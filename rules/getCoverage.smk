@@ -1,4 +1,5 @@
 rule getCoverage_se:
+#get all coverage files here...
     input: 
         i  =  "results/snippy_se/{sample}_se/snps.depth.gz",
         _1 = "results/snippy_se/{sample}_se/snps.bam",

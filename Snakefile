@@ -48,14 +48,17 @@ def get_output_files_pe(SAMPLES):
         expand("results/snippy_pe/{sample}_pe/snps.tab", sample=SAMPLES),
         expand("results/coverage_pe/{sample}_coverage.tab", sample=SAMPLES),
         expand("results/freebayes_pe/{sample}_pe/var.vcf", sample=SAMPLES),
-        "results/mauve_pe/mauve.xmfa"
+        "results/concat/multifile.fasta",
+        "results/mafft_pe/mafft.fasta"
     )    
 
 
 import os
 
 ext = "fastq.gz"
-REFERENCE = "config/GCA_009858895.3.fasta"
+REFERENCE = "config/SARS_CoV_2_Wuhan_Hu_1_MN908947.fasta"
+REFERENCE_GB = "config/SARS_CoV_2_Wuhan_Hu_1_MN908947.gb"
+
 
 
 include: "rules/fastqc.smk"
@@ -66,7 +69,7 @@ include: "rules/snippy.smk"
 include: "rules/getCoverage.smk"
 include: "rules/freebayes.smk"
 include: "rules/mauve.smk"
-
+include: "rules/mafft.smk"
 
 if test.get_sample_2() == []:
     get_output = get_output_files_se
