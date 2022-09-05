@@ -1,0 +1,7 @@
+channels:
+  - conda-forge
+  - bioconda
+  - nodefaults
+dependencies:
+  - spades >=3.11.1
+  - python >=3.5, <3.10
