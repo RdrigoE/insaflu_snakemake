@@ -16,6 +16,8 @@ rule freebayes_se:
         "--min-coverage 100 "
         "--min-alternate-count 10 " 
         "--min-alternate-fraction 0.01 "
+        "--ploidy 2 "
+        "-V " #ver este <_
     shell:
         "freebayes {params} -f {input.ref} {input.i} > {output}"
     

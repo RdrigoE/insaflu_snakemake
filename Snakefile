@@ -40,15 +40,15 @@ def get_output_files_se(SAMPLES):
 
 
 def get_output_files_pe(SAMPLES):
+    SAMPLES = SAMPLES
     return(
         expand("results/raw_fastqc_pe/{sample}_{direction}_fastqc.html", sample=SAMPLES,direction=["1","2"]),
         expand("results/trimmed_reads_pe/{sample}_{direction}.trimmed.fastq.gz",sample=SAMPLES,direction=["1","2"]),
         expand("results/trimmed_fastqc_pe/{sample}_{direction}.trimmed_fastqc.html", sample=SAMPLES,direction=["1","2"]),
         expand("results/snippy_pe/{sample}_pe/snps.tab", sample=SAMPLES),
         expand("results/coverage_pe/{sample}_coverage.tab", sample=SAMPLES),
-        expand("results/freebayes_pe/{sample}_pe/var.vcf", sample=SAMPLES)
-
-
+        expand("results/freebayes_pe/{sample}_pe/var.vcf", sample=SAMPLES),
+        "results/mauve_pe/mauve.xmfa"
     )    
 
 
@@ -65,6 +65,8 @@ include: "rules/abricate.smk"
 include: "rules/snippy.smk"
 include: "rules/getCoverage.smk"
 include: "rules/freebayes.smk"
+include: "rules/mauve.smk"
+
 
 if test.get_sample_2() == []:
     get_output = get_output_files_se
