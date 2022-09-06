@@ -25,8 +25,9 @@ rule snippy_se:
         _0  =  "results/snippy_se/{sample}_se/snps.depth.gz",
         _1 = "results/snippy_se/{sample}_se/snps.bam",
         _2 = "results/snippy_se/{sample}_se/snps.tab",
-        _3 = "results/snippy_se/{sample}_se/snps.consensus.fa",
-        dir = directory("results/snippy_se/{sample}_se")
+        _3 = "results/snippy_se/{sample}_se/snps.consensus.fad",
+        dir = directory("results/snippy_se/{sample}_se"),
+        consensus = "./results/project_consensus/{sample}_consensus.fa"
     conda:
         "../envs/snippy.yaml"
     params:
