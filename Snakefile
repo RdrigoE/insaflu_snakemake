@@ -24,17 +24,20 @@ class Data:
         if len(self.get_sample_1()) == 1 and self.get_sample_2() == []: 
             return True
         return False
-test = Data("test.csv")
+test = Data("test2.csv")
 
 
 def get_output_files_se(SAMPLES):
     return(
         expand("results/raw_fastqc_se/{sample}_fastqc.html", sample=SAMPLES),
         expand("results/trimmed_fastqc_se/{sample}.trimmed_fastqc.html", sample=SAMPLES),
-        expand("results/abricate/{sample}/abricate_{sample}.csv", sample=SAMPLES),
+        expand("results/abricate_se/{sample}/abricate_{sample}.csv", sample=SAMPLES),
         expand("results/snippy_se/{sample}_se/snps.tab", sample=SAMPLES),
         expand("results/coverage_se/{sample}_coverage.tab", sample=SAMPLES),
-        expand("results/freebayes_se/{sample}_se/var.vcf", sample=SAMPLES)
+        expand("results/freebayes_se/{sample}_se/var.vcf", sample=SAMPLES),
+        "results/concat_se/multifile.fasta",
+        "results/mafft_se/mafft.fasta",
+        "results/fasttre_se/tree"
 
     )
 
@@ -43,14 +46,14 @@ def get_output_files_pe(SAMPLES):
     SAMPLES = SAMPLES
     return(
         expand("results/raw_fastqc_pe/{sample}_{direction}_fastqc.html", sample=SAMPLES,direction=["1","2"]),
-        expand("results/trimmed_reads_pe/{sample}_{direction}.trimmed.fastq.gz",sample=SAMPLES,direction=["1","2"]),
         expand("results/trimmed_fastqc_pe/{sample}_{direction}.trimmed_fastqc.html", sample=SAMPLES,direction=["1","2"]),
+        expand("results/abricate_pe/{sample}/abricate_{sample}.csv", sample=SAMPLES),
         expand("results/snippy_pe/{sample}_pe/snps.tab", sample=SAMPLES),
         expand("results/coverage_pe/{sample}_coverage.tab", sample=SAMPLES),
         expand("results/freebayes_pe/{sample}_pe/var.vcf", sample=SAMPLES),
-        "results/concat/multifile.fasta",
+        "results/concat_pe/multifile.fasta",
         "results/mafft_pe/mafft.fasta",
-        "results/fasttre/tree"
+        "results/fasttre_pe/tree"
     )    
 
 

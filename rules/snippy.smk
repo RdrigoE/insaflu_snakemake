@@ -22,12 +22,11 @@ rule snippy_se:
         r1="results/trimmed_reads_se/{sample}.trimmed.fastq.gz",
         ref=REFERENCE
     output:
-        _0  =  "results/snippy_se/{sample}_se/snps.depth.gz",
+        _0 = "results/snippy_se/{sample}_se/snps.depth.gz",
         _1 = "results/snippy_se/{sample}_se/snps.bam",
         _2 = "results/snippy_se/{sample}_se/snps.tab",
-        _3 = "results/snippy_se/{sample}_se/snps.consensus.fad",
+        _3 = "results/snippy_se/{sample}_se/snps.consensus.fa",
         dir = directory("results/snippy_se/{sample}_se"),
-        consensus = "./results/project_consensus/{sample}_consensus.fa"
     conda:
         "../envs/snippy.yaml"
     params:
