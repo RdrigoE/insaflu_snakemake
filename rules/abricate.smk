@@ -6,4 +6,5 @@ rule abricate:
     conda:
         "../envs/abricate.yaml"
     shell:
-        "abricate --minid 70 --mincov 60 {input} > {output}"
+        "abricate --db insaflu --minid 70 --mincov 60 {input} > {output}"
+

@@ -49,7 +49,8 @@ def get_output_files_pe(SAMPLES):
         expand("results/coverage_pe/{sample}_coverage.tab", sample=SAMPLES),
         expand("results/freebayes_pe/{sample}_pe/var.vcf", sample=SAMPLES),
         "results/concat/multifile.fasta",
-        "results/mafft_pe/mafft.fasta"
+        "results/mafft_pe/mafft.fasta",
+        "results/fasttre/tree"
     )    
 
 
@@ -68,8 +69,11 @@ include: "rules/abricate.smk"
 include: "rules/snippy.smk"
 include: "rules/getCoverage.smk"
 include: "rules/freebayes.smk"
-include: "rules/mauve.smk"
+include: "rules/concat.smk"
 include: "rules/mafft.smk"
+include: "rules/fasttree.smk"
+include: "rules/seqret.smk"
+
 
 if test.get_sample_2() == []:
     get_output = get_output_files_se

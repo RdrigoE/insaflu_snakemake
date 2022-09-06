@@ -6,4 +6,4 @@ rule mafft_pe:
     conda:
         "../envs/mafft.yaml"
     shell:
-        "mafft --preservecase {input} > {input}"
+        "mafft --preservecase {input} > {output}"
