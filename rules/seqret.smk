@@ -1,9 +1,9 @@
 rule seqret:
     input:
-        "projects/{project}/mafft/mafft.fasta" 
+        "projects/{project}/main_result/mafft/mafft.fasta" 
 
     output:
-        "projects/{project}/seqret/seqret.nex"
+        "projects/{project}/main_result/seqret/seqret.nex"
 
     conda:
         "../envs/seqret.yaml"

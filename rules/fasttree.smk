@@ -1,8 +1,8 @@
 rule fasttree:
     input:
-        "projects/{project}/mafft/mafft.fasta"    
+        "projects/{project}/main_result/mafft/mafft.fasta"    
     output:
-        "projects/{project}/fasttre/tree"    
+        "projects/{project}/main_result/fasttre/tree"    
 
     conda:
         "../envs/fasttree.yaml"

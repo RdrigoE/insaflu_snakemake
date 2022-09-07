@@ -1,8 +1,15 @@
-rule concat_:
+checkpoint cp_directory:
     input:
-        expand("projects/{project}/samples/{sample}/snippy/snps.consensus.fa")
+        "projects/{project}/sample_{sample}/snippy/snps.consensus.fa"
     output:
-        o="projects/{project}/concat/multifile.fasta",
-        dir = directory("projects/{project}/concat")   
+        "projects/{project}/main_result/consensus/{sample}_SARS_COV_2_consensus.fasta"
     shell:
-        "python merge_fasta_files.py {project} SARS_COV_2"
+        "python utils/move_fasta_files.py {wildcards.project} {wildcards.sample} SARS_COV_2"
+
+rule all_consensus:
+    input:
+        aggregate_input
+    output:
+        o="projects/{project}/main_result/AllConsensus.fasta"    
+    shell:
+        "cat projects/{wildcards.project}/main_result/consensus/* > projects/{wildcards.project}/main_result/AllConsensus.fasta"

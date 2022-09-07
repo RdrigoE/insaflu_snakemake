@@ -1,12 +1,12 @@
 rule freebayes:
     input:
-        _0 = "projects/{project}/samples/snippy/snps.depth.gz",
-        i  = "projects/{project}/samples/snippy/snps.bam",
-        _2 = "projects/{project}/samples/snippy/snps.tab",
-        _3 = "projects/{project}/samples/snippy/snps.consensus.fa",
+        _0 = "projects/{project}/sample_{sample}/snippy/snps.depth.gz",
+        i  = "projects/{project}/sample_{sample}/snippy/snps.bam",
+        _2 = "projects/{project}/sample_{sample}/snippy/snps.tab",
+        _3 = "projects/{project}/sample_{sample}/snippy/snps.consensus.fa",
         ref = REFERENCE
     output:
-        o = "projects/{project}/freebayes/{sample}_var.vcf"
+        o = "projects/{project}/main_result/freebayes/{sample}_var.vcf"
     conda:
         "../envs/freebayes.yaml"
 

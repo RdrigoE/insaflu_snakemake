@@ -1,8 +1,8 @@
 rule mafft:
     input:
-        "projects/{project}/concat/multifile.fasta"
+        "projects/{project}/main_result/AllConsensus.fasta"
     output:
-        "projects/{project}/mafft/mafft.fasta" 
+        "projects/{project}/main_result/mafft/mafft.fasta" 
     conda:
         "../envs/mafft.yaml"
     params:
