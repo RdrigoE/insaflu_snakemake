@@ -1,27 +1,13 @@
-rule getCoverage_se:
+rule getCoverage:
 #get all coverage files here...
     input: 
-        i  =  "results/snippy_se/{sample}_se/snps.depth.gz",
-        _1 = "results/snippy_se/{sample}_se/snps.bam",
-        _2 = "results/snippy_se/{sample}_se/snps.tab",
-        _3 = "results/snippy_se/{sample}_se/snps.consensus.fa",
+        i  = "projects/{project}/samples/snippy/snps.depth.gz",
+        _1 = "projects/{project}/samples/snippy/snps.bam",
+        _2 = "projects/{project}/samples/snippy/snps.tab",
+        _3 = "projects/{project}/samples/snippy/snps.consensus.fa",
         ref = REFERENCE
     output:
-        o = "results/coverage_se/{sample}_coverage.tab"
-    conda:
-        "../envs/coverage.yaml"
-    shell:
-        "python software/getCoverage/getCoverage.py -i {input.i} -r {input.ref} -o {output.o}"
-
-rule getCoverage_pe:
-    input: 
-        i  =  "results/snippy_pe/{sample}_pe/snps.depth.gz",
-        _1 = "results/snippy_pe/{sample}_pe/snps.bam",
-        _2 = "results/snippy_pe/{sample}_pe/snps.tab",
-        _3 = "results/snippy_pe/{sample}_pe/snps.consensus.fa",
-        ref = REFERENCE
-    output:
-        o = "results/coverage_pe/{sample}_coverage.tab"
+        o = "projects/{project}/coverage/{sample}_coverage.tab"
     conda:
         "../envs/coverage.yaml"
     shell:

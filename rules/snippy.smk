@@ -1,14 +1,14 @@
 rule snippy_pe:
     input:
-        r1="results/trimmed_reads_pe/{sample}_1.trimmed.fastq.gz",
-        r2="results/trimmed_reads_pe/{sample}_2.trimmed.fastq.gz",
+        r1="samples/{sample}/trimmed_reads/{sample}_1.trimmed.fastq.gz",
+        r2="samples/{sample}/trimmed_reads/{sample}_2.trimmed.fastq.gz",
         ref=REFERENCE
     output:
-        _0  =  "results/snippy_pe/{sample}_pe/snps.depth.gz",
-        _1 = "results/snippy_pe/{sample}_pe/snps.bam",
-        _2 = "results/snippy_pe/{sample}_pe/snps.tab",
-        _3 = "results/snippy_pe/{sample}_pe/snps.consensus.fa",
-        dir = directory("results/snippy_pe/{sample}_pe/")
+        _0  =  "samples/{sample}/snippy/snps.depth.gz",
+        _1 = "samples/{sample}/snippy/snps.bam",
+        _2 = "samples/{sample}/snippy/snps.tab",
+        _3 = "samples/{sample}/snippy/snps.consensus.fa",
+        dir = directory("samples/{sample}/snippy")
     conda:
         "../envs/snippy.yaml"
     params:
@@ -19,14 +19,14 @@ rule snippy_pe:
 
 rule snippy_se:
     input:
-        r1="results/trimmed_reads_se/{sample}.trimmed.fastq.gz",
+        r1="samples/{sample}/trimmed_reads/{sample}.trimmed.fastq.gz",
         ref=REFERENCE
     output:
-        _0 = "results/snippy_se/{sample}_se/snps.depth.gz",
-        _1 = "results/snippy_se/{sample}_se/snps.bam",
-        _2 = "results/snippy_se/{sample}_se/snps.tab",
-        _3 = "results/snippy_se/{sample}_se/snps.consensus.fa",
-        dir = directory("results/snippy_se/{sample}_se"),
+        _0 = "samples/{sample}/snippy/snps.depth.gz",
+        _1 = "samples/{sample}/snippy/snps.bam",
+        _2 = "samples/{sample}/snippy/snps.tab",
+        _3 = "samples/{sample}/snippy/snps.consensus.fa",
+        dir = directory("samples/{sample}/snippy/"),
     conda:
         "../envs/snippy.yaml"
     params:

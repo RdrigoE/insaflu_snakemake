@@ -1,11 +1,14 @@
 rule seqret:
     input:
-        "results/mafft_pe/mafft.fasta" 
+        "projects/{project}/mafft/mafft.fasta" 
 
     output:
-        "results/seqret/seqret.nex"
+        "projects/{project}/seqret/seqret.nex"
 
     conda:
         "../envs/seqret.yaml"
+
+    params:
+        "-sformat fasta -osformat2 nexusnon"
     shell:
-        "seqret -sformat fasta -osformat2 nexusnon -sequence {input} -outseq {output}"
+        "seqret {params} -sequence {input} -outseq {output}"

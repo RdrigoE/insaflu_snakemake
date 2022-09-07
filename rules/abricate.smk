@@ -1,20 +1,11 @@
-rule abricate_se:
+rule abricate:
     input:
-        "results/spades_se/{sample}/contigs.fasta"
+        "samples/{sample}/spades/contigs.fasta"
     output:
-        "results/abricate_se/{sample}/abricate_{sample}.csv"
+        "samples/{sample}/abricate/abricate_{sample}.csv"
     conda:
         "../envs/abricate.yaml"
+    params:
+        "--db insaflu --minid 70 --mincov 60"
     shell:
-        "abricate --db insaflu --minid 70 --mincov 60 {input} > {output}"
-
-rule abricate_pe:
-    input:
-        "results/spades_pe/{sample}/contigs.fasta"
-    output:
-        "results/abricate_pe/{sample}/abricate_{sample}.csv"
-    conda:
-        "../envs/abricate.yaml"
-    shell:
-        "abricate --db insaflu --minid 70 --mincov 60 {input} > {output}"
-
+        "abricate {params} {input} > {output}"

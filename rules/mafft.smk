@@ -1,19 +1,12 @@
-rule mafft_pe:
+rule mafft:
     input:
-        "results/concat_pe/multifile.fasta"
+        "projects/{project}/concat/multifile.fasta"
     output:
-        "results/mafft_pe/mafft.fasta" 
+        "projects/{project}/mafft/mafft.fasta" 
     conda:
         "../envs/mafft.yaml"
+    params:
+        "--preservecase"
     shell:
-        "mafft --preservecase {input} > {output}"
+        "mafft {params} {input} > {output}"
 
-rule mafft_se:
-    input:
-        "results/concat_se/multifile.fasta"
-    output:
-        "results/mafft_se/mafft.fasta" 
-    conda:
-        "../envs/mafft.yaml"
-    shell:
-        "mafft --preservecase {input} > {output}"
