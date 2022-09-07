@@ -25,7 +25,7 @@ rule snippy_se:
         _0  = "align_samples/{sample}/snippy/snps.depth.gz",
         _1 = "align_samples/{sample}/snippy/snps.bam",
         _2 = "align_samples/{sample}/snippy/snps.tab",
-        _3 = "align_samples/{sample}/snippysnps.consensus.fa",
+        _3 = "align_samples/{sample}/snippy/snps.consensus.fa",
         dir = directory("align_samples/{sample}/snippy/")
     conda:
         "../envs/snippy.yaml"

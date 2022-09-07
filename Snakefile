@@ -54,13 +54,13 @@ def get_output_files_pe(SAMPLES, PROJECT):
         expand("samples/{sample}/spades/contigs.fasta", sample=SAMPLES),
         expand("samples/{sample}/abricate/abricate_{sample}.csv", sample=SAMPLES),
         expand("align_samples/{sample}/snippy/snps.consensus.fa",project=PROJECT, sample=SAMPLES),
-        expand("projects/{project}/sample_{sample}/main_result/project.txt", sample=SAMPLES, project=PROJECT),
-        expand("projects/{project}/main_result/consensus/{sample}_SARS_COV_2_consensus.fasta", sample=SAMPLES, project=PROJECT),
-        expand("projects/{project}/main_result/AllConsensus.fasta", project=PROJECT),
-        expand("projects/{project}/main_result/coverage/{sample}_coverage.tab", sample=SAMPLES, project=PROJECT),
-        expand("projects/{project}/main_result/freebayes/{sample}_var.vcf", sample=SAMPLES, project=PROJECT),
-        expand("projects/{project}/main_result/mafft/mafft.fasta", sample=SAMPLES, project=PROJECT),
-        expand("projects/{project}/main_result/fasttre/tree", sample=SAMPLES, project=PROJECT),  
+        # expand("projects/{project}/sample_{sample}/main_result/project.txt", sample=SAMPLES, project=PROJECT),
+        # expand("projects/{project}/main_result/consensus/{sample}_SARS_COV_2_consensus.fasta", sample=SAMPLES, project=PROJECT),
+        # expand("projects/{project}/main_result/AllConsensus.fasta", project=PROJECT),
+        # expand("projects/{project}/main_result/coverage/{sample}_coverage.tab", sample=SAMPLES, project=PROJECT),
+        # expand("projects/{project}/main_result/freebayes/{sample}_var.vcf", sample=SAMPLES, project=PROJECT),
+        # expand("projects/{project}/main_result/mafft/mafft.fasta", sample=SAMPLES, project=PROJECT),
+        # expand("projects/{project}/main_result/fasttre/tree", sample=SAMPLES, project=PROJECT),  
     )    
 
 
