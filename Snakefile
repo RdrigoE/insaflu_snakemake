@@ -35,6 +35,8 @@ def get_output_files_se(SAMPLES, PROJECT):
         expand("samples/{sample}/spades/contigs.fasta", sample=SAMPLES),
         expand("samples/{sample}/abricate/abricate_{sample}.csv", sample=SAMPLES),
         expand("samples/{sample}/snippy/snps.tab", sample=SAMPLES),
+        expand("projects/{project}/sample_{sample}/", sample=SAMPLES, project=PROJECT)
+
         # expand("projects/{project}/coverage/{sample}_coverage.tab", sample=SAMPLES, project=PROJECT),
         # expand("projects/{project}/freebayes/{sample}_var.vcf", sample=SAMPLES, project=PROJECT),
         # expand("projects/{project}/concat/multifile.fasta", sample=SAMPLES, project=PROJECT),
@@ -53,6 +55,7 @@ def get_output_files_pe(SAMPLES, PROJECT):
         expand("samples/{sample}/spades/contigs.fasta", sample=SAMPLES),
         expand("samples/{sample}/abricate/abricate_{sample}.csv", sample=SAMPLES),
         expand("samples/{sample}/snippy/snps.tab", sample=SAMPLES),
+        expand("projects/{project}/sample_{sample}/", sample=SAMPLES, project=PROJECT)
         # expand("projects/{project}/coverage/{sample}_coverage.tab", sample=SAMPLES, project=PROJECT),
         # expand("projects/{project}/freebayes/{sample}_var.vcf", sample=SAMPLES, project=PROJECT),
         # expand("projects/{project}/concat/multifile.fasta", sample=SAMPLES, project=PROJECT),
@@ -74,6 +77,7 @@ include: "rules/trimmomatic.smk"
 include: "rules/spades.smk"
 include: "rules/abricate.smk"
 include: "rules/snippy.smk"
+include: "rules/makeproject.smk"
 # include: "rules/getCoverage.smk"
 # include: "rules/freebayes.smk"
 # include: "rules/concat.smk"
@@ -90,5 +94,5 @@ else:
 
 rule all:
     input:
-        get_output(test.get_name(),"")
+        get_output(test.get_name(),"test")
 
