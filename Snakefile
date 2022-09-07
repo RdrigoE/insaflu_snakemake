@@ -25,7 +25,7 @@ class Data:
             return True
         return False
 
-test = Data("./config_user/sample_info.csv")
+test = Data("./config_user/sample_info_1.csv")
 
 
 def get_output_files_se(SAMPLES, PROJECT):
@@ -34,15 +34,14 @@ def get_output_files_se(SAMPLES, PROJECT):
         expand("samples/{sample}/trimmed_fastqc/{sample}.trimmed_fastqc.html", sample=SAMPLES),
         expand("samples/{sample}/spades/contigs.fasta", sample=SAMPLES),
         expand("samples/{sample}/abricate/abricate_{sample}.csv", sample=SAMPLES),
-        expand("samples/{sample}/snippy/snps.tab", sample=SAMPLES),
-        expand("projects/{project}/sample_{sample}/", sample=SAMPLES, project=PROJECT)
-
-        # expand("projects/{project}/coverage/{sample}_coverage.tab", sample=SAMPLES, project=PROJECT),
-        # expand("projects/{project}/freebayes/{sample}_var.vcf", sample=SAMPLES, project=PROJECT),
-        # expand("projects/{project}/concat/multifile.fasta", sample=SAMPLES, project=PROJECT),
-        # expand("projects/{project}/mafft/mafft.fasta", sample=SAMPLES, project=PROJECT),
-        # expand("projects/{project}/fasttre/tree", sample=SAMPLES, project=PROJECT),                                                                                                                                                         
-
+        expand("projects/{project}/sample_{sample}/main_result/project.txt", sample=SAMPLES, project=PROJECT),
+        expand("projects/{project}/sample_{sample}/snippy/snps.consensus.fa",project=PROJECT, sample=SAMPLES),
+        expand("projects/{project}/main_result/consensus/{sample}_SARS_COV_2_consensus.fasta", sample=SAMPLES, project=PROJECT),
+        expand("projects/{project}/main_result/AllConsensus.fasta", project=PROJECT),
+        expand("projects/{project}/main_result/coverage/{sample}_coverage.tab", sample=SAMPLES, project=PROJECT),
+        expand("projects/{project}/main_result/freebayes/{sample}_var.vcf", sample=SAMPLES, project=PROJECT),
+        expand("projects/{project}/main_result/mafft/mafft.fasta", sample=SAMPLES, project=PROJECT),
+        expand("projects/{project}/main_result/fasttre/tree", sample=SAMPLES, project=PROJECT),  
     )
 
 
@@ -54,13 +53,14 @@ def get_output_files_pe(SAMPLES, PROJECT):
         expand("samples/{sample}/trimmed_fastqc/{sample}_{direction}.trimmed_fastqc.html", sample=SAMPLES,direction=["1","2"]),
         expand("samples/{sample}/spades/contigs.fasta", sample=SAMPLES),
         expand("samples/{sample}/abricate/abricate_{sample}.csv", sample=SAMPLES),
-        expand("samples/{sample}/snippy/snps.tab", sample=SAMPLES),
-        expand("projects/{project}/sample_{sample}/", sample=SAMPLES, project=PROJECT)
-        # expand("projects/{project}/coverage/{sample}_coverage.tab", sample=SAMPLES, project=PROJECT),
-        # expand("projects/{project}/freebayes/{sample}_var.vcf", sample=SAMPLES, project=PROJECT),
-        # expand("projects/{project}/concat/multifile.fasta", sample=SAMPLES, project=PROJECT),
-        # expand("projects/{project}/mafft/mafft.fasta", sample=SAMPLES, project=PROJECT),
-        # expand("projects/{project}/fasttre/tree", sample=SAMPLES, project=PROJECT),
+        expand("align_samples/{sample}/snippy/snps.consensus.fa",project=PROJECT, sample=SAMPLES),
+        expand("projects/{project}/sample_{sample}/main_result/project.txt", sample=SAMPLES, project=PROJECT),
+        expand("projects/{project}/main_result/consensus/{sample}_SARS_COV_2_consensus.fasta", sample=SAMPLES, project=PROJECT),
+        expand("projects/{project}/main_result/AllConsensus.fasta", project=PROJECT),
+        expand("projects/{project}/main_result/coverage/{sample}_coverage.tab", sample=SAMPLES, project=PROJECT),
+        expand("projects/{project}/main_result/freebayes/{sample}_var.vcf", sample=SAMPLES, project=PROJECT),
+        expand("projects/{project}/main_result/mafft/mafft.fasta", sample=SAMPLES, project=PROJECT),
+        expand("projects/{project}/main_result/fasttre/tree", sample=SAMPLES, project=PROJECT),  
     )    
 
 
@@ -78,12 +78,12 @@ include: "rules/spades.smk"
 include: "rules/abricate.smk"
 include: "rules/snippy.smk"
 include: "rules/makeproject.smk"
-# include: "rules/getCoverage.smk"
-# include: "rules/freebayes.smk"
-# include: "rules/concat.smk"
-# include: "rules/mafft.smk"
-# include: "rules/fasttree.smk"
-# include: "rules/seqret.smk"
+include: "rules/getCoverage.smk"
+include: "rules/freebayes.smk"
+include: "rules/concat.smk"
+include: "rules/mafft.smk"
+include: "rules/fasttree.smk"
+include: "rules/seqret.smk"
 
 
 if test.get_sample_2() == []:
@@ -94,5 +94,5 @@ else:
 
 rule all:
     input:
-        get_output(test.get_name(),"test")
+        get_output(test.get_name(),"test_se")
 

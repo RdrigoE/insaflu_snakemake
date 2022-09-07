@@ -4,11 +4,11 @@ rule snippy_pe:
         r2="samples/{sample}/trimmed_reads/{sample}_2.trimmed.fastq.gz",
         ref=REFERENCE
     output:
-        _0  =  "samples/{sample}/snippy/snps.depth.gz",
-        _1 = "samples/{sample}/snippy/snps.bam",
-        _2 = "samples/{sample}/snippy/snps.tab",
-        _3 = "samples/{sample}/snippy/snps.consensus.fa",
-        dir = directory("samples/{sample}/snippy")
+        _0  = "align_samples/{sample}/snippy/snps.depth.gz",
+        _1 = "align_samples/{sample}/snippy/snps.bam",
+        _2 = "align_samples/{sample}/snippy/snps.tab",
+        _3 = "align_samples/{sample}/snippy/snps.consensus.fa",
+        dir = directory("align_samples/{sample}/snippy/")
     conda:
         "../envs/snippy.yaml"
     params:
@@ -22,11 +22,11 @@ rule snippy_se:
         r1="samples/{sample}/trimmed_reads/{sample}.trimmed.fastq.gz",
         ref=REFERENCE
     output:
-        _0 = "samples/{sample}/snippy/snps.depth.gz",
-        _1 = "samples/{sample}/snippy/snps.bam",
-        _2 = "samples/{sample}/snippy/snps.tab",
-        _3 = "samples/{sample}/snippy/snps.consensus.fa",
-        dir = directory("samples/{sample}/snippy/"),
+        _0  = "align_samples/{sample}/snippy/snps.depth.gz",
+        _1 = "align_samples/{sample}/snippy/snps.bam",
+        _2 = "align_samples/{sample}/snippy/snps.tab",
+        _3 = "align_samples/{sample}/snippysnps.consensus.fa",
+        dir = directory("align_samples/{sample}/snippy/")
     conda:
         "../envs/snippy.yaml"
     params:
