@@ -1,6 +1,6 @@
 rule raw_fastqc_se:
     input:
-        i = "user_data/{sample}." + ext
+        i = "user_data/{sample}."+ ext
     output:
         o = "samples/{sample}/raw_fastqc/{sample}_fastqc.html",
         dir=directory("samples/{sample}/raw_fastqc")
@@ -9,7 +9,7 @@ rule raw_fastqc_se:
     params:
         "--nogroup"
     shell:
-        "fastqc {input.i} -o {output.dir}  {params}"
+        "fastqc {input.i} -o {output.dir} {params}"
 
 rule raw_fastqc_pe:
     input:
@@ -46,7 +46,7 @@ rule trimmed_fastqc_se:
         "samples/{sample}/trimmed_reads/{sample}.trimmed.fastq.gz"
     output:
         o="samples/{sample}/trimmed_fastqc/{sample}.trimmed_fastqc.html",
-        dir="samples/{sample}/trimmed_fastqc/"
+        dir=directory("samples/{sample}/trimmed_fastqc/")
     conda:
         "../envs/fastqc.yaml"
     params:

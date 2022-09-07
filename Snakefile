@@ -28,17 +28,18 @@ class Data:
 test = Data("./config_user/sample_info.csv")
 
 
-def get_output_files_se(SAMPLES):
+def get_output_files_se(SAMPLES, PROJECT):
     return(
         expand("samples/{sample}/raw_fastqc/{sample}_fastqc.html", sample=SAMPLES),
         expand("samples/{sample}/trimmed_fastqc/{sample}.trimmed_fastqc.html", sample=SAMPLES),
-        expand("samples/{sample}/abricate/{sample}/abricate_{sample}.csv", sample=SAMPLES),
+        expand("samples/{sample}/spades/contigs.fasta", sample=SAMPLES),
+        expand("samples/{sample}/abricate/abricate_{sample}.csv", sample=SAMPLES),
         expand("samples/{sample}/snippy/snps.tab", sample=SAMPLES),
-        expand("projects/{project}/coverage/{sample}_coverage.tab", sample=SAMPLES, project=PROJECT),
-        expand("projects/{project}/freebayes/{sample}_var.vcf", sample=SAMPLES, project=PROJECT),
-        expand("projects/{project}/concat/multifile.fasta", sample=SAMPLES, project=PROJECT),
-        expand("projects/{project}/mafft/mafft.fasta", sample=SAMPLES, project=PROJECT),
-        expand("projects/{project}/fasttre/tree", sample=SAMPLES, project=PROJECT),                                                                                                                                                         
+        # expand("projects/{project}/coverage/{sample}_coverage.tab", sample=SAMPLES, project=PROJECT),
+        # expand("projects/{project}/freebayes/{sample}_var.vcf", sample=SAMPLES, project=PROJECT),
+        # expand("projects/{project}/concat/multifile.fasta", sample=SAMPLES, project=PROJECT),
+        # expand("projects/{project}/mafft/mafft.fasta", sample=SAMPLES, project=PROJECT),
+        # expand("projects/{project}/fasttre/tree", sample=SAMPLES, project=PROJECT),                                                                                                                                                         
 
     )
 
