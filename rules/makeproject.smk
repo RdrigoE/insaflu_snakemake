@@ -1,11 +1,12 @@
 rule makeproject:
     input:
-        o1="samples/{sample}/trimmed_reads/{sample}_1.trimmed.fastq.gz",
-        o2="samples/{sample}/trimmed_reads/{sample}_2.trimmed.fastq.gz",
-
+        "align_samples/{sample}/snippy/snps.consensus.fa"
     output:
-        "projects/{project}/sample_{sample}/main_result/project.txt"
+        #d1 =directory("projects/{project}/main_result/"),
+        d2 =directory("projects/{project}/sample_{sample}/snippy/"),
+        d3 = "projects/{project}/sample_{sample}/snippy/snps.consensus.fa"
+
     shell:
         "mkdir projects/{wildcards.project}/main_result/ -p | "
-        "mkdir projects/{wildcards.project}/sample_{wildcards.sample}/main_result -p |"
-        " echo 'project created' > projects/{wildcards.project}/sample_{wildcards.sample}/main_result/project.txt"
+        "mkdir projects/{wildcards.project}/sample_{wildcards.sample}/snippy/ -p |"
+        " cp align_samples/{wildcards.sample}/snippy/snps.* projects/{wildcards.project}/sample_{wildcards.sample}/snippy/"

@@ -1,15 +1,18 @@
-checkpoint cp_directory:
+with open('config_user/config_run.yaml') as file:
+    config_user = yaml.load(file, Loader=yaml.FullLoader)
+
+rule cp_directory:
     input:
-        "projects/{project}/sample_{sample}/snippy/snps.consensus.fa"
+        i1 = "projects/{project}/sample_{sample}/snippy/snps.consensus.fa"
     output:
-        "projects/{project}/main_result/consensus/{sample}_SARS_COV_2_consensus.fasta"
+        o1 = "projects/{project}/main_result/consensus/{sample}_SARS_COV_2_consensus.fasta"
     shell:
-        "python utils/move_fasta_files.py {wildcards.project} {wildcards.sample} SARS_COV_2"
+        "python utils/move_fasta_files.py {wildcards.project} {wildcards.sample} SARS_COV_2" 
 
 rule all_consensus:
     input:
-        aggregate_input
+        expand("projects/{project}/main_result/consensus/{sample}_SARS_COV_2_consensus.fasta",project=config_user['project'], sample=config_user['samples'])
     output:
         o="projects/{project}/main_result/AllConsensus.fasta"    
     shell:
-        "cat projects/{wildcards.project}/main_result/consensus/* > projects/{wildcards.project}/main_result/AllConsensus.fasta"
+        "cat projects/{wildcards.project}/main_result/consensus/* > {output.o}"

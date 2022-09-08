@@ -1,7 +1,7 @@
 import os
 import sys
 
-file_path = f"align_samples/{sys.argv[2]}/snippy/snps.consensus.fa"
+file_path = f"align_samples/{sys.argv[2]}/snippy/"
 file_list = os.listdir(file_path)
 
 

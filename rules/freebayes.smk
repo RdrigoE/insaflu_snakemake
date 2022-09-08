@@ -1,9 +1,6 @@
 rule freebayes:
     input:
-        _0 = "projects/{project}/sample_{sample}/snippy/snps.depth.gz",
-        i  = "projects/{project}/sample_{sample}/snippy/snps.bam",
-        _2 = "projects/{project}/sample_{sample}/snippy/snps.tab",
-        _3 = "projects/{project}/sample_{sample}/snippy/snps.consensus.fa",
+        i  = "align_samples/{sample}/snippy/snps.bam",
         ref = REFERENCE
     output:
         o = "projects/{project}/main_result/freebayes/{sample}_var.vcf"

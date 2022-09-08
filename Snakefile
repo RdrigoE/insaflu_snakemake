@@ -27,40 +27,44 @@ class Data:
 
 test = Data("./config_user/sample_info_1.csv")
 
+import yaml
 
 def get_output_files_se(SAMPLES, PROJECT):
+    SAMPLES = SAMPLES
+    PROJECT = PROJECT
+    with open('config_user/config_run.yaml', 'w') as file:
+        documents = yaml.dump({'samples':SAMPLES, 'project':PROJECT}, file)
     return(
         expand("samples/{sample}/raw_fastqc/{sample}_fastqc.html", sample=SAMPLES),
         expand("samples/{sample}/trimmed_fastqc/{sample}.trimmed_fastqc.html", sample=SAMPLES),
         expand("samples/{sample}/spades/contigs.fasta", sample=SAMPLES),
         expand("samples/{sample}/abricate/abricate_{sample}.csv", sample=SAMPLES),
-        expand("projects/{project}/sample_{sample}/main_result/project.txt", sample=SAMPLES, project=PROJECT),
-        expand("projects/{project}/sample_{sample}/snippy/snps.consensus.fa",project=PROJECT, sample=SAMPLES),
+        expand("align_samples/{sample}/snippy/snps.consensus.fa",project=PROJECT, sample=SAMPLES),
         expand("projects/{project}/main_result/consensus/{sample}_SARS_COV_2_consensus.fasta", sample=SAMPLES, project=PROJECT),
         expand("projects/{project}/main_result/AllConsensus.fasta", project=PROJECT),
         expand("projects/{project}/main_result/coverage/{sample}_coverage.tab", sample=SAMPLES, project=PROJECT),
         expand("projects/{project}/main_result/freebayes/{sample}_var.vcf", sample=SAMPLES, project=PROJECT),
         expand("projects/{project}/main_result/mafft/mafft.fasta", sample=SAMPLES, project=PROJECT),
-        expand("projects/{project}/main_result/fasttre/tree", sample=SAMPLES, project=PROJECT),  
+        expand("projects/{project}/main_result/fasttre/tree", sample=SAMPLES, project=PROJECT), 
     )
-
 
 def get_output_files_pe(SAMPLES, PROJECT):
     SAMPLES = SAMPLES
     PROJECT = PROJECT
+    with open('config_user/config_run.yaml', 'w') as file:
+        documents = yaml.dump({'samples':SAMPLES, 'project':PROJECT}, file)
     return(
         expand("samples/{sample}/raw_fastqc/{sample}_{direction}_fastqc.html", sample=SAMPLES,direction=["1","2"]),
         expand("samples/{sample}/trimmed_fastqc/{sample}_{direction}.trimmed_fastqc.html", sample=SAMPLES,direction=["1","2"]),
         expand("samples/{sample}/spades/contigs.fasta", sample=SAMPLES),
         expand("samples/{sample}/abricate/abricate_{sample}.csv", sample=SAMPLES),
         expand("align_samples/{sample}/snippy/snps.consensus.fa",project=PROJECT, sample=SAMPLES),
-        # expand("projects/{project}/sample_{sample}/main_result/project.txt", sample=SAMPLES, project=PROJECT),
-        # expand("projects/{project}/main_result/consensus/{sample}_SARS_COV_2_consensus.fasta", sample=SAMPLES, project=PROJECT),
-        # expand("projects/{project}/main_result/AllConsensus.fasta", project=PROJECT),
-        # expand("projects/{project}/main_result/coverage/{sample}_coverage.tab", sample=SAMPLES, project=PROJECT),
-        # expand("projects/{project}/main_result/freebayes/{sample}_var.vcf", sample=SAMPLES, project=PROJECT),
-        # expand("projects/{project}/main_result/mafft/mafft.fasta", sample=SAMPLES, project=PROJECT),
-        # expand("projects/{project}/main_result/fasttre/tree", sample=SAMPLES, project=PROJECT),  
+        expand("projects/{project}/main_result/consensus/{sample}_SARS_COV_2_consensus.fasta", sample=SAMPLES, project=PROJECT),
+        expand("projects/{project}/main_result/AllConsensus.fasta", project=PROJECT),
+        expand("projects/{project}/main_result/coverage/{sample}_coverage.tab", sample=SAMPLES, project=PROJECT),
+        expand("projects/{project}/main_result/freebayes/{sample}_var.vcf", sample=SAMPLES, project=PROJECT),
+        expand("projects/{project}/main_result/mafft/mafft.fasta", sample=SAMPLES, project=PROJECT),
+        expand("projects/{project}/main_result/fasttre/tree", sample=SAMPLES, project=PROJECT),  
     )    
 
 
@@ -94,5 +98,5 @@ else:
 
 rule all:
     input:
-        get_output(test.get_name(),"test_se")
+        get_output(test.get_name(),"2_project")
 
