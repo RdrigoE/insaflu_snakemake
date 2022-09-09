@@ -54,7 +54,7 @@ def get_output_files_pe(SAMPLES, PROJECT):
     with open('config_user/config_run.yaml', 'w') as file:
         documents = yaml.dump({'samples':SAMPLES, 'project':PROJECT}, file)
     return(
-        expand("samples/{sample}/raw_fastqc/{sample}_{direction}_fastqc.html", sample=SAMPLES,direction=["1","2"]),
+        expand("samples/{sample}/raw_fastqc/{sample}_{direction}_fastqc.html", sample=SAMPLES,direction=["1","2"]), #generalziar
         expand("samples/{sample}/trimmed_fastqc/{sample}_{direction}.trimmed_fastqc.html", sample=SAMPLES,direction=["1","2"]),
         expand("samples/{sample}/spades/contigs.fasta", sample=SAMPLES),
         expand("samples/{sample}/abricate/abricate_{sample}.csv", sample=SAMPLES),
