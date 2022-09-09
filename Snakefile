@@ -45,6 +45,7 @@ def get_output_files_se(SAMPLES, PROJECT):
         expand("projects/{project}/main_result/coverage/{sample}_coverage.tab", sample=SAMPLES, project=PROJECT),
         expand("projects/{project}/main_result/coverage.csv",project=PROJECT),
         expand("projects/{project}/main_result/freebayes/{sample}_var.vcf", sample=SAMPLES, project=PROJECT),
+        expand("projects/{project}/main_result/snpeff/{sample}_snpeff.vcf",sample=SAMPLES, project=PROJECT),
         expand("projects/{project}/main_result/mafft/mafft.fasta", sample=SAMPLES, project=PROJECT),
         expand("projects/{project}/main_result/fasttre/tree", sample=SAMPLES, project=PROJECT), 
     )
@@ -65,6 +66,7 @@ def get_output_files_pe(SAMPLES, PROJECT):
         expand("projects/{project}/main_result/coverage/{sample}_coverage.csv", sample=SAMPLES, project=PROJECT),
         expand("projects/{project}/main_result/coverage.csv",project=PROJECT),
         expand("projects/{project}/main_result/freebayes/{sample}_var.vcf", sample=SAMPLES, project=PROJECT),
+        expand("projects/{project}/main_result/snpeff/{sample}_snpeff.vcf",sample=SAMPLES, project=PROJECT),
         expand("projects/{project}/main_result/mafft/mafft.fasta", sample=SAMPLES, project=PROJECT),
         expand("projects/{project}/main_result/fasttre/tree", sample=SAMPLES, project=PROJECT),  
     )    
@@ -75,7 +77,7 @@ import os
 ext = "fastq.gz"
 REFERENCE = "reference/SARS_CoV_2_Wuhan_Hu_1_MN908947.fasta"
 REFERENCE_GB = "reference/SARS_CoV_2_Wuhan_Hu_1_MN908947.gb"
-
+REFERENCE_GFF3 = "reference/SARS_CoV_2_Wuhan_Hu_1_MN908947.gff3"
 
 
 include: "rules/fastqc.smk"
@@ -87,6 +89,7 @@ include: "rules/makeproject.smk"
 include: "rules/getCoverage.smk"
 include: "rules/mergeCoverage.smk"
 include: "rules/freebayes.smk"
+include: "rules/snpeff.smk"
 include: "rules/concat.smk"
 include: "rules/mafft.smk"
 include: "rules/fasttree.smk"
