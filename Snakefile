@@ -43,6 +43,7 @@ def get_output_files_se(SAMPLES, PROJECT):
         expand("projects/{project}/main_result/consensus/{sample}_SARS_COV_2_consensus.fasta", sample=SAMPLES, project=PROJECT),
         expand("projects/{project}/main_result/AllConsensus.fasta", project=PROJECT),
         expand("projects/{project}/main_result/coverage/{sample}_coverage.tab", sample=SAMPLES, project=PROJECT),
+        expand("projects/{project}/main_result/coverage.csv",project=PROJECT),
         expand("projects/{project}/main_result/freebayes/{sample}_var.vcf", sample=SAMPLES, project=PROJECT),
         expand("projects/{project}/main_result/mafft/mafft.fasta", sample=SAMPLES, project=PROJECT),
         expand("projects/{project}/main_result/fasttre/tree", sample=SAMPLES, project=PROJECT), 
@@ -61,7 +62,8 @@ def get_output_files_pe(SAMPLES, PROJECT):
         expand("align_samples/{sample}/snippy/snps.consensus.fa",project=PROJECT, sample=SAMPLES),
         expand("projects/{project}/main_result/consensus/{sample}_SARS_COV_2_consensus.fasta", sample=SAMPLES, project=PROJECT),
         expand("projects/{project}/main_result/AllConsensus.fasta", project=PROJECT),
-        expand("projects/{project}/main_result/coverage/{sample}_coverage.tab", sample=SAMPLES, project=PROJECT),
+        expand("projects/{project}/main_result/coverage/{sample}_coverage.csv", sample=SAMPLES, project=PROJECT),
+        expand("projects/{project}/main_result/coverage.csv",project=PROJECT),
         expand("projects/{project}/main_result/freebayes/{sample}_var.vcf", sample=SAMPLES, project=PROJECT),
         expand("projects/{project}/main_result/mafft/mafft.fasta", sample=SAMPLES, project=PROJECT),
         expand("projects/{project}/main_result/fasttre/tree", sample=SAMPLES, project=PROJECT),  
@@ -83,6 +85,7 @@ include: "rules/abricate.smk"
 include: "rules/snippy.smk"
 include: "rules/makeproject.smk"
 include: "rules/getCoverage.smk"
+include: "rules/mergeCoverage.smk"
 include: "rules/freebayes.smk"
 include: "rules/concat.smk"
 include: "rules/mafft.smk"
