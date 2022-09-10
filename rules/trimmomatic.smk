@@ -23,6 +23,8 @@ rule trimme_reads_PE:
         
         o_un1="samples/{sample}/trimmed_reads/{sample}_1.untrimmed.fastq.gz",
         o_un2="samples/{sample}/trimmed_reads/{sample}_2.untrimmed.fastq.gz"
+    conda:
+        "../envs/trimmomatic.yaml"
     params:
         "HEADCROP:30 SLIDINGWINDOW:5:20 LEADING:3 TRAILING:3 MINLEN:35 TOPHRED33"
     shell:

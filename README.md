@@ -13,3 +13,5 @@ create environment:
 
 ## Deactivate Enviroment
     $ conda deactivate insaflu
+
+# create abricate database => `makeblastdb -in db/db_influenza_typing_v8.fasta -title insaflu -dbtype nucl -hash_index`
