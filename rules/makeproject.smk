@@ -7,6 +7,6 @@ rule makeproject:
         d3 = "projects/{project}/sample_{sample}/snippy/snps.consensus.fa",
 
     shell:
-        "mkdir projects/{wildcards.project}/main_results/snpeff -p | "
+        "mkdir projects/{wildcards.project}/main_result/ -p | "
         "mkdir projects/{wildcards.project}/sample_{wildcards.sample}/snippy/ -p |"
         " cp align_samples/{wildcards.sample}/snippy/snps.* projects/{wildcards.project}/sample_{wildcards.sample}/snippy/"

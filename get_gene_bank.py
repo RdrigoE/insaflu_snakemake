@@ -17,4 +17,4 @@ for idx,gene in enumerate(positions):
     for part in gene[1].parts:
         positions_clean[idx][1].append([int(part.start),int(part.end)]) 
 
-print(positions_clean)
+

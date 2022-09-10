@@ -40,12 +40,12 @@ def get_output_files_se(SAMPLES, PROJECT):
         expand("samples/{sample}/spades/contigs.fasta", sample=SAMPLES),
         expand("samples/{sample}/abricate/abricate_{sample}.csv", sample=SAMPLES),
         expand("align_samples/{sample}/snippy/snps.consensus.fa",project=PROJECT, sample=SAMPLES),
-        expand("projects/{project}/main_result/consensus/{sample}_SARS_COV_2_consensus.fasta", sample=SAMPLES, project=PROJECT),
+        expand("projects/{project}/main_result/consensus/{sample}__SARS_COV_2_consensus.fasta", sample=SAMPLES, project=PROJECT),
         expand("projects/{project}/main_result/AllConsensus.fasta", project=PROJECT),
         expand("projects/{project}/main_result/coverage/{sample}_coverage.tab", sample=SAMPLES, project=PROJECT),
         expand("projects/{project}/main_result/coverage.csv",project=PROJECT),
         expand("projects/{project}/main_result/freebayes/{sample}_var.vcf", sample=SAMPLES, project=PROJECT),
-        expand("projects/{project}/main_result/snpeff/{sample}_snpeff.vcf",sample=SAMPLES, project=PROJECT),
+        # expand("projects/{project}/main_result/snpeff/{sample}_snpeff.vcf",sample=SAMPLES, project=PROJECT),
         expand("projects/{project}/main_result/mafft/mafft.fasta", sample=SAMPLES, project=PROJECT),
         expand("projects/{project}/main_result/fasttre/tree", sample=SAMPLES, project=PROJECT), 
     )
@@ -61,12 +61,12 @@ def get_output_files_pe(SAMPLES, PROJECT):
         expand("samples/{sample}/spades/contigs.fasta", sample=SAMPLES),
         expand("samples/{sample}/abricate/abricate_{sample}.csv", sample=SAMPLES),
         expand("align_samples/{sample}/snippy/snps.consensus.fa",project=PROJECT, sample=SAMPLES),
-        expand("projects/{project}/main_result/consensus/{sample}_SARS_COV_2_consensus.fasta", sample=SAMPLES, project=PROJECT),
+        expand("projects/{project}/main_result/consensus/{sample}__SARS_COV_2_consensus.fasta", sample=SAMPLES, project=PROJECT),
         expand("projects/{project}/main_result/AllConsensus.fasta", project=PROJECT),
         expand("projects/{project}/main_result/coverage/{sample}_coverage.csv", sample=SAMPLES, project=PROJECT),
         expand("projects/{project}/main_result/coverage.csv",project=PROJECT),
         expand("projects/{project}/main_result/freebayes/{sample}_var.vcf", sample=SAMPLES, project=PROJECT),
-        expand("projects/{project}/main_result/snpeff/{sample}_snpeff.vcf",sample=SAMPLES, project=PROJECT),
+        # expand("projects/{project}/main_result/snpeff/{sample}_snpeff.vcf",sample=SAMPLES, project=PROJECT),
         expand("projects/{project}/main_result/mafft/mafft.fasta", sample=SAMPLES, project=PROJECT),
         expand("projects/{project}/main_result/fasttre/tree", sample=SAMPLES, project=PROJECT),  
     )    
@@ -104,5 +104,5 @@ else:
 
 rule all:
     input:
-        get_output(test.get_name(),"2_project")
+        get_output(test.get_name(),"insaflu_comp_1")
 
