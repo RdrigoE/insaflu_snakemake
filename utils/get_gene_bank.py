@@ -20,7 +20,6 @@ def get_positions_gb(genbank_file):
     handle_gb.close()
     return positions_clean
 
-get_positions_gb(genbank_file)
 
 def get_genes(genbank_file):
     genes = []
@@ -29,7 +28,8 @@ def get_genes(genbank_file):
     for record in SeqIO.parse(handle_gb, "genbank"):
         for features in record.features:
             if (features.type == 'CDS'):
-                genes.append([features.qualifiers["gene"][0], features.location])
+                genes.append(features.qualifiers["gene"][0])
     handle_gb.close()
 
     return genes
+

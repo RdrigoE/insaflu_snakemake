@@ -9,4 +9,3 @@ rule mafft:
         "--preservecase"
     shell:
         "mafft {params} {input} > {output}"
-

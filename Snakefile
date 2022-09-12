@@ -25,7 +25,7 @@ class Data:
             return True
         return False
 
-test = Data("./config_user/sample_info_1.csv")
+test = Data("./config_user/sample_info.csv")
 
 import yaml
 
@@ -50,12 +50,14 @@ def get_output_files_se(SAMPLES, PROJECT,REFERENCE):
         expand("projects/{project}/main_result/mafft/mafft.fasta", sample=SAMPLES, project=PROJECT),
         expand("projects/{project}/main_result/{ref}/Alignment_aa_{ref}_{protein}.fasta",project=PROJECT,ref=config_user["ref"],protein=config_user["proteins"]),
         expand("projects/{project}/main_result/fasttre/tree", sample=SAMPLES, project=PROJECT), 
+        expand("projects/{project}/main_result/{ref}/Alignment_aa_{ref}_{protein}_tree.tree", project=PROJECT,ref=config_user["ref"],protein=config_user["proteins"]),
+
     )
 
 def get_output_files_pe(SAMPLES, PROJECT,REFERENCE):
     SAMPLES = SAMPLES
     PROJECT = PROJECT
-    config_user = {'samples':SAMPLES, 'project':PROJECT, 'ref':'SARS_CoV_2', 'proteins':get_genes(REFERENCE)}
+    config_user = {'samples':SAMPLES, 'project':PROJECT, 'ref':'SARS_CoV_2', 'proteins':get_genes(REFERENCE_GB)}
     with open('config_user/config_run.yaml', 'w') as file:
         documents = yaml.dump(config_user, file)
     return(
@@ -72,7 +74,10 @@ def get_output_files_pe(SAMPLES, PROJECT,REFERENCE):
         # expand("projects/{project}/main_result/snpeff/{sample}_snpeff.vcf",sample=SAMPLES, project=PROJECT),
         expand("projects/{project}/main_result/mafft/mafft.fasta", sample=SAMPLES, project=PROJECT),
         expand("projects/{project}/main_result/{ref}/Alignment_aa_{ref}_{protein}.fasta",project=PROJECT,ref=config_user["ref"],protein=config_user["proteins"]),
-        expand("projects/{project}/main_result/fasttre/tree", sample=SAMPLES, project=PROJECT),  
+        expand("projects/{project}/main_result/{ref}/Alignment_aa_{ref}_{protein}_mafft.fasta",project=PROJECT,ref=config_user["ref"],protein=config_user["proteins"]),
+        expand("projects/{project}/main_result/fasttre/tree", sample=SAMPLES, project=PROJECT), 
+        expand("projects/{project}/main_result/{ref}/Alignment_aa_{ref}_{protein}_tree.tree", project=PROJECT,ref=config_user["ref"],protein=config_user["proteins"]),
+        
     )    
 
 
@@ -96,11 +101,14 @@ include: "rules/freebayes.smk"
 include: "rules/snpeff.smk"
 include: "rules/concat.smk"
 include: "rules/mafft.smk"
+include: "rules/translate.smk"
 include: "rules/move_depth.smk"
 include: "rules/msa_masker.smk"
 include: "rules/fasttree.smk"
 include: "rules/seqret.smk"
-include: "rules/translate.smk"
+include: "rules/mafft_proteins.smk"
+include: "rules/fastree_proteins.smk"
+
 
 if test.get_sample_2() == []:
     get_output = get_output_files_se
@@ -110,5 +118,5 @@ else:
 
 rule all:
     input:
-        get_output(test.get_name(),"insaflu_comp_1",REFERENCE)
+        get_output(test.get_name(),"insaflu_2",REFERENCE)
 
