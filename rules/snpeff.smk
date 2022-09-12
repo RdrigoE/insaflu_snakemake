@@ -1,32 +1,23 @@
-# with open('config_user/config_run.yaml') as file:
-#     config_user = yaml.load(file, Loader=yaml.FullLoader)
-
-# rule pre_snpeff:
-#     input:
-#         ref = REFERENCE
-
-#     output:
-#         directory("projects/{project}/main_result/snpeff/genomes")   
-#     conda:
-#         "../envs/snpeff.yaml"
-#     shell:
-#         "mkdir -p {output} |"
-#         "cp {input.ref} projects/{wildcards.project}/main_result/snpeff/genomes/"
+with open('config_user/config_run.yaml') as file:
+    config_user = yaml.load(file, Loader=yaml.FullLoader)
 
 
-# rule snpeff:
-#     input:
-#         i = "projects/{project}/main_result/freebayes/{sample}_var.vcf",
-#         ref = REFERENCE_GFF3
-#     output:
-#         o = "projects/{project}/main_result/snpeff/{sample}_snpeff.vcf",
-#     conda:
-#         "../envs/snpeff.yaml"
-#     params:
-#         "-no-downstream -no-upstream -no-intergenic -no-utr -noStats -c config/snpeff.config "
-#     shell:
-#         "snpEff {params} -v {input.ref} {input.i}  > {output.o}"
+rule snpeff:
+    input:
+        i = "projects/{project}/main_result/freebayes/{sample}_var.vcf",
+        ref = REFERENCE_GFF3
+    output:
+        o = "projects/{project}/main_result/snpeff/{sample}_snpeff.vcf",
+    conda:
+        "../envs/snpeff.yaml"
+    params:
+        "-no-downstream -no-upstream -no-intergenic -no-utr -noStats -c config/snpeff.config "
+    shell:
+        "snpEff {params} -v SARS_CoV_2 {input.i}  > {output.o}"
 
+
+
+#"snpEff build -c $refdir/snpeff.config -dataDir . -gff3 ref"
 
 # def run_snpEff(self, fasta_file, genbank, vcf_file, out_file):
 # 		"""
