@@ -45,7 +45,7 @@ def get_output_files_se(SAMPLES, PROJECT):
         expand("projects/{project}/main_result/coverage/{sample}_coverage.tab", sample=SAMPLES, project=PROJECT),
         expand("projects/{project}/main_result/coverage.csv",project=PROJECT),
         expand("projects/{project}/main_result/freebayes/{sample}_var.vcf", sample=SAMPLES, project=PROJECT),
-        # expand("projects/{project}/main_result/snpeff/{sample}_snpeff.vcf",sample=SAMPLES, project=PROJECT),
+        #expand("projects/{project}/main_result/snpeff/{sample}_snpeff.vcf",sample=SAMPLES, project=PROJECT),
         expand("projects/{project}/main_result/mafft/mafft.fasta", sample=SAMPLES, project=PROJECT),
         expand("projects/{project}/main_result/fasttre/tree", sample=SAMPLES, project=PROJECT), 
     )
@@ -66,7 +66,7 @@ def get_output_files_pe(SAMPLES, PROJECT):
         expand("projects/{project}/main_result/coverage/{sample}_coverage.csv", sample=SAMPLES, project=PROJECT),
         expand("projects/{project}/main_result/coverage.csv",project=PROJECT),
         expand("projects/{project}/main_result/freebayes/{sample}_var.vcf", sample=SAMPLES, project=PROJECT),
-        # expand("projects/{project}/main_result/snpeff/{sample}_snpeff.vcf",sample=SAMPLES, project=PROJECT),
+        #expand("projects/{project}/main_result/snpeff/{sample}_snpeff.vcf",sample=SAMPLES, project=PROJECT),
         expand("projects/{project}/main_result/mafft/mafft.fasta", sample=SAMPLES, project=PROJECT),
         expand("projects/{project}/main_result/fasttre/tree", sample=SAMPLES, project=PROJECT),  
     )    
