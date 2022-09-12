@@ -1,5 +1,5 @@
 import pandas
-
+from utils.get_gene_bank import get_genes
 class Data:
     def __init__(self,file):
         self.df = pandas.read_csv(file,na_values=None)
@@ -29,11 +29,12 @@ test = Data("./config_user/sample_info_1.csv")
 
 import yaml
 
-def get_output_files_se(SAMPLES, PROJECT):
+def get_output_files_se(SAMPLES, PROJECT,REFERENCE):
     SAMPLES = SAMPLES
     PROJECT = PROJECT
+    config_user = {'samples':SAMPLES, 'project':PROJECT, 'ref':'SARS_CoV_2', 'proteins':get_genes(REFERENCE)}
     with open('config_user/config_run.yaml', 'w') as file:
-        documents = yaml.dump({'samples':SAMPLES, 'project':PROJECT}, file)
+        documents = yaml.dump(config_user, file)
     return(
         expand("samples/{sample}/raw_fastqc/{sample}_fastqc.html", sample=SAMPLES),
         expand("samples/{sample}/trimmed_fastqc/{sample}.trimmed_fastqc.html", sample=SAMPLES),
@@ -47,14 +48,16 @@ def get_output_files_se(SAMPLES, PROJECT):
         expand("projects/{project}/main_result/freebayes/{sample}_var.vcf", sample=SAMPLES, project=PROJECT),
         #expand("projects/{project}/main_result/snpeff/{sample}_snpeff.vcf",sample=SAMPLES, project=PROJECT),
         expand("projects/{project}/main_result/mafft/mafft.fasta", sample=SAMPLES, project=PROJECT),
+        expand("projects/{project}/main_result/{ref}/Alignment_aa_{ref}_{protein}.fasta",project=PROJECT,ref=config_user["ref"],protein=config_user["proteins"]),
         expand("projects/{project}/main_result/fasttre/tree", sample=SAMPLES, project=PROJECT), 
     )
 
-def get_output_files_pe(SAMPLES, PROJECT):
+def get_output_files_pe(SAMPLES, PROJECT,REFERENCE):
     SAMPLES = SAMPLES
     PROJECT = PROJECT
+    config_user = {'samples':SAMPLES, 'project':PROJECT, 'ref':'SARS_CoV_2', 'proteins':get_genes(REFERENCE)}
     with open('config_user/config_run.yaml', 'w') as file:
-        documents = yaml.dump({'samples':SAMPLES, 'project':PROJECT}, file)
+        documents = yaml.dump(config_user, file)
     return(
         expand("samples/{sample}/raw_fastqc/{sample}_{direction}_fastqc.html", sample=SAMPLES,direction=["1","2"]), #generalziar
         expand("samples/{sample}/trimmed_fastqc/{sample}_{direction}.trimmed_fastqc.html", sample=SAMPLES,direction=["1","2"]),
@@ -66,8 +69,9 @@ def get_output_files_pe(SAMPLES, PROJECT):
         expand("projects/{project}/main_result/coverage/{sample}_coverage.csv", sample=SAMPLES, project=PROJECT),
         expand("projects/{project}/main_result/coverage.csv",project=PROJECT),
         expand("projects/{project}/main_result/freebayes/{sample}_var.vcf", sample=SAMPLES, project=PROJECT),
-        #expand("projects/{project}/main_result/snpeff/{sample}_snpeff.vcf",sample=SAMPLES, project=PROJECT),
+        # expand("projects/{project}/main_result/snpeff/{sample}_snpeff.vcf",sample=SAMPLES, project=PROJECT),
         expand("projects/{project}/main_result/mafft/mafft.fasta", sample=SAMPLES, project=PROJECT),
+        expand("projects/{project}/main_result/{ref}/Alignment_aa_{ref}_{protein}.fasta",project=PROJECT,ref=config_user["ref"],protein=config_user["proteins"]),
         expand("projects/{project}/main_result/fasttre/tree", sample=SAMPLES, project=PROJECT),  
     )    
 
@@ -96,7 +100,7 @@ include: "rules/move_depth.smk"
 include: "rules/msa_masker.smk"
 include: "rules/fasttree.smk"
 include: "rules/seqret.smk"
-
+include: "rules/translate.smk"
 
 if test.get_sample_2() == []:
     get_output = get_output_files_se
@@ -106,5 +110,5 @@ else:
 
 rule all:
     input:
-        get_output(test.get_name(),"insaflu_comp_1")
+        get_output(test.get_name(),"insaflu_comp_1",REFERENCE)
 

@@ -1,4 +1,6 @@
 project: insaflu_comp_1
+proteins: []
+ref: SARS_CoV_2
 samples:
 - ERR10039715
 - ERR10039716
