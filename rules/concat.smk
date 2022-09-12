@@ -15,4 +15,4 @@ rule all_consensus:
     output:
         o="projects/{project}/main_result/AllConsensus.fasta"    
     shell:
-        "cat {input} > {output.o}"
+        "cat reference/SARS_CoV_2_Wuhan_Hu_1_MN908947.fasta {input} > {output.o}"

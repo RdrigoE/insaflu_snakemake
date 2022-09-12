@@ -2,9 +2,10 @@ rule makeproject:
     input:
         "align_samples/{sample}/snippy/snps.consensus.fa"
     output:
-        #d1 =directory("projects/{project}/main_result/"),
         d2 =directory("projects/{project}/sample_{sample}/snippy/"),
         d3 = "projects/{project}/sample_{sample}/snippy/snps.consensus.fa",
+        d4 = "projects/{project}/sample_{sample}/snippy/snps.depth.gz",
+        
 
     shell:
         "mkdir projects/{wildcards.project}/main_result/ -p | "

@@ -92,6 +92,8 @@ include: "rules/freebayes.smk"
 include: "rules/snpeff.smk"
 include: "rules/concat.smk"
 include: "rules/mafft.smk"
+include: "rules/move_depth.smk"
+include: "rules/msa_masker.smk"
 include: "rules/fasttree.smk"
 include: "rules/seqret.smk"
 
