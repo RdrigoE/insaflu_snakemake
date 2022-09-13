@@ -12,4 +12,4 @@ rule translate:
         expand("projects/{project}/main_result/{ref}/Alignment_aa_{ref}_{protein}.fasta",project=config_user["project"],ref=config_user["ref"],protein=config_user["proteins"]),
         dir = directory(f"projects/{p}/main_result/{r}/")
     shell:
-        "mkdir projects/insaflu_comp_1/main_result/SARS_CoV_2 | python utils/translate.py {input.ref} SARS_CoV_2 {input.i} {output.dir}"
+        "python utils/translate.py {input.ref} SARS_CoV_2 {input.i} {output.dir}"

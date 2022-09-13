@@ -1,4 +1,4 @@
-with open('config_user/config_run.yaml') as file:
+with open('config/config_run.yaml') as file:
     config_user = yaml.load(file, Loader=yaml.FullLoader)
 
 

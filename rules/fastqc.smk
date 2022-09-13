@@ -1,6 +1,6 @@
 rule raw_fastqc_se:
     input:
-        i = "user_data/{sample}."+ ext
+        i = "user_data/{sample}.fastq.gz"
     output:
         o = "samples/{sample}/raw_fastqc/{sample}_fastqc.html",
         dir=directory("samples/{sample}/raw_fastqc")
@@ -13,8 +13,8 @@ rule raw_fastqc_se:
 
 rule raw_fastqc_pe:
     input:
-        i1 = "user_data/{sample}_1."+ext,
-        i2 = "user_data/{sample}_2."+ext
+        i1 = "user_data/{sample}_1.fastq.gz",
+        i2 = "user_data/{sample}_2.fastq.gz"
     output:
         o1 = "samples/{sample}/raw_fastqc/{sample}_1_fastqc.html",
         o2 = "samples/{sample}/raw_fastqc/{sample}_2_fastqc.html",
