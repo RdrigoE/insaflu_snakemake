@@ -21,6 +21,6 @@ rule snpeff:
         #         sarscov2.chromosomes : SC2.1
         #         sarscov2.MN908947.codonTable : Bacterial_and_Plant_Plastid
     #
-    #
+    #tentar novamente a apontar para a ref
 #snpEff build -c $refdir/snpeff.config -dataDir . -gff3 ref"
 

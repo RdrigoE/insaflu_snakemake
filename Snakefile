@@ -2,7 +2,6 @@ from utils.get_gene_bank import get_genes
 from utils.import_user_data import Data
 from utils.import_user_data import read_yaml
 import yaml
-import os 
 
 sample_data = Data("./config_user/sample_info_1.csv")
 run_config = read_yaml('./config_user/config_user.yaml')
@@ -76,7 +75,7 @@ def prepare_run(settings):
         if os.path.isfile(settings['gb_reference']):
             REFERENCE_GB = settings['gb_reference']
         if sample_data.get_sample_2() == []:
-            return get_output_sample_pe
+            return get_output_sample_se
         else:
             return get_output_sample_pe
     else:
@@ -84,7 +83,8 @@ def prepare_run(settings):
             return get_output_files_se
         else:
             return get_output_files_pe
-    
+
+
 get_output = prepare_run(run_config)
 config_user = {'samples':sample_data.get_sample_names(), 'project':run_config['project_name'], 'ref':run_config['species'], 'proteins':get_genes(REFERENCE_GB)}
 with open('config/config_run.yaml', 'w') as file:

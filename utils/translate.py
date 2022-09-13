@@ -22,11 +22,10 @@ def write_fast_aa(reference,ref_name, consensus, outdir):
             for record in SeqIO.parse(consensus, "fasta"):
                 #need to find new solution to this problem
                 #the final aa alignment has no gaps due to error in this segment of the pipline
-                
                 try:
-                    new_consensus[gene[0]][record.id] += record.seq[pos[0]:pos[1]].replace('-','N').translate(table=11, gap='-',to_stop=False)
+                    new_consensus[gene[0]][record.id] += record.seq[pos[0]:pos[1]].replace('-','').translate(table=11, gap='-',to_stop=False)
                 except:
-                    new_consensus[gene[0]][record.id] = record.seq[pos[0]:pos[1]].replace('-','N').translate(table=11, gap='-',to_stop=False)
+                    new_consensus[gene[0]][record.id] = record.seq[pos[0]:pos[1]].replace('-','').translate(table=11, gap='-',to_stop=False)
     for gene in new_consensus:
         write_fasta(new_consensus[gene], f"{outdir}/Alignment_aa_{ref_name}_{gene}.fasta")
         
