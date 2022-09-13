@@ -1,5 +1,5 @@
 import pandas
-
+import yaml
 
 class Data:
     def __init__(self,file):
@@ -25,3 +25,9 @@ class Data:
         if len(self.get_sample_1()) == 1 and self.get_sample_2() == []: 
             return True
         return False
+
+def read_yaml(file):
+    with open(file) as file:
+        return yaml.load(file, Loader=yaml.FullLoader)
+
+

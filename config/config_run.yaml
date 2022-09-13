@@ -1,0 +1,20 @@
+project: insaflu
+proteins:
+- orf1ab
+- S
+- ORF3a
+- E
+- M
+- ORF6
+- ORF7a
+- ORF8
+- N
+- ORF10
+ref: SARS_CoV_2
+samples:
+- ERR10039715
+- ERR10039716
+- ERR10039718
+- ERR10039719
+- ERR10039720
+- ERR10039723

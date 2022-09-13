@@ -15,8 +15,8 @@ rule trimme_reads_SE:
 
 rule trimme_reads_PE:
     input:
-        i1 = "user_data/{sample}_1..fastq.gz",
-        i2 = "user_data/{sample}_2..fastq.gz"
+        i1 = "user_data/{sample}_1.fastq.gz",
+        i2 = "user_data/{sample}_2.fastq.gz"
     output:
         o1="samples/{sample}/trimmed_reads/{sample}_1.trimmed.fastq.gz",
         o2="samples/{sample}/trimmed_reads/{sample}_2.trimmed.fastq.gz",

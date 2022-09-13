@@ -1,0 +1,5 @@
+only_samples: True
+project_name: insaflu
+species: SARS_CoV_2 #MonkeyPox #Flu
+fasta_reference: 'reference/'
+gb_reference: 'reference/'

@@ -4,8 +4,7 @@ with open('config/config_run.yaml') as file:
 
 rule snpeff:
     input:
-        i = "projects/{project}/main_result/freebayes/{sample}_var.vcf",
-        ref = REFERENCE_GFF3
+        i = "projects/{project}/main_result/freebayes/{sample}_var.vcf"
     output:
         o = "projects/{project}/main_result/snpeff/{sample}_snpeff.vcf",
     conda:

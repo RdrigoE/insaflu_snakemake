@@ -1,4 +1,0 @@
-only_samples: False
-project_name: insaflu_bigger
-fasta_reference: 'reference/'
-gb_reference: 'reference/'
