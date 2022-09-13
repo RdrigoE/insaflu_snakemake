@@ -11,9 +11,9 @@ rule snpeff:
     conda:
         "../envs/snpeff.yaml"
     params:
-        "-no-downstream -no-upstream -no-intergenic -no-utr -noStats -c config/snpeff.config "
+        "-no-downstream -no-upstream -no-intergenic -no-utr -noStats"
     shell:
-        "snpEff {params} -v SARS_CoV_2 {input.i}  > {output.o}"
+        "snpEff {params} -v MN908947 {input.i}  > {output.o}"
 
 
 
