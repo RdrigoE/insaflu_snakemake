@@ -11,8 +11,19 @@ def write_fasta(dictionary, filename):
                 fasta.write("\n".join(textwrap.wrap(str(value), 70)))
                 fasta.write("\n")
 
+def get_ref_adjusted_positions(consensus, positions): 
+    ref = list(SeqIO.parse(consensus, "fasta"))[0].seq
+    for gene in positions:
+        for group in gene[1]:
+            n_gaps = ref[:group[0]].count('-')
+            group[0] += n_gaps
+            group[1] += n_gaps
+    return positions
+
+    
 def write_fast_aa(reference,ref_name, consensus, outdir): 
     positions = ggb.get_positions_gb(reference)
+    positions = get_ref_adjusted_positions(consensus, positions)
     new_consensus = {}
     print(positions)
     for gene in positions:
@@ -21,7 +32,6 @@ def write_fast_aa(reference,ref_name, consensus, outdir):
             #print(f"This is {gene[0]} with the pos {pos[0], pos[1]}") #This is orf1ab with the pos (265, 13468)
             for record in SeqIO.parse(consensus, "fasta"):
                 #need to find new solution to this problem
-                #the final aa alignment has no gaps due to error in this segment of the pipline
                 try:
                     new_consensus[gene[0]][record.id] += record.seq[pos[0]:pos[1]].replace('-','').translate(table=11, gap='-',to_stop=False)
                 except:
