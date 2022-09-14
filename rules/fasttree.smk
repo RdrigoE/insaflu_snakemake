@@ -1,6 +1,6 @@
 rule fasttree:
     input:
-        "projects/{project}/main_result/mafft/mafft_masked.fasta"    
+        "projects/{project}/main_result/mafft/Alignment_nt_All_masked.fasta"    
     output:
         "projects/{project}/main_result/fasttre/tree"    
     conda:

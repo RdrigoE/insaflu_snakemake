@@ -2,7 +2,7 @@ import os
 import sys
 
 #sys.argv[1] -> project name
-#sys.argv[2] -> species
+#sys.argv[2] -> sample
 
 # Get the list of all files and directories
 path = f"projects/{sys.argv[1]}/sample_{sys.argv[2]}/snippy/"
@@ -19,5 +19,7 @@ for file in dir_list:
             lines[0] = f">{file}_{sys.argv[3]}\n"
             with open(f"projects/{sys.argv[1]}/consensus/"+lines[0][1:-1]+"_consensus.fasta", "w") as w:
                 w.writelines(lines)
+            w.close()
+        f.close()
 
 

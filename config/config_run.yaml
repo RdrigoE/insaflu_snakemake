@@ -1,20 +1,14 @@
-project: insaflu_new_translate
+locus: Flu
+project: first_flu
 proteins:
-- orf1ab
-- S
-- ORF3a
-- E
+- PB2
+- PB1
+- PA
+- HA
+- NP
+- NA
 - M
-- ORF6
-- ORF7a
-- ORF8
-- N
-- ORF10
-ref: SARS_CoV_2
+- NS
 samples:
-- ERR10039715
-- ERR10039716
-- ERR10039718
-- ERR10039719
-- ERR10039720
-- ERR10039723
+- SRR10885407
+- SRR10885406

@@ -10,7 +10,7 @@ rule snpeff:
     conda:
         "../envs/snpeff.yaml"
     params:
-        "-no-downstream -no-upstream -no-intergenic -no-utr -noStats"
+        "-no-downstream -no-upstream -no-intergenic -no-utr -noStats -c config/snpeff.config"
     shell:
         "snpEff {params} -v MN908947 {input.i}  > {output.o}"
 

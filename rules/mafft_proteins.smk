@@ -6,6 +6,6 @@ rule mafft_proteins:
     conda:
         "../envs/mafft.yaml"
     params:
-        "--preservecase"
+        "--preservecase --amino"
     shell:
         "mafft {params} {input} > {output}"
