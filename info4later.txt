@@ -1,0 +1,8 @@
+in config folder create a folder named data with the LOCUS name and inside it place the genbank file corresponding to that LOCUS
+then in config/snpeff.config write:
+    # SARS CoV 2
+        MN908947.genome :  Severe acute respiratory syndrome coronavirus 2
+                sarscov2.chromosomes : SC2.1
+                sarscov2.MN908947.codonTable : Bacterial_and_Plant_Plastid
+then run the command:
+     snpEff build -genbank -v {LOCUS} -c config/snpeff.config
