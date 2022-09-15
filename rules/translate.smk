@@ -1,15 +1,11 @@
 with open('config/config_run.yaml') as file:
     config_user = yaml.load(file, Loader=yaml.FullLoader)
 
-p = config_user["project"]
-locus = get_locus(REFERENCE_GB,config_user["locus"])
-
 rule translate:
     input:
         ref = REFERENCE_GB,
-        i = expand("projects/{p}/main_result/mafft/Alignment_nt_All_masked.fasta",p=p)
+        i = "projects/{project}/main_result/{locus}/Alignment_nt_{locus}_masked.fasta"
     output:
-        expand("projects/{project}/main_result/{ref}.fasta",ref = locus_protein_alignment, project = config_user["project"]),
-        dir = directory(expand("projects/{p}/main_result/{i}",p=p, i = locus)),
+        dir = "projects/{project}/main_result/{locus}/Alignment_aa_{locus}_{gene}_trans.fasta"
     shell:
-        "python utils/translate.py {input.ref} {locus} {input.i} {output.dir}"
+        "python utils/translate.py {input.ref} {input.i} {output.dir} '{wildcards.locus}' '{wildcards.gene}'"

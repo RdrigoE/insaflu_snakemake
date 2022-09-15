@@ -1,5 +1,5 @@
 locus: SARS_CoV_2
-project: first_flu
+project: covid
 proteins:
 - orf1ab
 - S

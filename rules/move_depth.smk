@@ -7,4 +7,4 @@ rule move_depth:
     output:
         "projects/{project}/main_result/depth/{sample}__{ref}.depth"
     shell:
-        "gzip -d -k -c {input} > {output}"# | python utils/split_depth_file.py {output}"
+        "gzip -d -k -c {input} > {output} | python utils/split_depth_file.py {output}"

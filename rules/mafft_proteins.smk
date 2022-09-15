@@ -1,8 +1,8 @@
 rule mafft_proteins:
     input:
-        "projects/{project}/main_result/{ref}/Alignment_aa_{ref}_{protein}.fasta"
+        "projects/{project}/main_result/{locus}/Alignment_aa_{locus}_{gene}_trans.fasta"
     output:
-        "projects/{project}/main_result/{ref}/Alignment_aa_{ref}_{protein}_mafft.fasta"
+        "projects/{project}/main_result/{locus}/Alignment_aa_{locus}_{gene}_mafft.fasta"
     conda:
         "../envs/mafft.yaml"
     params:
