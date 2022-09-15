@@ -4,7 +4,7 @@ from utils.import_user_data import read_yaml
 from utils.get_locus import get_locus_protein, get_locus
 import yaml
 
-sample_data = Data("./config_user/flu.csv")
+sample_data = Data("./config_user/sample_info.csv")
 run_config = read_yaml('./config_user/config_user.yaml')
 locus_protein_alignment = get_locus_protein(run_config["gb_reference"],run_config["locus"])
 
@@ -51,7 +51,7 @@ def get_output_files_pe():
         #expand("projects/{project}/main_result/coverage/{sample}_coverage.csv", sample=config_user['samples'], project=config_user['project']),
         expand("projects/{project}/main_result/coverage.csv",project=config_user['project']),
         #expand("projects/{project}/main_result/freebayes/{sample}_var.vcf", sample=config_user['samples'], project=config_user['project']),
-        #expand("projects/{project}/main_result/depth/{sample}.depth",sample=config_user['samples'], project=config_user['project']),        
+        expand("projects/{project}/main_result/depth/{sample}__{ref}.depth",sample=config_user['samples'], project=config_user['project'], ref=get_locus(run_config["gb_reference"],run_config["locus"])),        
         expand("projects/{project}/main_result/snpeff/{sample}_snpeff.vcf",sample=config_user['samples'], project=config_user['project']),
         expand("projects/{project}/main_result/mafft/Alignment_nt_All.fasta", sample=config_user['samples'], project=config_user['project']),
         expand("projects/{project}/main_result/{locus_protein_alignment_file}.fasta", project=config_user['project'],locus_protein_alignment_file = locus_protein_alignment),
