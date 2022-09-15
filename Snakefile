@@ -55,10 +55,10 @@ def get_output_files_pe():
         #expand("projects/{project}/main_result/{seg}/Alignment_nt_{seg}_masked.fasta",project=config_user['project'], seg=get_locus(run_config["gb_reference"],run_config["locus"])),
         expand("projects/{project}/main_result/depth/{sample}__{ref}.depth",sample=config_user['samples'], project=config_user['project'], ref=get_locus(run_config["gb_reference"],run_config["locus"])),        
         expand("projects/{project}/main_result/snpeff/{sample}_snpeff.vcf",sample=config_user['samples'], project=config_user['project']),
-        expand("projects/{project}/main_result/mafft/Alignment_nt_All.fasta", sample=config_user['samples'], project=config_user['project']),
+        expand("projects/{project}/main_result/mafft/Alignment_nt_All_concat.fasta", sample=config_user['samples'], project=config_user['project']),
         expand("projects/{project}/main_result/{locus_protein_alignment_file}_trans.fasta", project=config_user['project'],locus_protein_alignment_file = locus_protein_alignment),
         expand("projects/{project}/main_result/{locus_protein_alignment_file}_mafft.fasta", project=config_user['project'],locus_protein_alignment_file = locus_protein_alignment),
-        #expand("projects/{project}/main_result/fasttre/tree", sample=config_user['samples'], project=config_user['project']), 
+        expand("projects/{project}/main_result/fasttre/tree", sample=config_user['samples'], project=config_user['project']), 
         expand("projects/{project}/main_result/{locus_protein_alignment_file}_tree.tree", project=config_user['project'],locus_protein_alignment_file = locus_protein_alignment),
         
     ) 

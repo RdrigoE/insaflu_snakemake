@@ -1,6 +1,7 @@
 with open('config/config_run.yaml') as file:
     config_user = yaml.load(file, Loader=yaml.FullLoader)
 
+species = config_user['locus']
 
 fr = REFERENCE
 rule cp_directory:
@@ -13,8 +14,10 @@ rule cp_directory:
 
 rule all_consensus:
     input:
-        expand("projects/{project}/main_result/consensus/{sample}_consensus.fasta",project=config_user['project'], sample=config_user['samples'])
+        i = expand("projects/{project}/main_result/consensus/{sample}_consensus.fasta",project=config_user['project'], sample=config_user['samples']),
+        ref = REFERENCE_GB
     output:
-        o="projects/{project}/main_result/AllConsensus.fasta"    
+        o="projects/{project}/main_result/AllConsensus_sep.fasta",
+        o_2 = "projects/{project}/main_result/AllConsensus_concat.fasta"    
     shell:
-        "cat {fr} {input} > {output.o}"
+        "cat {fr} {input.i} > {output.o} | python utils/concat_segments.py {output.o} {input.ref} {species} {output.o_2}"
