@@ -6,7 +6,7 @@ species = config_user['locus']
 fr = REFERENCE
 rule cp_directory:
     input:
-        i1 = expand("projects/{project}/sample_{sample}/snippy/snps.consensus.fa",project=config_user['project'], sample=config_user['samples']),
+        i1 = expand("projects/{project}/sample_{sample}/snippy/snps.aligned.fa",project=config_user['project'], sample=config_user['samples']),
     output:
         o1 = "projects/{project}/main_result/consensus/{sample}_consensus.fasta"
     shell:

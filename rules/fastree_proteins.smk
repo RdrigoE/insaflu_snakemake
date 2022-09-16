@@ -9,3 +9,4 @@ rule fasttree_proteins:
         "-gtr -boot 1000 -nt"
     shell:
         "fasttree {params} {input} > {output}"
+    

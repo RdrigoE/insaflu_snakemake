@@ -1,20 +1,14 @@
-locus: SARS_CoV_2
-project: covid_testing
+locus: Flu
+project: flu_testing
 proteins:
-- orf1ab
-- S
-- ORF3a
-- E
+- PB2
+- PB1
+- PA
+- HA
+- NP
+- NA
 - M
-- ORF6
-- ORF7a
-- ORF8
-- N
-- ORF10
+- NS
 samples:
-- ERR10039715
-- ERR10039716
-- ERR10039718
-- ERR10039719
-- ERR10039720
-- ERR10039723
+- SRR10885405
+- SRR10885406
