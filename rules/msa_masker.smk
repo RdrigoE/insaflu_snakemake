@@ -35,7 +35,7 @@ rule msa_masker_proteins:
 rule msa_masker:
     input:
         all = "projects/{project}/main_result/mafft/Alignment_nt_All_concat.fasta",
-        i = expand("projects/{project}/main_result/depth/{sample}__{ref}.depth",sample=config_user['samples'], project=config_user['project'], ref=get_locus(run_config["gb_reference"],run_config["locus"])),        
+        i = expand("projects/{project}/main_result/depth/{sample}.depth",sample=config_user['samples'], project=config_user['project'], ref=get_locus(run_config["gb_reference"],run_config["locus"])),        
 
     output:
        "projects/{project}/main_result/mafft/Alignment_nt_All_masked.fasta"  

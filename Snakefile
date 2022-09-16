@@ -4,8 +4,8 @@ from utils.import_user_data import read_yaml
 from utils.get_locus import get_locus_protein, get_locus
 import yaml
 
-sample_data = Data("./config_user/sample_info.csv")
-run_config = read_yaml('./config_user/config_user.yaml')
+sample_data = Data("./config_user/sample_info_1.csv")
+run_config = read_yaml('./config_user/config_user1.yaml')
 locus_protein_alignment = get_locus_protein(run_config["gb_reference"],run_config["locus"])
 
 def get_output_sample_se():
@@ -27,16 +27,24 @@ def get_output_files_se():
         expand("samples/{sample}/raw_fastqc/{sample}_fastqc.html", sample=config_user['samples']),
         expand("samples/{sample}/trimmed_fastqc/{sample}.trimmed_fastqc.html", sample=config_user['samples']),
         #expand("samples/{sample}/spades/contigs.fasta", sample=config_user['samples']),
-        expand("samples/{sample}/abricate/abricate_{sample}.csv", sample=config_user['samples']),
-        #expand("align_samples/{sample}/snippyref=config_user["locus"],protein=config_user["proteins"]t/coverage/{sample}_coverage.tab", sample=config_user['samples'], project=config_user['project']),
+        #expand("samples/{sample}/abricate/abricate_{sample}.csv", sample=config_user['samples']),
+        #expand("align_samples/{sample}/snippy/snps.consensus.fa",project=config_user['project'], sample=config_user['samples']),
+        #expand("projects/{project}/main_result/consensus/{sample}__SARS_COV_2_consensus.fasta", sample=config_user['samples'], project=config_user['project']),
+        #expand("projects/{project}/main_result/AllConsensus.fasta", project=config_user['project']),
+        #expand("projects/{project}/main_result/coverage/{sample}_coverage.csv", sample=config_user['samples'], project=config_user['project']),
         expand("projects/{project}/main_result/coverage.csv",project=config_user['project']),
         #expand("projects/{project}/main_result/freebayes/{sample}_var.vcf", sample=config_user['samples'], project=config_user['project']),
+        expand("projects/{project}/main_result/{seg}/Alignment_nt_{seg}.fasta",project=config_user['project'], seg=get_locus(run_config["gb_reference"],run_config["locus"])),
+        #expand("projects/{project}/main_result/{seg}/Alignment_nt_{seg}_masked.fasta",project=config_user['project'], seg=get_locus(run_config["gb_reference"],run_config["locus"])),
+        # expand("projects/{project}/main_result/depth/{sample}__{ref}.depth",sample=config_user['samples'], project=config_user['project'], ref=get_locus(run_config["gb_reference"],run_config["locus"])),        
+        # expand("projects/{project}/main_result/depth/{sample}.depth",sample=config_user['samples'], project=config_user['project']),        
         expand("projects/{project}/main_result/snpeff/{sample}_snpeff.vcf",sample=config_user['samples'], project=config_user['project']),
-        expand("projects/{project}/main_result/mafft/Alignment_nt_All.fasta", sample=config_user['samples'], project=config_user['project']),
-        expand("projects/{project}/main_result/{locus_protein_alignment_file}.fasta",project=config_user['project'],locus_protein_alignment_file = locus_protein_alignment),
+        expand("projects/{project}/main_result/mafft/Alignment_nt_All_concat.fasta", sample=config_user['samples'], project=config_user['project']),
+        expand("projects/{project}/main_result/{locus_protein_alignment_file}_trans.fasta", project=config_user['project'],locus_protein_alignment_file = locus_protein_alignment),
+        expand("projects/{project}/main_result/{locus_protein_alignment_file}_mafft.fasta", project=config_user['project'],locus_protein_alignment_file = locus_protein_alignment),
         expand("projects/{project}/main_result/fasttre/tree", sample=config_user['samples'], project=config_user['project']), 
         expand("projects/{project}/main_result/{locus_protein_alignment_file}_tree.tree", project=config_user['project'],locus_protein_alignment_file = locus_protein_alignment),
-
+        
     )
 
 def get_output_files_pe():
@@ -51,9 +59,10 @@ def get_output_files_pe():
         #expand("projects/{project}/main_result/coverage/{sample}_coverage.csv", sample=config_user['samples'], project=config_user['project']),
         expand("projects/{project}/main_result/coverage.csv",project=config_user['project']),
         #expand("projects/{project}/main_result/freebayes/{sample}_var.vcf", sample=config_user['samples'], project=config_user['project']),
-        expand("projects/{project}/main_result/{seg}/Alignment_nt_{seg}.fasta",project=config_user['project'], seg=get_locus(run_config["gb_reference"],run_config["locus"])),
+        #expand("projects/{project}/main_result/{seg}/Alignment_nt_{seg}.fasta",project=config_user['project'], seg=get_locus(run_config["gb_reference"],run_config["locus"])),
         #expand("projects/{project}/main_result/{seg}/Alignment_nt_{seg}_masked.fasta",project=config_user['project'], seg=get_locus(run_config["gb_reference"],run_config["locus"])),
-        expand("projects/{project}/main_result/depth/{sample}__{ref}.depth",sample=config_user['samples'], project=config_user['project'], ref=get_locus(run_config["gb_reference"],run_config["locus"])),        
+        # expand("projects/{project}/main_result/depth/{sample}__{ref}.depth",sample=config_user['samples'], project=config_user['project'], ref=get_locus(run_config["gb_reference"],run_config["locus"])),        
+        # expand("projects/{project}/main_result/depth/{sample}.depth",sample=config_user['samples'], project=config_user['project']),        
         expand("projects/{project}/main_result/snpeff/{sample}_snpeff.vcf",sample=config_user['samples'], project=config_user['project']),
         expand("projects/{project}/main_result/mafft/Alignment_nt_All_concat.fasta", sample=config_user['samples'], project=config_user['project']),
         expand("projects/{project}/main_result/{locus_protein_alignment_file}_trans.fasta", project=config_user['project'],locus_protein_alignment_file = locus_protein_alignment),

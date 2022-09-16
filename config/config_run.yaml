@@ -1,5 +1,5 @@
 locus: SARS_CoV_2
-project: first_covid
+project: covid_testing
 proteins:
 - orf1ab
 - S
@@ -12,5 +12,9 @@ proteins:
 - N
 - ORF10
 samples:
+- ERR10039715
+- ERR10039716
 - ERR10039718
+- ERR10039719
+- ERR10039720
 - ERR10039723
