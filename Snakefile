@@ -61,8 +61,8 @@ class Checkpoint_MakePattern:
 
 
 
-sample_data = Data("./config_user/flu.csv")
-run_config = read_yaml('./config_user/config_user2.yaml')
+sample_data = Data("./config_user/sample_info_1.csv")
+run_config = read_yaml('./config_user/config_user1.yaml')
 locus_protein_alignment = get_locus_protein(run_config["gb_reference"],run_config["locus"])
 
 def get_output_sample_se():
@@ -121,6 +121,8 @@ def get_output_files_pe():
         expand("projects/{project}/main_result/depth/{sample}__{ref}.depth",sample=config_user['samples'], project=config_user['project'], ref=get_locus(run_config["gb_reference"],run_config["locus"])),        
         expand("projects/{project}/main_result/depth/{sample}.depth",sample=config_user['samples'], project=config_user['project']),        
         expand("projects/{project}/main_result/snpeff/{sample}_snpeff.vcf",sample=config_user['samples'], project=config_user['project']),
+        expand("projects/{project}/main_result/snpeff.vcf",project=config_user['project']),
+
         expand("projects/{project}/main_result/mafft/Alignment_nt_All_concat.fasta", sample=config_user['samples'], project=config_user['project']),
         Checkpoint_MakePattern(f'projects/{run_config["project_name"]}/main_result/',"_trans.fasta",run_config['gb_reference'],run_config["locus"], "projects/flu_testing/main_result/coverage_translate.csv"),
         Checkpoint_MakePattern(f'projects/{run_config["project_name"]}/main_result/',"_mafft.fasta",run_config['gb_reference'],run_config["locus"], "projects/flu_testing/main_result/coverage_translate.csv"),
@@ -131,7 +133,7 @@ def get_output_files_pe():
         #expand("projects/{project}/main_result/{locus_protein_alignment_file}_mafft.fasta", project=config_user['project'],locus_protein_alignment_file = locus_protein_alignment),
         expand("projects/{project}/main_result/fasttre/tree", sample=config_user['samples'], project=config_user['project']), 
         #expand("projects/{project}/main_result/{locus_protein_alignment_file}_tree.tree", project=config_user['project'],locus_protein_alignment_file = locus_protein_alignment),
-        
+
     ) 
 
 
@@ -183,7 +185,7 @@ include: "rules/fasttree.smk"
 include: "rules/seqret.smk"
 include: "rules/mafft_proteins.smk"
 include: "rules/fastree_proteins.smk"
-
+include: "rules/snpeff_concat.smk"
 
 rule all:
     input:
