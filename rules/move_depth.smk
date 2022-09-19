@@ -5,7 +5,7 @@ rule move_depth:
     input:
         "projects/{project}/sample_{sample}/snippy/snps.depth.gz"
     output:
-        o = "projects/{project}/main_result/depth/{sample}__{ref}.depth",
+        o = temp("projects/{project}/main_result/depth/{sample}__{ref}.depth"),
     shell:
         "gzip -d -k -c {input} > {output.o} | python utils/split_depth_file.py {output.o}"
 
