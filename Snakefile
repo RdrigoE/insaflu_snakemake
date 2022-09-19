@@ -83,8 +83,8 @@ def get_output_files_se():
     return(
         expand("samples/{sample}/raw_fastqc/{sample}_fastqc.html", sample=config_user['samples']),
         expand("samples/{sample}/trimmed_fastqc/{sample}.trimmed_fastqc.html", sample=config_user['samples']),
-        #expand("samples/{sample}/spades/contigs.fasta", sample=config_user['samples']),
-        #expand("samples/{sample}/abricate/abricate_{sample}.csv", sample=config_user['samples']),
+        expand("samples/{sample}/spades/contigs.fasta", sample=config_user['samples']),
+        expand("samples/{sample}/abricate/abricate_{sample}.csv", sample=config_user['samples']),
         #expand("align_samples/{sample}/snippy/snps.consensus.fa",project=config_user['project'], sample=config_user['samples']),
         #expand("projects/{project}/main_result/consensus/{sample}__SARS_COV_2_consensus.fasta", sample=config_user['samples'], project=config_user['project']),
         #expand("projects/{project}/main_result/AllConsensus.fasta", project=config_user['project']),
@@ -108,8 +108,8 @@ def get_output_files_pe():
     return(
         expand("samples/{sample}/raw_fastqc/{sample}_{direction}_fastqc.html", sample=config_user['samples'],direction=["1","2"]), #generalizar
         expand("samples/{sample}/trimmed_fastqc/{sample}_{direction}.trimmed_fastqc.html", sample=config_user['samples'],direction=["1","2"]),
-        #expand("samples/{sample}/spades/contigs.fasta", sample=config_user['samples']),
-        #expand("samples/{sample}/abricate/abricate_{sample}.csv", sample=config_user['samples']),
+        expand("samples/{sample}/spades/contigs.fasta", sample=config_user['samples']),
+        expand("samples/{sample}/abricate/abricate_{sample}.csv", sample=config_user['samples']),
         #expand("align_samples/{sample}/snippy/snps.consensus.fa",project=config_user['project'], sample=config_user['samples']),
         #expand("projects/{project}/main_result/consensus/{sample}__SARS_COV_2_consensus.fasta", sample=config_user['samples'], project=config_user['project']),
         #expand("projects/{project}/main_result/AllConsensus.fasta", project=config_user['project']),
@@ -163,7 +163,6 @@ config_user = {'samples':sample_data.get_sample_names(),
 with open('config/config_run.yaml', 'w') as file:
     documents = yaml.dump(config_user, file)
     file.close()
-
 
 include: "rules/fastqc.smk"
 include: "rules/trimmomatic.smk"
