@@ -12,7 +12,7 @@ rule snpeff:
     params:
         "-no-downstream -no-upstream -no-intergenic -no-utr -noStats -c config/snpeff.config"
     shell:
-        "snpEff {params} -v sarscov2 {input.i}  > {output.o}"
+        "snpEff {params} -v MN908947 {input.i}  > {output.o}"
 
 
 #ir ao snpEff config e colocar:❯ nano /home/reusebio/tese/insaflu_snakemake/.snakemake/conda/42a5a38a1b1e62c38dd21415a318b1ee_/share/snpeff-4.3.1t-5/snpEff.config 
