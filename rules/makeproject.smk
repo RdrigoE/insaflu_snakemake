@@ -1,6 +1,6 @@
 rule makeproject:
     input:
-        "align_samples/{sample}/snippy/snps.aligned.fa"
+        "align_samples/{sample}/snippy/snps.consensus.fa"
     output:
         d2 =directory("projects/{project}/sample_{sample}/snippy/"),
         d3 = "projects/{project}/sample_{sample}/snippy/snps.consensus.fa",
