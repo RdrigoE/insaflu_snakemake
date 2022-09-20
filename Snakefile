@@ -121,7 +121,7 @@ def get_output_files_pe():
         expand("projects/{project}/main_result/depth/{sample}__{ref}.depth",sample=config_user['samples'], project=config_user['project'], ref=get_locus(run_config["gb_reference"],run_config["locus"])),        
         expand("projects/{project}/main_result/depth/{sample}.depth",sample=config_user['samples'], project=config_user['project']),        
         expand("projects/{project}/main_result/snpeff/{sample}_snpeff.vcf",sample=config_user['samples'], project=config_user['project']),
-        expand("projects/{project}/main_result/snpeff.vcf",project=config_user['project']),
+        expand("projects/{project}/main_result/validated_minor_iSNVs.csv",project=config_user['project']),
 
         expand("projects/{project}/main_result/mafft/Alignment_nt_All_concat.fasta", sample=config_user['samples'], project=config_user['project']),
         Checkpoint_MakePattern(f'projects/{run_config["project_name"]}/main_result/',"_trans.fasta",run_config['gb_reference'],run_config["locus"], "projects/flu_testing/main_result/coverage_translate.csv"),
@@ -185,7 +185,7 @@ include: "rules/fasttree.smk"
 include: "rules/seqret.smk"
 include: "rules/mafft_proteins.smk"
 include: "rules/fastree_proteins.smk"
-include: "rules/snpeff_concat.smk"
+include: "rules/freebays_concat.smk"
 
 rule all:
     input:

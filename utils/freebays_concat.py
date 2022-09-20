@@ -11,11 +11,15 @@ for file in files_path:
             if line.startswith('#'):
                 continue
             line = line.strip().split()
-            line.insert(0,file)
-            vcf_final.append(line)
+            if 'TYPE=snp' not in line[7].split(";"):
+                print(line[7].split(";"))
+                line.insert(0,file)
+                vcf_final.append(line)
+                
+
 
 output_file = sys.argv[2]
 with open(output_file, mode='w') as f:
-    f_writer = csv.writer(f, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+    f_writer = csv.writer(f, delimiter=',')
     f_writer.writerows(vcf_final)
     f.close()

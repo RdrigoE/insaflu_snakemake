@@ -6,7 +6,7 @@ rule fasttree_proteins:
     conda:
         "../envs/fasttree.yaml"
     params:
-        "-gtr -boot 1000 -nt"
+        "-gtr -boot 1000"
     shell:
         "fasttree {params} {input} > {output}"
     
