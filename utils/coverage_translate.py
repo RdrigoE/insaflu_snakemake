@@ -18,9 +18,9 @@ def get_coverage(filename,n_locus):
 list = sys.argv[1].split()
 
 n_locus = int(sys.argv[3])
-
 coverage_translate = []
 for filename in list:
+    print(get_coverage(filename,n_locus))
     coverage_translate.append(get_coverage(filename,n_locus))
 
 

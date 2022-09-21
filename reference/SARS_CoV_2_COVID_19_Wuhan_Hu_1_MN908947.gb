@@ -1,4 +1,4 @@
-LOCUS       MN908947               29903 bp ss-RNA     linear   VRL 18-MAR-2020
+LOCUS       MN908947               29903 bp ss-RNA     linear   VRL 11-FEB-2020
 DEFINITION  Severe acute respiratory syndrome coronavirus 2 isolate Wuhan-Hu-1,
             complete genome.
 ACCESSION   MN908947
@@ -6,17 +6,17 @@ VERSION     MN908947.3
 KEYWORDS    .
 SOURCE      Severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2)
   ORGANISM  Severe acute respiratory syndrome coronavirus 2
-            Viruses; Riboviria; Orthornavirae; Pisuviricota; Pisoniviricetes;
-            Nidovirales; Cornidovirineae; Coronaviridae; Orthocoronavirinae;
-            Betacoronavirus; Sarbecovirus.
+            Viruses; Riboviria; Nidovirales; Cornidovirineae; Coronaviridae;
+            Orthocoronavirinae; Betacoronavirus; Sarbecovirus.
 REFERENCE   1  (bases 1 to 29903)
   AUTHORS   Wu,F., Zhao,S., Yu,B., Chen,Y.M., Wang,W., Song,Z.G., Hu,Y.,
             Tao,Z.W., Tian,J.H., Pei,Y.Y., Yuan,M.L., Zhang,Y.L., Dai,F.H.,
             Liu,Y., Wang,Q.M., Zheng,J.J., Xu,L., Holmes,E.C. and Zhang,Y.Z.
   TITLE     A new coronavirus associated with human respiratory disease in
             China
-  JOURNAL   Nature 579 (7798), 265-269 (2020)
+  JOURNAL   Nature (2020) In press
    PUBMED   32015508
+  REMARK    Publication Status: Available-Online prior to print
 REFERENCE   2  (bases 1 to 29903)
   AUTHORS   Wu,F., Zhao,S., Yu,B., Chen,Y.-M., Wang,W., Hu,Y., Song,Z.-G.,
             Tao,Z.-W., Tian,J.-H., Pei,Y.-Y., Yuan,M.L., Zhang,Y.-L.,
@@ -795,4 +795,3 @@ ORIGIN
     29821 tttagtagtg ctatccccat gtgattttaa tagcttctta ggagaatgac aaaaaaaaaa
     29881 aaaaaaaaaa aaaaaaaaaa aaa
 //
-

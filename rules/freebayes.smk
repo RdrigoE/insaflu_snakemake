@@ -3,7 +3,7 @@ rule freebayes:
         i  = "align_samples/{sample}/snippy/snps.bam",
         ref = REFERENCE
     output:
-        o = "projects/{project}/main_result/freebayes/{sample}_var.vcf"
+        o = "projects/{project}/main_result/freebayes/{sample}_var.vcf",
     conda:
         "../envs/freebayes.yaml"
 
@@ -16,5 +16,5 @@ rule freebayes:
         "--ploidy 2 "
         "-V " #ver este <-
     shell:
-        "freebayes {params} -f {input.ref} {input.i} > {output}"
+        "freebayes {params} -f {input.ref} {input.i} > {output.o}"
     

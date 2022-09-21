@@ -1,6 +1,7 @@
 rule snpeff_sample:
     input:
-        "projects/{project}/sample_{sample}/snippy/snps.vcf"
+        i1 = "projects/{project}/sample_{sample}/snippy/snps.vcf",
+        i2 = "projects/{project}/main_result/snpeff/ready.txt"
     output:
         "projects/{project}/main_result/snpeff_samples/{sample}_snpeff.vcf"
     conda:
@@ -8,5 +9,5 @@ rule snpeff_sample:
     params:
         "-no-downstream -no-upstream -no-intergenic -no-utr -noStats -c config/snpeff.config"
     shell:
-        #"snpEff {params} -v MN908947.3 {input}  > {output}"
-        "snpEff {params} -v B_Vic_B_Brisbane_60_2008 {input}  > {output}"
+        #"snpEff {params} -v MN908947.3 {input.1}  > {output}"
+        "snpEff {params} -v {REFERENCE_NAME} {input.i1}  > {output}"

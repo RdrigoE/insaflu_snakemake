@@ -20,7 +20,7 @@ rule pre_msa_masker:
 
 rule msa_masker_proteins:
     input:
-        all = "projects/{project}/main_result/{seg}/Alignment_nt_{seg}.fasta",
+        protein = "projects/{project}/main_result/{seg}/Alignment_nt_{seg}.fasta",
         i = expand("projects/{project}/main_result/depth/{sample}__{ref}.depth",sample=config_user['samples'], project=config_user['project'], ref=get_locus(run_config["gb_reference"],run_config["locus"])),        
 
     output:
@@ -30,7 +30,7 @@ rule msa_masker_proteins:
     params:
         "--c 1"
     shell:
-        "python software/msa_masker/msa_masker.py -i {input.all} -df projects/{wildcards.project}/main_result/depth/ -o {output} {params}"
+        "python software/msa_masker/msa_masker.py -i {input.protein} -df projects/{wildcards.project}/main_result/depth/ -o {output} {params}"
 
 rule msa_masker:
     input:
