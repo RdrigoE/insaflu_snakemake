@@ -61,11 +61,11 @@ class Checkpoint_MakePattern:
 
 
 
-sample_data = Data("./config_user/sample_info_1.csv")
-#sample_data = Data("./config_user/flu.csv")
+# sample_data = Data("./config_user/sample_info_1.csv")
+sample_data = Data("./config_user/flu.csv")
 
-run_config = read_yaml('./config_user/config_user1.yaml')
-#run_config = read_yaml('./config_user/config_user2.yaml')
+# run_config = read_yaml('./config_user/config_user1.yaml')
+run_config = read_yaml('./config_user/config_user2.yaml')
 
 locus_protein_alignment = get_locus_protein(run_config["gb_reference"],run_config["locus"])
 
@@ -112,8 +112,8 @@ def get_output_files_pe():
     return(
         expand("samples/{sample}/raw_fastqc/{sample}_{direction}_fastqc.html", sample=config_user['samples'],direction=["1","2"]), #generalizar
         expand("samples/{sample}/trimmed_fastqc/{sample}_{direction}.trimmed_fastqc.html", sample=config_user['samples'],direction=["1","2"]),
-        # expand("samples/{sample}/spades/contigs.fasta", sample=config_user['samples']),
-        # expand("samples/{sample}/abricate/abricate_{sample}.csv", sample=config_user['samples']),
+        expand("samples/{sample}/spades/contigs.fasta", sample=config_user['samples']),
+        expand("samples/{sample}/abricate/abricate_{sample}.csv", sample=config_user['samples']),
         #expand("align_samples/{sample}/snippy/snps.consensus.fa",project=config_user['project'], sample=config_user['samples']),
         #expand("projects/{project}/main_result/consensus/{sample}__SARS_COV_2_consensus.fasta", sample=config_user['samples'], project=config_user['project']),
         #expand("projects/{project}/main_result/AllConsensus.fasta", project=config_user['project']),
@@ -132,16 +132,16 @@ def get_output_files_pe():
         expand("projects/{project}/main_result/validated_variants.csv",project=config_user['project']),
         expand("projects/{project}/main_result/validated_minor_iSNVs_inc_indels.csv",project=config_user['project']),
         expand("projects/{project}/main_result/proportions_iSNVs_graph.csv",project=config_user['project']),
-        # expand("projects/{project}/main_result/mafft/Alignment_nt_All_concat.fasta", sample=config_user['samples'], project=config_user['project']),
+        expand("projects/{project}/main_result/mafft/Alignment_nt_All_concat.fasta", sample=config_user['samples'], project=config_user['project']),
         Checkpoint_MakePattern(f'projects/{run_config["project_name"]}/main_result/',"_trans.fasta",run_config['gb_reference'],run_config["locus"],f"projects/{config_user['project']}/main_result/coverage_translate.csv"),
         Checkpoint_MakePattern(f'projects/{run_config["project_name"]}/main_result/',"_mafft.fasta",run_config['gb_reference'],run_config["locus"],f"projects/{config_user['project']}/main_result/coverage_translate.csv"),
         Checkpoint_MakePattern(f'projects/{run_config["project_name"]}/main_result/',"_tree.tree",run_config['gb_reference'],run_config["locus"], f"projects/{config_user['project']}/main_result/coverage_translate.csv"),
 
 
-        expand("projects/{project}/main_result/{locus_protein_alignment_file}_trans.fasta", project=config_user['project'],locus_protein_alignment_file = locus_protein_alignment),
-        expand("projects/{project}/main_result/{locus_protein_alignment_file}_mafft.fasta", project=config_user['project'],locus_protein_alignment_file = locus_protein_alignment),
-        expand("projects/{project}/main_result/fasttre/tree", sample=config_user['samples'], project=config_user['project']), 
-        expand("projects/{project}/main_result/{locus_protein_alignment_file}_tree.tree", project=config_user['project'],locus_protein_alignment_file = locus_protein_alignment),
+        # expand("projects/{project}/main_result/{locus_protein_alignment_file}_trans.fasta", project=config_user['project'],locus_protein_alignment_file = locus_protein_alignment),
+        # expand("projects/{project}/main_result/{locus_protein_alignment_file}_mafft.fasta", project=config_user['project'],locus_protein_alignment_file = locus_protein_alignment),
+        # expand("projects/{project}/main_result/fasttre/tree", sample=config_user['samples'], project=config_user['project']), 
+        # expand("projects/{project}/main_result/{locus_protein_alignment_file}_tree.tree", project=config_user['project'],locus_protein_alignment_file = locus_protein_alignment),
 
     ) 
 

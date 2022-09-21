@@ -24,9 +24,10 @@ def get_ref_adjusted_positions(alignment, positions, locus, gene):
         if gene_group[0] == gene:
             for group in gene_group[1]:
                 group[0] = index_list[group[0]]
-                if group[1] == len(index_list):
+                if group[1] >= len(index_list): #if this is == it will throw an error cuz index list é mais pequena que o numero no group[1 ]
                     group[1] = index_list[-1]
                 else:
+                    print(len(index_list),group[1])
                     group[1] = index_list[group[1]]
             new_positions.append(gene_group)
     return new_positions

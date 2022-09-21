@@ -6,6 +6,7 @@ rule snpeff_sample:
     conda:
         "../envs/snpeff.yaml"
     params:
-        "-no-downstream -no-upstream -no-intergenic -no-utr -noStats "#-c config/snpeff.config"
+        "-no-downstream -no-upstream -no-intergenic -no-utr -noStats -c config/snpeff.config"
     shell:
-        "snpEff {params} -v MN908947.3 {input}  > {output}"
+        #"snpEff {params} -v MN908947.3 {input}  > {output}"
+        "snpEff {params} -v B_Vic_B_Brisbane_60_2008 {input}  > {output}"

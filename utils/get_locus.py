@@ -33,6 +33,19 @@ def get_locus(genbank_file,possible_name):
     handle_gb.close()
     return locus
 
+def get_locus(genbank_file,possible_name):
+    count = 1
+    locus = []
+    handle_gb = open(genbank_file)
+    for record in SeqIO.parse(handle_gb, "genbank"):
+        locus.append(count)
+        count+=1
+    handle_gb.close()
+    if len(locus) == 1:
+        return possible_name
+    else:
+        return locus
+
 #when locus exists:
 # ['1_PB2', '2_PB1', '3_PA', '4_HA', '5_NP', '6_NA', '7_M', '8_NS']
 # ['1', '2', '3', '4', '5', '6', '7', '8']

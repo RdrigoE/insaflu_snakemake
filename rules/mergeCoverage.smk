@@ -4,6 +4,7 @@ with open('config/config_run.yaml') as file:
 locus = get_locus(REFERENCE_GB,config_user['locus'])
 if type(get_locus(REFERENCE_GB,config_user['locus'])) == type([1]):
     loop = len(get_locus(REFERENCE_GB,config_user['locus']))
+    print("------------------------->Loop is ", loop)
 else:
     loop = 1
 

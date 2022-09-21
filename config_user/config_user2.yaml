@@ -1,5 +1,5 @@
 only_samples: False
-project_name: flu_testing
+project_name: flu_testing_BVictoria
 locus: Flu 
-fasta_reference: reference/A_H1N1pdm09_A_Michigan_45_2015.fasta  #reference/SARS_CoV_2_Wuhan_Hu_1_MN908947.fasta 
-gb_reference: reference/A_H1N1pdm09_A_Michigan_45_2015.gbk #reference/SARS_CoV_2_Wuhan_Hu_1_MN908947.gb  # 
+fasta_reference: reference/B_Vic_B_Brisbane_60_2008.fasta  #reference/SARS_CoV_2_Wuhan_Hu_1_MN908947.fasta 
+gb_reference: reference/B_Vic_B_Brisbane_60_2008.gbk #reference/SARS_CoV_2_Wuhan_Hu_1_MN908947.gb  # 
