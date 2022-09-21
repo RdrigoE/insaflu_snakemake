@@ -2,7 +2,7 @@ rule snpeff_sample:
     input:
         "projects/{project}/sample_{sample}/snippy/snps.vcf"
     output:
-        "projects/{project}/main_result/{sample}_snpeff.vcf"
+        "projects/{project}/main_result/snpeff_samples/{sample}_snpeff.vcf"
     conda:
         "../envs/snpeff.yaml"
     params:

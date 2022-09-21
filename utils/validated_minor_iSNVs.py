@@ -60,8 +60,8 @@ for file in files_path:
                 else:
                     info_dic['FTYPE'] = 'CDS'
 
-                if 'snp' in info_dic['TYPE'] or 'del' in info_dic['TYPE'] or 'ins' in info_dic['TYPE']:
-                    if round(float(info_dic['AO'])/float(info_dic['DP']),2) > 0.50:
+                if 'snp' in info_dic['TYPE']:
+                    if round(float(info_dic['AO'])/float(info_dic['DP']),2) < 0.50:
                         new_entry.append(file[0]) #ID
                         new_entry.append(row_dic['CHROM']) #CHROM
                         new_entry.append(row_dic['POS']) #POS

@@ -46,6 +46,7 @@ def write_fast_aa(reference,alignment, output, locus, gene, coverage):
         position = 0
     coverage_dic = get_coverage_to_translate_matrix(coverage)
     reference_id = list(SeqIO.parse(alignment, "fasta"))[0].id
+    
     positions = ggb.get_positions_gb(reference)
     positions = get_ref_adjusted_positions(alignment, positions, locus, gene)
     new_consensus = {}

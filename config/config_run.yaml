@@ -1,4 +1,4 @@
-locus: SARS_CoV_2
+locus: MN908947.3
 project: covid_testing_2
 proteins:
 - orf1ab

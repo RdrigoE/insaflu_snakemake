@@ -3,9 +3,27 @@ with open('config/config_run.yaml') as file:
 
 rule snpeff_concat:
     input: 
-        expand("projects/{project}/main_result/freebayes/{sample}_var.vcf",sample=config_user['samples'], project=config_user['project']),
+        expand("projects/{project}/main_result/snpeff/{sample}_snpeff.vcf",sample=config_user['samples'], project=config_user['project']),
 
     output:
         "projects/{project}/main_result/validated_minor_iSNVs.csv"
     shell:
-    	"python utils/freebays_concat.py '{input}' {output}"
+    	"python utils/validated_minor_iSNVs.py '{input}' {output}"
+
+rule snpeff_concat_indels:
+    input: 
+        expand("projects/{project}/main_result/snpeff/{sample}_snpeff.vcf",sample=config_user['samples'], project=config_user['project']),
+
+    output:
+        "projects/{project}/main_result/validated_minor_iSNVs_inc_indels.csv"
+    shell:
+    	"python utils/minor_iSNVs_inc_indels.py '{input}' {output}"
+
+rule proportions_iSNVs_graph:
+    input: 
+        expand("projects/{project}/main_result/snpeff/{sample}_snpeff.vcf",sample=config_user['samples'], project=config_user['project']),
+
+    output:
+        "projects/{project}/main_result/proportions_iSNVs_graph.csv"
+    shell:
+    	"python utils/proportions_iSNVs_graph.py '{input}' {output}"
