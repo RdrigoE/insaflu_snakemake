@@ -24,7 +24,8 @@ else:
     for i in list(version.records):
         identification = i.annotations['accessions'][-1]
         version = i.annotations['sequence_version']
-    text = [f"{reference_name}.{identification}.{version}.codonTable : Bacterial_and_Plant_Plastid\n",]
+    text = [f"{reference_name}.genome: {reference_name}",
+    f"{reference_name}.{identification}.{version}.codonTable : Bacterial_and_Plant_Plastid\n",]
 
 
 with open('config/snpeff.config', 'a') as snpeff:

@@ -3,17 +3,19 @@ with open('config/config_run.yaml') as file:
 locus = config_user['locus']
 rule prepare_snpeff:
     input:
-        ref = REFERENCE_GB,
+        ref_gb = REFERENCE_GB,
+        ref_fa = REFERENCE,
         i=expand("projects/{project}/sample_{sample}/snippy/snps.vcf",sample=config_user['samples'], project=config_user['project']),
     output:
         "projects/{project}/main_result/snpeff/ready.txt"
     conda:
         "../envs/snpeff.yaml"
     shell:
-        "python utils/create_snpeff_text.py $CONDA_PREFIX {input.ref} {locus} {REFERENCE_NAME} |"
-        "conda activate $CONDA_PREFIX | "
-        "mkdir  config/data/{REFERENCE_NAME} -p |"
-        "cat {input.ref} > config/data/{REFERENCE_NAME}/genes.gbk | "
+        "python utils/create_snpeff_text.py $CONDA_PREFIX {input.ref_gb} {locus} {REFERENCE_NAME} &&"
+        "conda activate $CONDA_PREFIX && "
+        "mkdir  config/data/{REFERENCE_NAME} -p &&"
+        "cat {input.ref_gb} > config/data/{REFERENCE_NAME}/genes.gbk && "
+        "cat {input.ref_fa} > config/data/{REFERENCE_NAME}/sequences.fa &&"
         "snpEff build -genbank {REFERENCE_NAME} -c config/snpeff.config > {output}"
 
 rule snpeff:
