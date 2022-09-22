@@ -1,8 +1,7 @@
 from Bio import SeqIO
 
-genbank_file = "reference/SARS_CoV_2_Wuhan_Hu_1_MN908947.gb"
-
 def get_positions_gb(genbank_file):
+    print(" Hello")
     positions = []
 
     handle_gb = open(genbank_file)
@@ -10,7 +9,7 @@ def get_positions_gb(genbank_file):
         for features in record.features:
             if (features.type == 'CDS'):
                 positions.append([features.qualifiers["gene"][0], features.location])
-
+    print(positions)
     positions_clean = []
 
     for idx,gene in enumerate(positions):

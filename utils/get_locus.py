@@ -19,19 +19,19 @@ def get_locus_protein(genbank_file,possible_name):
     handle_gb.close()
     return locus_protein
 
-def get_locus(genbank_file,possible_name):
-    locus = []
-    handle_gb = open(genbank_file)
-    for record in SeqIO.parse(handle_gb, "genbank"):
-        for features in record.features:
-            if (features.type == 'CDS'):
-                try:
-                    a = features.qualifiers["locus_tag"]
-                    locus.append(f"{int(features.qualifiers['locus_tag'][0][-5:])}")
-                except:
-                    return possible_name
-    handle_gb.close()
-    return locus
+# def get_locus(genbank_file,possible_name):
+#     locus = []
+#     handle_gb = open(genbank_file)
+#     for record in SeqIO.parse(handle_gb, "genbank"):
+#         for features in record.features:
+#             if (features.type == 'CDS'):
+#                 try:
+#                     a = features.qualifiers["locus_tag"]
+#                     locus.append(f"{int(features.qualifiers['locus_tag'][0][-5:])}")
+#                 except:
+#                     return possible_name
+#     handle_gb.close()
+#     return locus
 
 def get_locus(genbank_file,possible_name):
     count = 1

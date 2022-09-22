@@ -10,7 +10,7 @@ rule cp_directory:
     output:
         o1 = "projects/{project}/main_result/consensus/{sample}_consensus.fasta"
     shell:
-        "python utils/move_fasta_files.py {wildcards.project} {wildcards.sample}" 
+        "python utils/move_fasta_files.py {wildcards.project} {wildcards.sample} {species}" 
 
 rule all_consensus:
     input:

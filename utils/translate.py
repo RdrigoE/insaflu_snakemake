@@ -1,4 +1,3 @@
-
 import sys
 from Bio import SeqIO
 import get_gene_bank as ggb 
@@ -27,7 +26,7 @@ def get_ref_adjusted_positions(alignment, positions, locus, gene):
                 if group[1] >= len(index_list): #if this is == it will throw an error cuz index list é mais pequena que o numero no group[1 ]
                     group[1] = index_list[-1]
                 else:
-                    print(len(index_list),group[1])
+                    # print(len(index_list),group[1])
                     group[1] = index_list[group[1]]
             new_positions.append(gene_group)
     return new_positions
@@ -46,7 +45,7 @@ def write_fast_aa(reference,alignment, output, locus, gene, coverage):
     else:
         position = 0
     coverage_dic = get_coverage_to_translate_matrix(coverage)
-    reference_id = list(SeqIO.parse(alignment, "fasta"))[0].id
+    reference_id = str(locus)
     
     positions = ggb.get_positions_gb(reference)
     positions = get_ref_adjusted_positions(alignment, positions, locus, gene)
@@ -56,7 +55,8 @@ def write_fast_aa(reference,alignment, output, locus, gene, coverage):
         for pos in gene[1]:
             #print(f"This is {gene[0]} with the pos {pos[0], pos[1]}") #This is orf1ab with the pos (265, 13468)
             for record in SeqIO.parse(alignment, "fasta"):
-                if record.id != reference_id and float(coverage_dic[record.id[:record.id.index('__'+reference_id)]][position]) >= 90:
+                identifier = record.id
+                if identifier != reference_id and float(coverage_dic[identifier[:identifier.index(f"__{reference_id}")]][position]) >= 90:
                     try:
                         new_consensus[gene[0]][record.id] += record.seq[pos[0]:pos[1]].replace('-','').translate(table=11,to_stop=False)
                     except:

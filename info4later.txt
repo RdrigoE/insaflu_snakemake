@@ -6,3 +6,7 @@ then in config/snpeff.config write:
                 sarscov2.MN908947.codonTable : Bacterial_and_Plant_Plastid
 then run the command:
      snpEff build -genbank -v {LOCUS} -c config/snpeff.config
+
+
+
+The reference file must have a \n in the end

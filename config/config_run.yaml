@@ -1,6 +1,16 @@
 locus: SARS_CoV_2
 project: covid_testing_5
-proteins: []
+proteins:
+- orf1ab
+- S
+- ORF3a
+- E
+- M
+- ORF6
+- ORF7a
+- ORF8
+- N
+- ORF10
 samples:
 - ERR10039715
 - ERR10039716
