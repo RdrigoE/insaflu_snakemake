@@ -61,11 +61,11 @@ class Checkpoint_MakePattern:
 
 
 
-sample_data = Data("./config_user/sample_info_1.csv")
-# sample_data = Data("./config_user/flu.csv")
+# sample_data = Data("./config_user/sample_info_1.csv")
+sample_data = Data("./config_user/flu.csv")
 
-run_config = read_yaml('./config_user/config_user1.yaml')
-# run_config = read_yaml('./config_user/config_user2.yaml')
+# run_config = read_yaml('./config_user/config_user1.yaml')
+run_config = read_yaml('./config_user/config_user2.yaml')
 
 locus_protein_alignment = get_locus_protein(run_config["gb_reference"],run_config["locus"])
 

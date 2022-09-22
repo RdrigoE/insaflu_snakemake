@@ -31,4 +31,3 @@ def get_genes(genbank_file):
     handle_gb.close()
 
     return genes
-

@@ -1,17 +1,19 @@
 with open('config/config_run.yaml') as file:
     config_user = yaml.load(file, Loader=yaml.FullLoader)
 locus = config_user['locus']
+samples = config_user['samples']
 rule prepare_snpeff:
     input:
         ref_gb = REFERENCE_GB,
         ref_fa = REFERENCE,
-        i=expand("projects/{project}/sample_{sample}/snippy/snps.vcf",sample=config_user['samples'], project=config_user['project']),
+        i_1 = expand("projects/{project}/sample_{sample}/snippy/snps.vcf",sample=config_user['samples'], project=config_user['project']),
+        i_2 = expand("projects/{project}/main_result/freebayes/{sample}_var.vcf",sample=config_user['samples'], project=config_user['project'])
     output:
         "projects/{project}/main_result/snpeff/ready.txt"
     conda:
         "../envs/snpeff.yaml"
     shell:
-        "python utils/create_snpeff_text.py $CONDA_PREFIX {input.ref_gb} {locus} {REFERENCE_NAME} &&"
+        "python utils/create_snpeff_text.py $CONDA_PREFIX {input.ref_gb} {locus} {REFERENCE_NAME} {wildcards.project} '{samples}' &&"
         "conda activate $CONDA_PREFIX && "
         "mkdir  config/data/{REFERENCE_NAME} -p &&"
         "cat {input.ref_gb} > config/data/{REFERENCE_NAME}/genes.gbk && "

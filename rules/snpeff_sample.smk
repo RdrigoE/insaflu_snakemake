@@ -9,5 +9,4 @@ rule snpeff_sample:
     params:
         "-no-downstream -no-upstream -no-intergenic -no-utr -noStats -c config/snpeff.config"
     shell:
-        #"snpEff {params} -v MN908947.3 {input.1}  > {output}"
         "snpEff {params} -v {REFERENCE_NAME} {input.i1}  > {output}"
