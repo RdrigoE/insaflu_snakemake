@@ -1,6 +1,8 @@
-    
+import re    
 import csv
 import sys
+
+
 
 def get_info_dic(info_list):
     info_dic = {}
@@ -55,40 +57,42 @@ for file in files_path:
                 info_dic = get_info_dic(info)
                 row_dic = get_row_dict(line)
                 if 'ANN' not in info_dic:
-                    info_dic['ANN'] = '|||||||||||||||||||||||||||||||||||||||'
+                    info_dic['ANN'] = '|||||||||||||||||||||||||||||||||||||||||||'
                     info_dic['FTYPE'] = ''
                 else:
                     info_dic['FTYPE'] = 'CDS'
 
                 if 'snp' in info_dic['TYPE'] or 'del' in info_dic['TYPE'] or 'ins' in info_dic['TYPE']:
                     if round(float(info_dic['AO'])/float(info_dic['DP']),2) < 0.50:
-                        new_entry.append(file[0]) #ID
+                        ann = info_dic['ANN'].split('|')
+                        new_entry.append(re.findall("(?<=/main_result/snpeff/)(.*?)(?=_snpeff.vcf)",file)[0]) #ID
                         new_entry.append(row_dic['CHROM']) #CHROM
                         new_entry.append(row_dic['POS']) #POS
                         new_entry.append(info_dic['TYPE']) #TYPE
                         new_entry.append(row_dic['REF']) #REF
                         new_entry.append(row_dic['ALT']) #ALT
                         new_entry.append(round(float(info_dic['AO'])/float(info_dic['DP']),2)) #FREQ
-                        new_entry.append(0) #COVERAGE
-                        new_entry.append(0) #EVIDENCE
+                        new_entry.append("") #COVERAGE
+                        new_entry.append("") #EVIDENCE
                         new_entry.append(info_dic['FTYPE']) #FTYPE
-                        new_entry.append(0) #STRAND
-                        new_entry.append(info_dic['ANN'].split('|')[11]) #NT_POS
-                        new_entry.append(info_dic['ANN'].split('|')[13]) #AA_POS
-                        new_entry.append(info_dic['ANN'].split('|')[1]) #EFFECT
-                        new_entry.append(info_dic['ANN'].split('|')[9]) #NT CHANGE
-                        new_entry.append(info_dic['ANN'].split('|')[10]) #AA CHANGE
-                        new_entry.append(0) #AA CHANGE ALT
-                        new_entry.append(0) #LOCUS_TAG
-                        new_entry.append(info_dic['ANN'].split('|')[3]) #GENE
-                        new_entry.append(0) #PRODUCT
-                        new_entry.append(0) #VARIANTS IN INCOMPLETE LOCUS
+                        new_entry.append("") #STRAND
+                        new_entry.append(ann[11]) #NT_POS
+                        new_entry.append(ann[13]) #AA_POS
+                        new_entry.append(ann[1]) #EFFECT
+                        new_entry.append(ann[9]) #NT CHANGE
+                        new_entry.append(ann[10]) #AA CHANGE
+                        new_entry.append("") #AA CHANGE ALT
+                        new_entry.append("") #LOCUS_TAG
+                        new_entry.append(ann[3]) #GENE
+                        new_entry.append("") #PRODUCT
+                        new_entry.append("") #VARIANTS IN INCOMPLETE LOCUS
                         vcf_final.append(new_entry)
             except:
                 continue
 
                 
 output_file = sys.argv[2]
+
 with open(output_file, mode='w') as f:
     f_writer = csv.writer(f, delimiter=',')
     f_writer.writerows(vcf_final)

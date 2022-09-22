@@ -1,15 +1,18 @@
-locus: Flu
-project: flu_testing_BVictoria
+locus: SARS_CoV_2
+project: covid_testing_5
 proteins:
-- PB2
-- PB1
-- PA
-- HA
-- NP
-- NA
-- M_1
-- M_2
-- NS
+- orf1ab
+- S
+- ORF3a
+- E
+- M
+- ORF6
+- ORF7a
+- ORF8
+- N
+- ORF10
 samples:
-- SRR10885405
-- SRR10885406
+- ERR10039715
+- ERR10039716
+- ERR10039718
+- ERR10039719

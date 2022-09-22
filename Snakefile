@@ -61,11 +61,11 @@ class Checkpoint_MakePattern:
 
 
 
-# sample_data = Data("./config_user/sample_info_1.csv")
-sample_data = Data("./config_user/flu.csv")
+sample_data = Data("./config_user/sample_info_1.csv")
+# sample_data = Data("./config_user/flu.csv")
 
-# run_config = read_yaml('./config_user/config_user1.yaml')
-run_config = read_yaml('./config_user/config_user2.yaml')
+run_config = read_yaml('./config_user/config_user1.yaml')
+# run_config = read_yaml('./config_user/config_user2.yaml')
 
 locus_protein_alignment = get_locus_protein(run_config["gb_reference"],run_config["locus"])
 
@@ -115,15 +115,11 @@ def get_output_files_pe():
         # expand("samples/{sample}/abricate/abricate_{sample}.csv", sample=config_user['samples']),
         #expand("align_samples/{sample}/snippy/snps.consensus.fa",project=config_user['project'], sample=config_user['samples']),
         #expand("projects/{project}/main_result/consensus/{sample}__SARS_COV_2_consensus.fasta", sample=config_user['samples'], project=config_user['project']),
-        #expand("projects/{project}/main_result/AllConsensus.fasta", project=config_user['project']),
-        #expand("projects/{project}/main_result/coverage/{sample}_coverage.csv", sample=config_user['samples'], project=config_user['project']),
         expand("projects/{project}/main_result/coverage.csv",project=config_user['project']),
         expand("projects/{project}/main_result/coverage_translate.csv",project=config_user['project']),
         expand("projects/{project}/main_result/snpeff_samples/{sample}_snpeff.vcf",sample=config_user['samples'], project=config_user['project'], ref=get_locus(run_config["gb_reference"],run_config["locus"])),        
 
         expand("projects/{project}/main_result/freebayes/{sample}_var.vcf", sample=config_user['samples'], project=config_user['project']),
-        #expand("projects/{project}/main_result/{seg}/Alignment_nt_{seg}.fasta",project=config_user['project'], seg=get_locus(run_config["gb_reference"],run_config["locus"])),
-        #expand("projects/{project}/main_result/{seg}/Alignment_nt_{seg}_masked.fasta",project=config_user['project'], seg=get_locus(run_config["gb_reference"],run_config["locus"])),
         expand("projects/{project}/main_result/depth/{sample}__{ref}.depth",sample=config_user['samples'], project=config_user['project'], ref=get_locus(run_config["gb_reference"],run_config["locus"])),        
         expand("projects/{project}/main_result/depth/{sample}.depth",sample=config_user['samples'], project=config_user['project']),        
         expand("projects/{project}/main_result/snpeff_samples/{sample}_snpeff.vcf",sample=config_user['samples'], project=config_user['project']),
@@ -131,16 +127,13 @@ def get_output_files_pe():
         expand("projects/{project}/main_result/validated_variants.csv",project=config_user['project']),
         expand("projects/{project}/main_result/validated_minor_iSNVs_inc_indels.csv",project=config_user['project']),
         expand("projects/{project}/main_result/proportions_iSNVs_graph.csv",project=config_user['project']),
+        expand("projects/{project}/main_result/proportions_iSNVs_graph.png",project=config_user['project']),
         expand("projects/{project}/main_result/mafft/Alignment_nt_All_concat.fasta", sample=config_user['samples'], project=config_user['project']),
         Checkpoint_MakePattern(f'projects/{run_config["project_name"]}/main_result/',"_trans.fasta",run_config['gb_reference'],run_config["locus"],f"projects/{config_user['project']}/main_result/coverage_translate.csv"),
         Checkpoint_MakePattern(f'projects/{run_config["project_name"]}/main_result/',"_mafft.fasta",run_config['gb_reference'],run_config["locus"],f"projects/{config_user['project']}/main_result/coverage_translate.csv"),
         Checkpoint_MakePattern(f'projects/{run_config["project_name"]}/main_result/',"_tree.tree",run_config['gb_reference'],run_config["locus"], f"projects/{config_user['project']}/main_result/coverage_translate.csv"),
         expand("projects/{project}/main_result/snpeff/ready.txt",project=config_user['project']),
-
-        # expand("projects/{project}/main_result/{locus_protein_alignment_file}_trans.fasta", project=config_user['project'],locus_protein_alignment_file = locus_protein_alignment),
-        # expand("projects/{project}/main_result/{locus_protein_alignment_file}_mafft.fasta", project=config_user['project'],locus_protein_alignment_file = locus_protein_alignment),
-        # expand("projects/{project}/main_result/fasttre/tree", sample=config_user['samples'], project=config_user['project']), 
-        # expand("projects/{project}/main_result/{locus_protein_alignment_file}_tree.tree", project=config_user['project'],locus_protein_alignment_file = locus_protein_alignment),
+        expand("projects/{project}/main_result/fasttre/tree", sample=config_user['samples'], project=config_user['project']), 
 
     ) 
 
@@ -194,7 +187,7 @@ include: "rules/fasttree.smk"
 include: "rules/seqret.smk"
 include: "rules/mafft_proteins.smk"
 include: "rules/fastree_proteins.smk"
-include: "rules/freebays_concat.smk"
+include: "rules/minor_iSNVs.smk"
 include: "rules/snpeff_sample.smk"
 include: "rules/snp_variant_validated.smk"
 

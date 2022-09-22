@@ -10,3 +10,4 @@ then run the command:
 
 
 The reference file must have a \n in the end
+The locus and reference fasta identifier must be the same!

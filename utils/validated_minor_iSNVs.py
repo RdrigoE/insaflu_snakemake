@@ -1,4 +1,4 @@
-    
+import re
 import csv
 import sys
 
@@ -62,7 +62,7 @@ for file in files_path:
 
                 if 'snp' in info_dic['TYPE']:
                     if round(float(info_dic['AO'])/float(info_dic['DP']),2) < 0.50:
-                        new_entry.append(file[0]) #ID
+                        new_entry.append(re.findall("(?<=/main_result/snpeff_samples/)(.*?)(?=_snpeff.vcf)",file)[0]) #ID
                         new_entry.append(row_dic['CHROM']) #CHROM
                         new_entry.append(row_dic['POS']) #POS
                         new_entry.append(info_dic['TYPE']) #TYPE

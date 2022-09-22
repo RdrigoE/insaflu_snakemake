@@ -1,4 +1,4 @@
-    
+import re 
 import csv
 import sys
 
@@ -53,7 +53,7 @@ for file in files_path:
                         count_more_50_less_90 += 1
             except:
                 continue
-    file_final.append([file,count_less,count_more_50_less_90])
+    file_final.append([re.findall("(?<=/main_result/snpeff/)(.*?)(?=_snpeff.vcf)",file)[0],count_less,count_more_50_less_90])
     
 
                 
@@ -62,3 +62,30 @@ with open(output_file, mode='w') as f:
     f_writer = csv.writer(f, delimiter=',')
     f_writer.writerows(file_final)
     f.close()
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+with open(output_file,'r') as file:
+    rows = file.readlines()
+    dic = {
+        'samples' : [],
+        'bellow_fifty' : [],
+        'more_fifty' : []
+    }
+    for row in rows[1:]:
+        row = row[:-1]
+        row = row.split(',')
+        dic['samples'].append(row[0])
+        dic['bellow_fifty'].append(int(row[1]))
+        dic['more_fifty'].append(int(row[2]))
+    print(dic)
+df = pd.DataFrame({'1-50% (minor iSNVs)':dic['bellow_fifty'],
+                   '50-90%':dic['more_fifty']},index=dic['samples'])
+
+x = df.plot.barh(stacked=True,color = ["#ffc4de","#81cdff"], )
+x.set_xlabel('SNVs at frequency 1-50% (minor iSNVs) and 50-90%')
+x.set_ylabel('Samples')
+
+out_img = sys.argv[3]
+plt.savefig(out_img)
