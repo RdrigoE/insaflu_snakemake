@@ -1,3 +1,5 @@
+configfile: "config/parameters.yaml"
+
 rule trimme_reads_SE:
     input:
         "user_data/{sample}..fastq.gz"
@@ -5,10 +7,13 @@ rule trimme_reads_SE:
         "samples/{sample}/trimmed_reads/{sample}.trimmed.fastq.gz"
     conda:
         "../envs/trimmomatic.yaml"
+    threads: 
+        config['trimmomatic_threads']
     params:
         "HEADCROP:30 SLIDINGWINDOW:5:20 LEADING:3 TRAILING:3 MINLEN:35 TOPHRED33"
     shell:
         "trimmomatic SE "
+        "-threads {threads} "
         "{input} "
         "{output} " 
         "{params}"
@@ -17,6 +22,8 @@ rule trimme_reads_PE:
     input:
         i1 = "user_data/{sample}_1.fastq.gz",
         i2 = "user_data/{sample}_2.fastq.gz"
+    threads:
+        config['trimmomatic_threads']
     output:
         o1="samples/{sample}/trimmed_reads/{sample}_1.trimmed.fastq.gz",
         o2="samples/{sample}/trimmed_reads/{sample}_2.trimmed.fastq.gz",
@@ -29,6 +36,7 @@ rule trimme_reads_PE:
         "HEADCROP:30 SLIDINGWINDOW:5:20 LEADING:3 TRAILING:3 MINLEN:35 TOPHRED33"
     shell:
         "trimmomatic PE "
+        "-threads {threads} "
         "{input.i1} "
         "{input.i2} "
         "{output.o1} "

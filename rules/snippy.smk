@@ -1,3 +1,6 @@
+configfile: "config/parameters.yaml"
+
+
 rule snippy_pe:
     input:
         r1="samples/{sample}/trimmed_reads/{sample}_1.trimmed.fastq.gz",
@@ -11,11 +14,13 @@ rule snippy_pe:
         dir = directory("align_samples/{sample}/snippy/")
     conda:
         "../envs/snippy.yaml"
+    threads: 
+        config['snippy_threads']
     params:
         "--mapqual 20 --mincov 10 --minfrac 0.51"
     shell:
         "rm -r {output.dir}|"
-        "snippy --R1 {input.r1} --R2 {input.r2} --ref {input.ref} --outdir {output.dir} {params}"
+        "snippy --cpus {threads} --R1 {input.r1} --R2 {input.r2} --ref {input.ref} --outdir {output.dir} {params}"
 
 rule snippy_se:
     input:

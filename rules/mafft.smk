@@ -1,3 +1,6 @@
+configfile: "config/parameters.yaml"
+
+
 rule mafft_p_way:
     input:
         "projects/{project}/main_result/AllConsensus_sep.fasta"
@@ -5,10 +8,12 @@ rule mafft_p_way:
         "projects/{project}/main_result/mafft/Alignment_nt_All.fasta" 
     conda:
         "../envs/mafft.yaml"
+    threads:
+        config['mafft_threads']
     params:
         "--preservecase"
     shell:
-        "mafft {params} {input} > {output}"
+        "mafft --thread {threads} {params} {input} > {output}"
 
 rule mafft:
     input:
@@ -17,7 +22,9 @@ rule mafft:
         "projects/{project}/main_result/mafft/Alignment_nt_All_concat.fasta" 
     conda:
         "../envs/mafft.yaml"
+    threads:
+        config['mafft_threads']
     params:
         "--preservecase"
     shell:
-        "mafft {params} {input} > {output}"
+        "mafft --thread {threads} {params} {input} > {output}"

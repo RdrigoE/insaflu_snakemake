@@ -1,3 +1,5 @@
+configfile: "config/parameters.yaml"
+
 rule spades_se:
     input:
         "samples/{sample}/trimmed_reads/{sample}.trimmed.fastq.gz"
@@ -6,10 +8,12 @@ rule spades_se:
         dir = directory('samples/{sample}/spades/')
     conda:
         "../envs/spades.yaml"
+    threads: 
+        config['spades_threads']
     params:
         "--only-assembler"
     shell:
-        'spades.py {params} -s {input} -o {output.dir}' #isolate is just to keep this working
+        'spades.py -t {threads} {params} -s {input} -o {output.dir}' #isolate is just to keep this working
 
 rule spades_pe:
     input:
@@ -18,9 +22,11 @@ rule spades_pe:
     output:
         o = "samples/{sample}/spades/contigs.fasta",
         dir = directory('samples/{sample}/spades/')
+    threads: 
+        config['spades_threads']
     conda:
         "../envs/spades.yaml"
     params:
-        "--only-assembler --isolate"
+        "--only-assembler --isolate" 
     shell:
-        'spades.py {params} -1 {input.i1} -2 {input.i2} -o {output.dir}' #isolate is just to keep this working
+        'spades.py -t {threads}  {params} -1 {input.i1} -2 {input.i2} -o {output.dir}' #isolate is just to keep this working
