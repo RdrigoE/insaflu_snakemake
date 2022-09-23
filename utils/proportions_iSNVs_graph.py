@@ -88,4 +88,4 @@ x.set_xlabel('SNVs at frequency 1-50% (minor iSNVs) and 50-90%')
 x.set_ylabel('Samples')
 
 out_img = sys.argv[3]
-plt.savefig(out_img)
+plt.savefig(out_img, format = 'pdf')

@@ -61,13 +61,14 @@ class Checkpoint_MakePattern:
 
 
 
-sample_data = Data("./config_user/sample_info_1.csv")
+sample_data = Data("./config_user/sample_info.csv")
 # sample_data = Data("./config_user/flu.csv")
 
 run_config = read_yaml('./config_user/config_user1.yaml')
 # run_config = read_yaml('./config_user/config_user2.yaml')
 
 locus_protein_alignment = get_locus_protein(run_config["gb_reference"],run_config["locus"])
+
 
 def get_output_sample_se():
     return(
@@ -111,8 +112,8 @@ def get_output_files_pe():
     return(
         expand("samples/{sample}/raw_fastqc/{sample}_{direction}_fastqc.html", sample=config_user['samples'],direction=["1","2"]), #generalizar
         expand("samples/{sample}/trimmed_fastqc/{sample}_{direction}.trimmed_fastqc.html", sample=config_user['samples'],direction=["1","2"]),
-        # expand("samples/{sample}/spades/contigs.fasta", sample=config_user['samples']),
-        # expand("samples/{sample}/abricate/abricate_{sample}.csv", sample=config_user['samples']),
+        expand("samples/{sample}/spades/contigs.fasta", sample=config_user['samples']),
+        expand("samples/{sample}/abricate/abricate_{sample}.csv", sample=config_user['samples']),
         #expand("align_samples/{sample}/snippy/snps.consensus.fa",project=config_user['project'], sample=config_user['samples']),
         #expand("projects/{project}/main_result/consensus/{sample}__SARS_COV_2_consensus.fasta", sample=config_user['samples'], project=config_user['project']),
         expand("projects/{project}/main_result/coverage.csv",project=config_user['project']),
@@ -132,7 +133,7 @@ def get_output_files_pe():
         Checkpoint_MakePattern(f'projects/{run_config["project_name"]}/main_result/',"_trans.fasta",run_config['gb_reference'],run_config["locus"],f"projects/{config_user['project']}/main_result/coverage_translate.csv"),
         Checkpoint_MakePattern(f'projects/{run_config["project_name"]}/main_result/',"_mafft.fasta",run_config['gb_reference'],run_config["locus"],f"projects/{config_user['project']}/main_result/coverage_translate.csv"),
         Checkpoint_MakePattern(f'projects/{run_config["project_name"]}/main_result/',"_tree.tree",run_config['gb_reference'],run_config["locus"], f"projects/{config_user['project']}/main_result/coverage_translate.csv"),
-        expand("projects/{project}/main_result/snpeff/ready.txt",project=config_user['project']),
+        expand("projects/{project}/main_result/snp_ready.txt",project=config_user['project']),
         expand("projects/{project}/main_result/fasttre/tree", sample=config_user['samples'], project=config_user['project']), 
 
     ) 
@@ -158,10 +159,21 @@ REFERENCE_NAME = x[0]
 
 
 get_output = prepare_run(run_config)
+
+if run_config['locus']  != 'Flu':
+    version = SeqIO.parse(REFERENCE_GB, "genbank")
+    for i in list(version.records):
+            identification = i.annotations['accessions'][-1]
+            version = i.annotations['sequence_version']
+else:
+    identification = ''
+    version = ''
 config_user = {'samples':sample_data.get_sample_names(), 
                'project':run_config['project_name'], 
                'locus': run_config['locus'], 
-               'proteins':get_genes(run_config['gb_reference'])}
+               'proteins':get_genes(run_config['gb_reference']),
+               'identification': identification,
+               'version': version}
 
 
 with open('config/config_run.yaml', 'w') as file:

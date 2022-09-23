@@ -1,0 +1,6 @@
+fastqc_threads: 1
+trimmomatic_threads: 6
+snippy_threads: 6
+spades_threads: 6
+snpeff_threads: 6
+mafft_threads: 6

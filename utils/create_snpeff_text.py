@@ -27,15 +27,21 @@ else:
         version = i.annotations['sequence_version']
     text = [f"\n{reference_name}.genome: {reference_name}\n",
     f"{reference_name}.{identification}.{version}.codonTable : Bacterial_and_Plant_Plastid\n",]
-    project = sys.argv[5]
-    samples = sys.argv[6]
+    # project = sys.argv[5]
+    # samples = sys.argv[6]
 
-    samples = samples.split(" ")
-    for sample in samples:
-        os.system(f"sed -i 's/{locus}/{identification}.{version}/g' projects/{project}/main_result/freebayes/{sample}_var.vcf")
-    for sample in samples:
-        os.system(f"sed -i 's/{locus}/{identification}.{version}/g' projects/{project}/sample_{sample}/snippy/snps.vcf")
+    # samples = samples.split(" ")
+    # for sample in samples:
+    #     os.system(f"sed -i 's/{locus}/{identification}.{version}/g' projects/{project}/main_result/freebayes/{sample}_var.vcf")
+    # for sample in samples:
+    #     os.system(f"sed -i 's/{locus}/{identification}.{version}/g' projects/{project}/sample_{sample}/snippy/snps.vcf")
 
-with open('config/snpeff.config', 'a') as snpeff:
-    snpeff.writelines(text)
+with open('config/snpeff.config' , 'r') as f:
+    lines = f.readlines()
+    joined = ''.join(lines)
+    find = joined.find(''.join(text))
+
+if find == -1:
+    with open('config/snpeff.config', 'a') as snpeff:
+        snpeff.writelines(text)
 
