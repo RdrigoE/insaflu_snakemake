@@ -24,7 +24,7 @@ rule msa_masker_proteins:
         i = expand("projects/{project}/main_result/depth/{sample}__{ref}.depth",sample=config_user['samples'], project=config_user['project'], ref=get_locus(run_config["gb_reference"],run_config["locus"])),        
 
     output:
-        "projects/{project}/main_result/{seg}/Alignment_nt_{seg}_masked.fasta"
+        temp("projects/{project}/main_result/{seg}/Alignment_nt_{seg}_masked.fasta")
     conda:
         "../envs/msa_masker.yaml"
     params:

@@ -16,5 +16,5 @@ checkpoint mergeCoverage:
         coverage_translate = temp(expand("projects/{project}/main_result/coverage_translate.csv",project=config_user['project']))
 
     shell:
-        "python utils/mergeCoverage.py '{input}' {output.coverage_regular} | "
+        "python utils/mergeCoverage.py '{input}' {output.coverage_regular} && "
         "python utils/coverage_translate.py '{input}' {output.coverage_translate} {loop}"

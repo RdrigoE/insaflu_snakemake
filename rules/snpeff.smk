@@ -18,16 +18,11 @@ rule prepare_snpeff:
         ref_fa = REFERENCE,
     output:
         temp("projects/{project}/main_result/snp_ready.txt"),
-        # dir("projects/{project}/main_result/")
     conda:
         "../envs/snpeff.yaml"
     shell:
-        "python utils/create_snpeff_text.py $CONDA_PREFIX {input.ref_gb} {locus} {REFERENCE_NAME} && "
-        "conda activate $CONDA_PREFIX && "
-        "mkdir  config/data/{REFERENCE_NAME} -p && "
-        "cat {input.ref_gb} > config/data/{REFERENCE_NAME}/genes.gbk && "
-        "cat {input.ref_fa} > config/data/{REFERENCE_NAME}/sequences.fa && "
-        "snpEff build -genbank {REFERENCE_NAME} -c config/snpeff.config > {output}"
+        "python utils/create_snpeff_text.py $CONDA_PREFIX {input.ref_gb} {locus} {input.ref_fa} {REFERENCE_NAME} {output} "
+        
 
 rule snpeff:
     input:

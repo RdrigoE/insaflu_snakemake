@@ -28,3 +28,30 @@ rule mafft:
         "--preservecase"
     shell:
         "mafft --thread {threads} {params} {input} > {output}"
+
+rule mafft_nt:
+    input:
+        "projects/{project}/main_result/{seg}/Alignment_nt_{seg}_masked.fasta"
+    output:
+        "projects/{project}/main_result/{seg}/Alignment_nt_{seg}_mafft.fasta"
+    conda:
+        "../envs/mafft.yaml"
+    threads:
+        config['mafft_threads']
+    params:
+        "--preservecase"
+    shell:
+        "mafft --thread {threads} {params} {input} > {output}"
+
+rule fasttree_nt:
+    input:
+        "projects/{project}/main_result/{seg}/Alignment_nt_{seg}_mafft.fasta"
+    output:
+        "projects/{project}/main_result/{seg}/Alignment_nt_{seg}_tree.tree"
+    conda:
+        "../envs/fasttree.yaml"
+    params:
+        "-gtr -boot 1000"
+    shell:
+        "fasttree {params} {input} > {output}"
+    
