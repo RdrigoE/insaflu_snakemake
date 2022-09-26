@@ -11,7 +11,7 @@ else:
 locus = config_user['locus']
 rule pre_msa_masker:
     input:
-        expand("projects/{p}/main_result/mafft/Alignment_nt_All.fasta",p = config_user["project"]),
+        expand("projects/{p}/main_result/Alignment_nt_All_sep.fasta",p = config_user["project"]),
     output:
         expand("projects/{project}/main_result/{seg}/Alignment_nt_{seg}.fasta",project = config_user["project"], seg=get_locus(REFERENCE_GB,config_user['locus'])),
         
@@ -34,11 +34,11 @@ rule msa_masker_proteins:
 
 rule msa_masker:
     input:
-        all = "projects/{project}/main_result/mafft/Alignment_nt_All_concat.fasta",
+        all = "projects/{project}/main_result/Alignment_nt_All_aligned.fasta",
         i = expand("projects/{project}/main_result/depth/{sample}.depth",sample=config_user['samples'], project=config_user['project'], ref=get_locus(run_config["gb_reference"],run_config["locus"])),        
 
     output:
-       "projects/{project}/main_result/mafft/Alignment_nt_All_masked.fasta"  
+       "projects/{project}/main_result/Alignment_nt_All.fasta"
     conda:
         "../envs/msa_masker.yaml"
     params:

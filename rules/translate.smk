@@ -10,6 +10,6 @@ rule translate:
         coverage = "projects/{project}/main_result/coverage_translate.csv",
         
     output:
-        dir = "projects/{project}/main_result/{locus}/Alignment_aa_{locus}_{gene}_trans.fasta"
+        temp("projects/{project}/main_result/{locus}/Alignment_aa_{locus}_{gene}_trans.fasta")
     shell:
-        "python utils/translate.py {input.ref} {input.i} {output.dir} '{wildcards.locus}' '{wildcards.gene}' {input.coverage}"
+        "python utils/translate.py {input.ref} {input.i} {output} '{wildcards.locus}' '{wildcards.gene}' {input.coverage}"

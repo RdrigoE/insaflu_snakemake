@@ -17,7 +17,7 @@ rule all_consensus:
         i = expand("projects/{project}/main_result/consensus/{sample}_consensus.fasta",project=config_user['project'], sample=config_user['samples']),
         ref = REFERENCE_GB
     output:
-        o="projects/{project}/main_result/AllConsensus_sep.fasta",
-        o_2 = "projects/{project}/main_result/AllConsensus_concat.fasta"    
+        o="projects/{project}/main_result/AllConsensus.fasta",
+        o_2 = "projects/{project}/main_result/All_nt.fasta"
     shell:
         "cat {fr} {input.i} > {output.o} | python utils/concat_segments.py {output.o} {input.ref} {species} {output.o_2}"

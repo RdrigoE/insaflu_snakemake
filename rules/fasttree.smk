@@ -1,8 +1,8 @@
 rule fasttree:
     input:
-        "projects/{project}/main_result/mafft/Alignment_nt_All_masked.fasta"    
+        "projects/{project}/main_result/Alignment_nt_All.fasta"    
     output:
-        "projects/{project}/main_result/fasttre/tree"    
+        "projects/{project}/main_result/Tree_ML_All.tree"    
     conda:
         "../envs/fasttree.yaml"
     params:

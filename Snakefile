@@ -129,12 +129,14 @@ def get_output_files_pe():
         expand("projects/{project}/main_result/validated_minor_iSNVs_inc_indels.csv",project=config_user['project']),
         expand("projects/{project}/main_result/proportions_iSNVs_graph.csv",project=config_user['project']),
         expand("projects/{project}/main_result/proportions_iSNVs_graph.png",project=config_user['project']),
-        expand("projects/{project}/main_result/mafft/Alignment_nt_All_concat.fasta", sample=config_user['samples'], project=config_user['project']),
-        Checkpoint_MakePattern(f'projects/{run_config["project_name"]}/main_result/',"_trans.fasta",run_config['gb_reference'],run_config["locus"],f"projects/{config_user['project']}/main_result/coverage_translate.csv"),
+        expand("projects/{project}/main_result/Alignment_nt_All.fasta", sample=config_user['samples'], project=config_user['project']),
+        expand("projects/{project}/main_result/AllConsensus.fasta", sample=config_user['samples'], project=config_user['project']),
+
+        #Checkpoint_MakePattern(f'projects/{run_config["project_name"]}/main_result/',"_trans.fasta",run_config['gb_reference'],run_config["locus"],f"projects/{config_user['project']}/main_result/coverage_translate.csv"),
         Checkpoint_MakePattern(f'projects/{run_config["project_name"]}/main_result/',"_mafft.fasta",run_config['gb_reference'],run_config["locus"],f"projects/{config_user['project']}/main_result/coverage_translate.csv"),
         Checkpoint_MakePattern(f'projects/{run_config["project_name"]}/main_result/',"_tree.tree",run_config['gb_reference'],run_config["locus"], f"projects/{config_user['project']}/main_result/coverage_translate.csv"),
         expand("projects/{project}/main_result/snp_ready.txt",project=config_user['project']),
-        expand("projects/{project}/main_result/fasttre/tree", sample=config_user['samples'], project=config_user['project']), 
+        expand("projects/{project}/main_result/Tree_ML_All.tree", sample=config_user['samples'], project=config_user['project']), 
 
     ) 
 
