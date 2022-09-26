@@ -17,7 +17,8 @@ final_output = [super_header,super_header_1, header]
 
 for file in list:
     with open(file, "r") as f:
-        x = re.findall("(?<=coverage/)(.*?)(?=_coverage.csv)",file)
+        x = re.findall("(?<=/main_result/)(.*?)(?=_coverage.csv)",file)
+        print("This is the re result: ",x)
         info = f.readlines()[6].split()
         info[0] = x[0]
         final_output.append(info)

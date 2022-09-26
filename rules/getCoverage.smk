@@ -4,7 +4,7 @@ rule getCoverage:
         i  = "align_samples/{sample}/snippy/snps.depth.gz",
         ref = REFERENCE
     output:
-        o = "projects/{project}/main_result/coverage/{sample}_coverage.csv"
+        o = temp("projects/{project}/main_result/{sample}_coverage.csv")
     conda:
         "../envs/coverage.yaml"
     shell:

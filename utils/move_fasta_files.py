@@ -10,18 +10,15 @@ print(ref_id)
 file_path = f"align_samples/{sample}/snippy/"
 file_list = os.listdir(file_path)
 
-os.system(f"mkdir projects/{project}/main_result/consensus/ -p")
+new_file = []
+for record in SeqIO.parse(file_path+"snps.consensus.fa", "fasta"):
+    if ref_id != "Flu":
+        record.id = ref_id
+    print(f"{sample}__{record.id}")
+    record.id = f"{sample}__{record.id}"
+    new_file.append(record)
 
-if "snps.consensus.fa" in file_list:
-    new_file = []
-    for record in SeqIO.parse(file_path+"snps.consensus.fa", "fasta"):
-        if ref_id == 'SARS_CoV_2' or ref_id == "MonkeyPox":
-            record.id = ref_id
-        print(f"{sample}__{record.id}")
-        record.id = f"{sample}__{record.id}"
-        new_file.append(record)
-    
-    SeqIO.write(new_file, f"projects/{project}/main_result/consensus/"+sample+"_consensus.fasta", "fasta")
+SeqIO.write(new_file, f"projects/{project}/sample_{sample}/snippy/{sample}_consensus.fasta", "fasta")
     
     
     

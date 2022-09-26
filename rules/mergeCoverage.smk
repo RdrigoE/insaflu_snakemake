@@ -10,7 +10,7 @@ else:
 
 checkpoint mergeCoverage:
     input:
-        expand("projects/{project}/main_result/coverage/{sample}_coverage.csv",project=config_user['project'], sample=config_user['samples'])
+        expand("projects/{project}/main_result/{sample}_coverage.csv",project=config_user['project'], sample=config_user['samples'])
     output:
         coverage_regular = expand("projects/{project}/main_result/coverage.csv",project=config_user['project']),
         coverage_translate = expand("projects/{project}/main_result/coverage_translate.csv",project=config_user['project'])

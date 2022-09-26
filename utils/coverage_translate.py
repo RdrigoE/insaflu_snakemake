@@ -6,7 +6,7 @@ def get_coverage(filename,n_locus):
     with open(filename, newline='') as csvfile:
         csv_reader = csv.reader(csvfile, delimiter='\t')
         coverage_list = []
-        x = re.findall("(?<=coverage/)(.*?)(?=_coverage.csv)",filename)
+        x = re.findall("(?<=main_result/)(.*?)(?=_coverage.csv)",filename)
         for i in csv_reader:
             coverage_list.append(i)
         coverage_list = coverage_list[-1][-n_locus:]

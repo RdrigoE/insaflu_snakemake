@@ -8,13 +8,13 @@ rule cp_directory:
     input:
         i1 = expand("projects/{project}/sample_{sample}/snippy/snps.consensus.fa",project=config_user['project'], sample=config_user['samples']),
     output:
-        o1 = "projects/{project}/main_result/consensus/{sample}_consensus.fasta"
+        o1 = "projects/{project}/sample_{sample}/snippy/{sample}_consensus.fasta"
     shell:
         "python utils/move_fasta_files.py {wildcards.project} {wildcards.sample} {species}" 
 
 rule all_consensus:
     input:
-        i = expand("projects/{project}/main_result/consensus/{sample}_consensus.fasta",project=config_user['project'], sample=config_user['samples']),
+        i = expand("projects/{project}/sample_{sample}/snippy/{sample}_consensus.fasta",project=config_user['project'], sample=config_user['samples']),
         ref = REFERENCE_GB
     output:
         o="projects/{project}/main_result/AllConsensus.fasta",
