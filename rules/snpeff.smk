@@ -40,7 +40,7 @@ rule snpeff:
     threads: 
         config['snpeff_threads']
     params:
-        "-no-downstream -no-upstream -no-intergenic -no-utr -c config/snpeff.config"
+        "-no-downstream -no-upstream -no-intergenic -no-utr -noStats -c config/snpeff.config"
     shell:
         #not ready for multithreading >< -t {threads}
         "{replace} {input.i1} &&"
