@@ -6,7 +6,7 @@ rule freebayes:
         i  = "align_samples/{sample}/snippy/snps.bam",
         ref = REFERENCE
     output:
-        o = "projects/{project}/main_result/freebayes/{sample}_var.vcf",
+        o = "projects/{project}/sample_{sample}/freebayes/{sample}_var.vcf",
     conda:
         "../envs/freebayes.yaml"
 

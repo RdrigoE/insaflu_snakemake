@@ -61,11 +61,11 @@ class Checkpoint_MakePattern:
 
 
 
-sample_data = Data("./config_user/sample_info.csv")
-# sample_data = Data("./config_user/flu.csv")
+# sample_data = Data("./config_user/sample_info.csv")
+sample_data = Data("./config_user/flu.csv")
 
-run_config = read_yaml('./config_user/config_user1.yaml')
-# run_config = read_yaml('./config_user/config_user2.yaml')
+# run_config = read_yaml('./config_user/config_user1.yaml')
+run_config = read_yaml('./config_user/config_user2.yaml')
 
 locus_protein_alignment = get_locus_protein(run_config["gb_reference"],run_config["locus"])
 
@@ -101,10 +101,10 @@ def get_output_files_se():
         # expand("projects/{project}/main_result/depth/{sample}__{ref}.depth",sample=config_user['samples'], project=config_user['project'], ref=get_locus(run_config["gb_reference"],run_config["locus"])),        
         # expand("projects/{project}/main_result/depth/{sample}.depth",sample=config_user['samples'], project=config_user['project']),        
         expand("projects/{project}/main_result/snpeff/{sample}_snpeff.vcf",sample=config_user['samples'], project=config_user['project']),
-        expand("projects/{project}/main_result/mafft/Alignment_nt_All_concat.fasta", sample=config_user['samples'], project=config_user['project']),
+        #expand("projects/{project}/main_result/Alignment_nt_All_concat.fasta", sample=config_user['samples'], project=config_user['project']),
         expand("projects/{project}/main_result/{locus_protein_alignment_file}_trans.fasta", project=config_user['project'],locus_protein_alignment_file = locus_protein_alignment),
         expand("projects/{project}/main_result/{locus_protein_alignment_file}_mafft.fasta", project=config_user['project'],locus_protein_alignment_file = locus_protein_alignment),
-        expand("projects/{project}/main_result/fasttre/tree", sample=config_user['samples'], project=config_user['project']), 
+        expand("projects/{project}/main_result/Tree_ML_All.tree", sample=config_user['samples'], project=config_user['project']), 
         expand("projects/{project}/main_result/{locus_protein_alignment_file}_tree.tree", project=config_user['project'],locus_protein_alignment_file = locus_protein_alignment),
     )
 
@@ -118,12 +118,12 @@ def get_output_files_pe():
         #expand("projects/{project}/main_result/consensus/{sample}__SARS_COV_2_consensus.fasta", sample=config_user['samples'], project=config_user['project']),
         expand("projects/{project}/main_result/coverage.csv",project=config_user['project']),
         expand("projects/{project}/main_result/coverage_translate.csv",project=config_user['project']),
-        expand("projects/{project}/main_result/snpeff_samples/{sample}_snpeff.vcf",sample=config_user['samples'], project=config_user['project'], ref=get_locus(run_config["gb_reference"],run_config["locus"])),        
+        #expand("projects/{project}/main_result/snpeff_samples/{sample}_snpeff.vcf",sample=config_user['samples'], project=config_user['project'], ref=get_locus(run_config["gb_reference"],run_config["locus"])),        
 
-        expand("projects/{project}/main_result/freebayes/{sample}_var.vcf", sample=config_user['samples'], project=config_user['project']),
+        #expand("projects/{project}/main_result/freebayes/{sample}_var.vcf", sample=config_user['samples'], project=config_user['project']),
         expand("projects/{project}/main_result/depth/{sample}__{ref}.depth",sample=config_user['samples'], project=config_user['project'], ref=get_locus(run_config["gb_reference"],run_config["locus"])),        
-        expand("projects/{project}/main_result/depth/{sample}.depth",sample=config_user['samples'], project=config_user['project']),        
-        expand("projects/{project}/main_result/snpeff_samples/{sample}_snpeff.vcf",sample=config_user['samples'], project=config_user['project']),
+        #expand("projects/{project}/main_result/depth/{sample}.depth",sample=config_user['samples'], project=config_user['project']),        
+        #expand("projects/{project}/main_result/snpeff_samples/{sample}_snpeff.vcf",sample=config_user['samples'], project=config_user['project']),
         expand("projects/{project}/main_result/validated_minor_iSNVs.csv",project=config_user['project']),
         expand("projects/{project}/main_result/validated_variants.csv",project=config_user['project']),
         expand("projects/{project}/main_result/validated_minor_iSNVs_inc_indels.csv",project=config_user['project']),

@@ -53,7 +53,7 @@ for file in files_path:
                         count_more_50_less_90 += 1
             except:
                 continue
-    file_final.append([re.findall("(?<=/main_result/snpeff/)(.*?)(?=_snpeff.vcf)",file)[0],count_less,count_more_50_less_90])
+    file_final.append([re.findall("(?<=/)(.*?)(?=_snpeff.vcf)",file)[0],count_less,count_more_50_less_90])
     
 
                 

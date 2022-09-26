@@ -3,7 +3,7 @@ with open('config/config_run.yaml') as file:
 
 rule snpeff_concat:
     input: 
-        expand("projects/{project}/main_result/snpeff/{sample}_snpeff.vcf",sample=config_user['samples'], project=config_user['project']),
+        expand("projects/{project}/sample_{sample}/freebayes/{sample}_snpeff.vcf",sample=config_user['samples'], project=config_user['project']),
 
     output:
         "projects/{project}/main_result/validated_minor_iSNVs.csv"
@@ -12,7 +12,7 @@ rule snpeff_concat:
 
 rule snpeff_concat_indels:
     input: 
-        expand("projects/{project}/main_result/snpeff/{sample}_snpeff.vcf",sample=config_user['samples'], project=config_user['project']),
+        expand("projects/{project}/sample_{sample}/freebayes/{sample}_snpeff.vcf",sample=config_user['samples'], project=config_user['project']),
 
     output:
         "projects/{project}/main_result/validated_minor_iSNVs_inc_indels.csv"
@@ -21,7 +21,7 @@ rule snpeff_concat_indels:
 
 rule proportions_iSNVs_graph:
     input: 
-        expand("projects/{project}/main_result/snpeff/{sample}_snpeff.vcf",sample=config_user['samples'], project=config_user['project']),
+        expand("projects/{project}/sample_{sample}/freebayes/{sample}_snpeff.vcf",sample=config_user['samples'], project=config_user['project']),
 
     output:
         out_file = "projects/{project}/main_result/proportions_iSNVs_graph.csv",

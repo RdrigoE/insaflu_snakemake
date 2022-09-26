@@ -31,10 +31,10 @@ rule prepare_snpeff:
 
 rule snpeff:
     input:
-        i1 = "projects/{project}/main_result/freebayes/{sample}_var.vcf",
+        i1 = "projects/{project}/sample_{sample}/freebayes/{sample}_var.vcf",
         i2 = "projects/{project}/main_result/snp_ready.txt"
     output:
-        o = "projects/{project}/main_result/snpeff/{sample}_snpeff.vcf",
+        o = "projects/{project}/sample_{sample}/freebayes/{sample}_snpeff.vcf",
     conda:
         "../envs/snpeff.yaml"
     threads: 
