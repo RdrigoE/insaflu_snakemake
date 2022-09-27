@@ -1,7 +1,15 @@
 from Bio import SeqIO
 
 def get_positions_gb(genbank_file):
-    print(" Hello")
+    """
+    The get_positions_gb function takes a genbank file as input and returns a list of lists.
+    Each sublist contains the name of the gene, and its start and end positions in that particular sequence.
+    The get_positions_gb function is called by other functions to retrieve this information.
+    
+    :param genbank_file: Open the genbank file and parse it
+    :return: A list of lists
+    :doc-author: Trelent
+    """
     positions = []
 
     handle_gb = open(genbank_file)
@@ -21,6 +29,14 @@ def get_positions_gb(genbank_file):
 
 
 def get_genes(genbank_file):
+    """
+    The get_genes function takes a genbank file as input and returns a list of all the genes in that file.
+    The function is used to create a list of all the genes in each genome.
+    
+    :param genbank_file: Specify the name of the file that contains all of the genes in a genome
+    :return: A list of all the genes in the genbank file
+    :doc-author: Trelent
+    """
     genes = []
 
     handle_gb = open(genbank_file)

@@ -1,7 +1,7 @@
 from utils.get_gene_bank import get_genes
 from utils.import_user_data import Data
 from utils.import_user_data import read_yaml
-from utils.get_locus import get_locus_protein, get_locus
+from utils.get_locus import get_locus
 import yaml
 import csv
 from Bio import SeqIO
@@ -118,7 +118,6 @@ sample_data = Data("./config_user/flu.csv")
 # run_config = read_yaml('./config_user/config_user1.yaml')
 run_config = read_yaml('./config_user/config_user2.yaml')
 
-locus_protein_alignment = get_locus_protein(run_config["gb_reference"],run_config["locus"])
 
 
 def get_output_sample_se():
@@ -141,23 +140,7 @@ def get_output_files_se():
         expand("samples/{sample}/trimmed_fastqc/{sample}.trimmed_fastqc.html", sample=config_user['samples']),
         expand("samples/{sample}/spades/contigs.fasta", sample=config_user['samples']),
         expand("samples/{sample}/abricate/abricate_{sample}.csv", sample=config_user['samples']),
-        #expand("align_samples/{sample}/snippy/snps.consensus.fa",project=config_user['project'], sample=config_user['samples']),
-        #expand("projects/{project}/main_result/consensus/{sample}__SARS_COV_2_consensus.fasta", sample=config_user['samples'], project=config_user['project']),
-        #expand("projects/{project}/main_result/AllConsensus.fasta", project=config_user['project']),
-        #expand("projects/{project}/main_result/coverage/{sample}_coverage.csv", sample=config_user['samples'], project=config_user['project']),
-        expand("projects/{project}/main_result/coverage.csv",project=config_user['project']),
-        #expand("projects/{project}/main_result/freebayes/{sample}_var.vcf", sample=config_user['samples'], project=config_user['project']),
-        expand("projects/{project}/main_result/{seg}/Alignment_nt_{seg}.fasta",project=config_user['project'], seg=get_locus(run_config["gb_reference"],run_config["locus"])),
-        #expand("projects/{project}/main_result/{seg}/Alignment_nt_{seg}_masked.fasta",project=config_user['project'], seg=get_locus(run_config["gb_reference"],run_config["locus"])),
-        # expand("projects/{project}/main_result/depth/{sample}__{ref}.depth",sample=config_user['samples'], project=config_user['project'], ref=get_locus(run_config["gb_reference"],run_config["locus"])),        
-        # expand("projects/{project}/main_result/depth/{sample}.depth",sample=config_user['samples'], project=config_user['project']),        
-        expand("projects/{project}/main_result/snpeff/{sample}_snpeff.vcf",sample=config_user['samples'], project=config_user['project']),
-        #expand("projects/{project}/main_result/Alignment_nt_All_concat.fasta", sample=config_user['samples'], project=config_user['project']),
-        expand("projects/{project}/main_result/{locus_protein_alignment_file}_trans.fasta", project=config_user['project'],locus_protein_alignment_file = locus_protein_alignment),
-        expand("projects/{project}/main_result/{locus_protein_alignment_file}_mafft.fasta", project=config_user['project'],locus_protein_alignment_file = locus_protein_alignment),
-        expand("projects/{project}/main_result/Tree_ML_All.tree", sample=config_user['samples'], project=config_user['project']), 
-        expand("projects/{project}/main_result/{locus_protein_alignment_file}_tree.tree", project=config_user['project'],locus_protein_alignment_file = locus_protein_alignment),
-    )
+ )
 
 def get_output_files_pe():
     return(

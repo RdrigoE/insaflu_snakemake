@@ -3,6 +3,15 @@ from Bio import SeqIO
 import get_gene_bank as ggb 
 import csv
 def write_fasta(dictionary, filename):
+        """
+        The write_fasta function takes a dictionary and a filename as input.
+        It then writes the sequences in the dictionary to that file in FASTA format.
+        
+        :param dictionary: Store the key value pairs of the sequence names and sequences
+        :param filename: Specify the name of the file that will be created
+        :return: The name of the file created
+        :doc-author: Trelent
+        """
         import textwrap
         with open(filename, "w") as fasta:
             for key, value in dictionary.items():
@@ -11,6 +20,18 @@ def write_fasta(dictionary, filename):
                 fasta.write("\n")
 
 def get_ref_adjusted_positions(alignment, positions, locus, gene): 
+    """
+    The get_ref_adjusted_positions function takes a fasta file of aligned sequences and the positions
+    of interest for each gene, and returns the adjusted positions in reference to the first sequence.
+    
+    
+    :param alignment: Get the reference sequence
+    :param positions: Get the positions of each gene group in the alignment
+    :param locus: Identify the gene that is being used to get the positions
+    :param gene: Determine which gene is being analyzed
+    :return: The positions of the genes in the reference sequence
+    :doc-author: Trelent
+    """
     references = []
     new_positions = []
     ref = list(SeqIO.parse(alignment, "fasta"))[0]
@@ -32,6 +53,17 @@ def get_ref_adjusted_positions(alignment, positions, locus, gene):
     return new_positions
 
 def get_coverage_to_translate_matrix(filename):
+    """
+    The get_coverage_to_translate_matrix function takes a csv file as an argument and returns a dictionary.
+    The csv file is expected to have two columns, the first being the name of the gene and each subsequent column
+    being one sample's coverage for that gene. The function then creates a dictionary where each key is one of 
+    the samples' names and its value is another dictionary with keys being genes (from the first column) and values 
+    being that sample's coverage for that gene.
+    
+    :param filename: Specify the name of the file to be read
+    :return: A dictionary with the coverage as keys and a list of the number of times each amino acid was translated for that coverage
+    :doc-author: Trelent
+    """
     with open(filename, newline='') as csvfile:
         csv_reader = csv.reader(csvfile, delimiter=',')
         coverage_dic = {}
@@ -40,6 +72,21 @@ def get_coverage_to_translate_matrix(filename):
     return coverage_dic
 
 def write_fast_aa(reference,alignment, output, locus, gene, coverage): 
+    """
+    The write_fast_aa function takes a reference sequence, an alignment file, and an output file as arguments.
+    It then parses the alignment to find all of the positions that are not gaps in the reference sequence.
+    For each position it finds that is not a gap it translates those bases into amino acids and writes them to 
+    the output fasta file.
+    
+    :param reference: Get the reference sequence
+    :param alignment: Specify the alignment file
+    :param output: Specify the output file name
+    :param locus: Specify the reference sequence number
+    :param gene: Specify which gene to write the consensus sequence for
+    :param coverage: Filter out sequences that have a coverage below 90% for the locus of interest
+    :return: A dictionary with the amino acid sequences of each gene in a reference genome
+    :doc-author: Trelent
+    """
     if type(locus) == type(1):
         position = locus - 1 
     else:
@@ -70,7 +117,6 @@ def write_fast_aa(reference,alignment, output, locus, gene, coverage):
         write_fasta(new_consensus[gene], output)
         
 if __name__ == '__main__':
-    #write_fast_aa("reference/SARS_CoV_2_Wuhan_Hu_1_MN908947.gb","SARS_CoV_2","projects/insaflu_comp_1/main_result/mafft/mafft_masked.fasta","projects/insaflu_comp_1/main_result/SARS_CoV_2")
     reference = sys.argv[1]
     alignment = sys.argv[2]
     output = sys.argv[3]
