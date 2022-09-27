@@ -15,9 +15,12 @@ rule cp_directory:
 rule all_consensus:
     input:
         i = expand("projects/{project}/sample_{sample}/snippy/{sample}_consensus.fasta",project=config_user['project'], sample=config_user['samples']),
-        ref = REFERENCE_GB
+        ref = REFERENCE_GB,
+        coverage = "projects/{project}/main_result/coverage_translate.csv",
+        fasta =REFERENCE
     output:
         o="projects/{project}/main_result/AllConsensus.fasta",
-        o_2 = "projects/{project}/main_result/All_nt.fasta"
+        o_2 = "projects/{project}/main_result/All_nt.fasta",
+        o_3 = "projects/{project}/main_result/All_nt_only_90plus.fasta"
     shell:
-        "cat {fr} {input.i} > {output.o} | python utils/concat_segments.py {output.o} {input.ref} {species} {output.o_2}"
+        "cat {fr} {input.i} > {output.o} | python utils/concat_segments.py '{input.i}' {input.ref} {species} {output.o_2} {input.coverage} {input.fasta} {output.o_3}"
