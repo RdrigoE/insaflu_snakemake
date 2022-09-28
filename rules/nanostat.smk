@@ -2,11 +2,12 @@ rule raw_nanostat_se:
     input:
         i = "user_data/{sample}.fastq.gz"
     output:
-        dir=directory("samples/{sample}/raw_nanofilt")
+        dir=directory("samples/{sample}/raw_nanostat/"),
+        name = "samples/{sample}/raw_nanostat/{sample}_stats.txt"
     conda:
-        "../envs/fastqc.yaml"
+        "../envs/nanostat.yaml"
     shell:
-        "fastqc --fastq {input.i} --outdir {output.dir}"
+        "mkdir {output.dir} -p && NanoStat --fastq {input.i} --outdir {output.dir} -n {wildcards.sample}_stats.txt"
 
 
 rule trimmed_nanostat_se:
@@ -18,4 +19,4 @@ rule trimmed_nanostat_se:
     conda:
         "../envs/nanostat.yaml"
     shell:
-        "fastqc --fastq {input.i} --outdir {output.dir}"
+        "NanoStat --fastq {input.i} --outdir -n {output.dir}"

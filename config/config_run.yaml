@@ -1,17 +1,18 @@
-identification: ''
-locus: Flu
-project: flu_testing_BVictoria
+identification: MN908947
+locus: SARS_CoV_2
+project: ont
 proteins:
-- PB2
-- PB1
-- PA
-- HA
-- NP
-- NA
-- M_1
-- M_2
-- NS
+- orf1ab
+- S
+- ORF3a
+- E
+- M
+- ORF6
+- ORF7a
+- ORF8
+- N
+- ORF10
 samples:
-- SRR10885405
-- SRR10885406
-version: ''
+- SRR21548666
+- SRR21548667
+version: 3

@@ -2,7 +2,7 @@ configfile: "config/parameters.yaml"
 
 rule trimme_reads_SE:
     input:
-        "user_data/{sample}..fastq.gz"
+        "user_data/{sample}.fastq.gz"
     output:
         "samples/{sample}/trimmed_reads/{sample}.trimmed.fastq.gz"
     conda:

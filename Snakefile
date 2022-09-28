@@ -113,10 +113,12 @@ class Checkpoint_Seg:
         return final_output
 
 # sample_data = Data("./config_user/sample_info.csv")
-sample_data = Data("./config_user/flu.csv")
+# sample_data = Data("./config_user/flu.csv")
+sample_data = Data("./config_user/ont.csv")
 
 # run_config = read_yaml('./config_user/config_user1.yaml')
-run_config = read_yaml('./config_user/config_user2.yaml')
+# run_config = read_yaml('./config_user/config_user2.yaml')
+run_config = read_yaml('./config_user/config_user3.yaml')
 
 
 
@@ -144,38 +146,37 @@ def get_output_files_se():
 
 def get_output_files_pe():
     return(
-        expand("samples/{sample}/raw_fastqc/{sample}_{direction}_fastqc.html", sample=config_user['samples'],direction=["1","2"]), #generalizar
-        expand("samples/{sample}/trimmed_fastqc/{sample}_{direction}.trimmed_fastqc.html", sample=config_user['samples'],direction=["1","2"]),
-        expand("samples/{sample}/spades/contigs.fasta", sample=config_user['samples']),
-        expand("samples/{sample}/abricate/abricate_{sample}.csv", sample=config_user['samples']),
-        #expand("align_samples/{sample}/snippy/snps.consensus.fa",project=config_user['project'], sample=config_user['samples']),
-        #expand("projects/{project}/main_result/consensus/{sample}__SARS_COV_2_consensus.fasta", sample=config_user['samples'], project=config_user['project']),
-        expand("projects/{project}/main_result/coverage.csv",project=config_user['project']),
-        expand("projects/{project}/main_result/coverage_translate.csv",project=config_user['project']),
-        #expand("projects/{project}/main_result/snpeff_samples/{sample}_snpeff.vcf",sample=config_user['samples'], project=config_user['project'], ref=get_locus(run_config["gb_reference"],run_config["locus"])),        
+        # expand("samples/{sample}/raw_fastqc/{sample}_{direction}_fastqc.html", sample=config_user['samples'],direction=["1","2"]), #generalizar
+        # expand("samples/{sample}/trimmed_fastqc/{sample}_{direction}.trimmed_fastqc.html", sample=config_user['samples'],direction=["1","2"]),
+        # expand("samples/{sample}/spades/contigs.fasta", sample=config_user['samples']),
+        # expand("samples/{sample}/abricate/abricate_{sample}.csv", sample=config_user['samples']),
+        # expand("projects/{project}/main_result/coverage.csv",project=config_user['project']),
+        # expand("projects/{project}/main_result/coverage_translate.csv",project=config_user['project']),
 
-        #expand("projects/{project}/main_result/freebayes/{sample}_var.vcf", sample=config_user['samples'], project=config_user['project']),
-        expand("projects/{project}/main_result/depth/{sample}__{ref}.depth",sample=config_user['samples'], project=config_user['project'], ref=get_locus(run_config["gb_reference"],run_config["locus"])),        
-        #expand("projects/{project}/main_result/depth/{sample}.depth",sample=config_user['samples'], project=config_user['project']),        
-        #expand("projects/{project}/main_result/snpeff_samples/{sample}_snpeff.vcf",sample=config_user['samples'], project=config_user['project']),
-        expand("projects/{project}/main_result/validated_minor_iSNVs.csv",project=config_user['project']),
-        expand("projects/{project}/main_result/validated_variants.csv",project=config_user['project']),
-        expand("projects/{project}/main_result/validated_minor_iSNVs_inc_indels.csv",project=config_user['project']),
-        expand("projects/{project}/main_result/proportions_iSNVs_graph.csv",project=config_user['project']),
-        expand("projects/{project}/main_result/proportions_iSNVs_graph.png",project=config_user['project']),
-        expand("projects/{project}/main_result/Alignment_nt_All.fasta", sample=config_user['samples'], project=config_user['project']),
-        expand("projects/{project}/main_result/All_nt_only_90plus.fasta", sample=config_user['samples'], project=config_user['project']),
+        # expand("projects/{project}/main_result/depth/{sample}__{ref}.depth",sample=config_user['samples'], project=config_user['project'], ref=get_locus(run_config["gb_reference"],run_config["locus"])),        
+        # expand("projects/{project}/main_result/validated_minor_iSNVs.csv",project=config_user['project']),
+        # expand("projects/{project}/main_result/validated_variants.csv",project=config_user['project']),
+        # expand("projects/{project}/main_result/validated_minor_iSNVs_inc_indels.csv",project=config_user['project']),
+        # expand("projects/{project}/main_result/proportions_iSNVs_graph.csv",project=config_user['project']),
+        # expand("projects/{project}/main_result/proportions_iSNVs_graph.png",project=config_user['project']),
+        # expand("projects/{project}/main_result/Alignment_nt_All.fasta", sample=config_user['samples'], project=config_user['project']),
+        # expand("projects/{project}/main_result/All_nt_only_90plus.fasta", sample=config_user['samples'], project=config_user['project']),
 
-        expand("projects/{project}/main_result/AllConsensus.fasta", sample=config_user['samples'], project=config_user['project']),
+        # expand("projects/{project}/main_result/AllConsensus.fasta", sample=config_user['samples'], project=config_user['project']),
 
-        Checkpoint_Alignment_aa(f'projects/{run_config["project_name"]}/main_result/',"_trans.fasta",run_config['gb_reference'],run_config["locus"],f"projects/{config_user['project']}/main_result/coverage_translate.csv"),
-        Checkpoint_Alignment_aa(f'projects/{run_config["project_name"]}/main_result/',"_mafft.fasta",run_config['gb_reference'],run_config["locus"],f"projects/{config_user['project']}/main_result/coverage_translate.csv"),
-        Checkpoint_Alignment_aa(f'projects/{run_config["project_name"]}/main_result/',"_tree.tree",run_config['gb_reference'],run_config["locus"], f"projects/{config_user['project']}/main_result/coverage_translate.csv"),
-        Checkpoint_Seg(f'projects/{run_config["project_name"]}/main_result/', "_tree.tree" ,run_config['gb_reference'],run_config["locus"], f"projects/{config_user['project']}/main_result/coverage_translate.csv"),
-        expand("projects/{project}/main_result/snp_ready.txt",project=config_user['project']),
-        expand("projects/{project}/main_result/Tree_ML_All.tree", sample=config_user['samples'], project=config_user['project']), 
+        # Checkpoint_Alignment_aa(f'projects/{run_config["project_name"]}/main_result/',"_trans.fasta",run_config['gb_reference'],run_config["locus"],f"projects/{config_user['project']}/main_result/coverage_translate.csv"),
+        # Checkpoint_Alignment_aa(f'projects/{run_config["project_name"]}/main_result/',"_mafft.fasta",run_config['gb_reference'],run_config["locus"],f"projects/{config_user['project']}/main_result/coverage_translate.csv"),
+        # Checkpoint_Alignment_aa(f'projects/{run_config["project_name"]}/main_result/',"_tree.tree",run_config['gb_reference'],run_config["locus"], f"projects/{config_user['project']}/main_result/coverage_translate.csv"),
+        # Checkpoint_Seg(f'projects/{run_config["project_name"]}/main_result/', "_tree.tree" ,run_config['gb_reference'],run_config["locus"], f"projects/{config_user['project']}/main_result/coverage_translate.csv"),
+        # expand("projects/{project}/main_result/snp_ready.txt",project=config_user['project']),
+        # expand("projects/{project}/main_result/Tree_ML_All.tree", sample=config_user['samples'], project=config_user['project']), 
+        expand("samples/{sample}/raw_nanostat/{sample}_stats.txt", sample=config_user['samples']), #generalizar
+        expand("samples/{sample}/nano_trimmed_reads/{sample}.trimmed.fastq.gz", sample=config_user['samples']),
+        #expand("samples/{sample}/rabbitqc/rabbit.html", sample=config_user['samples']),
+        expand("align_samples/{sample}/medaka/consensus.fa", sample=config_user['samples']),
+        
 
-    ) 
+)
 
 
 def prepare_run(settings):
@@ -241,6 +242,10 @@ include: "rules/fastree_proteins.smk"
 include: "rules/minor_iSNVs.smk"
 include: "rules/snpeff_sample.smk"
 include: "rules/snp_variant_validated.smk"
+include: "rules/nanostat.smk"
+include: "rules/nanofilt.smk"
+include: "rules/rabbitqc.smk"
+include: "rules/medaka.smk"
 
 rule all:
     input:
