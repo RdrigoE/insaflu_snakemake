@@ -164,6 +164,8 @@ def get_output_files_pe():
         expand("projects/{project}/main_result/proportions_iSNVs_graph.csv",project=config_user['project']),
         expand("projects/{project}/main_result/proportions_iSNVs_graph.png",project=config_user['project']),
         expand("projects/{project}/main_result/Alignment_nt_All.fasta", sample=config_user['samples'], project=config_user['project']),
+        expand("projects/{project}/main_result/All_nt_only_90plus.fasta", sample=config_user['samples'], project=config_user['project']),
+
         expand("projects/{project}/main_result/AllConsensus.fasta", sample=config_user['samples'], project=config_user['project']),
 
         Checkpoint_Alignment_aa(f'projects/{run_config["project_name"]}/main_result/',"_trans.fasta",run_config['gb_reference'],run_config["locus"],f"projects/{config_user['project']}/main_result/coverage_translate.csv"),
