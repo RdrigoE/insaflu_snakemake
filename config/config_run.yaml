@@ -13,6 +13,5 @@ proteins:
 - N
 - ORF10
 samples:
-- SRR21548666
-- SRR21548667
+- covidONT
 version: 3

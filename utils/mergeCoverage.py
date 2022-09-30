@@ -13,6 +13,7 @@ def merge_coverage(file_list):
     :return: A list of lists with the coverage information for each sample
     :doc-author: Trelent
     """
+    
     with open(file_list[0],"r") as f:
         length = (f.readlines()[3].split()[1])
 

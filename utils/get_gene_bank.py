@@ -38,12 +38,13 @@ def get_genes(genbank_file):
     :doc-author: Trelent
     """
     genes = []
-
     handle_gb = open(genbank_file)
     for record in SeqIO.parse(handle_gb, "genbank"):
         for features in record.features:
             if (features.type == 'CDS'):
-                genes.append(features.qualifiers["gene"][0])
+                try:
+                    genes.append(features.qualifiers["gene"][0])
+                except:
+                    genes.append(features.qualifiers["locus_tag"][0])
     handle_gb.close()
-
     return genes

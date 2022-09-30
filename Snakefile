@@ -170,11 +170,14 @@ def get_output_files_pe():
         # Checkpoint_Seg(f'projects/{run_config["project_name"]}/main_result/', "_tree.tree" ,run_config['gb_reference'],run_config["locus"], f"projects/{config_user['project']}/main_result/coverage_translate.csv"),
         # expand("projects/{project}/main_result/snp_ready.txt",project=config_user['project']),
         # expand("projects/{project}/main_result/Tree_ML_All.tree", sample=config_user['samples'], project=config_user['project']), 
-        expand("samples/{sample}/raw_nanostat/{sample}_stats.txt", sample=config_user['samples']), #generalizar
+        # expand("samples/{sample}/raw_nanostat/{sample}_stats.txt", sample=config_user['samples']), #generalizar
         expand("samples/{sample}/nano_trimmed_reads/{sample}.trimmed.fastq.gz", sample=config_user['samples']),
         #expand("samples/{sample}/rabbitqc/rabbit.html", sample=config_user['samples']),
-        expand("align_samples/{sample}/medaka/consensus.fa", sample=config_user['samples']),
-        
+        expand("align_samples/{sample}/medaka/consensus.fasta", sample=config_user['samples']),
+        expand("align_samples/{sample}/medaka/snps.depth.gz", sample=config_user['samples']),
+        expand("align_samples/{sample}/medaka/snps.depth.gz.tbi", sample=config_user['samples']),
+
+        expand("align_samples/{sample}/medaka/snps.vfc", sample=config_user['samples']),
 
 )
 
