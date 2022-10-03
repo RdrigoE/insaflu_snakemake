@@ -3,4 +3,5 @@ channels:
   - bioconda
   - nodefaults
 dependencies:
-  - medaka =1.7.2
+  - clair3 =0.1.12
+  - python =3.9.0 

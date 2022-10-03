@@ -3,4 +3,4 @@ channels:
   - bioconda
   - nodefaults
 dependencies:
-  - medaka =1.7.2
+  - medaka =1.2.1

@@ -10,7 +10,8 @@ rule medaka_consensus:
     conda:
         "../envs/medaka_1_7.yaml"
     shell:
-        "medaka_consensus -i {input.i} -d {input.ref} -o {output.dir} -t 4 -m r941_min_high_g360"
+        "source ./testONT/software/medaka/bin/activate && "
+        "./testONT/software/medaka/bin/medaka_consensus -i {input.i} -d {input.ref} -o {output.dir} -t 4 -m r941_min_high_g360"
         #email => Medaka_consensus -i filtered_fastq -d reference_fasta -o output_folder -t threads –m r941_min_high_g360
 rule medaka_depth:
     input:
@@ -43,13 +44,31 @@ rule medaka_vfc:
         bam = "align_samples/{sample}/medaka/calls_to_draft.bam",
         depth = "align_samples/{sample}/medaka/snps.depth.gz.tbi"
     output:
-        vcf = "align_samples/{sample}/medaka/round_1.vcf",
-        vcf_dir = directory("align_samples/{sample}/medaka/variant/")
+        vcf = "align_samples/{sample}/medaka/round_1_phased.vcf",
+        dir = "align_samples/{sample}/medaka/variant"
     conda:
         "../envs/medaka_1_x.yaml"
 
     shell:
-        "medaka_variant -i {input.bam} -f {input.ref} -s {input.hdf} -p {output.vcf} -o {output.vcf_dir} -t 8"
+        "source ./testONT/software/medaka/bin/activate && "
+        "./testONT/software/medaka/bin/medaka_variant -i {input.bam} -f {input.ref} -s {input.hdf} -p {output.dir}"
+
+
+rule clair3_vfc:
+    input:
+        hdf = "align_samples/{sample}/medaka/consensus_probs.hdf",
+        ref = REFERENCE,
+        bam = "align_samples/{sample}/medaka/calls_to_draft.bam",
+        depth = "align_samples/{sample}/medaka/snps.depth.gz.tbi"
+    output:
+        vcf = "align_samples/{sample}/medaka/clair3/merge_output.vcf.gz",
+        dir = directory("align_samples/{sample}/medaka/clair3/")
+    conda:
+        "../envs/clair3.yaml"
+    shell:
+        "run_clair3.sh --bam_fn={input.bam} --ref_fn={input.ref} --threads=8 --platform='ont' --model_path=$CONDA_PREFIX/bin/models/ont --output={output.dir}"
+
+
 # rule medaka_annotate:
 #     input:
 #         ref = REFERENCE,
