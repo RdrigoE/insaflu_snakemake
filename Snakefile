@@ -176,7 +176,7 @@ def get_output_files_pe():
         expand("align_samples/{sample}/medaka/consensus.fasta", sample=config_user['samples']),
         expand("align_samples/{sample}/medaka/snps.depth.gz", sample=config_user['samples']),
         expand("align_samples/{sample}/medaka/snps.depth.gz.tbi", sample=config_user['samples']),
-
+        expand("samples/{sample}/nano_trimmed_reads/{sample}/ready.txt", sample=config_user['samples']),
         expand("align_samples/{sample}/medaka/round_1.vcf", sample=config_user['samples']),
 
 )

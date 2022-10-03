@@ -26,6 +26,16 @@ rule medaka_depth:
         "samtools depth {params} {input.i} | bgzip -c > {output.depth} "
         "&& tabix -p vcf {output.depth}"
 
+rule:
+    input:
+        i = "samples/{sample}/nano_trimmed_reads/{sample}.trimmed.fastq.gz",
+    output:
+        o = "samples/{sample}/nano_trimmed_reads/{sample}/ready.txt"
+    conda:
+        "../envs/medaka_dependency.yaml"
+    shell:
+        "touch {output.o}"
+
 # rule tabix:
 #     input:
 #         depth = "align_samples/{sample}/medaka/snps.depth.gz",
@@ -41,15 +51,16 @@ rule medaka_vfc:
         hdf = "align_samples/{sample}/medaka/consensus_probs.hdf",
         ref = REFERENCE,
         bam = "align_samples/{sample}/medaka/calls_to_draft.bam",
-        depth = "align_samples/{sample}/medaka/snps.depth.gz.tbi"
+        depth = "align_samples/{sample}/medaka/snps.depth.gz.tbi",
+        dep = "samples/{sample}/nano_trimmed_reads/{sample}/ready.txt"
     output:
         vcf = "align_samples/{sample}/medaka/round_1.vcf",
         vcf_dir = directory("align_samples/{sample}/medaka/variant/")
     conda:
-        "../envs/medaka_1_x.yaml"
-
+        "../envs/medaka_1_2.yaml"
     shell:
-        "medaka_variant -i {input.bam} -f {input.ref} -s {input.hdf} -p {output.vcf} -o {output.vcf_dir} -t 8"
+        "source ./testONT/software/medaka/bin/activate && "
+        "medaka_variant -i {input.bam} -f {input.ref} {input.hdf} "
 # rule medaka_annotate:
 #     input:
 #         ref = REFERENCE,
