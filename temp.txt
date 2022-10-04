@@ -9,3 +9,14 @@ RUN pip3 install nanofilt==2.7.1
 ## medaka
 COPY software/install_soft_medaka.sh /software
 RUN /software/install_soft_medaka.sh
+
+
+pip3 install bblfsh
+sudo apt install libbz2-dev 
+sudo apt-get install liblzma-dev
+sudo apt-get install libncurses5-dev libncursesw5-dev
+
+
+
+
+mascarar o consensus depois deste ser formado no snippy e medaka 

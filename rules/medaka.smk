@@ -8,10 +8,11 @@ rule medaka_consensus:
         i = "align_samples/{sample}/medaka/calls_to_draft.bam",
         hdf = "align_samples/{sample}/medaka/consensus_probs.hdf"
     conda:
-        "../envs/medaka_1_7.yaml"
+        "../envs/medaka_1_4_4.yaml"
     shell:
         "medaka_consensus -i {input.i} -d {input.ref} -o {output.dir} -t 4 -m r941_min_high_g360"
-        #email => Medaka_consensus -i filtered_fastq -d reference_fasta -o output_folder -t threads –m r941_min_high_g360
+
+
 rule medaka_depth:
     input:
         i = "align_samples/{sample}/medaka/calls_to_draft.bam",
@@ -19,56 +20,73 @@ rule medaka_depth:
         depth = "align_samples/{sample}/medaka/snps.depth.gz",
         depth_indexed = "align_samples/{sample}/medaka/snps.depth.gz.tbi"
     conda:
-        "../envs/medaka_1_2.yaml"
+        "../envs/medaka_1_4_4.yaml"
     params:
         "-aa -q 10"
     shell:
         "samtools depth {params} {input.i} | bgzip -c > {output.depth} "
         "&& tabix -p vcf {output.depth}"
 
-rule:
-    input:
-        i = "samples/{sample}/nano_trimmed_reads/{sample}.trimmed.fastq.gz",
-    output:
-        o = "samples/{sample}/nano_trimmed_reads/{sample}/ready.txt"
-    conda:
-        "../envs/medaka_dependency.yaml"
-    shell:
-        "touch {output.o}"
-
-# rule tabix:
-#     input:
-#         depth = "align_samples/{sample}/medaka/snps.depth.gz",
-#     output:
-#         depth = "align_samples/{sample}/medaka/snps.depth.gz.tbi"
-#     conda:
-#         "../envs/tabix.yaml"
-#     shell:
-#         "tabix {input.depth}"
-
 rule medaka_vfc:
     input:
         hdf = "align_samples/{sample}/medaka/consensus_probs.hdf",
         ref = REFERENCE,
-        bam = "align_samples/{sample}/medaka/calls_to_draft.bam",
+        consensus = "align_samples/{sample}/medaka/consensus.fasta",
         depth = "align_samples/{sample}/medaka/snps.depth.gz.tbi",
-        dep = "samples/{sample}/nano_trimmed_reads/{sample}/ready.txt"
     output:
         vcf = "align_samples/{sample}/medaka/round_1.vcf",
-        vcf_dir = directory("align_samples/{sample}/medaka/variant/")
     conda:
-        "../envs/medaka_1_2.yaml"
+        "../envs/medaka_1_4_4.yaml"
     shell:
-        "source ./testONT/software/medaka/bin/activate && "
-        "medaka_variant -i {input.bam} -f {input.ref} {input.hdf} "
-# rule medaka_annotate:
-#     input:
-#         ref = REFERENCE,
-#         vcf = "align_samples/{sample}/medaka/snps.vfc",
-#         bam = "align_samples/{sample}/medaka/calls_to_draft.bam"
-#     output:
-#         vfc = "align_samples/{sample}/medaka/snps.vfc"
-#     conda:
-#         "../envs/medaka_1_2.yaml"
-#     shell:
-#         "medaka_tools annotate {input.vcf} -f {input.ref} {input.bam} {output}"
+        "medaka variant --verbose {input.ref} {input.hdf} {output.vcf}"
+
+rule medaka_annotate:
+    input:
+        ref = REFERENCE,
+        vcf = "align_samples/{sample}/medaka/round_1.vcf",
+        bam = "align_samples/{sample}/medaka/calls_to_draft.bam"
+    output:
+        snps = "align_samples/{sample}/medaka/snps.vcf",
+        vcf_zipped = "align_samples/{sample}/medaka/snps.vcf.gz"
+    conda:
+        "../envs/medaka_1_4_4.yaml"
+    shell:
+        "medaka tools annotate {input.vcf} {input.ref} {input.bam} {output.snps} && bgzip {output.snps} -c > {output.vcf_zipped} && tabix {output.vcf_zipped}"
+
+
+rule bcf_consensus:
+    input:
+        vcf_ziped = "align_samples/{sample}/medaka/snps.vcf.gz",
+        ref = REFERENCE
+    output:
+        out = "align_samples/{sample}/medaka/final_consensus.fasta",
+    conda:
+        "../envs/medaka_1_4_4.yaml"
+    shell:
+        "bcftools consensus -s SAMPLE -f {input.ref} {input.vcf_ziped} -o {output.out}"
+
+# rule mask final consensus
+rule bcf_consensus:
+    input:
+        vcf_ziped = "align_samples/{sample}/medaka/snps.vcf.gz",
+        ref = REFERENCE
+    output:
+        out = "align_samples/{sample}/medaka/final_consensus.fasta",
+    conda:
+        "../envs/medaka_1_4_4.yaml"
+    shell:
+        "bcftools consensus -s SAMPLE -f {input.ref} {input.vcf_ziped} -o {output.out}"
+
+rule mask_consensus:
+    input:
+        consensus = "align_samples/{sample}/medaka/final_consensus.fasta",
+        depth = "align_samples/{sample}/medaka/snps.depth"
+    output:
+        consensus = 
+    conda:
+
+    shell:
+
+# rule add freq to vcf 
+
+# rule add snpeff

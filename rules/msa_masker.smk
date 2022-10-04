@@ -32,16 +32,16 @@ rule msa_masker_proteins:
     shell:
         "python software/msa_masker/msa_masker.py -i {input.protein} -df projects/{wildcards.project}/main_result/depth/ -o {output} {params}"
 
-rule msa_masker:
-    input:
-        all = "projects/{project}/main_result/Alignment_nt_All_aligned.fasta",
-        i = expand("projects/{project}/main_result/depth/{sample}.depth",sample=config_user['samples'], project=config_user['project'], ref=get_locus(run_config["gb_reference"],run_config["locus"])),        
+# rule msa_masker:
+#     input:
+#         all = "projects/{project}/main_result/Alignment_nt_All_aligned.fasta",
+#         i = expand("projects/{project}/main_result/depth/{sample}.depth",sample=config_user['samples'], project=config_user['project'], ref=get_locus(run_config["gb_reference"],run_config["locus"])),        
 
-    output:
-       "projects/{project}/main_result/Alignment_nt_All.fasta"
-    conda:
-        "../envs/msa_masker.yaml"
-    params:
-        "--c 1"
-    shell:
-        "python software/msa_masker/msa_masker.py -i {input.all} -df projects/{wildcards.project}/main_result/depth/ -o {output} {params}"
+#     output:
+#        "projects/{project}/main_result/Alignment_nt_All.fasta"
+#     conda:
+#         "../envs/msa_masker.yaml"
+#     params:
+#         "--c 1"
+#     shell:
+#         "python software/msa_masker/msa_masker.py -i {input.all} -df projects/{wildcards.project}/main_result/depth/ -o {output} {params}"
