@@ -1,2 +1,2 @@
 conda activate $CONDA_PREFIX
-conda update bcftools 
+conda update bcftools --channel conda-forge
