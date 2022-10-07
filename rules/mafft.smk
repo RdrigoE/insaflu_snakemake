@@ -19,7 +19,7 @@ rule mafft:
     input:
         "projects/{project}/main_result/All_nt.fasta"
     output:
-        temp("projects/{project}/main_result/Alignment_nt_All_aligned.fasta")
+        temp("projects/{project}/main_result/Alignment_nt_All.fasta")
     conda:
         "../envs/mafft.yaml"
     threads:
@@ -31,7 +31,7 @@ rule mafft:
 
 rule mafft_nt:
     input:
-        "projects/{project}/main_result/{seg}/Alignment_nt_{seg}_masked.fasta"
+        "projects/{project}/main_result/{seg}/Alignment_nt_{seg}.fasta"
     output:
         "projects/{project}/main_result/{seg}/Alignment_nt_{seg}_mafft.fasta"
     conda:

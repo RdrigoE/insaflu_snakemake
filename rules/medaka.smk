@@ -66,26 +66,26 @@ rule bcf_consensus:
         "bcftools consensus -s SAMPLE -f {input.ref} {input.vcf_ziped} -o {output.out}"
 
 # rule mask final consensus
-rule bcf_consensus:
-    input:
-        vcf_ziped = "align_samples/{sample}/medaka/snps.vcf.gz",
-        ref = REFERENCE
-    output:
-        out = "align_samples/{sample}/medaka/final_consensus.fasta",
-    conda:
-        "../envs/medaka_1_4_4.yaml"
-    shell:
-        "bcftools consensus -s SAMPLE -f {input.ref} {input.vcf_ziped} -o {output.out}"
+# rule bcf_consensus:
+#     input:
+#         vcf_ziped = "align_samples/{sample}/medaka/snps.vcf.gz",
+#         ref = REFERENCE
+#     output:
+#         out = "align_samples/{sample}/medaka/final_consensus.fasta",
+#     conda:
+#         "../envs/medaka_1_4_4.yaml"
+#     shell:
+#         "bcftools consensus -s SAMPLE -f {input.ref} {input.vcf_ziped} -o {output.out}"
 
-rule mask_consensus:
-    input:
-        consensus = "align_samples/{sample}/medaka/final_consensus.fasta",
-        depth = "align_samples/{sample}/medaka/snps.depth"
-    output:
-        consensus = 
-    conda:
+# rule mask_consensus:
+#     input:
+#         consensus = "align_samples/{sample}/medaka/final_consensus.fasta",
+#         depth = "align_samples/{sample}/medaka/snps.depth"
+#     output:
+#         consensus = 
+#     conda:
 
-    shell:
+#     shell:
 
 # rule add freq to vcf 
 
