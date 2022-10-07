@@ -1,6 +1,6 @@
 identification: MN908947
 locus: SARS_CoV_2
-project: covid_two_sample
+project: ont
 proteins:
 - orf1ab
 - S
@@ -13,6 +13,5 @@ proteins:
 - N
 - ORF10
 samples:
-- ERR10039715
-- ERR10039716
+- covidONT
 version: 3

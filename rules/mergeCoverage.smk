@@ -1,12 +1,8 @@
 with open('config/config_run.yaml') as file:
     config_user = yaml.load(file, Loader=yaml.FullLoader)
 
-locus = get_locus(REFERENCE_GB,config_user['locus'])
-if type(get_locus(REFERENCE_GB,config_user['locus'])) == type([1]):
-    loop = get_locus(REFERENCE_GB,config_user['locus'])
-
-else:
-    loop = 1
+locus = get_locus(REFERENCE_GB)
+loop = len(locus)
 
 checkpoint mergeCoverage:
     input:

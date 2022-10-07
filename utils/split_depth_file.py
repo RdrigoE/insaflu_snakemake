@@ -1,7 +1,9 @@
 import sys
 import re
 
-def split_depth_file(file_path):
+from get_locus import get_locus
+
+def split_depth_file(file_path,reference_gb):
     """
     The split_depth_file function takes a file path as an argument and splits the depth file into separate files for each reference sequence.
     The function takes the last position of a string containing the full path to the depth file as its starting point, then finds where in that string
@@ -14,18 +16,21 @@ def split_depth_file(file_path):
     :doc-author: Trelent
     """
     last_pos = len(file_path) - file_path[::-1].index("/")
-    filename = file_path[last_pos:]
-    new_file = []
-
-    reference = x = re.findall("(?<=__)(.*?)(?=.depth)",filename)[0]
-    with open(file_path, "r") as f:
-        for line in f.readlines():
-            if line.split()[0] == reference:
-                new_file.append(line)
-    with open(file_path, "w") as f:
-        f.writelines(new_file)   
+    path = file_path[:last_pos]
+    reference_list = get_locus(reference_gb)
+    print("Reference list === ",reference_list)
+    for name in reference_list:
+        with open(file_path, "r") as f:
+            new_file = []
+            for line in f.readlines():
+                print(line.split()[0] , str(name))
+                if line.split()[0] == str(name):
+                    new_file.append(line)
+            with open(f"{path}{name}.depth", "w") as output_file:
+                output_file.writelines(new_file)   
 
 
 if __name__ == '__main__':
     file_path = sys.argv[1]
-    split_depth_file(file_path)
+    reference_gb = sys.argv[2]
+    split_depth_file(file_path, reference_gb)

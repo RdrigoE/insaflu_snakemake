@@ -8,7 +8,6 @@ rule translate:
         ref = REFERENCE_GB,
         i = "projects/{project}/main_result/{locus}/Alignment_nt_{locus}.fasta",
         coverage = "projects/{project}/main_result/coverage_translate.csv",
-        
     output:
         temp("projects/{project}/main_result/{locus}/Alignment_aa_{locus}_{gene}_trans.fasta")
     shell:

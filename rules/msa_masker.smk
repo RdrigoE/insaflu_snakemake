@@ -1,19 +1,16 @@
 with open('config/config_run.yaml') as file:
     config_user = yaml.load(file, Loader=yaml.FullLoader)
 p = config_user["project"]
-locus = get_locus(REFERENCE_GB,config_user['locus'])
-if type(get_locus(REFERENCE_GB,config_user['locus'])) == type([1]):
-    loop = len(get_locus(REFERENCE_GB,config_user['locus']))
-else:
-    loop = 1
+locus = get_locus(REFERENCE_GB)
+loop = len(locus)
 
 
 locus = config_user['locus']
-rule pre_msa_masker:
+rule create_segments:
     input:
         expand("projects/{p}/main_result/Alignment_nt_All_sep.fasta",p = config_user["project"]),
     output:
-        expand("projects/{project}/main_result/{seg}/Alignment_nt_{seg}.fasta",project = config_user["project"], seg=get_locus(REFERENCE_GB,config_user['locus'])),
+        expand("projects/{project}/main_result/{seg}/Alignment_nt_{seg}.fasta",project = config_user["project"], seg=get_locus(REFERENCE_GB)),
         
     shell:
         "python utils/pre_msa_masker.py {input} projects/{p}/main_result {loop} '{locus}'"
