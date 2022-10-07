@@ -1,7 +1,6 @@
 with open('config/config_run.yaml') as file:
     config_user = yaml.load(file, Loader=yaml.FullLoader)
 
-species = config_user['locus']
 
 fr = REFERENCE
 rule cp_directory:
@@ -17,7 +16,7 @@ rule all_consensus:
         i = expand("projects/{project}/sample_{sample}/snippy/{sample}_consensus.fasta",project=config_user['project'], sample=config_user['samples']),
         ref = REFERENCE_GB,
         coverage = "projects/{project}/main_result/coverage_translate.csv",
-        fasta =REFERENCE
+        fasta = REFERENCE
     output:
         o="projects/{project}/main_result/AllConsensus.fasta",
         o_2 = "projects/{project}/main_result/All_nt.fasta",
