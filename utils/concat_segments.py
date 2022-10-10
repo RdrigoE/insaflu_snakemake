@@ -79,7 +79,7 @@ def get_id_sequence_from_consensus_strict(consensus,sample_name, value_list):
 
 
 
-def create_consensus_file_for_alignment(consensus,reference_gb,species,output,coverage_file,fasta_file,output_only_90_plus):
+def create_consensus_file_for_alignment(consensus,reference_gb,output,coverage_file,fasta_file,output_only_90_plus):
     """
     The create_consensus_file_for_alignment function takes a list of files, the reference genome in genbank format,
     the species name and an output file name as input. It then creates a fasta file with all the sequences from the 
@@ -117,7 +117,7 @@ def create_consensus_file_for_alignment(consensus,reference_gb,species,output,co
     fasta_reference_concat = get_fasta_reference_concat(fasta_file)
     new_concat_file = [fasta_reference_concat]
     new_concat_file_strict = [fasta_reference_concat]
-    if species == 'Flu':
+    if len(get_locus(reference_gb)) > 1:
         for file in consensus:
             sample_name = re.findall("(?<=sample_)(.*?)(?=/snippy/)",file)[0]
             if len(coverage_dic[sample_name]) > 0:
@@ -141,10 +141,9 @@ def create_consensus_file_for_alignment(consensus,reference_gb,species,output,co
 if __name__ == '__main__':
     consensus = sys.argv[1].split(' ')
     reference_gb = sys.argv[2]
-    species = sys.argv[3]
-    output = sys.argv[4]
-    coverage_file = sys.argv[5]
-    fasta_file = sys.argv[6]
-    output_only_90_plus = sys.argv[7]
+    output = sys.argv[3]
+    coverage_file = sys.argv[4]
+    fasta_file = sys.argv[5]
+    output_only_90_plus = sys.argv[6]
 
-    create_consensus_file_for_alignment(consensus,reference_gb,species,output,coverage_file,fasta_file,output_only_90_plus)
+    create_consensus_file_for_alignment(consensus,reference_gb,output,coverage_file,fasta_file,output_only_90_plus)

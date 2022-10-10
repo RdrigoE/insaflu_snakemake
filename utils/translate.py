@@ -123,9 +123,5 @@ if __name__ == '__main__':
     locus = sys.argv[4]
     gene = sys.argv[5]
     coverage = sys.argv[6]
-    try:
-        locus = int(locus)
-    except:
-        locus = locus
 
     write_fast_aa(reference, alignment, output, locus, gene, coverage)

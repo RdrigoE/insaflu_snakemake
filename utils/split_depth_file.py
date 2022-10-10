@@ -25,7 +25,6 @@ def split_depth_file(file_path,reference_gb):
             with open(file_path, "r") as f:
                 new_file = []
                 for line in f.readlines():
-                    print(line.split()[0] , str(name))
                     if line.split()[0] == str(name):
                         new_file.append(line)
                     with open(f"{path}{name}.depth", "w") as output_file:

@@ -6,7 +6,7 @@ locus = config_user['locus']
 samples = config_user['samples']
 identification = config_user['identification']
 version = config_user['version']
-if locus != 'Flu':
+if len(get_locus(REFERENCE_GB)) != 1:
     replace = f"sed -i 's/{locus}/{identification}.{version}/g' "
 else:
     replace = 'true '
