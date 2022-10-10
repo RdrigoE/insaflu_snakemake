@@ -3,13 +3,13 @@ with open('config/config_run.yaml') as file:
 
 
 fr = REFERENCE
-rule cp_directory:
-    input:
-        i1 = "projects/{project}/sample_{sample}/snippy/snps.consensus.fa",
-    output:
-        o1 = "projects/{project}/sample_{sample}/snippy/{sample}_consensus.fasta"
-    shell:
-        "python utils/get_consensus.py {input} {output}" 
+# rule cp_directory:
+#     input:
+#         i1 = "projects/{project}/sample_{sample}/snippy/snps.consensus.fa",
+#     output:
+#         o1 = "projects/{project}/sample_{sample}/snippy/{sample}_consensus.fasta"
+#     shell:
+#         "python utils/get_consensus.py {input} {output}" 
 
 rule all_consensus:
     input:

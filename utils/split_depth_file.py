@@ -1,6 +1,6 @@
 import sys
 import re
-from os.path import exists
+from genericpath import exists
 
 from get_locus import get_locus
 
@@ -19,16 +19,18 @@ def split_depth_file(file_path,reference_gb):
     last_pos = len(file_path) - file_path[::-1].index("/")
     path = file_path[:last_pos]
     reference_list = get_locus(reference_gb)
-    print("Reference list === ",reference_list)
     for name in reference_list:
+        print(path)
         if not exists(f"{path}{name}.depth"):
             with open(file_path, "r") as f:
                 new_file = []
                 for line in f.readlines():
                     if line.split()[0] == str(name):
                         new_file.append(line)
-                    with open(f"{path}{name}.depth", "w") as output_file:
-                        output_file.writelines(new_file)   
+                with open(f"{path}{name}.depth", "w") as output_file:
+                    output_file.writelines(new_file)
+        else:
+            print("Action already taken.")
 
 
 if __name__ == '__main__':

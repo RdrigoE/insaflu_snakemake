@@ -131,8 +131,8 @@ def create_graph(output_file, out_img):
 if __name__ == '__main__':
     files_path = sys.argv[1].split(" ")
     output_file = sys.argv[2]
-    out_img = sys.argv[3]
+    # out_img = sys.argv[3]
 
 
     create_graph_csv(files_path, output_file)
-    create_graph(output_file, out_img)
+    # create_graph(output_file, out_img)
