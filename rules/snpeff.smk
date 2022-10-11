@@ -2,14 +2,15 @@ configfile: "config/parameters.yaml"
 
 with open('config/config_run.yaml') as file:
     config_user = yaml.load(file, Loader=yaml.FullLoader)
-locus = config_user['locus']
+locus = get_locus(REFERENCE_GB)
 samples = config_user['samples']
-identification = config_user['identification']
-version = config_user['version']
-if len(get_locus(REFERENCE_GB)) != 1:
-    replace = f"sed -i 's/{locus}/{identification}.{version}/g' "
+
+if len(locus) == 1:
+    print("LOCUS: ", locus[0])
+    print("VERSION: ",get_id_version(REFERENCE_GB))
+    replace = f"sed -i 's/{locus[0]}/{get_id_version(REFERENCE_GB)}/g' "
 else:
-    replace = 'true '
+    replace = f'true'
 
 
 rule prepare_snpeff:
@@ -38,6 +39,7 @@ rule snpeff:
         "-no-downstream -no-upstream -no-intergenic -no-utr -noStats -c config/snpeff.config"
     shell:
         #not ready for multithreading >< -t {threads}
+        "echo '{replace}' && "
         "{replace} {input.i1} &&"
         "snpEff {params} -v {REFERENCE_NAME} {input.i1} > {output.o}"
 

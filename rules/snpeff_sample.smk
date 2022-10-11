@@ -2,12 +2,12 @@ configfile: "config/parameters.yaml"
 
 with open('config/config_run.yaml') as file:
     config_user = yaml.load(file, Loader=yaml.FullLoader)
-locus = config_user['locus']
+locus = get_locus(REFERENCE_GB)
 samples = config_user['samples']
 identification = config_user['identification']
 version = config_user['version']
-if len(get_locus(REFERENCE_GB)) != 1:
-    replace = f"sed -i 's/{locus}/{identification}.{version}/g' "
+if len(locus) == 1:
+    replace = f"sed -i 's/{locus[0]}/{get_id_version(REFERENCE_GB)}/g' "
 else:
     replace = 'true '
 
