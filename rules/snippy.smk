@@ -97,6 +97,24 @@ rule get_masked_consensus_snippy:
         lambda wildcards:
             expand("align_samples/{sample}/snippy/consensus_aligned_{seg}.fasta", sample = wildcards.sample, seg = get_locus(REFERENCE_GB))
     output:
-       final_consensus = "align_samples/{sample}/snippy/{sample}_consensus.fasta"
+       final_consensus = "align_samples/{sample}/snippy/pre_{sample}_consensus.fasta"
     shell:
         "python utils/get_consensus_medaka.py '{input}' {output}"
+
+rule mask_regions_consensus_snippy:
+    input:
+        consensus = "align_samples/{sample}/snippy/pre_{sample}_consensus.fasta"
+    output:
+        final_consensus = "align_samples/{sample}/snippy/{sample}_consensus.fasta"
+    params:
+        # single_positions = '1,2,10,400'
+        # ranges = '10-30,40-50,60-90'
+        # from_beggining = '2'
+        # from_end = '2'
+        # " -r '1,2,10,400' "
+        # " -s '10-30,40-50,60-90' "
+        # " -b '2' "
+        # " -e '2' "
+
+    shell:
+        "python utils/mask_regions.py {input} {output} {params}"
