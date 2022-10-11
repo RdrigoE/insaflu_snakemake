@@ -2,6 +2,7 @@ from Bio import SeqIO
 import Bio.Seq
 from Bio.Seq import MutableSeq
 import sys
+import argparse
 
 def compute_masking_sites(sequence, ranges=None, singles_positions=None, from_beggining=None, from_end=None):
     length = len(sequence)
@@ -32,13 +33,42 @@ def compute_masking_sites(sequence, ranges=None, singles_positions=None, from_be
 # from_beggining = '2'
 # from_end = '2'
 
-consensus = sys.argv[1]
-output = sys.argv[2]
+parser = argparse.ArgumentParser()
+parser.add_argument("consensus", type=str,
+                    help="Consensus File Path")
+parser.add_argument("output", type=str,
+                    help="Output File Path")
+parser.add_argument("-r","--regions", type=str,
+                    help="Pass a string with the format x-y,n-z,...")
+parser.add_argument("-s", "--single", type=str,
+                    help="Pass a string with the format x,y,n,z,...")
+parser.add_argument("-b", "--beggining", type=int,
+                    help="Pass a integer with the format x")
+parser.add_argument("-e", "--end", type=int,
+                    help="Pass a integer with the format x")
 
-single_positions = sys.argv[3].split(',')
-ranges = [x.split('-') for x in sys.argv[4].split(',')]
-from_beggining = sys.argv[5]
-from_end = sys.argv[6]
+args = parser.parse_args()
+
+consensus = None
+output = None
+single_positions = None
+ranges = None
+from_beggining = None
+from_end = None
+
+
+if args.consensus: 
+    consensus = args.consensus
+if args.output: 
+    output = args.output
+if args.single: 
+    single_positions = args.single.split(',')
+if args.regions: 
+    ranges = [x.split('-') for x in args.regions.split(',')]
+if args.beggining: 
+    from_beggining = args.beggining
+if args.end: 
+    from_end = args.end
 
 final_mask_consensus = []
 
@@ -58,7 +88,6 @@ for record in SeqIO.parse(consensus, "fasta"):
         if ((ref_pos + ref_insertions) >= len(record.seq)): break
     ### End of insaflu code
     record.seq = sequence
-    print(record.id, ' ===> ', record.seq)
     final_mask_consensus.append(record)
 
 with open(output, "w") as handle_fasta_out:
