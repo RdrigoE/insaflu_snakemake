@@ -1,7 +1,7 @@
 from utils.get_gene_bank import get_genes
 from utils.import_user_data import Data
 from utils.import_user_data import read_yaml
-from utils.get_locus import get_locus
+from utils.get_locus import get_locus, get_id_version
 import yaml
 import csv
 from Bio import SeqIO
