@@ -154,11 +154,11 @@ def get_output_files_pe():
         expand("samples/{sample}/abricate/abricate_{sample}.csv", sample=config_user['samples']),
         expand("projects/{project}/main_result/coverage.csv",project=config_user['project']),
         expand("projects/{project}/main_result/coverage_translate.csv",project=config_user['project']),
-        expand("align_samples/{sample}/snippy/depth/{seg}.depth",sample=config_user['samples'], seg = get_locus(REFERENCE_GB)),
-        expand("align_samples/{sample}/snippy/snippy_align_{seg}.fasta",sample=config_user['samples'], seg = get_locus(REFERENCE_GB)),
-        expand("align_samples/{sample}/snippy/snippy_aligned_{seg}.fasta",sample=config_user['samples'], seg = get_locus(REFERENCE_GB)),
-        expand("align_samples/{sample}/snippy/consensus_aligned_{seg}.fasta",sample=config_user['samples'], seg = get_locus(REFERENCE_GB)),
-        expand("align_samples/{sample}/snippy/{sample}_consensus.fasta",sample=config_user['samples'], seg = get_locus(REFERENCE_GB)),
+        expand("align_samples/{sample}/snippy/depth/{seg}.depth",sample=config_user['samples'], seg = SEGMENTS),
+        expand("align_samples/{sample}/snippy/snippy_align_{seg}.fasta",sample=config_user['samples'], seg = SEGMENTS),
+        expand("align_samples/{sample}/snippy/snippy_aligned_{seg}.fasta",sample=config_user['samples'], seg = SEGMENTS),
+        expand("align_samples/{sample}/snippy/consensus_aligned_{seg}.fasta",sample=config_user['samples'], seg = SEGMENTS),
+        expand("align_samples/{sample}/snippy/{sample}_consensus.fasta",sample=config_user['samples'], seg = SEGMENTS),
         expand("projects/{project}/main_result/depth/{sample}__{ref}.depth",sample=config_user['samples'], project=config_user['project'], ref=get_locus(run_config["gb_reference"])),        
         expand("projects/{project}/main_result/validated_minor_iSNVs.csv",project=config_user['project']),
         expand("projects/{project}/main_result/validated_variants.csv",project=config_user['project']),
@@ -167,13 +167,22 @@ def get_output_files_pe():
         # expand("projects/{project}/main_result/proportions_iSNVs_graph.png",project=config_user['project']),
         expand("projects/{project}/main_result/Alignment_nt_All.fasta", sample=config_user['samples'], project=config_user['project']),
         expand("projects/{project}/main_result/All_nt_only_90plus.fasta", sample=config_user['samples'], project=config_user['project']),
-
         expand("projects/{project}/main_result/AllConsensus.fasta", sample=config_user['samples'], project=config_user['project']),
+        expand("projects/{project}/main_result/All_nt.fasta", sample=config_user['samples'], project=config_user['project']),
+        expand("projects/{project}/main_result/All_nt.nex", sample=config_user['samples'], project=config_user['project']),
+
+        expand("projects/{project}/main_result/AllConsensus.nex", sample=config_user['samples'], project=config_user['project']),
+        expand("projects/{project}/main_result/Alignment_nt_All.nex", sample=config_user['samples'], project=config_user['project']),
+        expand("projects/{project}/main_result/All_nt_only_90plus.nex", sample=config_user['samples'], project=config_user['project']),
+
 
         Checkpoint_Alignment_aa(f'projects/{run_config["project_name"]}/main_result/',"_trans.fasta",run_config['gb_reference'],run_config["locus"],f"projects/{config_user['project']}/main_result/coverage_translate.csv"),
         Checkpoint_Alignment_aa(f'projects/{run_config["project_name"]}/main_result/',"_mafft.fasta",run_config['gb_reference'],run_config["locus"],f"projects/{config_user['project']}/main_result/coverage_translate.csv"),
+        Checkpoint_Alignment_aa(f'projects/{run_config["project_name"]}/main_result/',"_mafft.nex",run_config['gb_reference'],run_config["locus"],f"projects/{config_user['project']}/main_result/coverage_translate.csv"),
         Checkpoint_Alignment_aa(f'projects/{run_config["project_name"]}/main_result/',"_tree.tree",run_config['gb_reference'],run_config["locus"], f"projects/{config_user['project']}/main_result/coverage_translate.csv"),
         Checkpoint_Seg(f'projects/{run_config["project_name"]}/main_result/', "_tree.tree" ,run_config['gb_reference'],run_config["locus"], f"projects/{config_user['project']}/main_result/coverage_translate.csv"),
+        # expand("projects/{project}/main_result/{seg}/Alignment_nt_{seg}.fasta", project=config_user['project'], seg = SEGMENTS),
+        # expand("projects/{project}/main_result/{seg}/Alignment_nt_{seg}.nex", project=config_user['project'], seg = SEGMENTS),
         expand("projects/{project}/main_result/snp_ready.txt",project=config_user['project']),
         expand("projects/{project}/main_result/Tree_ML_All.tree", sample=config_user['samples'], project=config_user['project']), 
         
@@ -184,14 +193,14 @@ def get_output_files_pe():
         # #expand("samples/{sample}/rabbitqc/rabbit.html", sample=config_user['samples']),
         # expand("align_samples/{sample}/medaka/consensus.fasta", sample=config_user['samples']),
         # expand("align_samples/{sample}/medaka/depth/snps.depth.gz", sample=config_user['samples']),
-        # expand("align_samples/{sample}/medaka/depth/{seg}.depth", sample=config_user['samples'], seg = get_locus(REFERENCE_GB)),
+        # expand("align_samples/{sample}/medaka/depth/{seg}.depth", sample=config_user['samples'], seg = SEGMENTS),
         # expand("align_samples/{sample}/medaka/depth/snps.depth.gz.tbi", sample=config_user['samples']),
         # expand("align_samples/{sample}/medaka/round_1.vcf", sample=config_user['samples']),
         # expand("align_samples/{sample}/medaka/snps.vcf", sample=config_user['samples']),
         # expand("align_samples/{sample}/medaka/snps.vcf.gz", sample=config_user['samples']),
-        # expand("align_samples/{sample}/medaka/medaka_align_{seg}.fasta", sample=config_user['samples'], seg=get_locus(REFERENCE_GB)),
-        # expand("align_samples/{sample}/medaka/medaka_aligned_{seg}.fasta", sample=config_user['samples'], seg=get_locus(REFERENCE_GB)),
-        # expand("align_samples/{sample}/medaka/consensus_aligned_{seg}.fasta", sample=config_user['samples'], seg=get_locus(REFERENCE_GB)),
+        # expand("align_samples/{sample}/medaka/medaka_align_{seg}.fasta", sample=config_user['samples'], seg=SEGMENTS),
+        # expand("align_samples/{sample}/medaka/medaka_aligned_{seg}.fasta", sample=config_user['samples'], seg=SEGMENTS),
+        # expand("align_samples/{sample}/medaka/consensus_aligned_{seg}.fasta", sample=config_user['samples'], seg=SEGMENTS),
         # expand("align_samples/{sample}/medaka/{sample}_consensus.fasta", sample=config_user['samples']),
 
 
@@ -216,6 +225,8 @@ REFERENCE_GB =run_config['gb_reference']
 REFERENCE  =run_config['fasta_reference']
 x = re.findall("(?<=/)(.*?)(?=.fasta)",REFERENCE)
 REFERENCE_NAME = x[0]
+
+SEGMENTS = get_locus(REFERENCE_GB)
 
 
 get_output = prepare_run(run_config)

@@ -19,7 +19,7 @@ rule mafft:
     input:
         "projects/{project}/main_result/All_nt.fasta"
     output:
-        temp("projects/{project}/main_result/Alignment_nt_All.fasta")
+        "projects/{project}/main_result/Alignment_nt_All.fasta"
     conda:
         "../envs/mafft.yaml"
     threads:
@@ -42,6 +42,7 @@ rule mafft_nt:
         "--preservecase"
     shell:
         "mafft --thread {threads} {params} {input} > {output}"
+
 
 rule fasttree_nt:
     input:
