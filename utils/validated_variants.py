@@ -90,7 +90,7 @@ def validated_variants(files_path,output_file):
                     if 'snp' in info_dic['TYPE']:
                         if round(float(info_dic['AO'].replace(',','.'))/float(info_dic['DP'].replace(',','.')),2) > 0.50:
                             ann_list = info_dic['ANN'].split('|')
-                            new_entry.append(re.findall("(?<=/snippy/)(.*?)(?=_snpeff.vcf)",file)[0]) #ID
+                            new_entry.append(re.findall("(?<=/sample_)(.*?)(?=/)",file)[0]) #ID
                             new_entry.append(row_dic['CHROM']) #CHROM
                             new_entry.append(row_dic['POS']) #POS
                             new_entry.append(info_dic['TYPE']) #TYPE

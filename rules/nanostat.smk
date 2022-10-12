@@ -12,10 +12,9 @@ rule raw_nanostat_se:
 
 rule trimmed_nanostat_se:
     input:
-        "samples/{sample}/trimmed_reads/{sample}.trimmed.fastq.gz"
+        "samples/{sample}/trimmed_reads/nano_{sample}.trimmed.fastq.gz"
     output:
         o="samples/{sample}/trimmed_fastqc/{sample}.trimmed_fastqc.html",
-        dir=directory("samples/{sample}/trimmed_fastqc/")
     conda:
         "../envs/nanostat.yaml"
     shell:

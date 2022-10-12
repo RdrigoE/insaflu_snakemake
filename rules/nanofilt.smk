@@ -4,8 +4,7 @@ rule nanofilt_SE:
     input:
         "user_data/{sample}.fastq.gz"
     output:
-        dir = directory("samples/{sample}/nano_trimmed_reads/"),
-        o = "samples/{sample}/nano_trimmed_reads/{sample}.trimmed.fastq.gz"
+        o = "samples/{sample}/trimmed_reads/nano_{sample}.trimmed.fastq.gz"
     conda:
         "../envs/nanofilt.yaml"
     params:

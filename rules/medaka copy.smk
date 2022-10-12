@@ -1,6 +1,6 @@
 rule medaka_consensus:
     input:
-        i = "samples/{sample}/nano_trimmed_reads/{sample}.trimmed.fastq.gz",
+        i = "samples/{sample}/nano_trimmed_reads/nano_{sample}.trimmed.fastq.gz",
         ref = REFERENCE
     output:
         dir = directory("align_samples/{sample}/medaka"),

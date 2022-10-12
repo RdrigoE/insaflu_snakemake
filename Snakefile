@@ -112,13 +112,14 @@ class Checkpoint_Seg:
                         break
         return final_output
 
-sample_data = Data("./config_user/sample_info.csv")
-# sample_data = Data("./config_user/flu.csv")
+# sample_data = Data("./config_user/sample_info.csv")
+sample_data = Data("./config_user/flu.csv")
 # sample_data = Data("./config_user/ont.csv")
 # sample_data = Data("./config_user/flu_ont.csv")
 
-run_config = read_yaml('./config_user/config_user1.yaml')
-# run_config = read_yaml('./config_user/config_user2.yaml')
+paired_illumina,single_illumina,ont_samples=sample_data.get_options()
+# run_config = read_yaml('./config_user/config_user1.yaml')
+run_config = read_yaml('./config_user/config_user2.yaml')
 # run_config = read_yaml('./config_user/config_user3.yaml')
 # run_config = read_yaml('./config_user/config_user4.yaml')
 
@@ -148,17 +149,54 @@ def get_output_files_se():
 
 def get_output_files_pe():
     return(
-        expand("samples/{sample}/raw_fastqc/{sample}_{direction}_fastqc.html", sample=config_user['samples'],direction=["1","2"]), #generalizar
-        expand("samples/{sample}/trimmed_fastqc/{sample}_{direction}.trimmed_fastqc.html", sample=config_user['samples'],direction=["1","2"]),
-        expand("samples/{sample}/spades/contigs.fasta", sample=config_user['samples']),
-        expand("samples/{sample}/abricate/abricate_{sample}.csv", sample=config_user['samples']),
+        expand("samples/{sample}/raw_fastqc/{sample}_{direction}_fastqc.html",sample = paired_illumina.keys(),direction=["1","2"]), #generalizar
+        expand("samples/{sample}/trimmed_fastqc/{sample}_{direction}.trimmed_fastqc.html",sample = paired_illumina.keys(),direction=["1","2"]),
+        expand("samples/{sample}/spades/contigs.fasta", sample = paired_illumina.keys()),
+        expand("samples/{sample}/abricate/abricate_{sample}.csv", sample = paired_illumina.keys()),
+   
+        expand("samples/{sample}/raw_fastqc/{sample}_fastqc.html", sample=single_illumina.keys()),
+        expand("samples/{sample}/trimmed_fastqc/{sample}.trimmed_fastqc.html", sample=single_illumina.keys()),
+        expand("samples/{sample}/spades/contigs.fasta", sample=single_illumina.keys()),
+        expand("samples/{sample}/abricate/abricate_{sample}.csv", sample=single_illumina.keys()),
+        
+    
+        
+        
+        expand("align_samples/{sample}/snippy/depth/{seg}.depth",sample = single_illumina.keys(), seg = SEGMENTS),
+        expand("align_samples/{sample}/snippy/snippy_align_{seg}.fasta",sample = single_illumina.keys(), seg = SEGMENTS),
+        expand("align_samples/{sample}/snippy/snippy_aligned_{seg}.fasta",sample = single_illumina.keys(), seg = SEGMENTS),
+        expand("align_samples/{sample}/snippy/consensus_aligned_{seg}.fasta",sample = single_illumina.keys(), seg = SEGMENTS),
+        expand("align_samples/{sample}/snippy/{sample}_consensus.fasta",sample = single_illumina.keys(), seg = SEGMENTS),
+        
+
+        expand("align_samples/{sample}/snippy/depth/{seg}.depth",sample = paired_illumina.keys(), seg = SEGMENTS),
+        expand("align_samples/{sample}/snippy/snippy_align_{seg}.fasta",sample = paired_illumina.keys(), seg = SEGMENTS),
+        expand("align_samples/{sample}/snippy/snippy_aligned_{seg}.fasta",sample = paired_illumina.keys(), seg = SEGMENTS),
+        expand("align_samples/{sample}/snippy/consensus_aligned_{seg}.fasta",sample = paired_illumina.keys(), seg = SEGMENTS),
+        expand("align_samples/{sample}/snippy/{sample}_consensus.fasta",sample = paired_illumina.keys(), seg = SEGMENTS),
+        
+
+        expand("samples/{sample}/raw_nanostat/{sample}_stats.txt", sample = ont_samples.keys()), #generalizar
+        expand("samples/{sample}/trimmed_reads/nano_{sample}.trimmed.fastq.gz", sample = ont_samples.keys()),
+        #expand("samples/{sample}/rabbitqc/rabbit.html", sample=config_user['samples']),
+        expand("align_samples/{sample}/medaka/consensus.fasta", sample = ont_samples.keys()),
+        expand("align_samples/{sample}/medaka/snps.depth.gz", sample = ont_samples.keys()),
+        expand("align_samples/{sample}/medaka/{seg}.depth", sample = ont_samples.keys(), seg = SEGMENTS),
+        expand("align_samples/{sample}/medaka/snps.depth.gz.tbi", sample = ont_samples.keys()),
+        expand("align_samples/{sample}/medaka/round_1.vcf", sample = ont_samples.keys()),
+        expand("align_samples/{sample}/medaka/snps.vcf", sample = ont_samples.keys()),
+        expand("align_samples/{sample}/medaka/snps.vcf.gz", sample = ont_samples.keys()),
+        expand("align_samples/{sample}/medaka/medaka_align_{seg}.fasta",sample =  ont_samples.keys(), seg=SEGMENTS),
+        expand("align_samples/{sample}/medaka/medaka_aligned_{seg}.fasta", sample = ont_samples.keys(), seg=SEGMENTS),
+        expand("align_samples/{sample}/medaka/consensus_aligned_{seg}.fasta",sample =  ont_samples.keys(), seg=SEGMENTS),
+        expand("align_samples/{sample}/medaka/{sample}_consensus.fasta",sample =  ont_samples.keys()),
+        
+        
+        
+        
+        
         expand("projects/{project}/main_result/coverage.csv",project=config_user['project']),
         expand("projects/{project}/main_result/coverage_translate.csv",project=config_user['project']),
-        expand("align_samples/{sample}/snippy/depth/{seg}.depth",sample=config_user['samples'], seg = SEGMENTS),
-        expand("align_samples/{sample}/snippy/snippy_align_{seg}.fasta",sample=config_user['samples'], seg = SEGMENTS),
-        expand("align_samples/{sample}/snippy/snippy_aligned_{seg}.fasta",sample=config_user['samples'], seg = SEGMENTS),
-        expand("align_samples/{sample}/snippy/consensus_aligned_{seg}.fasta",sample=config_user['samples'], seg = SEGMENTS),
-        expand("align_samples/{sample}/snippy/{sample}_consensus.fasta",sample=config_user['samples'], seg = SEGMENTS),
         expand("projects/{project}/main_result/depth/{sample}__{ref}.depth",sample=config_user['samples'], project=config_user['project'], ref=get_locus(run_config["gb_reference"])),        
         expand("projects/{project}/main_result/validated_minor_iSNVs.csv",project=config_user['project']),
         expand("projects/{project}/main_result/validated_variants.csv",project=config_user['project']),
@@ -186,22 +224,6 @@ def get_output_files_pe():
         expand("projects/{project}/main_result/snp_ready.txt",project=config_user['project']),
         expand("projects/{project}/main_result/Tree_ML_All.tree", sample=config_user['samples'], project=config_user['project']), 
         
-        
-        
-        # expand("samples/{sample}/raw_nanostat/{sample}_stats.txt", sample=config_user['samples']), #generalizar
-        # expand("samples/{sample}/nano_trimmed_reads/{sample}.trimmed.fastq.gz", sample=config_user['samples']),
-        # #expand("samples/{sample}/rabbitqc/rabbit.html", sample=config_user['samples']),
-        # expand("align_samples/{sample}/medaka/consensus.fasta", sample=config_user['samples']),
-        # expand("align_samples/{sample}/medaka/depth/snps.depth.gz", sample=config_user['samples']),
-        # expand("align_samples/{sample}/medaka/depth/{seg}.depth", sample=config_user['samples'], seg = SEGMENTS),
-        # expand("align_samples/{sample}/medaka/depth/snps.depth.gz.tbi", sample=config_user['samples']),
-        # expand("align_samples/{sample}/medaka/round_1.vcf", sample=config_user['samples']),
-        # expand("align_samples/{sample}/medaka/snps.vcf", sample=config_user['samples']),
-        # expand("align_samples/{sample}/medaka/snps.vcf.gz", sample=config_user['samples']),
-        # expand("align_samples/{sample}/medaka/medaka_align_{seg}.fasta", sample=config_user['samples'], seg=SEGMENTS),
-        # expand("align_samples/{sample}/medaka/medaka_aligned_{seg}.fasta", sample=config_user['samples'], seg=SEGMENTS),
-        # expand("align_samples/{sample}/medaka/consensus_aligned_{seg}.fasta", sample=config_user['samples'], seg=SEGMENTS),
-        # expand("align_samples/{sample}/medaka/{sample}_consensus.fasta", sample=config_user['samples']),
 
 
 
@@ -244,7 +266,8 @@ config_user = {'samples':sample_data.get_sample_names(),
                'locus': run_config['locus'], 
                'proteins':get_genes(run_config['gb_reference']),
                'identification': identification,
-               'version': version}
+               'version': version,
+               'sample_type': sample_data.get_sample_type()}
 
 
 with open('config/config_run.yaml', 'w') as file:
@@ -277,6 +300,83 @@ include: "rules/nanostat.smk"
 include: "rules/nanofilt.smk"
 include: "rules/rabbitqc.smk"
 include: "rules/medaka.smk"
+
+
+# for i in [expand("samples/{sample}/raw_fastqc/{sample}_{direction}_fastqc.html",sample = paired_illumina.keys(),direction=["1","2"]), #generalizar
+#         expand("samples/{sample}/trimmed_fastqc/{sample}_{direction}.trimmed_fastqc.html",sample = paired_illumina.keys(),direction=["1","2"]),
+#         expand("samples/{sample}/spades/contigs.fasta", sample = paired_illumina.keys()),
+#         expand("samples/{sample}/abricate/abricate_{sample}.csv", sample = paired_illumina.keys()),
+   
+#         expand("samples/{sample}/raw_fastqc/{sample}_fastqc.html", sample=single_illumina.keys()),
+#         expand("samples/{sample}/trimmed_fastqc/{sample}.trimmed_fastqc.html", sample=single_illumina.keys()),
+#         expand("samples/{sample}/spades/contigs.fasta", sample=single_illumina.keys()),
+#         expand("samples/{sample}/abricate/abricate_{sample}.csv", sample=single_illumina.keys()),
+        
+    
+        
+        
+#         expand("align_samples/{sample}/snippy/depth/{seg}.depth",sample = single_illumina.keys(), seg = SEGMENTS),
+#         expand("align_samples/{sample}/snippy/snippy_align_{seg}.fasta",sample = single_illumina.keys(), seg = SEGMENTS),
+#         expand("align_samples/{sample}/snippy/snippy_aligned_{seg}.fasta",sample = single_illumina.keys(), seg = SEGMENTS),
+#         expand("align_samples/{sample}/snippy/consensus_aligned_{seg}.fasta",sample = single_illumina.keys(), seg = SEGMENTS),
+#         expand("align_samples/{sample}/snippy/{sample}_consensus.fasta",sample = single_illumina.keys(), seg = SEGMENTS),
+        
+
+#         expand("align_samples/{sample}/snippy/depth/{seg}.depth",sample = paired_illumina.keys(), seg = SEGMENTS),
+#         expand("align_samples/{sample}/snippy/snippy_align_{seg}.fasta",sample = paired_illumina.keys(), seg = SEGMENTS),
+#         expand("align_samples/{sample}/snippy/snippy_aligned_{seg}.fasta",sample = paired_illumina.keys(), seg = SEGMENTS),
+#         expand("align_samples/{sample}/snippy/consensus_aligned_{seg}.fasta",sample = paired_illumina.keys(), seg = SEGMENTS),
+#         expand("align_samples/{sample}/snippy/{sample}_consensus.fasta",sample = paired_illumina.keys(), seg = SEGMENTS),
+        
+
+#         expand("samples/{sample}/raw_nanostat/{sample}_stats.txt", sample = ont_samples.keys()), #generalizar
+#         expand("samples/{sample}/trimmed_reads/nano_{sample}.trimmed.fastq.gz", sample = ont_samples.keys()),
+#         #expand("samples/{sample}/rabbitqc/rabbit.html", sample=config_user['samples']),
+#         expand("align_samples/{sample}/medaka/consensus.fasta", sample = ont_samples.keys()),
+#         expand("align_samples/{sample}/medaka/depth/snps.depth.gz", sample = ont_samples.keys()),
+#         expand("align_samples/{sample}/medaka/depth/{seg}.depth", sample = ont_samples.keys(), seg = SEGMENTS),
+#         expand("align_samples/{sample}/medaka/depth/snps.depth.gz.tbi", sample = ont_samples.keys()),
+#         expand("align_samples/{sample}/medaka/round_1.vcf", sample = ont_samples.keys()),
+#         expand("align_samples/{sample}/medaka/snps.vcf", sample = ont_samples.keys()),
+#         expand("align_samples/{sample}/medaka/snps.vcf.gz", sample = ont_samples.keys()),
+#         expand("align_samples/{sample}/medaka/medaka_align_{seg}.fasta",sample =  ont_samples.keys(), seg=SEGMENTS),
+#         expand("align_samples/{sample}/medaka/medaka_aligned_{seg}.fasta", sample = ont_samples.keys(), seg=SEGMENTS),
+#         expand("align_samples/{sample}/medaka/consensus_aligned_{seg}.fasta",sample =  ont_samples.keys(), seg=SEGMENTS),
+#         expand("align_samples/{sample}/medaka/{sample}_consensus.fasta",sample =  ont_samples.keys()),
+        
+        
+        
+        
+        
+#         expand("projects/{project}/main_result/coverage.csv",project=config_user['project']),
+#         expand("projects/{project}/main_result/coverage_translate.csv",project=config_user['project']),
+#         expand("projects/{project}/main_result/depth/{sample}__{ref}.depth",sample=config_user['samples'], project=config_user['project'], ref=get_locus(run_config["gb_reference"])),        
+#         expand("projects/{project}/main_result/validated_minor_iSNVs.csv",project=config_user['project']),
+#         expand("projects/{project}/main_result/validated_variants.csv",project=config_user['project']),
+#         expand("projects/{project}/main_result/validated_minor_iSNVs_inc_indels.csv",project=config_user['project']),
+#         expand("projects/{project}/main_result/proportions_iSNVs_graph.csv",project=config_user['project']),
+#         # expand("projects/{project}/main_result/proportions_iSNVs_graph.png",project=config_user['project']),
+#         expand("projects/{project}/main_result/Alignment_nt_All.fasta", sample=config_user['samples'], project=config_user['project']),
+#         expand("projects/{project}/main_result/All_nt_only_90plus.fasta", sample=config_user['samples'], project=config_user['project']),
+#         expand("projects/{project}/main_result/AllConsensus.fasta", sample=config_user['samples'], project=config_user['project']),
+#         expand("projects/{project}/main_result/All_nt.fasta", sample=config_user['samples'], project=config_user['project']),
+#         expand("projects/{project}/main_result/All_nt.nex", sample=config_user['samples'], project=config_user['project']),
+
+#         expand("projects/{project}/main_result/AllConsensus.nex", sample=config_user['samples'], project=config_user['project']),
+#         expand("projects/{project}/main_result/Alignment_nt_All.nex", sample=config_user['samples'], project=config_user['project']),
+#         expand("projects/{project}/main_result/All_nt_only_90plus.nex", sample=config_user['samples'], project=config_user['project']),
+
+
+#         Checkpoint_Alignment_aa(f'projects/{run_config["project_name"]}/main_result/',"_trans.fasta",run_config['gb_reference'],run_config["locus"],f"projects/{config_user['project']}/main_result/coverage_translate.csv"),
+#         Checkpoint_Alignment_aa(f'projects/{run_config["project_name"]}/main_result/',"_mafft.fasta",run_config['gb_reference'],run_config["locus"],f"projects/{config_user['project']}/main_result/coverage_translate.csv"),
+#         Checkpoint_Alignment_aa(f'projects/{run_config["project_name"]}/main_result/',"_mafft.nex",run_config['gb_reference'],run_config["locus"],f"projects/{config_user['project']}/main_result/coverage_translate.csv"),
+#         Checkpoint_Alignment_aa(f'projects/{run_config["project_name"]}/main_result/',"_tree.tree",run_config['gb_reference'],run_config["locus"], f"projects/{config_user['project']}/main_result/coverage_translate.csv"),
+#         Checkpoint_Seg(f'projects/{run_config["project_name"]}/main_result/', "_tree.tree" ,run_config['gb_reference'],run_config["locus"], f"projects/{config_user['project']}/main_result/coverage_translate.csv"),
+#         # expand("projects/{project}/main_result/{seg}/Alignment_nt_{seg}.fasta", project=config_user['project'], seg = SEGMENTS),
+#         # expand("projects/{project}/main_result/{seg}/Alignment_nt_{seg}.nex", project=config_user['project'], seg = SEGMENTS),
+#         expand("projects/{project}/main_result/snp_ready.txt",project=config_user['project']),
+#         expand("projects/{project}/main_result/Tree_ML_All.tree", sample=config_user['samples'], project=config_user['project'])]:
+#     print(i)
 
 rule all:
     input:

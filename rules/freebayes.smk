@@ -1,9 +1,14 @@
 
 #https://sanjaynagi.github.io/freebayes-parallel/ check this out
 #https://github.com/freebayes/freebayes/blob/master/scripts/freebayes-parallel
+
+def get_consensus(wildcards):
+    return f"align_samples/{wildcards.sample}/{config_user['sample_type'][wildcards.sample]}/snps.bam"
+
+
 rule freebayes:
     input:
-        samples = "align_samples/{sample}/snippy/snps.bam",
+        samples = get_consensus,
         ref = REFERENCE
     output:
         o = "projects/{project}/sample_{sample}/freebayes/{sample}_var.vcf",

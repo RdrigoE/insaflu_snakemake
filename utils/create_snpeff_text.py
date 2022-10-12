@@ -3,6 +3,7 @@ import sys
 import re
 from Bio import SeqIO
 import os
+from get_locus import get_id_version 
 
 def prepare_snpeff_run(ref_path_gb,locus,ref_path_fa,reference_name,output):
     """
@@ -25,25 +26,14 @@ def prepare_snpeff_run(ref_path_gb,locus,ref_path_fa,reference_name,output):
     :return: A text file with a message &quot;database ready!&quot;
     :doc-author: Trelent
     """
-    if locus == 'Flu':
-        text = [f"{reference_name}.chromosome : 1, 2, 3, 4, 5, 6, 7, 8\n",
-        f"{reference_name}.genome : flu\n",
-        f"{reference_name}.1.codonTable : Bacterial_and_Plant_Plastid\n",
-        f"{reference_name}.2.codonTable : Bacterial_and_Plant_Plastid\n",
-        f"{reference_name}.3.codonTable : Bacterial_and_Plant_Plastid\n",
-        f"{reference_name}.4.codonTable : Bacterial_and_Plant_Plastid\n",
-        f"{reference_name}.5.codonTable : Bacterial_and_Plant_Plastid\n",
-        f"{reference_name}.6.codonTable : Bacterial_and_Plant_Plastid\n",
-        f"{reference_name}.7.codonTable : Bacterial_and_Plant_Plastid\n",
-        f"{reference_name}.8.codonTable : Bacterial_and_Plant_Plastid\n"]
+    if len(locus) > 1:
+        text = [f"{reference_name}.chromosome : {' '.join(str(locus))}\n",
+        f"{reference_name}.genome : flu\n"]
+        for i in locus:
+            text.append(f"{reference_name}.{i}.codonTable : Bacterial_and_Plant_Plastid\n")
     else:
-        version = SeqIO.parse(ref_path_gb, "genbank")
-
-        for i in list(version.records):
-            identification = i.annotations['accessions'][-1]
-            version = i.annotations['sequence_version']
         text = [f"\n{reference_name}.genome: {reference_name}\n",
-        f"{reference_name}.{identification}.{version}.codonTable : Bacterial_and_Plant_Plastid\n",]
+        f"{reference_name}.{get_id_version(ref_path_gb)}.codonTable : Bacterial_and_Plant_Plastid\n",]
         # project = sys.argv[5]
         # samples = sys.argv[6]
 
@@ -75,7 +65,7 @@ def prepare_snpeff_run(ref_path_gb,locus,ref_path_fa,reference_name,output):
 if __name__ == '__main__':
     snpeff_path = sys.argv[1]
     ref_path_gb = sys.argv[2]
-    locus = sys.argv[3]
+    locus = sys.argv[3].split(' ')
     ref_path_fa = sys.argv[4]
     reference_name = sys.argv[5]
     output = sys.argv[6]

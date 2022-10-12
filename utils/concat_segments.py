@@ -119,7 +119,7 @@ def create_consensus_file_for_alignment(consensus,reference_gb,output,coverage_f
     new_concat_file_strict = [fasta_reference_concat]
     if len(get_locus(reference_gb)) > 1:
         for file in consensus:
-            sample_name = re.findall("(?<=sample_)(.*?)(?=/snippy/)",file)[0]
+            sample_name = re.findall("(?<=sample_)(.*?)(?=/)",file)[0]
             if len(coverage_dic[sample_name]) > 0:
                 new_sequence = get_id_sequence_from_consensus(file,sample_name,coverage_dic[sample_name])
                 new_concat_file.append(new_sequence)
@@ -131,7 +131,7 @@ def create_consensus_file_for_alignment(consensus,reference_gb,output,coverage_f
 
     else:
         for file in consensus:
-            sample_name = re.findall("(?<=/snippy/)(.*?)(?=_consensus.fasta)",file)[0]
+            sample_name = re.findall("(?<=sample_)(.*?)(?=/)",file)[0]
             if len(coverage_dic[sample_name]) == 1:
                 new_sequence = get_id_sequence_from_consensus_strict(file,sample_name,coverage_dic[sample_name])
                 new_concat_file_strict.append(new_sequence)

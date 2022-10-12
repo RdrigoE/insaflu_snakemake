@@ -13,10 +13,10 @@ else:
 
 rule snpeff_sample:
     input:
-        i1 = "projects/{project}/sample_{sample}/snippy/snps.vcf",
+        i1 = "projects/{project}/sample_{sample}/snps.vcf",
         i2 = "projects/{project}/main_result/snp_ready.txt"
     output:
-        "projects/{project}/sample_{sample}/snippy/{sample}_snpeff.vcf"
+        "projects/{project}/sample_{sample}/{sample}_snpeff.vcf"
     conda:
         "../envs/snpeff.yaml"
     threads: 

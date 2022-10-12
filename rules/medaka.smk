@@ -1,38 +1,44 @@
 rule medaka_consensus:
     input:
-        i = "samples/{sample}/nano_trimmed_reads/{sample}.trimmed.fastq.gz",
+        i = "samples/{sample}/trimmed_reads/nano_{sample}.trimmed.fastq.gz",
         ref = REFERENCE
     output:
         out = "align_samples/{sample}/medaka/consensus.fasta",
         i = "align_samples/{sample}/medaka/calls_to_draft.bam",
+        i2 = "align_samples/{sample}/medaka/snps.bam",
         hdf = "align_samples/{sample}/medaka/consensus_probs.hdf"
     conda:
         "../envs/medaka_1_4_4.yaml"
     shell:
         "medaka_consensus -i {input.i} -d {input.ref} -o align_samples/{wildcards.sample}/medaka -t 4 -m r941_min_high_g360"
+        " && cp {output.i} {output.i2}"
 
 
 rule medaka_depth:
     input:
         i = "align_samples/{sample}/medaka/calls_to_draft.bam",
     output:
-        depth = "align_samples/{sample}/medaka/depth/{seg}.depth.gz",
-        depth_unzipped = "align_samples/{sample}/medaka/depth/{seg}.depth",
-        depth_indexed = "align_samples/{sample}/medaka/depth/{seg}.depth.gz.tbi"
+        only_depth =  "align_samples/{sample}/medaka/snps.depth.gz",
+        depth = "align_samples/{sample}/medaka/snps.depth",
+        ind = "align_samples/{sample}/medaka/snps.depth.gz.tbi",
     conda:
         "../envs/medaka_1_4_4.yaml"
     params:
         "-aa -q 10"
     shell:
-        "samtools depth {params} {input.i} | bgzip -c > {output.depth} "
-        "&& tabix -p vcf {output.depth} && gunzip -k {output.depth} && python utils/split_depth_file.py {output.depth_unzipped} {REFERENCE_GB}"
+        "samtools depth {params} {input.i} | bgzip -c > {output.only_depth} "
+        "&& tabix -p vcf {output.only_depth} && gunzip -k {output.only_depth}"
+
+rule medaka_depth_follow:
+    input: "align_samples/{sample}/medaka/snps.depth"
+    output: "align_samples/{sample}/medaka/{seg}.depth"
+    shell: "python3 utils/split_depth_file.py {input} {REFERENCE_GB}" 
 
 rule medaka_vfc:
     input:
         hdf = "align_samples/{sample}/medaka/consensus_probs.hdf",
         ref = REFERENCE,
         consensus = "align_samples/{sample}/medaka/consensus.fasta",
-        depth = "align_samples/{sample}/medaka/depth/snps.depth.gz.tbi",
     output:
         vcf = "align_samples/{sample}/medaka/round_1.vcf",
     conda:
@@ -92,7 +98,7 @@ rule align_mafft:
 rule msa_masker_medaka:
     input:
         align_file = "align_samples/{sample}/medaka/medaka_aligned_{seg}.fasta",
-        depth = "align_samples/{sample}/medaka/depth/{seg}.depth"
+        depth = "align_samples/{sample}/medaka/{seg}.depth",
     output:
        temp("align_samples/{sample}/medaka/consensus_aligned_{seg}.fasta")
     conda:
@@ -102,15 +108,35 @@ rule msa_masker_medaka:
     shell:
         "python software/msa_masker/msa_masker.py -i {input.align_file} -df {input.depth} -o {output} {params}"
 
-rule get_masked_consensus:
+
+
+rule get_masked_consensus_medaka:
     input:
         lambda wildcards:
             expand("align_samples/{sample}/medaka/consensus_aligned_{seg}.fasta", sample = wildcards.sample, seg = get_locus(REFERENCE_GB))
     output:
-       final_consensus = "align_samples/{sample}/medaka/{sample}_consensus.fasta"
+       final_consensus = "align_samples/{sample}/medaka/pre_{sample}_consensus.fasta"
     shell:
         "python utils/get_consensus_medaka.py '{input}' {output}"
 
+
+rule mask_regions_consensus_medaka:
+    input:
+        consensus = "align_samples/{sample}/medaka/pre_{sample}_consensus.fasta"
+    output:
+        final_consensus = "align_samples/{sample}/medaka/{sample}_consensus.fasta"
+    params:
+        # single_positions = '1,2,10,400'
+        # ranges = '10-30,40-50,60-90'
+        # from_beggining = '2'
+        # from_end = '2'
+        # " -r '1,2,10,400' "
+        # " -s '10-30,40-50,60-90' "
+        # " -b '2' "
+        # " -e '2' "
+
+    shell:
+        "python utils/mask_regions.py {input} {output} {params}"
 
 # rule add freq to vcf 
 

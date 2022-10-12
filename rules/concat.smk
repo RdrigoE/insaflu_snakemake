@@ -13,7 +13,7 @@ fr = REFERENCE
 
 rule all_consensus:
     input:
-        i = expand("projects/{project}/sample_{sample}/snippy/{sample}_consensus.fasta",project=config_user['project'], sample=config_user['samples']),
+        i = expand("projects/{project}/sample_{sample}/{sample}_consensus.fasta",project=config_user['project'], sample=config_user['samples']),
         ref = REFERENCE_GB,
         coverage = "projects/{project}/main_result/coverage_translate.csv",
         fasta = REFERENCE

@@ -1,3 +1,4 @@
+from ctypes import POINTER
 import sys
 import re
 from genericpath import exists
@@ -21,16 +22,18 @@ def split_depth_file(file_path,reference_gb):
     reference_list = get_locus(reference_gb)
     for name in reference_list:
         print(path)
-        if not exists(f"{path}{name}.depth"):
-            with open(file_path, "r") as f:
-                new_file = []
-                for line in f.readlines():
-                    if line.split()[0] == str(name):
-                        new_file.append(line)
-                with open(f"{path}{name}.depth", "w") as output_file:
-                    output_file.writelines(new_file)
-        else:
-            print("Action already taken.")
+        # if not exists(f"{path}{name}.depth"):
+        with open(file_path, "r") as f:
+            new_file = []
+            for line in f.readlines():
+                if line.split()[0] == str(name):
+                    new_file.append(line)
+            if new_file != []:
+                output_file = open(f"{path}{name}.depth", "w")
+                output_file.writelines(new_file)
+                output_file.close()
+        # else:
+            # print("Action already taken.")
 
 
 if __name__ == '__main__':

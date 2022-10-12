@@ -1,3 +1,4 @@
-sample_name,sample_1,sample_2
-ERR10039718,1,1
-ERR10039723,1,1
+sample_name,sample_1,sample_2,tech
+ERR10039718,ERR10039718_1,ERR10039718_2,illumina
+ERR10039723,ERR10039723_1,ERR10039723_2,illumina
+covidONT,covidONT,,ont
