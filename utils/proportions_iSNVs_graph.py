@@ -2,7 +2,6 @@ import re
 import csv
 import sys
 import pandas as pd
-import matplotlib.pyplot as plt
 
 def get_info_dic(info_list):
     """
