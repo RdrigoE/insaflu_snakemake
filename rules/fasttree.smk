@@ -2,10 +2,11 @@ rule fasttree:
     input:
         "projects/{project}/main_result/Alignment_nt_All.fasta"    
     output:
-        "projects/{project}/main_result/Tree_ML_All.tree"    
+        tree = "projects/{project}/main_result/Tree_ML_All.tree",
+        nwk = "projects/{project}/main_result/Tree_ML_All.nwk"
     conda:
         "../envs/fasttree.yaml"
     params:
         "-gtr -boot 1000 -nt"
     shell:
-        "fasttree {params} {input} > {output}"
+        "fasttree {params} {input} > {output.tree} && cp {output.tree} {output.nwk}"
