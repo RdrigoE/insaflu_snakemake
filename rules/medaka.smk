@@ -109,7 +109,7 @@ rule get_masked_consensus:
     output:
        final_consensus = "align_samples/{sample}/medaka/{sample}_consensus.fasta"
     shell:
-        "python utils/get_consensus.py '{input}' {output}"
+        "python utils/get_consensus_medaka.py '{input}' {output}"
 
 
 # rule add freq to vcf 

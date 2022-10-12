@@ -1,6 +1,6 @@
 identification: MN908947
 locus: SARS_CoV_2
-project: covid_two_sample
+project: INSAFLU_testing
 proteins:
 - orf1ab
 - S
@@ -13,6 +13,6 @@ proteins:
 - N
 - ORF10
 samples:
-- ERR10039715
-- ERR10039716
+- ERR10039718
+- ERR10039723
 version: 3
