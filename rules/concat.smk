@@ -19,7 +19,8 @@ rule all_consensus:
         fasta = REFERENCE
     output:
         o="projects/{project}/main_result/AllConsensus.fasta",
+        all_consensus_no_ref = "projects/{project}/main_result/AllConsensus_no_ref.fasta",
         o_2 = "projects/{project}/main_result/All_nt.fasta",
         o_3 = "projects/{project}/main_result/All_nt_only_90plus.fasta"
     shell:
-        "cat {fr} {input.i} > {output.o} | python utils/concat_segments.py '{input.i}' {input.ref} {output.o_2} {input.coverage} {input.fasta} {output.o_3}"
+        "cat {fr} {input.i} > {output.o} && cat {input.i} > {output.all_consensus_no_ref} && python utils/concat_segments.py '{input.i}' {input.ref} {output.o_2} {input.coverage} {input.fasta} {output.o_3}"
