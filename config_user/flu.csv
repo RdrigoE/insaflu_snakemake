@@ -1,4 +1,4 @@
-sample_name,sample_1,sample_2,tech
-SRR10885405,SRR10885405_1,SRR10885405_2,illumina
+sample_name,fastq1,fastq2,tech
+SRR10885405,a,b,illumina
 SRR10885406,SRR10885406_1,SRR10885406_2,illumina
 ERR974981,ERR974981,,ont

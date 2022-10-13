@@ -1,4 +1,4 @@
-sample_name,sample_1,sample_2,tech
+sample_name,fastq1,fastq2,tech
 ERR10039715,ERR10039715_1,ERR10039715_2,illumina
 ERR10039720,ERR10039720_1,,illumina
 ERR10039716,ERR10039716_1,ERR10039716_2,ont
