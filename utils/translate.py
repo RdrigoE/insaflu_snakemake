@@ -2,6 +2,8 @@ import sys
 from Bio import SeqIO
 import get_gene_bank as ggb 
 import csv
+import yaml
+
 def write_fasta(dictionary, filename):
         """
         The write_fasta function takes a dictionary and a filename as input.
@@ -93,7 +95,9 @@ def write_fast_aa(reference,alignment, output, locus, gene, coverage):
         position = 0
     coverage_dic = get_coverage_to_translate_matrix(coverage)
     reference_id = str(locus)
-    
+    with open('config_user/parameters.yaml') as file:
+        software_parameters = yaml.load(file, Loader=yaml.FullLoader)
+    coverage_value = software_parameters['min_coverage_consensus'] 
     positions = ggb.get_positions_gb(reference)
     positions = get_ref_adjusted_positions(alignment, positions, locus, gene)
     new_consensus = {}
@@ -103,7 +107,7 @@ def write_fast_aa(reference,alignment, output, locus, gene, coverage):
             #print(f"This is {gene[0]} with the pos {pos[0], pos[1]}") #This is orf1ab with the pos (265, 13468)
             for record in SeqIO.parse(alignment, "fasta"):
                 identifier = record.id
-                if identifier != reference_id and float(coverage_dic[identifier[:identifier.index(f"__{reference_id}")]][position]) >= 90:
+                if identifier != reference_id and float(coverage_dic[identifier[:identifier.index(f"__{reference_id}")]][position]) >= coverage_value:
                     try:
                         new_consensus[gene[0]][record.id] += record.seq[pos[0]:pos[1]].replace('-','').translate(table=11,to_stop=False)
                     except:

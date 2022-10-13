@@ -3,6 +3,7 @@ from Bio import SeqIO
 from get_locus import get_locus
 import csv
 import re
+import yaml
 
 def get_fasta_reference_concat(fasta_ref):
     """
@@ -100,11 +101,13 @@ def create_consensus_file_for_alignment(consensus,reference_gb,output,coverage_f
     with open(coverage_file, newline='') as csvfile:
                 csv_reader = csv.reader(csvfile, delimiter=',')
                 coverage_list = list(csv_reader)
-
+    with open('config_user/parameters.yaml') as file:
+        software_parameters = yaml.load(file, Loader=yaml.FullLoader)
+    coverage_value = software_parameters['min_coverage_consensus']
     for row in coverage_list:
         for value in range(len(row)-1, 0, -1):
             # print(row[value])
-            if float(row[value]) > 90:
+            if float(row[value]) > coverage_value:
                 row[value] = value
             else:
                 row.pop(value)

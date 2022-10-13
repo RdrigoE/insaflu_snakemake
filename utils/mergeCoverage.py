@@ -1,7 +1,7 @@
 import re
 import sys
 import csv
-
+import yaml
 
 
 def merge_coverage(file_list):
@@ -20,7 +20,10 @@ def merge_coverage(file_list):
     species = "SARS_CoV_2"
     super_header = ["Name",species,"",""]
     super_header_1 = ["Length",length,"",""]
-    header = ["SAMPLES", "Mean depth of coverage", f"% of size covered by at least 1-fold", f"% of size covered by at least {90}-fold"]
+    with open('config_user/parameters.yaml') as file:
+        software_parameters = yaml.load(file, Loader=yaml.FullLoader)
+    coverage_value = software_parameters['min_coverage_consensus'] 
+    header = ["SAMPLES", "Mean depth of coverage", f"% of size covered by at least 1-fold", f"% of size covered by at least {coverage_value}-fold"]
     #colocar os segmentos para fazer sentido com a flu
     final_output = [super_header,super_header_1, header]
 

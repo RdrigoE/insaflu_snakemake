@@ -120,6 +120,13 @@ rule get_masked_consensus_medaka:
         "python utils/get_consensus_medaka.py '{input}' {output}"
 
 
+def mask_regions_parameters(software_parameters):    
+    mask = f'-s {software_parameters["MASK_SITES"]} ' if software_parameters['MASK_SITES'] != None else '' 
+    mask += f'-r {software_parameters["MASK_REGIONS"]} ' if software_parameters['MASK_REGIONS'] != None else '' 
+    mask += f'-b {software_parameters["MASK_F_BEGINNING"]} ' if software_parameters['MASK_F_BEGINNING'] != None else '' 
+    mask += f'-e {software_parameters["MASK_F_END"]} ' if software_parameters['MASK_F_END'] != None else '' 
+    return mask
+    
 rule mask_regions_consensus_medaka:
     input:
         consensus = "align_samples/{sample}/medaka/pre_{sample}_consensus.fasta"
@@ -134,7 +141,7 @@ rule mask_regions_consensus_medaka:
         # " -s '10-30,40-50,60-90' "
         # " -b '2' "
         # " -e '2' "
-
+        mask_regions_parameters(software_parameters)
     shell:
         "python utils/mask_regions.py {input} {output} {params}"
 

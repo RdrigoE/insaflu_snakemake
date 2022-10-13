@@ -1,7 +1,6 @@
 import re 
 import csv
 import sys
-import pandas as pd
 
 def get_info_dic(info_list):
     """
@@ -82,7 +81,9 @@ def create_graph_csv(files_path, output_file):
                             count_more_50_less_90 += 1
                 except:
                     continue
-        file_final.append([re.findall("(?<=/)(.*?)(?=_snpeff.vcf)",file)[0],count_less,count_more_50_less_90])
+        file_final.append([ re.findall("(?<=/)(.*?)(?=_snpeff.vcf)",file)[0],
+                            count_less,
+                            count_more_50_less_90])  # type: ignore
         
 
                     
@@ -93,39 +94,39 @@ def create_graph_csv(files_path, output_file):
         f.close()
 
 
-def create_graph(output_file, out_img):
-    """
-    The create_graph function creates a bar graph of the number of SNVs at frequency 1-50% (minor iSNVs) and 50-90% for each sample.
-    The function takes two arguments: output_file, out_img. The output file is the csv file that contains the data to be graphed, while out_img is 
-    the name of the image that will be created by this function.
-    
-    :param output_file: Specify the path to the file containing the data that will be used for creating a graph
-    :param out_img: Specify the name of the output image
-    :return: The graph that we want to create
-    :doc-author: Trelent
-    """
-    with open(output_file,'r') as file:
-        rows = file.readlines()
-        dic = {
-            'samples' : [],
-            'bellow_fifty' : [],
-            'more_fifty' : []
-        }
-        for row in rows[1:]:
-            row = row[:-1]
-            row = row.split(',')
-            dic['samples'].append(row[0])
-            dic['bellow_fifty'].append(int(row[1]))
-            dic['more_fifty'].append(int(row[2]))
-        print(dic)
-    df = pd.DataFrame({'1-50% (minor iSNVs)':dic['bellow_fifty'],
-                    '50-90%':dic['more_fifty']},index=dic['samples'])
+# def create_graph(output_file, out_img):
+#     """
+#     The create_graph function creates a bar graph of the number of SNVs at frequency 1-50% (minor iSNVs) and 50-90% for each sample.
+#     The function takes two arguments: output_file, out_img. The output file is the csv file that contains the data to be graphed, while out_img is 
+#     the name of the image that will be created by this function.
 
-    x = df.plot.barh(stacked=True,color = ["#ffc4de","#81cdff"], )
-    x.set_xlabel('SNVs at frequency 1-50% (minor iSNVs) and 50-90%')
-    x.set_ylabel('Samples')
+#     :param output_file: Specify the path to the file containing the data that will be used for creating a graph
+#     :param out_img: Specify the name of the output image
+#     :return: The graph that we want to create
+#     :doc-author: Trelent
+#     """
+#     with open(output_file,'r') as file:
+#         rows = file.readlines()
+#         dic = {
+#             'samples' : [],
+#             'bellow_fifty' : [],
+#             'more_fifty' : []
+#         }
+#         for row in rows[1:]:
+#             row = row[:-1]
+#             row = row.split(',')
+#             dic['samples'].append(row[0])
+#             dic['bellow_fifty'].append(int(row[1]))
+#             dic['more_fifty'].append(int(row[2]))
+#         print(dic)
+#     df = pd.DataFrame({'1-50% (minor iSNVs)':dic['bellow_fifty'],
+#                     '50-90%':dic['more_fifty']},index=dic['samples'])
 
-    plt.savefig(out_img, format = 'pdf')
+#     x = df.plot.barh(stacked=True,color = ["#ffc4de","#81cdff"], )
+#     x.set_xlabel('SNVs at frequency 1-50% (minor iSNVs) and 50-90%')
+#     x.set_ylabel('Samples')
+
+#     plt.savefig(out_img, format = 'pdf')
 
 if __name__ == '__main__':
     files_path = sys.argv[1].split(" ")

@@ -1,6 +1,20 @@
 configfile: "config/parameters.yaml"
 
 
+def get_snippy_parameters(software_parameters):
+    snippy_parameters = f' --mapqual {software_parameters["mapqual"]}' if software_parameters['mapqual'] else ''
+    snippy_parameters += f' --mincov {software_parameters["mincov"]}' if software_parameters['mincov'] else ''
+    snippy_parameters += f' --minfrac {software_parameters["minfrac"] }' if software_parameters['minfrac'] else ''
+    return snippy_parameters
+
+
+def get_sample_type(sample):
+    "--R1 {input.r1} --R2 {input.r2}"
+    if config_user['samples'][sample]['fastq1'] and config_user['samples'][sample]['fastq2']:
+        return f"--R1 samples/{sample}/trimmed_reads/{sample}_1.trimmed.fastq.gz --R2 samples/{sample}/trimmed_reads/{sample}_2.trimmed.fastq.gz"
+    elif config_user['samples'][sample]['fastq1']:
+        return f"--se samples/{sample}/trimmed_reads/{sample}.trimmed.fastq.gz"
+
 rule snippy_pe:
     input:
         r1="samples/{sample}/trimmed_reads/{sample}_1.trimmed.fastq.gz",
@@ -16,10 +30,10 @@ rule snippy_pe:
     threads: 
         config['snippy_threads']
     params:
-        "--mapqual 20 --mincov 10 --minfrac 0.51"
+        get_snippy_parameters(software_parameters)
     shell:
         "rm -r align_samples/{wildcards.sample}/snippy/ && "
-        "snippy --cpus {threads} --R1 {input.r1} --R2 {input.r2} --ref {input.ref} --outdir align_samples/{wildcards.sample}/snippy/ {params}"
+        "snippy --cpus {threads} --pe1 {input.r1} --pe2 {input.r2} --ref {input.ref} --outdir align_samples/{wildcards.sample}/snippy/ {params} "
 
 rule snippy_se:
     input:
@@ -30,13 +44,17 @@ rule snippy_se:
         _1 = "align_samples/{sample}/snippy/snps.bam",
         _2 = "align_samples/{sample}/snippy/snps.tab",
         _3 = "align_samples/{sample}/snippy/snps.consensus.fa",
+
     conda:
         "../envs/snippy.yaml"
     params:
-        "--mapqual 20 --mincov 10 -minfrac 0.51"
+        get_snippy_parameters(software_parameters)
     shell:
         "rm -r align_samples/{wildcards.sample}/snippy/ && " 
         "snippy --se {input.r1} --ref {input.ref} --outdir align_samples/{wildcards.sample}/snippy/ {params}"
+
+
+ruleorder: snippy_pe > snippy_se
 
 rule snippy_depth_step_1:
     input:
@@ -101,12 +119,20 @@ rule get_masked_consensus_snippy:
     shell:
         "python utils/get_consensus_medaka.py '{input}' {output}"
 
+
+def mask_regions_parameters(software_parameters):    
+    mask = f'-s {software_parameters["MASK_SITES"]} ' if software_parameters['MASK_SITES'] != None else '' 
+    mask += f'-r {software_parameters["MASK_REGIONS"]} ' if software_parameters['MASK_REGIONS'] != None else '' 
+    mask += f'-b {software_parameters["MASK_F_BEGINNING"]} ' if software_parameters['MASK_F_BEGINNING'] != None else '' 
+    mask += f'-e {software_parameters["MASK_F_END"]} ' if software_parameters['MASK_F_END'] != None else '' 
+    return mask
 rule mask_regions_consensus_snippy:
     input:
         consensus = "align_samples/{sample}/snippy/pre_{sample}_consensus.fasta"
     output:
         final_consensus = "align_samples/{sample}/snippy/{sample}_consensus.fasta"
     params:
+        mask_regions_parameters(software_parameters)
         # single_positions = '1,2,10,400'
         # ranges = '10-30,40-50,60-90'
         # from_beggining = '2'
@@ -115,6 +141,5 @@ rule mask_regions_consensus_snippy:
         # " -s '10-30,40-50,60-90' "
         # " -b '2' "
         # " -e '2' "
-
-    shell:
+    shell: 
         "python utils/mask_regions.py {input} {output} {params}"

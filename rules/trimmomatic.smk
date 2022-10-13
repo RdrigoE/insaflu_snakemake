@@ -1,8 +1,22 @@
 configfile: "config/parameters.yaml"
 
+def get_trimmomatic_parameters(software_parameters):
+    trimmomatic_params = f'ILLUMINACLIP {software_parameters["ILLUMINACLIP"]}' if software_parameters['ILLUMINACLIP'] != None else ''
+    trimmomatic_params += f' HEADCROP:{software_parameters["HEADCROP"]}' if software_parameters["HEADCROP"] != None else '' 
+    trimmomatic_params += f' CROP:{software_parameters["CROP"]}' if software_parameters["CROP"] else ''
+    trimmomatic_params += f' SLIDINGWINDOW:{software_parameters["SLIDINGWINDOW1"]}:{software_parameters["SLIDINGWINDOW2"]}' if software_parameters["SLIDINGWINDOW2"] else ''
+    trimmomatic_params += f' LEADING:{software_parameters["LEADING"]}' if software_parameters["LEADING"] else ''
+    trimmomatic_params += f' TRAILING:{software_parameters["TRAILING"]}' if software_parameters["TRAILING"] else ''
+    trimmomatic_params += f' MINLEN:{software_parameters["MINLEN"]}' if software_parameters["MINLEN"] else ''
+    trimmomatic_params += ' TOPHRED33'
+    return trimmomatic_params
+def get_raw_input_trimmomatic_se(wildcards):
+    return f"user_data/{config_user['samples'][wildcards.sample]['fastq1']}.fastq.gz"
+
+
 rule trimme_reads_SE:
     input:
-        "user_data/{sample}.fastq.gz"
+        get_raw_input_trimmomatic_se
     output:
         "samples/{sample}/trimmed_reads/{sample}.trimmed.fastq.gz"
     conda:
@@ -10,7 +24,7 @@ rule trimme_reads_SE:
     threads: 
         config['trimmomatic_threads']
     params:
-        "HEADCROP:30 SLIDINGWINDOW:5:20 LEADING:3 TRAILING:3 MINLEN:35 TOPHRED33"
+        get_trimmomatic_parameters(software_parameters)
     shell:
         "trimmomatic SE "
         "-threads {threads} "
@@ -18,10 +32,13 @@ rule trimme_reads_SE:
         "{output} " 
         "{params}"
 
+def get_raw_input_trimmomatic(wildcards):
+    return [f"user_data/{config_user['samples'][wildcards.sample]['fastq1']}.fastq.gz",
+            f"user_data/{config_user['samples'][wildcards.sample]['fastq2']}.fastq.gz"]
+
 rule trimme_reads_PE:
     input:
-        i1 = "user_data/{sample}_1.fastq.gz",
-        i2 = "user_data/{sample}_2.fastq.gz"
+        get_raw_input_trimmomatic
     threads:
         config['trimmomatic_threads']
     output:
@@ -33,12 +50,11 @@ rule trimme_reads_PE:
     conda:
         "../envs/trimmomatic.yaml"
     params:
-        "HEADCROP:30 SLIDINGWINDOW:5:20 LEADING:3 TRAILING:3 MINLEN:35 TOPHRED33"
+        get_trimmomatic_parameters(software_parameters)
     shell:
         "trimmomatic PE "
         "-threads {threads} "
-        "{input.i1} "
-        "{input.i2} "
+        "{input} "
         "{output.o1} "
         "{output.o_un1} "
         "{output.o2} "
