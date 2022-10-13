@@ -4,8 +4,8 @@ rule spades_se:
     input:
         "samples/{sample}/trimmed_reads/{sample}.trimmed.fastq.gz"
     output:
-        "samples/{sample}/spades/contigs.fasta",
-        dir = directory('samples/{sample}/spades/')
+        "samples/{sample}/spades_se/contigs.fasta",
+        dir = directory('samples/{sample}/spades_se/')
     conda:
         "../envs/spades.yaml"
     threads: 
@@ -20,8 +20,8 @@ rule spades_pe:
         i1 = "samples/{sample}/trimmed_reads/{sample}_1.trimmed.fastq.gz",
         i2 = "samples/{sample}/trimmed_reads/{sample}_2.trimmed.fastq.gz",
     output:
-        o = "samples/{sample}/spades/contigs.fasta",
-        dir = directory('samples/{sample}/spades/')
+        o = "samples/{sample}/spades_pe/contigs.fasta",
+        dir = directory('samples/{sample}/spades_pe/')
     threads: 
         config['spades_threads']
     conda:
