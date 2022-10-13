@@ -21,6 +21,3 @@
 
 ## Deactivate Enviroment
     $ conda deactivate insaflu
-
-# create abricate database 
-    later...

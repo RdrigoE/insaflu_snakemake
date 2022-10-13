@@ -1,22 +1,32 @@
-identification: ''
-locus: Flu
-project: flu_testing_BVictoria
+identification: MN908947
+locus: SARS_CoV_2
+project: INSAFLU_testing
 proteins:
-- PB2
-- PB1
-- PA
-- HA
-- NP
-- NA
-- M_1
-- M_2
-- NS
+- orf1ab
+- S
+- ORF3a
+- E
+- M
+- ORF6
+- ORF7a
+- ORF8
+- N
+- ORF10
 sample_type:
-  ERR974981: medaka
-  SRR10885405: snippy
-  SRR10885406: snippy
+  ERR10039718: snippy
+  ERR10039723: snippy
+  covidONT: medaka
 samples:
-- SRR10885405
-- SRR10885406
-- ERR974981
-version: ''
+  ERR10039718:
+    fastq1: ERR10039718_1
+    fastq2: ERR10039718_2
+    tech: illumina
+  ERR10039723:
+    fastq1: ERR10039723_1
+    fastq2: ERR10039723_2
+    tech: illumina
+  covidONT:
+    fastq1: covidONT
+    fastq2: null
+    tech: ont
+version: '3'

@@ -1,7 +1,7 @@
-rule rabbitqc_se:
+rule rabbitqc:
     input:
         i1 = "user_data/{sample}.fastq.gz",
-        i2 = "samples/{sample}/nano_trimmed_reads/nano_{sample}.trimmed.fastq.gz",
+        i2 = "samples/{sample}/trimmed_reads/nano_{sample}.trimmed.fastq.gz",
     output:
         dir=directory("samples/{sample}/rabbitqc/"),
         a = "samples/{sample}/rabbitqc/rabbit.html"

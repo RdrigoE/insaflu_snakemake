@@ -1,6 +1,13 @@
+with open('config/config_run.yaml') as file:
+    config_user = yaml.load(file, Loader=yaml.FullLoader)
+
+
+def get_raw_input_fastq_se(wildcards):
+    return f"user_data/{config_user['samples'][wildcards.sample]['fastq1']}.fastq.gz"
+
 rule raw_fastqc_se:
     input:
-        i = "user_data/{sample}.fastq.gz"
+        get_raw_input_fastq_se
     output:
         o = "samples/{sample}/raw_fastqc/{sample}_fastqc.html",
         dir=directory("samples/{sample}/raw_fastqc")
@@ -9,12 +16,15 @@ rule raw_fastqc_se:
     params:
         "--nogroup"
     shell:
-        "fastqc {input.i} -o {output.dir} {params}"
+        "fastqc {input} -o {output.dir} {params} && python3 utils/fix_fastq_output.py {wildcards.sample}"
 
+
+def get_raw_input_fastq(wildcards):
+    return [f"user_data/{config_user['samples'][wildcards.sample]['fastq1']}.fastq.gz",
+            f"user_data/{config_user['samples'][wildcards.sample]['fastq2']}.fastq.gz"]
 rule raw_fastqc_pe:
     input:
-        i1 = "user_data/{sample}_1.fastq.gz",
-        i2 = "user_data/{sample}_2.fastq.gz"
+        get_raw_input_fastq
     output:
         o1 = "samples/{sample}/raw_fastqc/{sample}_1_fastqc.html",
         o2 = "samples/{sample}/raw_fastqc/{sample}_2_fastqc.html",
@@ -24,7 +34,7 @@ rule raw_fastqc_pe:
     params:
         "--nogroup"
     shell:
-        "fastqc {input.i1} {input.i2} -o {output.dir} {params}"
+        "fastqc {input} -o {output.dir} {params} && python3 utils/fix_fastq_output.py {wildcards.sample}"
 
 rule trimmed_fastqc_pe:
     input:

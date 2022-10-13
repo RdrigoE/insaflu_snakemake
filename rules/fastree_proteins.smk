@@ -7,7 +7,7 @@ rule fasttree_proteins:
     conda:
         "../envs/fasttree.yaml"
     params:
-        "-gtr -boot 1000"
+        "-gtr -boot 1000 -aa"
     shell:
         "fasttree {params} {input} > {output.tree} && cp {output.tree} {output.nwk}"
     
