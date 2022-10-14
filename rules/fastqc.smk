@@ -1,7 +1,3 @@
-with open('config/config_run.yaml') as file:
-    config_user = yaml.load(file, Loader=yaml.FullLoader)
-
-
 def get_raw_input_fastq_se(wildcards):
     return f"user_data/{config_user['samples'][wildcards.sample]['fastq1']}.fastq.gz"
 

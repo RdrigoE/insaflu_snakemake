@@ -1,6 +1,5 @@
 configfile: "config/parameters.yaml"
 
-
 rule mafft_p_way:
     input:
         "projects/{project}/main_result/AllConsensus.fasta"

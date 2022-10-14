@@ -1,6 +1,7 @@
 import re
 import sys
 import csv
+from get_locus import get_locus
 
 def get_coverage(filename,n_locus):
     """
@@ -52,5 +53,6 @@ def create_machine_readable_coverage_file(coverage_files,output,n_locus):
 if __name__ == '__main__':
     coverage_files = sys.argv[1]
     output = sys.argv[2]
-    n_locus = sys.argv[3]
+    reference_gb = sys.argv[3]
+    n_locus = len(get_locus(reference_gb))
     create_machine_readable_coverage_file(coverage_files,output,n_locus )

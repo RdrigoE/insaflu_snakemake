@@ -2,6 +2,8 @@ from utils.get_gene_bank import get_genes
 from utils.import_user_data import Data
 from utils.import_user_data import read_yaml
 from utils.get_locus import get_locus, get_id_version
+from utils.get_software_parameters import get_nanofilt_parameters, mask_regions_parameters, get_trimmomatic_parameters
+
 import yaml
 import csv
 from Bio import SeqIO
@@ -243,15 +245,13 @@ def prepare_run(settings):
         return get_output_project
 
 
+get_output = prepare_run(run_config)
+
 REFERENCE_GB =run_config['gb_reference'] 
 REFERENCE  =run_config['fasta_reference']
 x = re.findall("(?<=/)(.*?)(?=.fasta)",REFERENCE)
 REFERENCE_NAME = x[0]
-
 SEGMENTS = get_locus(REFERENCE_GB)
-
-
-get_output = prepare_run(run_config)
 
 if len(get_locus(REFERENCE_GB))  == 1:
     version_id = get_id_version(REFERENCE_GB).split('.')
@@ -269,6 +269,8 @@ config_user = {'samples':sample_info_dic,
                'version': version,
                'sample_type': sample_data.get_sample_type()}
 
+
+PROJECT_NAME = config_user["project"]
 
 with open('config/config_run.yaml', 'w') as file:
     documents = yaml.dump(config_user, file)
@@ -306,6 +308,8 @@ include: "rules/nanofilt.smk"
 include: "rules/rabbitqc.smk"
 include: "rules/medaka.smk"
 include: "rules/pangolin.smk"
+
+
 rule all:
     input:
         get_output()

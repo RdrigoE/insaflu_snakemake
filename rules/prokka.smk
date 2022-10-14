@@ -7,7 +7,7 @@ rule prokka:
         "../envs/prokka.yaml"
     params: 
         "--kingdom Viruses --locustag locus --genus Influenzavirus --species Influenzavirus --strain "
-        "ref_PREFIX_FILES_OUT --gcode 11" #https://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi
+        "ref_PREFIX_FILES_OUT --gcode 11" 
 
     shell:
         "prokka {params} --outdir {output.dir}"

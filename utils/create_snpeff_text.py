@@ -3,7 +3,7 @@ import sys
 import re
 from Bio import SeqIO
 import os
-from get_locus import get_id_version 
+from get_locus import get_id_version, get_locus
 
 def prepare_snpeff_run(ref_path_gb,locus,ref_path_fa,reference_name,output):
     """
@@ -65,8 +65,8 @@ def prepare_snpeff_run(ref_path_gb,locus,ref_path_fa,reference_name,output):
 if __name__ == '__main__':
     snpeff_path = sys.argv[1]
     ref_path_gb = sys.argv[2]
-    locus = sys.argv[3].split(' ')
-    ref_path_fa = sys.argv[4]
-    reference_name = sys.argv[5]
-    output = sys.argv[6]
+    ref_path_fa = sys.argv[3]
+    reference_name = sys.argv[4]
+    output = sys.argv[5]
+    locus = get_locus(ref_path_gb)
     prepare_snpeff_run(ref_path_gb,locus,ref_path_fa,reference_name,output)

@@ -71,7 +71,7 @@ rule bcf_consensus:
     shell:
         "bcftools consensus -s SAMPLE -f {input.ref} {input.vcf_ziped} -o {output.out}"
 
-# rule mask first consensus
+
 rule create_align_file:
     input:
         first_consensus = "align_samples/{sample}/medaka/first_consensus.fasta",
@@ -120,12 +120,6 @@ rule get_masked_consensus_medaka:
         "python utils/get_consensus_medaka.py '{input}' {output}"
 
 
-def mask_regions_parameters(software_parameters):    
-    mask = f'-s {software_parameters["MASK_SITES"]} ' if software_parameters['MASK_SITES'] != None else '' 
-    mask += f'-r {software_parameters["MASK_REGIONS"]} ' if software_parameters['MASK_REGIONS'] != None else '' 
-    mask += f'-b {software_parameters["MASK_F_BEGINNING"]} ' if software_parameters['MASK_F_BEGINNING'] != None else '' 
-    mask += f'-e {software_parameters["MASK_F_END"]} ' if software_parameters['MASK_F_END'] != None else '' 
-    return mask
     
 rule mask_regions_consensus_medaka:
     input:
@@ -133,18 +127,6 @@ rule mask_regions_consensus_medaka:
     output:
         final_consensus = "align_samples/{sample}/medaka/{sample}_consensus.fasta"
     params:
-        # single_positions = '1,2,10,400'
-        # ranges = '10-30,40-50,60-90'
-        # from_beggining = '2'
-        # from_end = '2'
-        # " -r '1,2,10,400' "
-        # " -s '10-30,40-50,60-90' "
-        # " -b '2' "
-        # " -e '2' "
         mask_regions_parameters(software_parameters)
     shell:
         "python utils/mask_regions.py {input} {output} {params}"
-
-# rule add freq to vcf 
-
-# rule add snpeff

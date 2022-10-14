@@ -1,37 +1,36 @@
 import sys
 from Bio import SeqIO
+from get_locus import get_locus
 
-def prepare_msa_masker(alignment,outdir,species,loop):
+
+def prepare_msa_masker(alignment,outdir,reference_gb):
     """
-    The prepare_msa_masker function takes an alignment file and a species name as input.
-    It then splits the alignment into multiple files, one for each loop of the species.
-    The function returns nothing.
+    The prepare_msa_masker function takes a multiple sequence alignment and a reference genbank file as input.
+    It then creates an output directory for each locus in the reference genome, and writes the sequences of that locus to 
+    a fasta file within each output directory.
     
-    :param alignment: Define the path to the alignment file
+    :param alignment: Specify the path to the alignment file
     :param outdir: Specify the directory where the files will be saved
-    :param species: Name the output files
-    :param loop: Split the alignment into multiple files
-    :return: A list of seqio
+    :param reference_gb: Get the locus of each segment in the alignment
+    :return: A list of lists
     :doc-author: Trelent
     """
     counter = 0
-    list_of_segments = [[] for x in range(loop)]
+    seg_names = get_locus(reference_gb)
+    n_locus = len(seg_names)
+    list_of_segments = [[] for x in range(n_locus)]
     for record in SeqIO.parse(alignment, "fasta"):
-        if counter == loop:
+        if counter == len(list_of_segments):
             counter = 0
         #print(counter)
         list_of_segments[counter].append(record)
         counter+=1
-    if loop == 1:
-        SeqIO.write(list_of_segments[0], f"{outdir}/{species}/Alignment_nt_{species}.fasta", "fasta")
-    else:
-        for i in range(loop):
-            #print(i)
-            SeqIO.write(list_of_segments[i], f"{outdir}/{i+1}/Alignment_nt_{i+1}.fasta", "fasta")
+    
+    for index in range(len(list_of_segments)):
+        SeqIO.write(list_of_segments[index], f"{outdir}/{seg_names[index]}/Alignment_nt_{seg_names[index]}.fasta", "fasta")
 
 if __name__ == '__main__':
     alignment =sys.argv[1]
     outdir = sys.argv[2]
-    loop = int(sys.argv[3])
-    species = sys.argv[4]
-    prepare_msa_masker(alignment,outdir,species,loop)
+    reference_gb = sys.argv[3]
+    prepare_msa_masker(alignment,outdir,reference_gb)

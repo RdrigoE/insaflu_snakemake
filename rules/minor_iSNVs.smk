@@ -1,6 +1,3 @@
-with open('config/config_run.yaml') as file:
-    config_user = yaml.load(file, Loader=yaml.FullLoader)
-
 rule snpeff_concat:
     input: 
         expand("projects/{project}/sample_{sample}/freebayes/{sample}_snpeff.vcf",sample=config_user['samples'], project=config_user['project']),

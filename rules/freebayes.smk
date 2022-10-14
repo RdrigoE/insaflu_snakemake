@@ -1,4 +1,3 @@
-
 #https://sanjaynagi.github.io/freebayes-parallel/ check this out
 #https://github.com/freebayes/freebayes/blob/master/scripts/freebayes-parallel
 

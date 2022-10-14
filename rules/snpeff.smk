@@ -1,17 +1,6 @@
 configfile: "config/parameters.yaml"
 
-with open('config/config_run.yaml') as file:
-    config_user = yaml.load(file, Loader=yaml.FullLoader)
-locus = get_locus(REFERENCE_GB)
-samples = config_user['samples']
-
-if len(locus) == 1:
-    # print("LOCUS: ", locus[0])
-    # print("VERSION: ",get_id_version(REFERENCE_GB))
-    replace = f"sed -i 's/{locus[0]}/{get_id_version(REFERENCE_GB)}/g' "
-else:
-    replace = f'true'
-
+replace = f"sed -i 's/{SEGMENTS[0]}/{get_id_version(REFERENCE_GB)}/g' " if len(SEGMENTS) == 1 else 'true '
 
 rule prepare_snpeff:
     input:
@@ -22,7 +11,7 @@ rule prepare_snpeff:
     conda:
         "../envs/snpeff.yaml"
     shell:
-        "python utils/create_snpeff_text.py $CONDA_PREFIX {input.ref_gb} '{locus}' {input.ref_fa} {REFERENCE_NAME} {output} "
+        "python utils/create_snpeff_text.py $CONDA_PREFIX {input.ref_gb} {input.ref_fa} {REFERENCE_NAME} {output} "
         
 
 rule snpeff:

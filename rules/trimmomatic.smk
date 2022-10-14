@@ -1,18 +1,7 @@
 configfile: "config/parameters.yaml"
 
-def get_trimmomatic_parameters(software_parameters):
-    trimmomatic_params = f'ILLUMINACLIP {software_parameters["ILLUMINACLIP"]}' if software_parameters['ILLUMINACLIP'] != None else ''
-    trimmomatic_params += f' HEADCROP:{software_parameters["HEADCROP"]}' if software_parameters["HEADCROP"] != None else '' 
-    trimmomatic_params += f' CROP:{software_parameters["CROP"]}' if software_parameters["CROP"] else ''
-    trimmomatic_params += f' SLIDINGWINDOW:{software_parameters["SLIDINGWINDOW1"]}:{software_parameters["SLIDINGWINDOW2"]}' if software_parameters["SLIDINGWINDOW2"] else ''
-    trimmomatic_params += f' LEADING:{software_parameters["LEADING"]}' if software_parameters["LEADING"] else ''
-    trimmomatic_params += f' TRAILING:{software_parameters["TRAILING"]}' if software_parameters["TRAILING"] else ''
-    trimmomatic_params += f' MINLEN:{software_parameters["MINLEN"]}' if software_parameters["MINLEN"] else ''
-    trimmomatic_params += ' TOPHRED33'
-    return trimmomatic_params
 def get_raw_input_trimmomatic_se(wildcards):
     return f"user_data/{config_user['samples'][wildcards.sample]['fastq1']}.fastq.gz"
-
 
 rule trimme_reads_SE:
     input:
@@ -31,6 +20,7 @@ rule trimme_reads_SE:
         "{input} "
         "{output} " 
         "{params}"
+
 
 def get_raw_input_trimmomatic(wildcards):
     return [f"user_data/{config_user['samples'][wildcards.sample]['fastq1']}.fastq.gz",
