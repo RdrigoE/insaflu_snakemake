@@ -1,11 +1,11 @@
 def get_trimmomatic_parameters(software_parameters):
-    trimmomatic_params = f'ILLUMINACLIP {software_parameters["ILLUMINACLIP"]}' if software_parameters['ILLUMINACLIP'] != None else ''
-    trimmomatic_params += f' HEADCROP:{software_parameters["HEADCROP"]}' if software_parameters["HEADCROP"] != None else '' 
-    trimmomatic_params += f' CROP:{software_parameters["CROP"]}' if software_parameters["CROP"] else ''
-    trimmomatic_params += f' SLIDINGWINDOW:{software_parameters["SLIDINGWINDOW1"]}:{software_parameters["SLIDINGWINDOW2"]}' if software_parameters["SLIDINGWINDOW2"] else ''
-    trimmomatic_params += f' LEADING:{software_parameters["LEADING"]}' if software_parameters["LEADING"] else ''
-    trimmomatic_params += f' TRAILING:{software_parameters["TRAILING"]}' if software_parameters["TRAILING"] else ''
-    trimmomatic_params += f' MINLEN:{software_parameters["MINLEN"]}' if software_parameters["MINLEN"] else ''
+    trimmomatic_params = f'ILLUMINACLIP {software_parameters["trimmo-ILLUMINACLIP"]} -phred33' if software_parameters['trimmo-ILLUMINACLIP'] != None else '-phred33'
+    trimmomatic_params += f' HEADCROP:{software_parameters["trimmo-HEADCROP"]}' if software_parameters["trimmo-HEADCROP"] != None else '' 
+    trimmomatic_params += f' CROP:{software_parameters["trimmo-CROP"]}' if software_parameters["trimmo-CROP"]  != None  else ''
+    trimmomatic_params += f' SLIDINGWINDOW:{software_parameters["trimmo-SLIDINGWINDOW1"]}:{software_parameters["trimmo-SLIDINGWINDOW2"]}' if software_parameters["trimmo-SLIDINGWINDOW2"] != None else ''
+    trimmomatic_params += f' LEADING:{software_parameters["trimmo-LEADING"]}' if software_parameters["trimmo-LEADING"] != None  else ''
+    trimmomatic_params += f' TRAILING:{software_parameters["trimmo-TRAILING"]}' if software_parameters["trimmo-TRAILING"] != None  else ''
+    trimmomatic_params += f' MINLEN:{software_parameters["trimmo-MINLEN"]}' if software_parameters["trimmo-MINLEN"]  != None else ''
     trimmomatic_params += ' TOPHRED33'
     return trimmomatic_params
 
@@ -24,9 +24,10 @@ def get_snippy_parameters(software_parameters):
 
 
 def get_nanofilt_parameters(software_parameters):
-    nanofilt_parameters = f' -q {software_parameters["QUALITY"]}' if software_parameters["QUALITY"] else ''
-    nanofilt_parameters += f' -l {software_parameters["LENGTH"]}' if software_parameters["LENGTH"] else ''
-    nanofilt_parameters += f' --headcrop {software_parameters["HEADCROP"]}' if software_parameters["HEADCROP"] else ''
-    nanofilt_parameters += f' --tailcrop {software_parameters["TAILCROP"]}' if software_parameters["TAILCROP"] else ''
-    nanofilt_parameters += f' --maxlength {software_parameters["MAXLENGTH"]}' if software_parameters["MAXLENGTH"] else ''
+    nanofilt_parameters = f' -q {software_parameters["QUALITY"]}' if software_parameters["QUALITY"] != None else ''
+    nanofilt_parameters += f' -l {software_parameters["LENGTH"]}' if software_parameters["LENGTH"] != None else ''
+    nanofilt_parameters += f' --headcrop {software_parameters["HEADCROP"]}' if software_parameters["HEADCROP"] != None else ''
+    nanofilt_parameters += f' --tailcrop {software_parameters["TAILCROP"]}' if software_parameters["TAILCROP"] != None else ''
+    nanofilt_parameters += f' --maxlength {software_parameters["MAXLENGTH"]}' if software_parameters["MAXLENGTH"] != None else ''
     return nanofilt_parameters
+

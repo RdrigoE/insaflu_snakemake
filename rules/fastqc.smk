@@ -15,12 +15,12 @@ rule raw_fastqc_se:
         "fastqc {input} -o {output.dir} {params} && python3 utils/fix_fastq_output.py {wildcards.sample}"
 
 
-def get_raw_input_fastq(wildcards):
+def get_raw_input_fastq_pe(wildcards):
     return [f"user_data/{config_user['samples'][wildcards.sample]['fastq1']}.fastq.gz",
             f"user_data/{config_user['samples'][wildcards.sample]['fastq2']}.fastq.gz"]
 rule raw_fastqc_pe:
     input:
-        get_raw_input_fastq
+        get_raw_input_fastq_pe
     output:
         o1 = "samples/{sample}/raw_fastqc/{sample}_1_fastqc.html",
         o2 = "samples/{sample}/raw_fastqc/{sample}_2_fastqc.html",

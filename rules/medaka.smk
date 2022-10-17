@@ -27,6 +27,8 @@ rule medaka_depth:
         "-aa -q 10"
     shell:
         "samtools depth {params} {input.i} | bgzip -c > {output.only_depth} "
+        # "samtools depth {input.i} | bgzip -c > {output.only_depth} "
+
         "&& tabix -p vcf {output.only_depth} && gunzip -k {output.only_depth}"
 
 rule medaka_depth_follow:
@@ -104,7 +106,7 @@ rule msa_masker_medaka:
     conda:
         "../envs/msa_masker.yaml"
     params:
-        "--c 1"
+        "--c " + str(software_parameters['mincov_medaka'])
     shell:
         "python software/msa_masker/msa_masker.py -i {input.align_file} -df {input.depth} -o {output} {params}"
 

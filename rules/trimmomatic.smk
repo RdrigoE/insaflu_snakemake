@@ -43,10 +43,10 @@ rule trimme_reads_PE:
         get_trimmomatic_parameters(software_parameters)
     shell:
         "trimmomatic PE "
-        "-threads {threads} "
         "{input} "
         "{output.o1} "
         "{output.o_un1} "
         "{output.o2} "
         "{output.o_un2} "
+        "-threads {threads} "
         "{params}"

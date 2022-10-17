@@ -96,7 +96,7 @@ rule msa_masker_snippy:
     conda:
         "../envs/msa_masker.yaml"
     params:
-        "--c 1"
+        "--c " + str(software_parameters['mincov'])
     shell:
         "python software/msa_masker/msa_masker.py -i {input.align_file} -df {input.depth} -o {output} {params}"
 
