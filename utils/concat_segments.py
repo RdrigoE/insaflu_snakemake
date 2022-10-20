@@ -51,7 +51,7 @@ def get_id_sequence_from_consensus(consensus,sample_name, value_list):
             concat_consensus[0].seq += record.seq
         count += 1
     return concat_consensus[0]
-
+    
 def get_id_sequence_from_consensus_strict(consensus,sample_name, value_list):
     """
     The get_id_sequence_from_consensus_strict function takes a consensus sequence file, the sample name, and a list of integers.
@@ -66,11 +66,13 @@ def get_id_sequence_from_consensus_strict(consensus,sample_name, value_list):
     """
     concat_consensus = []
     count = 1
+
     starting_segment = value_list[0]
     for record in SeqIO.parse(consensus, "fasta"):
         if count == starting_segment:
             concat_consensus.append(record)
             concat_consensus[0].id = sample_name
+            concat_consensus[0].description = ''
         elif count in value_list:
             concat_consensus[0].seq += record.seq
         count += 1

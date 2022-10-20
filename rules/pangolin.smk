@@ -6,6 +6,6 @@ rule pangolin:
     conda:
         "../envs/pangolin.yaml"
     params:
-        "--analysis-mode fast"
+        "--analysis-mode fast" #pangolearn
     shell:
         "pangolin {input} --outfile {output} -t 2"

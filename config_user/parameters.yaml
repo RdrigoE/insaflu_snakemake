@@ -1,4 +1,4 @@
-min_coverage_consensus: 70
+min_coverage_consensus: 89
 
 ##ILLUMINA / Ion Torrent data##
 # Trimmomatic 
@@ -26,9 +26,11 @@ MAXLENGTH: null #(default: 0)
 
 mapqual: 20 #(default = 20)
 
-mincov: 29 #default = 10)
+mincov: 30 #default = 10)
 
 minfrac: 0.51 #(default = 0.51)
+
+msa_masker: 9
 
 ## Oxford Nanopore Technologies (ONT) data ##
 ## Medaka

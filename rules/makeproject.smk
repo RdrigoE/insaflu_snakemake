@@ -17,4 +17,5 @@ rule makeproject:
     shell:
         "mkdir projects/{wildcards.project}/main_result/depth -p && "
         "mkdir projects/{wildcards.project}/sample_{wildcards.sample}/ -p && "
-        " cp -r {params} projects/{wildcards.project}/sample_{wildcards.sample}/"
+        " cp -r {params} projects/{wildcards.project}/sample_{wildcards.sample}/ &&"
+        " cp config_user/parameters.yaml projects/{wildcards.project}/"

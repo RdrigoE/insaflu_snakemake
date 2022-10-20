@@ -5,7 +5,7 @@ rule snippy_pe:
     input:
         r1="samples/{sample}/trimmed_reads/{sample}_1.trimmed.fastq.gz",
         r2="samples/{sample}/trimmed_reads/{sample}_2.trimmed.fastq.gz",
-        ref=REFERENCE
+        ref=REFERENCE,
     output:
         _0  = "align_samples/{sample}/snippy/snps.depth.gz",
         _1 = "align_samples/{sample}/snippy/snps.bam",
@@ -18,27 +18,31 @@ rule snippy_pe:
     params:
         get_snippy_parameters(software_parameters)
     shell:
-        "rm -r align_samples/{wildcards.sample}/snippy/ && "
-        "snippy --cpus {threads} --pe1 {input.r1} --pe2 {input.r2} --ref {input.ref} --outdir align_samples/{wildcards.sample}/snippy/ {params} "
+        "rm -r align_samples/{wildcards.sample}/snippy/ && " 
+        # "python utils/create_snpeff_text_snippy.py $CONDA_PREFIX {input.ref_gb} {input.ref} {REFERENCE_NAME} && "
+        "snippy --cpus {threads} --pe1 {input.r1} --pe2 {input.r2} --ref {input.ref} --outdir align_samples/{wildcards.sample}/snippy/ {params}"
 
 
 rule snippy_se:
     input:
         r1="samples/{sample}/trimmed_reads/{sample}.trimmed.fastq.gz",
-        ref=REFERENCE
+        ref=REFERENCE,
+    	ref_gb = REFERENCE_GB
     output:
         _0  = "align_samples/{sample}/snippy/snps.depth.gz",
         _1 = "align_samples/{sample}/snippy/snps.bam",
         _2 = "align_samples/{sample}/snippy/snps.tab",
         _3 = "align_samples/{sample}/snippy/snps.consensus.fa",
-
+    threads: 
+        config['snippy_threads']
     conda:
         "../envs/snippy.yaml"
     params:
         get_snippy_parameters(software_parameters)
     shell:
         "rm -r align_samples/{wildcards.sample}/snippy/ && " 
-        "snippy --se {input.r1} --ref {input.ref} --outdir align_samples/{wildcards.sample}/snippy/ {params}"
+        # "python utils/create_snpeff_text.py $CONDA_PREFIX {input.ref_gb} {input.ref} {REFERENCE_NAME} &&"
+        "snippy --cpus {threads} --se {input.r1} --ref {input.ref} --outdir align_samples/{wildcards.sample}/snippy/ {params}"
 
 
 ruleorder: snippy_pe > snippy_se
@@ -96,7 +100,7 @@ rule msa_masker_snippy:
     conda:
         "../envs/msa_masker.yaml"
     params:
-        "--c " + str(software_parameters['mincov'])
+        "--c " + str(software_parameters['msa_masker'])
     shell:
         "python software/msa_masker/msa_masker.py -i {input.align_file} -df {input.depth} -o {output} {params}"
 
