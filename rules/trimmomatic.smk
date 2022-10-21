@@ -32,11 +32,11 @@ rule trimme_reads_PE:
     threads:
         config['trimmomatic_threads']
     output:
-        o1="samples/{sample}/trimmed_reads/{sample}_1.trimmed.fastq.gz",
-        o2="samples/{sample}/trimmed_reads/{sample}_2.trimmed.fastq.gz",
+        read_1="samples/{sample}/trimmed_reads/{sample}_1.trimmed.fastq.gz",
+        read_2="samples/{sample}/trimmed_reads/{sample}_2.trimmed.fastq.gz",
         
-        o_un1="samples/{sample}/trimmed_reads/{sample}_1.untrimmed.fastq.gz",
-        o_un2="samples/{sample}/trimmed_reads/{sample}_2.untrimmed.fastq.gz"
+        read_un1="samples/{sample}/trimmed_reads/{sample}_1.untrimmed.fastq.gz",
+        read_un2="samples/{sample}/trimmed_reads/{sample}_2.untrimmed.fastq.gz"
     conda:
         "../envs/trimmomatic.yaml"
     params:
@@ -44,9 +44,9 @@ rule trimme_reads_PE:
     shell:
         "trimmomatic PE "
         "{input} "
-        "{output.o1} "
-        "{output.o_un1} "
-        "{output.o2} "
-        "{output.o_un2} "
+        "{output.read_1} "
+        "{output.read_un1} "
+        "{output.read_2} "
+        "{output.read_un2} "
         "-threads {threads} "
         "{params}"

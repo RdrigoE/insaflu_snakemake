@@ -22,6 +22,5 @@ rule proportions_iSNVs_graph:
 
     output:
         out_file = "projects/{project}/main_result/proportions_iSNVs_graph.csv",
-        # out_img = "projects/{project}/main_result/proportions_iSNVs_graph.png"
     shell:
-    	"python utils/proportions_iSNVs_graph.py '{input}' {output.out_file}" #{output.out_img}"
+    	"python utils/proportions_iSNVs_graph.py '{input}' {output.out_file}" 

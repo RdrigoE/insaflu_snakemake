@@ -1,3 +1,4 @@
+#not being used at the time of realease 1.0
 rule rabbitqc:
     input:
         i1 = "user_data/{sample}.fastq.gz",

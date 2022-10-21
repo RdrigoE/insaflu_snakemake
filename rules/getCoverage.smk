@@ -4,11 +4,10 @@ def get_consensus(wildcards):
 
 rule getCoverage:
     input: 
-        i  = get_consensus,
-        ref = REFERENCE
+        consensus  = get_consensus
     output:
-        o = temp("projects/{project}/main_result/{sample}_coverage.csv")
+        coverage = temp("projects/{project}/main_result/{sample}_coverage.csv")
     conda:
         "../envs/coverage.yaml"
     shell:
-        "python software/getCoverage/getCoverage.py -i {input.i} -r {input.ref} -o {output.o}"
+        "python software/getCoverage/getCoverage.py -i {input.consensus} -r {REFERENCE} -o {output.coverage}"

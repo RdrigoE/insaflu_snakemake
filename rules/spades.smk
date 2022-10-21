@@ -17,8 +17,8 @@ rule spades_se:
 
 rule spades_pe:
     input:
-        i1 = "samples/{sample}/trimmed_reads/{sample}_1.trimmed.fastq.gz",
-        i2 = "samples/{sample}/trimmed_reads/{sample}_2.trimmed.fastq.gz",
+        read_1 = "samples/{sample}/trimmed_reads/{sample}_1.trimmed.fastq.gz",
+        read_2 = "samples/{sample}/trimmed_reads/{sample}_2.trimmed.fastq.gz",
     output:
         o = "samples/{sample}/spades_pe/contigs.fasta",
         dir = directory('samples/{sample}/spades_pe/')
@@ -29,4 +29,4 @@ rule spades_pe:
     params:
         "--only-assembler --isolate" 
     shell:
-        'spades.py -t {threads}  {params} -1 {input.i1} -2 {input.i2} -o {output.dir}' #isolate is just to keep this working
+        'spades.py -t {threads}  {params} -1 {input.read_1} -2 {input.read_2} -o {output.dir}' #isolate is just to keep this working

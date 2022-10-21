@@ -10,7 +10,7 @@ rule freebayes:
         samples = get_consensus,
         ref = REFERENCE
     output:
-        o = "projects/{project}/sample_{sample}/freebayes/{sample}_var.vcf",
+        "projects/{project}/sample_{sample}/freebayes/{sample}_var.vcf"
 
     params:
         extra = "--min-mapping-quality 20 --min-base-quality 20 --min-coverage 100 --min-alternate-count 10  --min-alternate-fraction 0.01 --ploidy 2 -V " #ver este <-

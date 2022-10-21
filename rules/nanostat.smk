@@ -8,7 +8,7 @@ rule raw_nanostat:
         get_raw_input_ont
     output:
         dir=directory("samples/{sample}/raw_nanostat/"),
-        name = "samples/{sample}/raw_nanostat/{sample}_stats.txt"
+        stats = "samples/{sample}/raw_nanostat/{sample}_stats.txt"
     conda:
         "../envs/nanostat.yaml"
     shell:
@@ -18,10 +18,9 @@ rule raw_nanostat:
 rule trimmed_nanostat:
     input:
         "samples/{sample}/trimmed_reads/nano_{sample}.trimmed.fastq.gz"
-
     output:
         dir=directory("samples/{sample}/nano_trimmed_fastqc/"),
-        name = "samples/{sample}/nano_trimmed_fastqc/{sample}_stats.txt"
+        stats = "samples/{sample}/nano_trimmed_fastqc/{sample}_stats.txt"
     conda:
         "../envs/nanostat.yaml"
     shell:

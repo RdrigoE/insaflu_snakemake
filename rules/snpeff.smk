@@ -16,10 +16,10 @@ rule prepare_snpeff:
 
 rule snpeff:
     input:
-        i1 = "projects/{project}/sample_{sample}/freebayes/{sample}_var.vcf",
-        i2 = "projects/{project}/main_result/snp_ready.txt"
+        snp_file = "projects/{project}/sample_{sample}/freebayes/{sample}_var.vcf",
+        dependency_file = "projects/{project}/main_result/snp_ready.txt"
     output:
-        o = "projects/{project}/sample_{sample}/freebayes/{sample}_snpeff.vcf",
+        "projects/{project}/sample_{sample}/freebayes/{sample}_snpeff.vcf",
     conda:
         "../envs/snpeff.yaml"
     threads: 
@@ -29,6 +29,6 @@ rule snpeff:
     shell:
         #not ready for multithreading >< -t {threads}
         "echo '{replace}' && "
-        "{replace} {input.i1} &&"
-        "snpEff {params} -v {REFERENCE_NAME} {input.i1} > {output.o}"
+        "{replace} {input.snp_file} &&"
+        "snpEff {params} -v {REFERENCE_NAME} {input.snp_file} > {output}"
 

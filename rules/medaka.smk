@@ -64,24 +64,22 @@ rule medaka_annotate:
 
 rule bcf_consensus:
     input:
-        vcf_ziped = "align_samples/{sample}/medaka/snps.vcf.gz",
-        ref = REFERENCE
+        vcf_ziped = "align_samples/{sample}/medaka/snps.vcf.gz"
     output:
-        out = temp("align_samples/{sample}/medaka/first_consensus.fasta"),
+        temp("align_samples/{sample}/medaka/first_consensus.fasta"),
     conda:
         "../envs/medaka_1_4_4.yaml"
     shell:
-        "bcftools consensus -s SAMPLE -f {input.ref} {input.vcf_ziped} -o {output.out}"
+        "bcftools consensus -s SAMPLE -f {REFERENCE} {input.vcf_ziped} -o {output}"
 
 
 rule create_align_file:
     input:
-        first_consensus = "align_samples/{sample}/medaka/first_consensus.fasta",
-        ref = REFERENCE
+        first_consensus = "align_samples/{sample}/medaka/first_consensus.fasta"
     output:
         align_file = temp("align_samples/{sample}/medaka/medaka_align_{seg}.fasta"),
     shell:
-        "python utils/mask_consensus_by_deep.py {input.ref} {input.first_consensus} {output.align_file} {wildcards.seg}"
+        "python utils/mask_consensus_by_deep.py {REFERENCE} {input.first_consensus} {output.align_file} {wildcards.seg}"
 
 rule align_mafft:
     input:

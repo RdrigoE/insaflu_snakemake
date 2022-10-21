@@ -3,14 +3,13 @@ configfile: "config/parameters.yaml"
 
 rule snippy_pe:
     input:
-        r1="samples/{sample}/trimmed_reads/{sample}_1.trimmed.fastq.gz",
-        r2="samples/{sample}/trimmed_reads/{sample}_2.trimmed.fastq.gz",
-        ref=REFERENCE,
+        reads_1="samples/{sample}/trimmed_reads/{sample}_1.trimmed.fastq.gz",
+        reads_2="samples/{sample}/trimmed_reads/{sample}_2.trimmed.fastq.gz",
     output:
-        _0  = "align_samples/{sample}/snippy/snps.depth.gz",
-        _1 = "align_samples/{sample}/snippy/snps.bam",
-        _2 = "align_samples/{sample}/snippy/snps.tab",
-        _3 = "align_samples/{sample}/snippy/snps.consensus.fa",
+        depth = "align_samples/{sample}/snippy/snps.depth.gz",
+        bam = "align_samples/{sample}/snippy/snps.bam",
+        tab = "align_samples/{sample}/snippy/snps.tab",
+        consensus = "align_samples/{sample}/snippy/snps.consensus.fa",
     conda:
         "../envs/snippy.yaml"
     threads: 
@@ -20,19 +19,17 @@ rule snippy_pe:
     shell:
         "rm -r align_samples/{wildcards.sample}/snippy/ && " 
         # "python utils/create_snpeff_text_snippy.py $CONDA_PREFIX {input.ref_gb} {input.ref} {REFERENCE_NAME} && "
-        "snippy --cpus {threads} --pe1 {input.r1} --pe2 {input.r2} --ref {input.ref} --outdir align_samples/{wildcards.sample}/snippy/ {params}"
+        "snippy --cpus {threads} --pe1 {input.reads_1} --pe2 {input.reads_2} --ref {REFERENCE} --outdir align_samples/{wildcards.sample}/snippy/ {params}"
 
 
 rule snippy_se:
     input:
-        r1="samples/{sample}/trimmed_reads/{sample}.trimmed.fastq.gz",
-        ref=REFERENCE,
-    	ref_gb = REFERENCE_GB
+        read = "samples/{sample}/trimmed_reads/{sample}.trimmed.fastq.gz",
     output:
-        _0  = "align_samples/{sample}/snippy/snps.depth.gz",
-        _1 = "align_samples/{sample}/snippy/snps.bam",
-        _2 = "align_samples/{sample}/snippy/snps.tab",
-        _3 = "align_samples/{sample}/snippy/snps.consensus.fa",
+        depth = "align_samples/{sample}/snippy/snps.depth.gz",
+        bam = "align_samples/{sample}/snippy/snps.bam",
+        tab = "align_samples/{sample}/snippy/snps.tab",
+        consensus = "align_samples/{sample}/snippy/snps.consensus.fa",
     threads: 
         config['snippy_threads']
     conda:
@@ -41,8 +38,7 @@ rule snippy_se:
         get_snippy_parameters(software_parameters)
     shell:
         "rm -r align_samples/{wildcards.sample}/snippy/ && " 
-        # "python utils/create_snpeff_text.py $CONDA_PREFIX {input.ref_gb} {input.ref} {REFERENCE_NAME} &&"
-        "snippy --cpus {threads} --se {input.r1} --ref {input.ref} --outdir align_samples/{wildcards.sample}/snippy/ {params}"
+        "snippy --cpus {threads} --se {input.read} --ref {REFERENCE} --outdir align_samples/{wildcards.sample}/snippy/ {params}"
 
 
 ruleorder: snippy_pe > snippy_se
@@ -52,16 +48,16 @@ rule snippy_depth_step_1:
     input:
         zipped = "align_samples/{sample}/snippy/snps.depth.gz",
     output:
-        out = "align_samples/{sample}/snippy/depth/snps.depth",
+        unzipped = "align_samples/{sample}/snippy/depth/snps.depth",
     shell:
-        "gunzip -k -c {input.zipped} > {output}"
+        "gunzip -k -c {input.zipped} > {output.unzipped}"
 
 
 rule snippy_depth_step_2:
     input:
         zipped = "align_samples/{sample}/snippy/depth/snps.depth",
     output:
-        out = "align_samples/{sample}/snippy/depth/{seg}.depth",
+        unzipped = "align_samples/{sample}/snippy/depth/{seg}.depth",
     shell:
         "python utils/split_depth_file.py align_samples/{wildcards.sample}/snippy/depth/snps.depth {REFERENCE_GB}"
 
@@ -69,11 +65,10 @@ rule snippy_depth_step_2:
 rule create_align_file_snippy:
     input:
         first_consensus = "align_samples/{sample}/snippy/snps.consensus.fa",
-        ref = REFERENCE
     output:
         align_file = temp("align_samples/{sample}/snippy/snippy_align_{seg}.fasta"),
     shell:
-        "python utils/mask_consensus_by_deep.py {input.ref} {input.first_consensus} {output.align_file} {wildcards.seg}"
+        "python utils/mask_consensus_by_deep.py {REFERENCE} {input.first_consensus} {output.align_file} {wildcards.seg}"
 
 
 rule align_mafft_snippy:
