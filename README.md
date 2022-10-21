@@ -1,4 +1,4 @@
-# insaflu_snakemake on linux
+# insaflu_snakemake
 
 ## Create environment 
 
