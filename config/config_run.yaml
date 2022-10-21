@@ -1,32 +1,75 @@
-identification: MN908947
-locus: SARS_CoV_2
-project: INSAFLU_testing
+identification: ''
+locus: influenza_A
+project: new_flu_samples
 proteins:
-- orf1ab
-- S
-- ORF3a
-- E
+- PB2
+- PB1
+- PA
+- HA
+- NP
+- NA
 - M
-- ORF6
-- ORF7a
-- ORF8
-- N
-- ORF10
+- NS
 sample_type:
-  ERR10039718: snippy
-  ERR10039723: snippy
-  covidONT: medaka
+  influenza_01: snippy
+  influenza_02: snippy
+  influenza_03: snippy
+  influenza_04: snippy
+  influenza_05: snippy
+  influenza_06: snippy
+  influenza_07: snippy
+  influenza_08: snippy
+  influenza_09: snippy
+  influenza_10: snippy
+  influenza_12: snippy
+  influenza_13: snippy
 samples:
-  ERR10039718:
-    fastq1: ERR10039718_1
-    fastq2: ERR10039718_2
+  influenza_01:
+    fastq1: influenza_01_R1_001
+    fastq2: influenza_01_R2_001
     tech: illumina
-  ERR10039723:
-    fastq1: ERR10039723_1
-    fastq2: ERR10039723_2
+  influenza_02:
+    fastq1: influenza_02_R1_001
+    fastq2: influenza_02_R2_001
     tech: illumina
-  covidONT:
-    fastq1: covidONT
-    fastq2: null
-    tech: ont
-version: '3'
+  influenza_03:
+    fastq1: influenza_03_R1_001
+    fastq2: influenza_03_R2_001
+    tech: illumina
+  influenza_04:
+    fastq1: influenza_04_R1_001
+    fastq2: influenza_04_R2_001
+    tech: illumina
+  influenza_05:
+    fastq1: influenza_05_R1_001
+    fastq2: influenza_05_R2_001
+    tech: illumina
+  influenza_06:
+    fastq1: influenza_06_R1_001
+    fastq2: influenza_06_R2_001
+    tech: illumina
+  influenza_07:
+    fastq1: influenza_07_R1_001
+    fastq2: influenza_07_R2_001
+    tech: illumina
+  influenza_08:
+    fastq1: influenza_08_R1_001
+    fastq2: influenza_08_R2_001
+    tech: illumina
+  influenza_09:
+    fastq1: influenza_09_R1_001
+    fastq2: influenza_09_R2_001
+    tech: illumina
+  influenza_10:
+    fastq1: influenza_10_R1_001
+    fastq2: influenza_10_R2_001
+    tech: illumina
+  influenza_12:
+    fastq1: influenza_12_R1_001
+    fastq2: influenza_12_R2_001
+    tech: illumina
+  influenza_13:
+    fastq1: influenza_13_R1_001
+    fastq2: influenza_13_R2_001
+    tech: illumina
+version: ''

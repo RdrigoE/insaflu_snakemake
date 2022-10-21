@@ -1,0 +1,23 @@
+"#Mandatory columns to fulfill: 'sample name', 'fastq1','fastq2' ('fastq2' is exceptionally not fulfilled only for single-end data)"										
+"#Other mandatory columns that may not be fulfilled: 'data set', 'vaccine status', 'week', 'onset date', 'collection date', 'lab reception date', 'latitude', 'longitude'"										
+#You may include any other columns with metadata variables.										
+#Date format: dd/mm/yyyy										
+#Fastq file names must be complete and match the ones from the files that you are going to upload later										
+#Sample names must be unique in your account										
+#Latitude and Longitude are in Decimal Degrees (DD)										
+"#Sample name: only numbers, letters and underscores are allowed"										
+#The aforementioned instructions do not need to be deleted before submission										
+name	fastq1	fastq2	data set	vaccine status	week	onset date	collection date	lab reception date	latitude	longitude
+influenza_01	influenza_01_R1_001.fastq.gz	influenza_01_R2_001.fastq.gz								
+influenza_02	influenza_02_R1_001.fastq.gz	influenza_02_R2_001.fastq.gz								
+influenza_03	influenza_03_R1_001.fastq.gz	influenza_03_R2_001.fastq.gz								
+influenza_04	influenza_04_R1_001.fastq.gz	influenza_04_R2_001.fastq.gz								
+influenza_05	influenza_05_R1_001.fastq.gz	influenza_05_R2_001.fastq.gz								
+influenza_06	influenza_06_R1_001.fastq.gz	influenza_06_R2_001.fastq.gz								
+influenza_07	influenza_07_R1_001.fastq.gz	influenza_07_R2_001.fastq.gz								
+influenza_08	influenza_08_R1_001.fastq.gz	influenza_08_R2_001.fastq.gz								
+influenza_09	influenza_09_R1_001.fastq.gz	influenza_09_R2_001.fastq.gz								
+influenza_10	influenza_10_R1_001.fastq.gz	influenza_10_R2_001.fastq.gz								
+influenza_12	influenza_12_R1_001.fastq.gz	influenza_12_R2_001.fastq.gz								
+influenza_13	influenza_13_R1_001.fastq.gz	influenza_13_R2_001.fastq.gz								
+	

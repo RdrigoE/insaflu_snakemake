@@ -24,7 +24,7 @@
 
 ## Create new folder named 'user_data'
    $ mkdir user_data
-   $ cp path/to/your/files/your_files path/to/user/data
+   $ cp path/to/your/files/your_files path/to/user_data
 ## Create a csv in the folder config_user called sample_info.csv
  This csv has to have the following format: sample_name,fastq1,fastq2,tech
 ## Go to config_user.yaml and fill the fields
