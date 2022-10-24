@@ -29,7 +29,7 @@ rule medaka_depth:
         "samtools depth {params} {input.i} | bgzip -c > {output.only_depth} "
         # "samtools depth {input.i} | bgzip -c > {output.only_depth} "
 
-        "&& tabix -p vcf {output.only_depth} && gunzip {output.only_depth} > {output.ind} "
+        "&& tabix -p vcf {output.only_depth} && gunzip {output.only_depth} > {output.depth} "
 
 rule medaka_depth_follow:
     input: "align_samples/{sample}/medaka/snps.depth"
