@@ -50,7 +50,7 @@ rule snippy_depth_step_1:
     output:
         unzipped = "align_samples/{sample}/snippy/depth/snps.depth",
     shell:
-        "gunzip -k -c {input.zipped} > {output.unzipped}"
+        "gunzip -c {input.zipped} > {output.unzipped}"
 
 
 rule snippy_depth_step_2:
