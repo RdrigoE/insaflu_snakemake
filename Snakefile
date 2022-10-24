@@ -114,10 +114,7 @@ class Checkpoint_Seg:
                         break
         return final_output
 
-
-
 sample_data = Data("./config_user/sample_info.csv")
-
 
 paired_illumina,single_illumina,ont_samples, sample_info_dic=sample_data.get_options()
 
@@ -125,10 +122,7 @@ paired_illumina_keys = paired_illumina.keys()
 single_illumina_keys = single_illumina.keys()
 ont_samples_keys = ont_samples.keys()
 
-
 run_config = read_yaml('./config_user/config_user.yaml')
-
-
 
 def get_output_sample():
     return(
