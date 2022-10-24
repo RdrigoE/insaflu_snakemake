@@ -114,13 +114,7 @@ class Checkpoint_Seg:
                         break
         return final_output
 
-
-# sample_data = Data("./config_user/90436840_SARS_CoV_2_dataset_174.csv")
 sample_data = Data("./config_user/sample_info.csv")
-# sample_data = Data("./config_user/new_flu_test.csv")
-# sample_data = Data("./config_user/flu.csv")
-# sample_data = Data("./config_user/ont.csv")
-# sample_data = Data("./config_user/flu_ont.csv")
 
 paired_illumina,single_illumina,ont_samples, sample_info_dic=sample_data.get_options()
 
@@ -128,19 +122,7 @@ paired_illumina_keys = paired_illumina.keys()
 single_illumina_keys = single_illumina.keys()
 ont_samples_keys = ont_samples.keys()
 
-# print(paired_illumina_keys)
-# print(single_illumina_keys)
-
-# print(ont_samples_keys)
-
-# run_config = read_yaml('./config_user/illumina_testing.yaml')
-run_config = read_yaml('./config_user/config_user1.yaml')
-# run_config = read_yaml('./config_user/new_flu_test.yaml')
-# run_config = read_yaml('./config_user/config_user2.yaml')
-# run_config = read_yaml('./config_user/config_user3.yaml')
-# run_config = read_yaml('./config_user/config_user4.yaml')
-
-
+run_config = read_yaml('./config_user/config_user.yaml')
 
 def get_output_sample():
     return(
