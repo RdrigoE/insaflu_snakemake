@@ -81,7 +81,7 @@ rule align_mafft_snippy:
     threads:
         config['mafft_threads']
     params:
-        "--maxiterate 1000 --localpair --preservecase --leavegappyregion --quiet "
+        "--preservecase"
     shell:
         "mafft --thread {threads} {params} {input.align_file} > {output.aligned_file}"
 

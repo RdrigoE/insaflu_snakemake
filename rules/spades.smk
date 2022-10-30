@@ -27,6 +27,6 @@ rule spades_pe:
     conda:
         "../envs/spades.yaml"
     params:
-        "--only-assembler" # --isolate" 
+        "--only-assembler --isolate" 
     shell:
         'spades.py -t {threads}  {params} -1 {input.read_1} -2 {input.read_2} -o {output.dir}' #isolate is just to keep this working

@@ -3,6 +3,6 @@ channels:
   - bioconda
   - nodefaults
 dependencies:
-  - snpeff =4.3
+  - snpeff =5.1
   - python =3.10
   - biopython
