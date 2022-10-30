@@ -24,7 +24,7 @@ rule medaka_depth:
     conda:
         "../envs/medaka_1_4_4.yaml"
     params:
-        "-aa -q 20"
+        "-aa "
     shell:
         "samtools depth {params} {input.i} | bgzip -c > {output.only_depth} "
         # "samtools depth {input.i} | bgzip -c > {output.only_depth} "

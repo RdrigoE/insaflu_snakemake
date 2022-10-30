@@ -1,0 +1,32 @@
+identification: MN908947
+locus: SARS_CoV_2
+project: INSAFLU_testing
+proteins:
+- orf1ab
+- S
+- ORF3a
+- E
+- M
+- ORF6
+- ORF7a
+- ORF8
+- N
+- ORF10
+sample_type:
+  ERR10039718: snippy
+  ERR10039723: snippy
+  covidONT: medaka
+samples:
+  ERR10039718:
+    fastq1: ERR10039718_1
+    fastq2: ERR10039718_2
+    tech: illumina
+  ERR10039723:
+    fastq1: ERR10039723_1
+    fastq2: ERR10039723_2
+    tech: illumina
+  covidONT:
+    fastq1: covidONT
+    fastq2: null
+    tech: ont
+version: '3'

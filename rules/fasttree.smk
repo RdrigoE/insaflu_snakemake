@@ -9,4 +9,5 @@ rule fasttree:
     params:
         "-gtr -boot 1000 -nt"
     shell:
+        #FastTreeDbl
         "fasttree {params} {input} > {output.tree} && cp {output.tree} {output.nwk}"
