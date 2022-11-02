@@ -137,7 +137,7 @@ class Checkpoint_Seg:
         return final_output
 
 
-sample_data = Data("./config_user/sample_info.csv")
+sample_data = Data("./config_user/sample_info_3.csv")
 
 (
     paired_illumina,
