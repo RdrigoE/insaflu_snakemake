@@ -15,4 +15,4 @@ rule nanofilt_SE:
     params:
         get_nanofilt_parameters(software_parameters),
     shell:
-        "gunzip -c {input} | NanoFilt {params} | gzip > {output}"
+        "gunzip -cd {input} | NanoFilt {params} | gzip > {output}"

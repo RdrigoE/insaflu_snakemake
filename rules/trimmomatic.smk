@@ -43,6 +43,7 @@ rule trimme_reads_PE:
         "../envs/trimmomatic.yaml"
     params:
         get_trimmomatic_parameters(software_parameters),
+        # "SLIDINGWINDOW:5:20 LEADING:3 TRAILING:3 MINLEN:35 TOPHRED33",
     shell:
         "trimmomatic PE "
         "{input} "

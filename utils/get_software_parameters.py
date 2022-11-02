@@ -28,6 +28,6 @@ def get_nanofilt_parameters(software_parameters):
     nanofilt_parameters += f' -l {software_parameters["LENGTH"]}' if software_parameters["LENGTH"] != None else ''
     nanofilt_parameters += f' --headcrop {software_parameters["HEADCROP"]}' if software_parameters["HEADCROP"] != None else ''
     nanofilt_parameters += f' --tailcrop {software_parameters["TAILCROP"]}' if software_parameters["TAILCROP"] != None else ''
-    nanofilt_parameters += f' --maxlength {software_parameters["MAXLENGTH"]}' if software_parameters["MAXLENGTH"] != None else ''
+    # nanofilt_parameters += f' --maxlength {software_parameters["MAXLENGTH"]}' if software_parameters["MAXLENGTH"] != None else ''
     return nanofilt_parameters
 
