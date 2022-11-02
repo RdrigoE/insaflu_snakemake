@@ -14,5 +14,7 @@ rule freebayes:
         "projects/{project}/sample_{sample}/freebayes/{sample}_var.vcf",
     params:
         extra="--min-mapping-quality 20 --min-base-quality 20 --min-coverage 100 --min-alternate-count 10  --min-alternate-fraction 0.01 --ploidy 2 -V ",  #ver este <-
-    wrapper:
-        "v1.14.0/bio/freebayes"
+    conda:
+        "../envs/snippy.yaml"
+    shell:
+        "freebayes -f {samples} {params} > {output}"
