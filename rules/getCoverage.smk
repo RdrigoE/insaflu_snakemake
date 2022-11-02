@@ -3,10 +3,10 @@ def get_consensus(wildcards):
 
 
 rule getCoverage:
-    input: 
-        consensus  = get_consensus
+    input:
+        consensus=get_consensus,
     output:
-        coverage = temp("projects/{project}/main_result/{sample}_coverage.csv")
+        coverage=temp("projects/{project}/main_result/{sample}_coverage.csv"),
     conda:
         "../envs/coverage.yaml"
     shell:

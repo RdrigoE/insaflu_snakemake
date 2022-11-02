@@ -1,14 +1,13 @@
-
 def get_raw_input_ont(wildcards):
     return f"user_data/{config_user['samples'][wildcards.sample]['fastq1']}.fastq.gz"
 
 
 rule raw_nanostat:
     input:
-        get_raw_input_ont
+        get_raw_input_ont,
     output:
         dir=directory("samples/{sample}/raw_nanostat/"),
-        stats = "samples/{sample}/raw_nanostat/{sample}_stats.txt"
+        stats="samples/{sample}/raw_nanostat/{sample}_stats.txt",
     conda:
         "../envs/nanostat.yaml"
     shell:
@@ -17,10 +16,10 @@ rule raw_nanostat:
 
 rule trimmed_nanostat:
     input:
-        "samples/{sample}/trimmed_reads/nano_{sample}.trimmed.fastq.gz"
+        "samples/{sample}/trimmed_reads/nano_{sample}.trimmed.fastq.gz",
     output:
         dir=directory("samples/{sample}/nano_trimmed_fastqc/"),
-        stats = "samples/{sample}/nano_trimmed_fastqc/{sample}_stats.txt"
+        stats="samples/{sample}/nano_trimmed_fastqc/{sample}_stats.txt",
     conda:
         "../envs/nanostat.yaml"
     shell:

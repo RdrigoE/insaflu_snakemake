@@ -1,5 +1,6 @@
-#https://sanjaynagi.github.io/freebayes-parallel/ check this out
-#https://github.com/freebayes/freebayes/blob/master/scripts/freebayes-parallel
+# https://sanjaynagi.github.io/freebayes-parallel/ check this out
+# https://github.com/freebayes/freebayes/blob/master/scripts/freebayes-parallel
+
 
 def get_consensus(wildcards):
     return f"align_samples/{wildcards.sample}/{config_user['sample_type'][wildcards.sample]}/snps.bam"
@@ -7,12 +8,11 @@ def get_consensus(wildcards):
 
 rule freebayes:
     input:
-        samples = get_consensus,
-        ref = REFERENCE
+        samples=get_consensus,
+        ref=REFERENCE,
     output:
-        "projects/{project}/sample_{sample}/freebayes/{sample}_var.vcf"
-
+        "projects/{project}/sample_{sample}/freebayes/{sample}_var.vcf",
     params:
-        extra = "--min-mapping-quality 20 --min-base-quality 20 --min-coverage 100 --min-alternate-count 10  --min-alternate-fraction 0.01 --ploidy 2 -V " #ver este <-
+        extra="--min-mapping-quality 20 --min-base-quality 20 --min-coverage 100 --min-alternate-count 10  --min-alternate-fraction 0.01 --ploidy 2 -V ",  #ver este <-
     wrapper:
         "v1.14.0/bio/freebayes"
