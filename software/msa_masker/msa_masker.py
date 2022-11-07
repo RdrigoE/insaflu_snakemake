@@ -3,12 +3,14 @@
 """
 Purpose
 -------
+
 This module substitutes positions with a low depth of coverage
 in a Multiple Sequence Alignment with 'N'. It ignores gaps at
 the start and end of each aligned sequence. The depth of coverage
 value below which the process masks positions can be set. By default,
 it will not mask gaps/indels contained in the aligned sequences but
 the user can change that behaviour.
+
 """
 
 
@@ -24,10 +26,12 @@ from Bio import SeqIO
 
 def import_seqs(fasta_file):
 	""" Imports sequences from a FASTA file.
+
 		Parameters
 		----------
 		fasta_file : str
 			Path to the FASTA file.
+
 		Returns
 		-------
 		seqs : list of list
@@ -65,6 +69,7 @@ def import_depth(depth_data, sample_ids = []):
 		----------
 		depth_data : str
 			Path to the depth files or file itself, can be in gz format.
+
 		Returns
 		-------
 		sample_map : dictionary with name of sequence and list of depth 

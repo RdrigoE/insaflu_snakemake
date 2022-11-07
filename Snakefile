@@ -137,7 +137,7 @@ class Checkpoint_Seg:
         return final_output
 
 
-sample_data = Data("./config_user/sample_info_3.csv")
+sample_data = Data("./config_user/flu.csv")
 
 (
     paired_illumina,
@@ -236,17 +236,31 @@ def get_output_project():
         # expand("align_samples/{sample}/snippy/snippy_align_{seg}.fasta",sample = single_illumina.keys(), seg = SEGMENTS),
         # expand("align_samples/{sample}/snippy/snippy_aligned_{seg}.fasta",sample = single_illumina.keys(), seg = SEGMENTS),
         # expand("align_samples/{sample}/snippy/consensus_aligned_{seg}.fasta",sample = single_illumina.keys(), seg = SEGMENTS),
+        # expand(
+        #     "align_samples/{sample}/snippy/{sample}_consensus.fasta",
+        #     sample=single_illumina.keys(),
+        #     seg=SEGMENTS,
+        # ),
+        # # expand("align_samples/{sample}/snippy/depth/{seg}.depth",sample = paired_illumina.keys(), seg = SEGMENTS),
+        # # expand("align_samples/{sample}/snippy/snippy_align_{seg}.fasta",sample = paired_illumina.keys(), seg = SEGMENTS),
+        # # expand("align_samples/{sample}/snippy/snippy_aligned_{seg}.fasta",sample = paired_illumina.keys(), seg = SEGMENTS),
+        # # expand("align_samples/{sample}/snippy/consensus_aligned_{seg}.fasta",sample = paired_illumina.keys(), seg = SEGMENTS),
+        # expand(
+        #     "align_samples/{sample}/snippy/{sample}_consensus.fasta",
+        #     sample=paired_illumina.keys(),
+        #     seg=SEGMENTS,
+        # ),
         expand(
-            "align_samples/{sample}/snippy/{sample}_consensus.fasta",
+            "align_samples/{sample}/iVar/{sample}_consensus.fasta",
             sample=single_illumina.keys(),
             seg=SEGMENTS,
         ),
-        # expand("align_samples/{sample}/snippy/depth/{seg}.depth",sample = paired_illumina.keys(), seg = SEGMENTS),
-        # expand("align_samples/{sample}/snippy/snippy_align_{seg}.fasta",sample = paired_illumina.keys(), seg = SEGMENTS),
-        # expand("align_samples/{sample}/snippy/snippy_aligned_{seg}.fasta",sample = paired_illumina.keys(), seg = SEGMENTS),
-        # expand("align_samples/{sample}/snippy/consensus_aligned_{seg}.fasta",sample = paired_illumina.keys(), seg = SEGMENTS),
+        # expand("align_samples/{sample}/iVar/depth/{seg}.depth",sample = paired_illumina.keys(), seg = SEGMENTS),
+        # expand("align_samples/{sample}/iVar/snippy_align_{seg}.fasta",sample = paired_illumina.keys(), seg = SEGMENTS),
+        # expand("align_samples/{sample}/iVar/snippy_aligned_{seg}.fasta",sample = paired_illumina.keys(), seg = SEGMENTS),
+        # expand("align_samples/{sample}/iVar/consensus_aligned_{seg}.fasta",sample = paired_illumina.keys(), seg = SEGMENTS),
         expand(
-            "align_samples/{sample}/snippy/{sample}_consensus.fasta",
+            "align_samples/{sample}/iVar/{sample}_consensus.fasta",
             sample=paired_illumina.keys(),
             seg=SEGMENTS,
         ),
@@ -448,6 +462,7 @@ include: "rules/nanofilt.smk"
 include: "rules/rabbitqc.smk"
 include: "rules/medaka.smk"
 include: "rules/pangolin.smk"
+include: "rules/iVar.smk"
 
 
 rule all:

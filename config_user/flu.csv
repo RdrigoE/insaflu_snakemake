@@ -1,0 +1,5 @@
+sample_name,fastq1,fastq2,tech
+influenza_01,influenza_01_R1_001,influenza_01_R2_001,illumina
+influenza_02,influenza_02_R1_001,influenza_02_R2_001,illumina
+influenza_03,influenza_03_R1_001,influenza_03_R2_001,illumina
+influenza_04,influenza_04_R1_001,influenza_04_R2_001,illumina

@@ -12,7 +12,7 @@ rule makeproject:
     output:
         consensus="projects/{project}/sample_{sample}/{sample}_consensus.fasta",
         depth="projects/{project}/sample_{sample}/snps.depth.gz",
-        vcf="projects/{project}/sample_{sample}/snps.vcf",
+        # vcf="projects/{project}/sample_{sample}/snps.vcf",
     params:
         get_directory,
     shell:

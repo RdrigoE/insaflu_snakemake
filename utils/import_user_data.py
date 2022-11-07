@@ -19,7 +19,7 @@ class Data:
         type = self.df['tech']
         type_dic = {}
         for index in range(len(names)):
-            type_dic[names[index]] = 'medaka' if type[index] == 'ont' else 'snippy'
+            type_dic[names[index]] = 'medaka' if type[index] == 'ont' else 'iVar'#'snippy'
         return type_dic
 
 
