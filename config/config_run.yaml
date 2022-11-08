@@ -1,35 +1,42 @@
-identification: ''
-locus: Flu
-project: flu_iVar
+identification: MN908947
+locus: SARS_CoV_2
+project: 3_covid_samples
 proteins:
-- PB2
-- PB1
-- PA
-- HA
-- NP
-- NA
+- orf1ab
+- S
+- ORF3a
+- E
 - M
-- NS
+- ORF6
+- ORF7a
+- ORF8
+- N
+- ORF10
 sample_type:
-  influenza_01: iVar
-  influenza_02: iVar
-  influenza_03: iVar
-  influenza_04: iVar
+  Portugal_PT43103_2022: iVar
+  Portugal_PT43123_2022: iVar
+  Portugal_PT43260_2022: iVar
+  Portugal_PT43261_2022: iVar
+  Portugal_PT43262_2022: iVar
 samples:
-  influenza_01:
-    fastq1: influenza_01_R1_001
-    fastq2: influenza_01_R2_001
+  Portugal_PT43103_2022:
+    fastq1: Portugal-PT43103-2022_R1_001
+    fastq2: Portugal-PT43103-2022_R2_001
     tech: illumina
-  influenza_02:
-    fastq1: influenza_02_R1_001
-    fastq2: influenza_02_R2_001
+  Portugal_PT43123_2022:
+    fastq1: Portugal-PT43123-2022_R1_001
+    fastq2: Portugal-PT43123-2022_R2_001
     tech: illumina
-  influenza_03:
-    fastq1: influenza_03_R1_001
-    fastq2: influenza_03_R2_001
+  Portugal_PT43260_2022:
+    fastq1: Portugal-PT43260-2022_R1_001
+    fastq2: Portugal-PT43260-2022_R2_001
     tech: illumina
-  influenza_04:
-    fastq1: influenza_04_R1_001
-    fastq2: influenza_04_R2_001
+  Portugal_PT43261_2022:
+    fastq1: Portugal-PT43261-2022_R1_001
+    fastq2: Portugal-PT43261-2022_R2_001
     tech: illumina
-version: ''
+  Portugal_PT43262_2022:
+    fastq1: Portugal-PT43262-2022_R1_001
+    fastq2: Portugal-PT43262-2022_R2_001
+    tech: illumina
+version: '3'

@@ -32,10 +32,16 @@ rule align_se:
 
 ruleorder: align_pe > align_se
 
+# rule conver_gbk_to_gff:
+#     input:"reference/{REFERENCE_NAME}.gbk"
+#     output:"reference/{REFERENCE_NAME}.gff"
+#     conda:"../envs/perl.yaml"
+#     shell:"perl software/bp_genbank2gff3.pl {input}"
 
 rule call_variant:
     input:
         bam="align_samples/{sample}/iVar/snps.bam",
+        gff = "reference/SARS_CoV_2_COVID_19_Wuhan_Hu_1_MN908947.gff3"
     output:
         vcf_file="align_samples/{sample}/iVar/snps.tsv",
     conda:
@@ -44,7 +50,7 @@ rule call_variant:
         "snps",
     shell:
         "samtools mpileup -A -d 600000 -B -Q 0 {input.bam} |"
-        "ivar variants -p {params} -q 20 -t 0.51 -m 10 -r align_samples/{wildcards.sample}/{REFERENCE} "
+        "ivar variants -p {params} -q 20 -t 0.51 -m 10 -r align_samples/{wildcards.sample}/{REFERENCE} -g {input.gff} "
 
 
 rule filter_variants:
@@ -52,11 +58,11 @@ rule filter_variants:
         bam="align_samples/{sample}/iVar/snps.bam",
         vcf_file="align_samples/{sample}/iVar/snps.tsv",
     output:
-        vcf_file="align_samples/{sample}/iVar/filtered_snps.tsv",
+        vcf_file="align_samples/{sample}/iVar/snps_filtered.tsv",
     conda:
         "../envs/ivar.yaml"
     params:
-        "filtered_snps",
+        "snps_filtered",
     shell:
         "ivar filtervariants -t 0.51 -p {params} {output.vcf_file}"
 
