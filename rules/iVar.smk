@@ -44,7 +44,7 @@ rule call_variant:
         "snps",
     shell:
         "samtools mpileup -A -d 600000 -B -Q 0 {input.bam} |"
-        "ivar variants -p {params} -q 20 -t 0.51 -m 10 -r align_samples/{wildcards.sample}/{REFERENCE} "
+        "ivar variants -p {params} -q 20 -t 0.51 -m 10 -r align_samples/{wildcards.sample}/{REFERENCE} -g {REFERENCE_NAME}.gff3"
 
 
 rule filter_variants:
