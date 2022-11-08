@@ -137,7 +137,7 @@ class Checkpoint_Seg:
         return final_output
 
 
-sample_data = Data("./config_user/sample_info_1.csv")
+sample_data = Data("./config_user/flu.csv")
 
 (
     paired_illumina,
@@ -150,7 +150,7 @@ paired_illumina_keys = paired_illumina.keys()
 single_illumina_keys = single_illumina.keys()
 ont_samples_keys = ont_samples.keys()
 
-run_config = read_yaml("./config_user/config_user_1.yaml")
+run_config = read_yaml("./config_user/config_user.yaml")
 
 
 def get_output_sample():
@@ -264,10 +264,6 @@ def get_output_project():
             sample=paired_illumina.keys(),
             seg=SEGMENTS,
         ),
-        # expand(
-        #     "align_samples/{sample}/iVar/filtered_snps.tsv",
-        #     sample=paired_illumina.keys(),
-        # ),
         # Analyse ONT Sample
         expand(
             "samples/{sample}/raw_nanostat/{sample}_stats.txt",
