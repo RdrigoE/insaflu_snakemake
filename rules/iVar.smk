@@ -48,11 +48,9 @@ rule call_variant:
         vcf_file="align_samples/{sample}/iVar/snps.tsv",
     conda:
         "../envs/ivar.yaml"
-    params:
-        "snps",
     shell:
-        "samtools mpileup -A -d 600000 -B -Q 0 {input.bam} |"
-        "ivar variants -p {params} -q 20 -t 0.51 -m 10 -r align_samples/{wildcards.sample}/{REFERENCE} -g {REFERENCE_NAME}.gff3"
+        "samtools mpileup -A -d 600000 -B -Q 0 {input.bam} | "
+        "ivar variants -p align_samples/{wildcards.sample}/snps -q 20 -t 0.51  align_samples/{wildcards.sample}/{REFERENCE}  reference/{REFERENCE_NAME}.gff3"
 
 
 rule filter_variants:
@@ -79,7 +77,7 @@ rule generate_consensus:
     params:
         "snps.consensus",
     shell:
-        "samtools mpileup -aa -A -Q 0 {input.bam} | ivar consensus -p align_samples/{wildcards.sample}/iVar/{params} -q 10 -t 0.51"
+        "samtools mpileup -aa -A -Q 0 {input.bam} | ivar consensus -p align_samples/{wildcards.sample}/iVar/{params} -q 10 -t 0.01"
         # "&& python3 utils/change_id_name.py {output.consensus} SARS_CoV_2"
 
 
