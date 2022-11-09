@@ -137,20 +137,39 @@ class Checkpoint_Seg:
         return final_output
 
 
-sample_data = Data("./config_user/flu.csv")
+sample_data = Data("./config_user/sample_info_1.csv")
 
 (
     paired_illumina,
     single_illumina,
     ont_samples,
     sample_info_dic,
+    ALIGNER,
 ) = sample_data.get_options()
 
 paired_illumina_keys = paired_illumina.keys()
 single_illumina_keys = single_illumina.keys()
+
+if ALIGNER == "snippy":
+    paired_illumina_snippy = paired_illumina
+    single_illumina_snippy = single_illumina
+    paired_illumina_iVar = {}
+    single_illumina_iVar = {}
+elif ALIGNER == "iVar":
+    paired_illumina_iVar = paired_illumina
+    single_illumina_iVar = single_illumina
+    paired_illumina_snippy = {}
+    single_illumina_snippy = {}
+
 ont_samples_keys = ont_samples.keys()
 
-run_config = read_yaml("./config_user/config_user.yaml")
+run_config = read_yaml("./config_user/config_user_1.yaml")
+
+REFERENCE_GB = run_config["gb_reference"]
+REFERENCE = run_config["fasta_reference"]
+x = re.findall("(?<=/)(.*?)(?=.fasta)", REFERENCE)
+REFERENCE_NAME = x[0]
+SEGMENTS = get_locus(REFERENCE_GB)
 
 
 def get_output_sample():
@@ -226,33 +245,14 @@ def get_output_project():
         ),
         expand(
             "samples/{sample}/trimmed_fastqc/{sample}.trimmed_fastqc.html",
-            sample=single_illumina.keys(),
+            sample=single_illumina_iVar.keys(),
         ),
         # Trying to get the same consensus
         # expand("samples/{sample}/spades_se/contigs.fasta", sample=single_illumina.keys()),
         # expand("samples/{sample}/abricate_se/abricate_{sample}.csv", sample=single_illumina.keys()),
-        # Snippy for Single and Paired End Sample
-        # expand("align_samples/{sample}/snippy/depth/{seg}.depth",sample = single_illumina.keys(), seg = SEGMENTS),
-        # expand("align_samples/{sample}/snippy/snippy_align_{seg}.fasta",sample = single_illumina.keys(), seg = SEGMENTS),
-        # expand("align_samples/{sample}/snippy/snippy_aligned_{seg}.fasta",sample = single_illumina.keys(), seg = SEGMENTS),
-        # expand("align_samples/{sample}/snippy/consensus_aligned_{seg}.fasta",sample = single_illumina.keys(), seg = SEGMENTS),
-        # expand(
-        #     "align_samples/{sample}/snippy/{sample}_consensus.fasta",
-        #     sample=single_illumina.keys(),
-        #     seg=SEGMENTS,
-        # ),
-        # # expand("align_samples/{sample}/snippy/depth/{seg}.depth",sample = paired_illumina.keys(), seg = SEGMENTS),
-        # # expand("align_samples/{sample}/snippy/snippy_align_{seg}.fasta",sample = paired_illumina.keys(), seg = SEGMENTS),
-        # # expand("align_samples/{sample}/snippy/snippy_aligned_{seg}.fasta",sample = paired_illumina.keys(), seg = SEGMENTS),
-        # # expand("align_samples/{sample}/snippy/consensus_aligned_{seg}.fasta",sample = paired_illumina.keys(), seg = SEGMENTS),
-        # expand(
-        #     "align_samples/{sample}/snippy/{sample}_consensus.fasta",
-        #     sample=paired_illumina.keys(),
-        #     seg=SEGMENTS,
-        # ),
         expand(
             "align_samples/{sample}/iVar/{sample}_consensus.fasta",
-            sample=single_illumina.keys(),
+            sample=single_illumina_iVar.keys(),
             seg=SEGMENTS,
         ),
         # expand("align_samples/{sample}/iVar/depth/{seg}.depth",sample = paired_illumina.keys(), seg = SEGMENTS),
@@ -261,6 +261,25 @@ def get_output_project():
         # expand("align_samples/{sample}/iVar/consensus_aligned_{seg}.fasta",sample = paired_illumina.keys(), seg = SEGMENTS),
         expand(
             "align_samples/{sample}/iVar/{sample}_consensus.fasta",
+            sample=paired_illumina_snippy.keys(),
+            seg=SEGMENTS,
+        ),
+        # Snippy for Single and Paired End Sample
+        # expand("align_samples/{sample}/snippy/depth/{seg}.depth",sample = single_illumina.keys(), seg = SEGMENTS),
+        # expand("align_samples/{sample}/snippy/snippy_align_{seg}.fasta",sample = single_illumina.keys(), seg = SEGMENTS),
+        # expand("align_samples/{sample}/snippy/snippy_aligned_{seg}.fasta",sample = single_illumina.keys(), seg = SEGMENTS),
+        # expand("align_samples/{sample}/snippy/consensus_aligned_{seg}.fasta",sample = single_illumina.keys(), seg = SEGMENTS),
+        expand(
+            "align_samples/{sample}/snippy/{sample}_consensus.fasta",
+            sample=single_illumina_snippy.keys(),
+            seg=SEGMENTS,
+        ),
+        # # expand("align_samples/{sample}/snippy/depth/{seg}.depth",sample = paired_illumina.keys(), seg = SEGMENTS),
+        # # expand("align_samples/{sample}/snippy/snippy_align_{seg}.fasta",sample = paired_illumina.keys(), seg = SEGMENTS),
+        # # expand("align_samples/{sample}/snippy/snippy_aligned_{seg}.fasta",sample = paired_illumina.keys(), seg = SEGMENTS),
+        # # expand("align_samples/{sample}/snippy/consensus_aligned_{seg}.fasta",sample = paired_illumina.keys(), seg = SEGMENTS),
+        expand(
+            "align_samples/{sample}/snippy/{sample}_consensus.fasta",
             sample=paired_illumina.keys(),
             seg=SEGMENTS,
         ),
@@ -400,11 +419,6 @@ def prepare_run(settings):
 
 get_output = prepare_run(run_config)
 
-REFERENCE_GB = run_config["gb_reference"]
-REFERENCE = run_config["fasta_reference"]
-x = re.findall("(?<=/)(.*?)(?=.fasta)", REFERENCE)
-REFERENCE_NAME = x[0]
-SEGMENTS = get_locus(REFERENCE_GB)
 
 if len(get_locus(REFERENCE_GB)) == 1:
     version_id = get_id_version(REFERENCE_GB).split(".")
