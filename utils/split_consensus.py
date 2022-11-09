@@ -4,24 +4,27 @@ import csv
 from Bio import SeqIO
 from get_locus import get_locus
 
+
 def parse_depth(depth_file):
-    with open(depth_file, 'r', encoding="UTF8") as depth:
+    with open(depth_file, "r", encoding="UTF8") as depth:
         reader = csv.reader(depth)
         out = []
         for i in reader:
-            out.append(i[0].split('\t'))
+            out.append(i[0].split("\t"))
     return out
 
+
 def get_consensus(consensus):
-    with open(consensus, "r",encoding='UTF8') as handle_fasta:
+    with open(consensus, "r", encoding="UTF8") as handle_fasta:
         return list(SeqIO.parse(handle_fasta, "fasta"))[0].seq
 
-def split_consensus(consensus, depth,locus,output):
+
+def split_consensus(consensus, depth, locus, output):
     depth = parse_depth(depth)
     locus = get_locus(locus)
     dic = {}
     for i in locus:
-        dic[i] = ''
+        dic[i] = ""
     for entry in depth:
         dic[entry[0]] = entry[1]
     numbers_list = []
@@ -34,25 +37,25 @@ def split_consensus(consensus, depth,locus,output):
 
     last_list = []
     count_nt = 0
-    seq = ' '
-    
+    seq = " "
+
     new_dic = {}
     count = 0
     for loc in locus:
-        new_dic[loc] = [count,count+int(dic[loc])]
+        new_dic[loc] = [count, count + int(dic[loc])]
         print(new_dic[loc])
         count += int(dic[loc])
 
     for loc in new_dic:
-        small_part = consensus_seq[new_dic[loc][0]:new_dic[loc][1]]
+        small_part = consensus_seq[new_dic[loc][0] : new_dic[loc][1]]
         seq = small_part
         last_list.append(seq)
 
-    with open(output, "w",encoding='UTF8') as out:
-        for idx,seq in enumerate(last_list):
+    with open(output, "w", encoding="UTF8") as out:
+        for idx, seq in enumerate(last_list):
             out.writelines(f">{locus[idx]}\n")
             out.writelines(seq)
-            out.writelines('\n')
+            out.writelines("\n")
 
 
 if __name__ == "__main__":

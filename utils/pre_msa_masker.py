@@ -3,12 +3,12 @@ from Bio import SeqIO
 from get_locus import get_locus
 
 
-def prepare_msa_masker(alignment,outdir,reference_gb):
+def prepare_msa_masker(alignment, outdir, reference_gb):
     """
     The prepare_msa_masker function takes a multiple sequence alignment and a reference genbank file as input.
-    It then creates an output directory for each locus in the reference genome, and writes the sequences of that locus to 
+    It then creates an output directory for each locus in the reference genome, and writes the sequences of that locus to
     a fasta file within each output directory.
-    
+
     :param alignment: Specify the path to the alignment file
     :param outdir: Specify the directory where the files will be saved
     :param reference_gb: Get the locus of each segment in the alignment
@@ -22,15 +22,20 @@ def prepare_msa_masker(alignment,outdir,reference_gb):
     for record in SeqIO.parse(alignment, "fasta"):
         if counter == len(list_of_segments):
             counter = 0
-        #print(counter)
+        # print(counter)
         list_of_segments[counter].append(record)
-        counter+=1
-    
-    for index in range(len(list_of_segments)):
-        SeqIO.write(list_of_segments[index], f"{outdir}/{seg_names[index]}/Alignment_nt_{seg_names[index]}.fasta", "fasta")
+        counter += 1
 
-if __name__ == '__main__':
-    alignment =sys.argv[1]
+    for index in range(len(list_of_segments)):
+        SeqIO.write(
+            list_of_segments[index],
+            f"{outdir}/{seg_names[index]}/Alignment_nt_{seg_names[index]}.fasta",
+            "fasta",
+        )
+
+
+if __name__ == "__main__":
+    alignment = sys.argv[1]
     outdir = sys.argv[2]
     reference_gb = sys.argv[3]
-    prepare_msa_masker(alignment,outdir,reference_gb)
+    prepare_msa_masker(alignment, outdir, reference_gb)

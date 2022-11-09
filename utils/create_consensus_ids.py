@@ -1,7 +1,9 @@
+""""""
 from Bio import SeqIO
 import sys
-sample_id = sys.argv[1] 
-file_path = sys.argv[2] 
+
+sample_id = sys.argv[1]
+file_path = sys.argv[2]
 output = sys.argv[3]
 handle_fasta = open(file_path)
 fasta_file = SeqIO.parse(handle_fasta, "fasta")

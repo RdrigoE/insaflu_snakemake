@@ -1,16 +1,17 @@
+""""""
 import sys
 import re
 from Bio import SeqIO
 
-consensus_file = sys.argv[1]
-output_file = sys.argv[2]
+CONSENSUS_FILE = sys.argv[1]
+OUTPUT_FILE = sys.argv[2]
 
 final_consensus_file = []
 
-final_consensus_file.append(list(SeqIO.parse(consensus_file, "fasta")))
+final_consensus_file.append(list(SeqIO.parse(CONSENSUS_FILE, "fasta")))
 for record in final_consensus_file:
     for entry in record:
-        entry.id = f"{re.findall('(?<=sample_)(.*?)(?=/snippy)',consensus_file)[0]}__{entry.id}"
+        entry.id = f"{re.findall('(?<=sample_)(.*?)(?=/snippy)',CONSENSUS_FILE)[0]}__{entry.id}"
 
-with open(output_file, "w") as handle_fasta_out_align:
+with open(OUTPUT_FILE, "w", encoding="UTF8") as handle_fasta_out_align:
     SeqIO.write(final_consensus_file[0], handle_fasta_out_align, "fasta")

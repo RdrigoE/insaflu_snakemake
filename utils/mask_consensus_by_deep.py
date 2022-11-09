@@ -10,7 +10,7 @@ with open(reference_fasta, "r") as handle_fasta:
     dt_consensus = SeqIO.to_dict(SeqIO.parse(consensus_file, "fasta"))
     print(dt_consensus)
     for record in SeqIO.parse(handle_fasta, "fasta"):
-        if record.id == segment_name:	### make mask
+        if record.id == segment_name:  ### make mask
             ### get sequences
             vect_out_fasta_to_align = []
             record_id = record.id
