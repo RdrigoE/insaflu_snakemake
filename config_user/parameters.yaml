@@ -28,7 +28,7 @@ mapqual: 20 #(default = 20)
 
 mincov: 30 #default = 10)
 
-minfrac: 0.51 #(default = 0.51)
+minfrac: 0.50 #(default = 0.51)
 
 msa_masker: 9
 

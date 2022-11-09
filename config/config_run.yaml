@@ -1,6 +1,6 @@
 identification: MN908947
 locus: SARS_CoV_2
-project: 3_covid_samples
+project: 5_covid_samples
 proteins:
 - orf1ab
 - S
@@ -13,11 +13,11 @@ proteins:
 - N
 - ORF10
 sample_type:
-  Portugal_PT43103_2022: iVar
-  Portugal_PT43123_2022: iVar
-  Portugal_PT43260_2022: iVar
-  Portugal_PT43261_2022: iVar
-  Portugal_PT43262_2022: iVar
+  Portugal_PT43103_2022: snippy
+  Portugal_PT43123_2022: snippy
+  Portugal_PT43260_2022: snippy
+  Portugal_PT43261_2022: snippy
+  Portugal_PT43262_2022: snippy
 samples:
   Portugal_PT43103_2022:
     fastq1: Portugal-PT43103-2022_R1_001

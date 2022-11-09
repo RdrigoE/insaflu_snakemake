@@ -5,4 +5,4 @@ __pycache__
 projects
 user_data
 align_samples
-ignore_files
+test_results
