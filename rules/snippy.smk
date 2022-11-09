@@ -13,6 +13,7 @@ rule snippy_pe:
         bam="align_samples/{sample}/snippy/snps.bam",
         tab="align_samples/{sample}/snippy/snps.tab",
         consensus="align_samples/{sample}/snippy/snps.consensus.fa",
+        vcf="align_samples/{sample}/snippy/snps.vcf",
     conda:
         "../envs/snippy.yaml"
     threads: config["snippy_threads"]

@@ -50,7 +50,7 @@ rule seqret_alignment_aa_gene:
         "seqret {params} -sequence {input} -outseq {output}"
 
 
-rule alignment_nt_seg_seqret:
+rule alignment_nt_seg_mafft_seqret:
     input:
         "projects/{project}/main_result/{seg}/Alignment_nt_{seg}_mafft.fasta",
     output:
@@ -68,6 +68,19 @@ rule alignment_nt_All_seqret:
         "projects/{project}/main_result/Alignment_nt_All.fasta",
     output:
         "projects/{project}/main_result/Alignment_nt_All.nex",
+    conda:
+        "../envs/seqret.yaml"
+    params:
+        "-sformat fasta -osformat2 nexusnon",
+    shell:
+        "seqret {params} -sequence {input} -outseq {output}"
+
+
+rule alignment_nt_seg_seqret:
+    input:
+        "projects/{project}/main_result/{seg}/Alignment_nt_{seg}.fasta",
+    output:
+        "projects/{project}/main_result/{seg}/Alignment_nt_{seg}.nex",
     conda:
         "../envs/seqret.yaml"
     params:
