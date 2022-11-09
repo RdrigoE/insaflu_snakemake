@@ -1,6 +1,6 @@
 identification: MN908947
 locus: SARS_CoV_2
-project: 5_covid_samples
+project: ont
 proteins:
 - orf1ab
 - S
@@ -13,30 +13,20 @@ proteins:
 - N
 - ORF10
 sample_type:
-  Portugal_PT43103_2022: snippy
-  Portugal_PT43123_2022: snippy
-  Portugal_PT43260_2022: snippy
-  Portugal_PT43261_2022: snippy
-  Portugal_PT43262_2022: snippy
+  ERR974981: medaka
+  SRR10885405: iVar
+  SRR10885406: iVar
 samples:
-  Portugal_PT43103_2022:
-    fastq1: Portugal-PT43103-2022_R1_001
-    fastq2: Portugal-PT43103-2022_R2_001
+  ERR974981:
+    fastq1: ERR974981
+    fastq2: null
+    tech: ont
+  SRR10885405:
+    fastq1: SRR10885405_1
+    fastq2: SRR10885405_2
     tech: illumina
-  Portugal_PT43123_2022:
-    fastq1: Portugal-PT43123-2022_R1_001
-    fastq2: Portugal-PT43123-2022_R2_001
-    tech: illumina
-  Portugal_PT43260_2022:
-    fastq1: Portugal-PT43260-2022_R1_001
-    fastq2: Portugal-PT43260-2022_R2_001
-    tech: illumina
-  Portugal_PT43261_2022:
-    fastq1: Portugal-PT43261-2022_R1_001
-    fastq2: Portugal-PT43261-2022_R2_001
-    tech: illumina
-  Portugal_PT43262_2022:
-    fastq1: Portugal-PT43262-2022_R1_001
-    fastq2: Portugal-PT43262-2022_R2_001
+  SRR10885406:
+    fastq1: SRR10885406_1
+    fastq2: SRR10885406_2
     tech: illumina
 version: '3'

@@ -137,7 +137,7 @@ class Checkpoint_Seg:
         return final_output
 
 
-sample_data = Data("./config_user/sample_info_1.csv")
+sample_data = Data("./config_user/sample_info_2.csv")
 
 (
     paired_illumina,
@@ -236,13 +236,13 @@ def get_output_project():
             direction=["1", "2"],
         ),
         # Trying to get the same consensus
-        expand(
-            "samples/{sample}/spades_pe/contigs.fasta", sample=paired_illumina.keys()
-        ),
-        expand(
-            "samples/{sample}/abricate_pe/abricate_{sample}.csv",
-            sample=paired_illumina.keys(),
-        ),
+        # expand(
+        #     "samples/{sample}/spades_pe/contigs.fasta", sample=paired_illumina.keys()
+        # ),
+        # expand(
+        #     "samples/{sample}/abricate_pe/abricate_{sample}.csv",
+        #     sample=paired_illumina.keys(),
+        # ),
         # Analyse Illumina Sample Single-End
         expand(
             "samples/{sample}/raw_fastqc/{sample}_fastqc.html",
@@ -253,21 +253,21 @@ def get_output_project():
             sample=single_illumina_iVar.keys(),
         ),
         # Trying to get the same consensus
-        expand(
-            "samples/{sample}/spades_se/contigs.fasta", sample=single_illumina.keys()
-        ),
-        expand(
-            "samples/{sample}/abricate_se/abricate_{sample}.csv",
-            sample=single_illumina.keys(),
-        ),
+        # expand(
+        #     "samples/{sample}/spades_se/contigs.fasta", sample=single_illumina.keys()
+        # ),
+        # expand(
+        #     "samples/{sample}/abricate_se/abricate_{sample}.csv",
+        #     sample=single_illumina.keys(),
+        # ),
         expand(
             "align_samples/{sample}/iVar/{sample}_consensus.fasta",
             sample=single_illumina_iVar.keys(),
             seg=SEGMENTS,
         ),
         expand(
-            "align_samples/{sample}/iVar/{sample}_consensus.fasta",
-            sample=paired_illumina_snippy.keys(),
+            "align_samples/{sample}/iVar/snps_filtered.tsv",
+            sample=single_illumina_iVar.keys(),
             seg=SEGMENTS,
         ),
         # Snippy for Single and Paired End Sample
@@ -377,6 +377,11 @@ def get_output_project():
             sample=ont_samples.keys(),
         ),
         # Run project
+        expand(
+            "projects/{project}/sample_{sample}/freebayes/{sample}_var.vcf",
+            sample=config_user["samples"],
+            project=config_user["project"],
+        ),
         expand(
             "projects/{project}/main_result/coverage.csv",
             project=config_user["project"],

@@ -50,7 +50,7 @@ rule medaka_vfc:
     output:
         vcf="align_samples/{sample}/medaka/round_1.vcf",
     conda:
-        "../envs/medaka_1_4_4.yaml"
+        "../envs/medaka_1_2_1.yaml"
     shell:
         "medaka variant --verbose {input.ref} {input.hdf} {output.vcf}"
 
@@ -130,9 +130,19 @@ rule get_masked_consensus_medaka:
         "python utils/get_consensus_medaka.py '{input}' {output}"
 
 
-rule mask_regions_consensus_medaka:
+rule mask_between_top_and_50:
     input:
         consensus="align_samples/{sample}/medaka/pre_{sample}_consensus.fasta",
+        vcf="align_samples/{sample}/medaka/snps.vcf",
+    output:
+        final_consensus="align_samples/{sample}/medaka/pos_cut_{sample}_consensus.fasta",
+    shell:
+        "python utils/mask_medaka_consensus.py {input.consensus} {input.vcf} {output} "
+
+
+rule mask_regions_consensus_medaka:
+    input:
+        consensus="align_samples/{sample}/medaka/pos_cut_{sample}_consensus.fasta",
     output:
         final_consensus="align_samples/{sample}/medaka/{sample}_consensus.fasta",
     params:

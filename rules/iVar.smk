@@ -12,7 +12,7 @@ rule align_pe:
         "bwa index align_samples/{wildcards.sample}/{REFERENCE} && "
         "bwa mem align_samples/{wildcards.sample}/{REFERENCE} {input.reads_1} {input.reads_2} | "
         "samtools view -u -T align_samples/{wildcards.sample}/{REFERENCE} -q 20 | "
-        "samtools sort --reference align_samples/{wildcards.sample}/{REFERENCE} > {output}"
+        "samtools sort --reference align_samples/{wildcards.sample}/{REFERENCE} > {output} && touch snps.vcf"
 
 
 rule align_se:
@@ -77,7 +77,7 @@ rule generate_consensus:
     params:
         "snps.consensus",
     shell:
-        "samtools mpileup -aa -A -Q 0 {input.bam} | ivar consensus -p align_samples/{wildcards.sample}/iVar/{params} -q 10 -t 0.01"
+        "samtools mpileup -aa -A -Q 0 {input.bam} | ivar consensus -p align_samples/{wildcards.sample}/iVar/{params} -q 20 -t 0.51 -n N"
         # "&& python3 utils/change_id_name.py {output.consensus} SARS_CoV_2"
 
 
