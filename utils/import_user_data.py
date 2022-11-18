@@ -2,8 +2,8 @@
 import pandas
 import yaml
 
-# ALIGNER = "snippy"
-ALIGNER = "iVar"
+ALIGNER = "snippy"
+# ALIGNER = "iVar"
 
 
 class Data:

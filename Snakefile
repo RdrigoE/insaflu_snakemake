@@ -137,7 +137,7 @@ class Checkpoint_Seg:
         return final_output
 
 
-sample_data = Data("./config_user/sample_info_2.csv")
+sample_data = Data("./config_user/test_ont.csv")
 
 (
     paired_illumina,
@@ -322,23 +322,23 @@ def get_output_project():
             seg=SEGMENTS,
         ),
         # Analyse ONT Sample
-        expand(
-            "samples/{sample}/raw_nanostat/{sample}_stats.txt",
-            sample=ont_samples.keys(),
-        ),  # generalizar
-        expand(
-            "samples/{sample}/trimmed_reads/nano_{sample}.trimmed.fastq.gz",
-            sample=ont_samples.keys(),
-        ),
-        expand(
-            "samples/{sample}/nano_trimmed_fastqc/{sample}_stats.txt",
-            sample=ont_samples.keys(),
-        ),
+        # expand(
+        #     "samples/{sample}/raw_nanostat/{sample}_stats.txt",
+        #     sample=ont_samples.keys(),
+        # ),  # generalizar
+        # expand(
+        #     "samples/{sample}/trimmed_reads/nano_{sample}.trimmed.fastq.gz",
+        #     sample=ont_samples.keys(),
+        # ),
+        # expand(
+        #     "samples/{sample}/nano_trimmed_fastqc/{sample}_stats.txt",
+        #     sample=ont_samples.keys(),
+        # ),
         # Trying to get the same consensus
-        expand(
-            "samples/{sample}/abricate_ont/abricate_{sample}.csv",
-            sample=ont_samples.keys(),
-        ),
+        # expand(
+        #     "samples/{sample}/abricate_ont/abricate_{sample}.csv",
+        #     sample=ont_samples.keys(),
+        # ),
         # expand("samples/{sample}/rabbitqc/rabbit.html", sample=config_user["samples"]),
         expand(
             "align_samples/{sample}/medaka/consensus.fasta", sample=ont_samples.keys()
@@ -355,8 +355,10 @@ def get_output_project():
             "align_samples/{sample}/medaka/snps.depth.gz.tbi", sample=ont_samples.keys()
         ),
         expand("align_samples/{sample}/medaka/round_1.vcf", sample=ont_samples.keys()),
-        expand("align_samples/{sample}/medaka/snps.vcf", sample=ont_samples.keys()),
-        expand("align_samples/{sample}/medaka/snps.vcf.gz", sample=ont_samples.keys()),
+        expand("align_samples/{sample}/medaka/snps_ann.vcf", sample=ont_samples.keys()),
+        expand(
+            "align_samples/{sample}/medaka/snps_ann.vcf.gz", sample=ont_samples.keys()
+        ),
         expand(
             "align_samples/{sample}/medaka/medaka_align_{seg}.fasta",
             sample=ont_samples.keys(),
@@ -377,11 +379,11 @@ def get_output_project():
             sample=ont_samples.keys(),
         ),
         # Run project
-        expand(
-            "projects/{project}/sample_{sample}/freebayes/{sample}_var.vcf",
-            sample=config_user["samples"],
-            project=config_user["project"],
-        ),
+        # expand(
+        #     "projects/{project}/sample_{sample}/freebayes/{sample}_var.vcf",
+        #     sample=config_user["samples"],
+        #     project=config_user["project"],
+        # ),
         expand(
             "projects/{project}/main_result/coverage.csv",
             project=config_user["project"],
@@ -397,24 +399,20 @@ def get_output_project():
             ref=get_locus(run_config["gb_reference"]),
         ),
         # Trying to get the same consensus
-        expand(
-            "projects/{project}/main_result/validated_minor_iSNVs.csv",
-            project=config_user["project"],
-        ),
-        expand(
-            "projects/{project}/main_result/validated_variants.csv",
-            project=config_user["project"],
-        ),
-        expand(
-            "projects/{project}/main_result/validated_minor_iSNVs_inc_indels.csv",
-            project=config_user["project"],
-        ),
-        expand(
-            "projects/{project}/main_result/proportions_iSNVs_graph.csv",
-            project=config_user["project"],
-        ),
         # expand(
-        #     "projects/{project}/main_result/proportions_iSNVs_graph.png",
+        #     "projects/{project}/main_result/validated_minor_iSNVs.csv",
+        #     project=config_user["project"],
+        # ),
+        # expand(
+        #     "projects/{project}/main_result/validated_variants.csv",
+        #     project=config_user["project"],
+        # ),
+        # expand(
+        #     "projects/{project}/main_result/validated_minor_iSNVs_inc_indels.csv",
+        #     project=config_user["project"],
+        # ),
+        # expand(
+        #     "projects/{project}/main_result/proportions_iSNVs_graph.csv",
         #     project=config_user["project"],
         # ),
         expand(
@@ -458,64 +456,64 @@ def get_output_project():
             project=config_user["project"],
         ),
         # Trying to get the same consensus
-        Checkpoint_Alignment_aa(
-            f'projects/{run_config["project_name"]}/main_result/',
-            "_trans.fasta",
-            run_config["gb_reference"],
-            run_config["locus"],
-            f"projects/{config_user['project']}/main_result/coverage_translate.csv",
-        ),
-        Checkpoint_Alignment_aa(
-            f'projects/{run_config["project_name"]}/main_result/',
-            "_mafft.fasta",
-            run_config["gb_reference"],
-            run_config["locus"],
-            f"projects/{config_user['project']}/main_result/coverage_translate.csv",
-        ),
-        Checkpoint_Alignment_aa(
-            f'projects/{run_config["project_name"]}/main_result/',
-            "_mafft.nex",
-            run_config["gb_reference"],
-            run_config["locus"],
-            f"projects/{config_user['project']}/main_result/coverage_translate.csv",
-        ),
-        Checkpoint_Alignment_aa(
-            f'projects/{run_config["project_name"]}/main_result/',
-            "_tree.tree",
-            run_config["gb_reference"],
-            run_config["locus"],
-            f"projects/{config_user['project']}/main_result/coverage_translate.csv",
-        ),
-        Checkpoint_Seg(
-            f'projects/{run_config["project_name"]}/main_result/',
-            "_tree.tree",
-            run_config["gb_reference"],
-            run_config["locus"],
-            f"projects/{config_user['project']}/main_result/coverage_translate.csv",
-        ),
-        expand(
-            "projects/{project}/main_result/{seg}/Alignment_nt_{seg}.fasta",
-            project=config_user["project"],
-            seg=SEGMENTS,
-        ),
-        expand(
-            "projects/{project}/main_result/{seg}/Alignment_nt_{seg}.nex",
-            project=config_user["project"],
-            seg=SEGMENTS,
-        ),
-        expand(
-            "projects/{project}/main_result/snp_ready.txt",
-            project=config_user["project"],
-        ),
-        expand(
-            "projects/{project}/main_result/Tree_ML_All.tree",
-            sample=config_user["samples"],
-            project=config_user["project"],
-        ),
-        expand(
-            "projects/{project}/main_result/lineage_report.csv",
-            project=config_user["project"],
-        ),
+        # Checkpoint_Alignment_aa(
+        #     f'projects/{run_config["project_name"]}/main_result/',
+        #     "_trans.fasta",
+        #     run_config["gb_reference"],
+        #     run_config["locus"],
+        #     f"projects/{config_user['project']}/main_result/coverage_translate.csv",
+        # ),
+        # Checkpoint_Alignment_aa(
+        #     f'projects/{run_config["project_name"]}/main_result/',
+        #     "_mafft.fasta",
+        #     run_config["gb_reference"],
+        #     run_config["locus"],
+        #     f"projects/{config_user['project']}/main_result/coverage_translate.csv",
+        # ),
+        # Checkpoint_Alignment_aa(
+        #     f'projects/{run_config["project_name"]}/main_result/',
+        #     "_mafft.nex",
+        #     run_config["gb_reference"],
+        #     run_config["locus"],
+        #     f"projects/{config_user['project']}/main_result/coverage_translate.csv",
+        # ),
+        # Checkpoint_Alignment_aa(
+        #     f'projects/{run_config["project_name"]}/main_result/',
+        #     "_tree.tree",
+        #     run_config["gb_reference"],
+        #     run_config["locus"],
+        #     f"projects/{config_user['project']}/main_result/coverage_translate.csv",
+        # ),
+        # Checkpoint_Seg(
+        #     f'projects/{run_config["project_name"]}/main_result/',
+        #     "_tree.tree",
+        #     run_config["gb_reference"],
+        #     run_config["locus"],
+        #     f"projects/{config_user['project']}/main_result/coverage_translate.csv",
+        # ),
+        # expand(
+        #     "projects/{project}/main_result/{seg}/Alignment_nt_{seg}.fasta",
+        #     project=config_user["project"],
+        #     seg=SEGMENTS,
+        # ),
+        # expand(
+        #     "projects/{project}/main_result/{seg}/Alignment_nt_{seg}.nex",
+        #     project=config_user["project"],
+        #     seg=SEGMENTS,
+        # ),
+        # expand(
+        #     "projects/{project}/main_result/snp_ready.txt",
+        #     project=config_user["project"],
+        # ),
+        # expand(
+        #     "projects/{project}/main_result/Tree_ML_All.tree",
+        #     sample=config_user["samples"],
+        #     project=config_user["project"],
+        # ),
+        # expand(
+        #     "projects/{project}/main_result/lineage_report.csv",
+        #     project=config_user["project"],
+        # ),
     )
 
 

@@ -1,9 +1,22 @@
-"""Tbd"""
+import pysam
 import os
-import sys
 from Bio import SeqIO
 from Bio.Seq import MutableSeq
-import pysam
+import sys
+
+consensus = sys.argv[1]
+vcf_file = sys.argv[2]
+file_coverage = sys.argv[3]
+vcf_file_out = sys.argv[4]
+vcf_file_out_removed_by_filter = sys.argv[5]
+freq_vcf_limit = 80
+coverage_limit = 1
+temp_file = sys.argv[6]
+output = sys.argv[7]
+element_name_old = ""
+vect_sites = []
+vect_ranges = []
+final_mask_consensus = []
 
 
 def get_type_variation(ref, alt):
@@ -40,65 +53,28 @@ def read_text_file(file_name):
     return vect_out
 
 
-def get_coverage_by_pos(file_coverage, chr_name, position_start, position_end):
+def get_coverage_by_pos(
+    file_coverage, chr_name, position_start, position_end, temp_file
+):
 
-    # print(" i was called get_Coveraaaage")
     if not os.path.exists(file_coverage):
-
-        print(" failed")
+        print("hello")
         return -1
-    temp_file = "temp.txt"
     cmd = "{} {} {}:{}-{} > {}".format(
         "tabix", file_coverage, chr_name, position_start, position_end, temp_file
     )
     os.system(cmd)
     ### get number
     vect_lines = read_text_file(temp_file)
-    # print(len(vect_lines) == 1 and len(vect_lines[0].split("\t")) == 3)
+    print(vect_lines[0].split("\t"))
     if (
         len(vect_lines) == 1
         and len(vect_lines[0].split("\t")) == 3
         and isinstance(int(vect_lines[0].split("\t")[2]), int)
     ):
-        print(int(vect_lines[0].split("\t")[2]))
-        return int(vect_lines[0].split("\t")[2])
+        return int(vect_lines[0].split()[2])
+
     return -1
-
-
-#     return -1
-# def get_coverage_by_pos(self, file_coverage, chr_name, position_start, position_end):
-#     """
-#     :out coverage at a specific position
-#     """
-#     if not os.path.exists(file_coverage):
-#         return -1
-
-#     # software_names = SoftwareNames()
-#     temp_file = "get_number_fastq.txt"
-#     # cmd = "{} {} {}:{}-{} > {}".format(software_names.get_tabix(), file_coverage,
-#     # 				chr_name, position_start, position_end, temp_file)
-#     cmd = "{} {} {}:{}-{} > {}".format(
-#         "tabix", file_coverage, chr_name, position_start, position_end, temp_file
-#     )
-
-#     exist_status = os.system(cmd)
-#     if exist_status != 0:
-#         self.logger_production.error("Fail to run: " + cmd)
-#         self.logger_debug.error("Fail to run: " + cmd)
-#         self.remove_file(temp_file)
-#         raise Exception("Fail to run gzip")
-
-#     ### get number
-#     vect_lines = self.read_text_file(temp_file)
-#     self.remove_file(temp_file)
-#     if (
-#         len(vect_lines) == 1
-#         and len(vect_lines[0].split()) == 3
-#         and self.is_integer(vect_lines[0].split()[2])
-#     ):
-#         return int(vect_lines[0].split()[2])
-
-#     return -1
 
 
 def add_freq_ao_ad_and_type_to_vcf(
@@ -107,24 +83,29 @@ def add_freq_ao_ad_and_type_to_vcf(
     vcf_file_out_removed_by_filter,
     freq_vcf_limit,
     coverage_limit,
-    file_coverage,
 ):
-    """add FREQ, AO, AF and TYPE to VCF, FREQ=AO/DP
-    This case is used in MEDAKA only
-    :param vcf_file_out_removed_by_filter -> can be None, keep the variants that are filter by  freq_vcf_limit
-    vcffile must be gzip and tbi included
-    :param coverage_limit -> filter by this coverage (this is necessary because medaka doesn't have)
-    :param cut off for VCF freq
-    returns: vcf file with freq, AO and AF
+    """
+    The add_freq_ao_ad_and_type_to_vcf function adds the following fields to each variant record:
+        - FREQ: The ratio of AO/(DPSP-AR)
+        - AO: The number of alternate alleles observed in SR (alt fwd + alt rev, etc.)
+        - RO: The number of reference alleles observed in SR (ref fwd + ref rev)
+        - AF: Number of observation for each allele, SR (ref fwd + ref rev, altf fwd + altf rev, etc.)  # noqae
+
+    :param vcf_file: Specify the path to the vcf file
+    :param vcf_file_out: Save the variants that are not removed by the filters
+    :param vcf_file_out_removed_by_filter: Save the variants that are removed by the filter
+    :param freq_vcf_limit: Filter the variants by frequency
+    :param coverage_limit: Filter the vcf file
+    :param : Define the coverage limit to process a variant
+    :return: The name of the new vcf file
+    :doc-author: Trelent
     """
     FREQ = "FREQ"
     AO = "AO"
     RO = "RO"
     AF = "AF"
     TYPE = "TYPE"
-    DP_COMPOSED = "DP_COMPOSED"  ### this is used to get
-
-    # read the input file
+    DP_COMPOSED = "DP_COMPOSED"
     vcf_hanlder = pysam.VariantFile(vcf_file, "r")
     if (
         FREQ in vcf_hanlder.header.info
@@ -132,9 +113,11 @@ def add_freq_ao_ad_and_type_to_vcf(
         and AF in vcf_hanlder.header.info
     ):
         vcf_hanlder.close()
+        print("out")
         return
 
     vcf_hanlder_write = pysam.VariantFile(vcf_file_out, "w")
+
     if not vcf_file_out_removed_by_filter is None:
         vcf_hanlder_write_removed_by_filter = pysam.VariantFile(
             vcf_file_out_removed_by_filter, "w"
@@ -194,7 +177,6 @@ def add_freq_ao_ad_and_type_to_vcf(
 
     for variant in vcf_hanlder:
         ### DP must be replaced by DPSP. DPSP is the sum of all reads Span and Ambiguous
-        print_me = False
         if (
             "SR" in variant.info and "DPSP" in variant.info and "AR" in variant.info
         ):  ## SR=0,0,15,6
@@ -203,18 +185,16 @@ def add_freq_ao_ad_and_type_to_vcf(
                 [int(_) for _ in variant.info["AR"]]
             )
             total_deep_samtools = get_coverage_by_pos(
-                file_coverage, variant.chrom, variant.pos, variant.pos
+                file_coverage, variant.chrom, variant.pos, variant.pos, temp_file
             )
             if (
                 coverage_limit > 0
                 and total_deep_samtools >= 0
                 and total_deep_samtools < coverage_limit
             ):
-                print("Coverage", variant)
                 continue
             if ((len(variant.info["SR"]) // 2) - 1) != len(variant.alts):
                 # vcf_hanlder_write.write(variant)
-                print("len something", variant)
                 continue  ### different numbers of Alleles and References
 
             #### extra info
@@ -230,7 +210,6 @@ def add_freq_ao_ad_and_type_to_vcf(
                     allele_count = int(variant.info["SR"][value_]) + int(
                         variant.info["SR"][value_ + 1]
                     )
-
                     if total_deep > 0:
                         ### incongruences in Medaka,
                         ### these values are collected in different stages of the Medaka workflow, (email from support@nanoporetech.com at 23 Dec 2020)
@@ -243,8 +222,6 @@ def add_freq_ao_ad_and_type_to_vcf(
                                     float("{:.1f}".format(freq_value * 100))
                                 )
                             elif not vcf_file_out_removed_by_filter is None:
-                                print_me = True
-
                                 vect_out_freq_filtered.append(
                                     float("{:.1f}".format(freq_value * 100))
                                 )
@@ -282,35 +259,33 @@ def add_freq_ao_ad_and_type_to_vcf(
             if len(vect_out_freq_filtered) > 0:
                 if out_ro > -1:
                     variant.info[RO] = tuple([out_ro])
-                variant.info[AO] = tuple(vect_out_ao)
-                variant.info[AF] = tuple(vect_out_af)
-                variant.info[TYPE] = tuple(vect_out_type)
-                variant.info[DP_COMPOSED] = tuple(
-                    ["{}/{}".format(total_deep, total_deep_samtools)]
-                )
+                    variant.info[AO] = tuple(vect_out_ao)
+                    variant.info[AF] = tuple(vect_out_af)
+                    variant.info[TYPE] = tuple(vect_out_type)
+                    variant.info[DP_COMPOSED] = tuple(
+                        ["{}/{}".format(total_deep, total_deep_samtools)]
+                    )
                 variant.info[FREQ] = tuple(vect_out_freq_filtered)
 
-                ### Only save the ones with FREQ
-                vcf_hanlder_write_removed_by_filter.write(variant)
-        if print_me:
-            print(variant)
+                if vect_out_freq_filtered[0] >= 50 and vect_out_freq_filtered[0] =< 80:
+                    vcf_hanlder_write_removed_by_filter.write(variant)
 
     vcf_hanlder_write.close()
     vcf_hanlder.close()
     if not vcf_file_out_removed_by_filter is None:
         vcf_hanlder_write_removed_by_filter.close()
     return vcf_file_out
-    return vcf_file_out
 
 
 def compute_masking_sites(
-    sequence, ranges=None, single_positions=None, from_beggining=None, from_end=None
-) -> list[int]:
+    sequence, ranges=None, singles_positions=None, from_beggining=None, from_end=None
+):
     length = len(sequence)
     masking_sites = []
+    print(ranges)
     if ranges is not None:
+
         for pos in ranges:
-            # print(ranges)
             pos[0] = int(pos[0])
             pos[1] = int(pos[1])
             if pos[1] < length and pos[1] > pos[0]:
@@ -330,116 +305,97 @@ def compute_masking_sites(
     return masking_sites
 
 
-def main():
-    freq_vcf_limit = 0.8
-    coverage_limit = 29
-    element_name_old = ""
-    vect_sites = []
-    vect_ranges = []
-    final_mask_consensus = []
+add_freq_ao_ad_and_type_to_vcf(
+    vcf_file,
+    vcf_file_out,
+    vcf_file_out_removed_by_filter,
+    freq_vcf_limit,
+    coverage_limit,
+)
 
-    vcf_file = sys.argv[2]
-    vcf_file_out = sys.argv[4]
-    vcf_file_out_removed_by_filter = sys.argv[5]
-    file_coverage = sys.argv[3]
 
-    add_freq_ao_ad_and_type_to_vcf(
-        vcf_file,
-        vcf_file_out,
-        vcf_file_out_removed_by_filter,
-        freq_vcf_limit,
-        coverage_limit,
-        file_coverage,
-    )
+vcf_hanlder = pysam.VariantFile(vcf_file_out_removed_by_filter, "r")
+for variant in vcf_hanlder:
+    if element_name_old != variant.chrom:
+        if len(element_name_old) > 0:
+            pass
+            # print([vect_sites,vect_ranges])
+            # mask_consensus = MaskingConsensus()
+            # mask_consensus.set_mask_sites(",".join(vect_sites))
+            # mask_consensus.set_mask_regions(",".join(vect_ranges))
+            # genetic_element.set_mask_consensus_element(element_name_old, mask_consensus)
 
-    final_vcf_with_removed_variants = sys.argv[5]
-
-    vcf_hanlder = pysam.VariantFile(final_vcf_with_removed_variants, "r")
-
-    vect_sites = []
-    vect_ranges = []
-    for variant in vcf_hanlder:
-        if element_name_old != variant.chrom:
-            element_name_old = variant.chrom
-        ### MEDAKA output must have "TYPE" in info
-        if variant.info["TYPE"][0] == "snp":
-            vect_sites.append(str(variant.pos))
-        elif variant.info["TYPE"][0] == "ins":
-            vect_sites.append(str(variant.pos))
-        elif variant.info["TYPE"][0] == "del":
-            vect_ranges.append(
-                "{}-{}".format(
-                    variant.pos + len(variant.alts[0]),
-                    variant.pos - len(variant.alts[0]) + len(variant.ref),
-                )
+        ## new one
+        element_name_old = variant.chrom
+        vect_sites = []
+        vect_ranges = []
+    ### MEDAKA output must have "TYPE" in info
+    if variant.info["TYPE"][0] == "snp":
+        vect_sites.append(str(variant.pos))
+    elif variant.info["TYPE"][0] == "ins":
+        vect_sites.append(str(variant.pos))
+    elif variant.info["TYPE"][0] == "del":
+        vect_ranges.append(
+            "{}-{}".format(
+                variant.pos + len(variant.alts[0]),
+                variant.pos - len(variant.alts[0]) + len(variant.ref),
             )
-        else:
-            vect_ranges.append(
-                "{}-{}".format(variant.pos, variant.pos + len(variant.ref) - 1)
-            )
+        )
+    else:
+        vect_ranges.append(
+            "{}-{}".format(variant.pos, variant.pos + len(variant.ref) - 1)
+        )
 
-    sites = ""
+
+sites = ""
+if len(vect_sites) > 0:
     for idx, i in enumerate(vect_sites):
         if idx == len(vect_sites) - 1:
             sites += i
         else:
             sites += i + ","
 
-    regions = ""
+regions = ""
+if len(vect_ranges) > 0:
     for idx, i in enumerate(vect_ranges):
         if idx == len(vect_ranges) - 1:
             regions += i
         else:
             regions += i + ","
 
-    # print(sites)
-    # print(regions)
+print(regions, sites)
+ranges, single_positions, from_beggining, from_end = (
+    [x.split("-") for x in regions.split(",")] if regions != "" else None,
+    sites.split(",") if sites != "" else None,
+    None,
+    None,
+)
 
-    consensus = sys.argv[1]
-    output = sys.argv[7]
-    final_mask_consensus = []
 
-    ranges, single_positions, from_beggining, from_end = (
-        [x.split("-") for x in regions.split(",")] if regions != "" else None,
-        sites.split(",") if sites != "" else None,
-        None,
-        None,
+for record in SeqIO.parse(consensus, "fasta"):
+    sequence = MutableSeq(record.seq)
+    masking_sites = compute_masking_sites(
+        sequence, ranges, single_positions, from_beggining, from_end
     )
+    print(masking_sites)
+    ### Taken from insaflu
+    ref_pos = 0
+    ref_insertions = 0
+    for _ in range(len(sequence)):
+        if sequence[_] == "-":
+            ref_insertions += 1
+            continue
+        if ref_pos in masking_sites:
+            print(
+                f"placing N in position {ref_pos + ref_insertions}, it was a {sequence[ref_pos + ref_insertions]}"
+            )
+            sequence[ref_pos + ref_insertions] = "N"
+        ref_pos += 1
+        if (ref_pos + ref_insertions) >= len(record.seq):
+            break
+    ### End of insaflu code
+    record.seq = sequence
+    final_mask_consensus.append(record)
 
-    for record in SeqIO.parse(consensus, "fasta"):
-        sequence = MutableSeq(record.seq)
-        masking_sites = compute_masking_sites(
-            sequence, ranges, single_positions, from_beggining, from_end
-        )
-        masking_sites = sorted(masking_sites)
-        # print(masking_sites)
-        ### Taken from insaflu
-        ref_pos = 0
-        ref_insertions = 0
-        gap = 0
-        for _ in range(len(sequence)):
-            if sequence[_] == "-":
-                # print("Hello")
-                gap += 1
-                # print(gap)
-
-            # ref_insertions += 1
-            # continue
-            # print(_, ref_pos)
-            if ref_pos in masking_sites:
-                print(
-                    f"placing N in position {ref_pos + ref_insertions}, it was a {sequence[ref_pos + ref_insertions]}"
-                )
-                sequence[ref_pos + ref_insertions] = "N"
-            ref_pos += 1
-            if (ref_pos + ref_insertions) >= len(record.seq):
-                break
-        ### End of insaflu code
-        record.seq = sequence
-        final_mask_consensus.append(record)
-
-    SeqIO.write(final_mask_consensus, output, "fasta")
-
-
-if __name__ == "__main__":
-    main()
+with open(output, "w") as handle_fasta_out:
+    SeqIO.write(final_mask_consensus, handle_fasta_out, "fasta")
