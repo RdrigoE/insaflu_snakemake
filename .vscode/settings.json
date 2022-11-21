@@ -3,5 +3,7 @@
     "python.linting.enabled": true,
     "python.analysis.typeCheckingMode": "basic",
     "python.formatting.blackPath": "black",
-    "python.languageServer": "Pylance"
+    "python.languageServer": "Pylance",
+    "mypy.dmypyExecutable": "dmypy",
+    "mypy.runUsingActiveInterpreter": false
 }

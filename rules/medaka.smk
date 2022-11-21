@@ -24,15 +24,12 @@ rule medaka_depth:
         depth="align_samples/{sample}/medaka/snps.depth",
         ind="align_samples/{sample}/medaka/snps.depth.gz.tbi",
     conda:
-        "../envs/medaka_1_4_4.yaml"
+        "../envs/medaka_1_2_1.yaml"
     params:
         "-aa ",
     shell:
         "samtools depth {params} {input.i} | bgzip -c > {output.only_depth} "
-
-
         "&& tabix -p vcf {output.only_depth} && gunzip -c {output.only_depth}  > {output.depth} "
-        # "samtools depth {input.i} | bgzip -c > {output.only_depth} "
 
 
 rule medaka_depth_follow:
@@ -71,6 +68,26 @@ rule medaka_annotate:
         "medaka tools annotate {input.vcf} {input.ref} {input.bam} {output.snps} && bgzip {output.snps} -c > {output.vcf_zipped} && tabix {output.vcf_zipped}"
 
 
+rule mask_between_top_and_50:
+    input:
+        vcf_file="align_samples/{sample}/medaka/snps_ann.vcf",
+        file_coverage="align_samples/{sample}/medaka/snps.depth.gz",
+        normal_reference_fasta="align_samples/{sample}/medaka/ref.fasta",
+    output:
+        vcf_file_out="align_samples/{sample}/medaka/snps.vcf",
+        vcf_file_out_removed_by_filter="align_samples/{sample}/medaka/snps_removed_by_filter.vcf",
+        temp_file=temp("align_samples/{sample}/medaka/temp_file.txt"),
+        normal_reference_fasta_removed="align_samples/{sample}/medaka/ref_masked.fasta",
+        vcf_file_out_compr="align_samples/{sample}/medaka/snps.vcf.gz",
+    conda:
+        "../envs/filter_medaka.yaml"
+    shell:
+        "touch {output.temp_file} && "
+        "python utils/add_freq_medaka_consensus.py {input.normal_reference_fasta} {input.vcf_file} {input.file_coverage} "
+        "{output.vcf_file_out} {output.vcf_file_out_removed_by_filter} {output.temp_file} {output.normal_reference_fasta_removed} {output.temp_file} &&"
+        "bgzip -c -f {output.vcf_file_out} > {output.vcf_file_out_compr} && tabix {output.vcf_file_out_compr}"
+
+
 rule bcf_consensus:
     input:
         vcf_ziped="align_samples/{sample}/medaka/snps.vcf.gz",
@@ -78,7 +95,7 @@ rule bcf_consensus:
     output:
         temp("align_samples/{sample}/medaka/first_consensus.fasta"),
     conda:
-        "../envs/medaka_1_2_1.yaml"
+        "../envs/bcftools.yaml"
     shell:
         "bcftools consensus -s SAMPLE -f {REFERENCE} {input.vcf_ziped} -o {output}"
 
@@ -133,26 +150,6 @@ rule get_masked_consensus_medaka:
         "python utils/get_consensus_medaka.py '{input}' {output}"
 
 
-rule mask_between_top_and_50:
-    input:
-        vcf_file="align_samples/{sample}/medaka/snps_ann.vcf",
-        file_coverage="align_samples/{sample}/medaka/snps.depth.gz",
-        normal_reference_fasta="align_samples/{sample}/medaka/ref.fasta",
-    output:
-        vcf_file_out="align_samples/{sample}/medaka/snps.vcf",
-        vcf_file_out_removed_by_filter="align_samples/{sample}/medaka/snps_removed_by_filter.vcf",
-        temp_file=temp("align_samples/{sample}/medaka/temp_file.txt"),
-        normal_reference_fasta_removed="align_samples/{sample}/medaka/ref_masked.fasta",
-        vcf_file_out_compr="align_samples/{sample}/medaka/snps.vcf.gz",
-    conda:
-        "../envs/filter_medaka.yaml"
-    shell:
-        "touch {output.temp_file} && "
-        "python utils/add_freq_medaka_consensus.py {input.normal_reference_fasta} {input.vcf_file} {input.file_coverage} "
-        "{output.vcf_file_out} {output.vcf_file_out_removed_by_filter} {output.temp_file} {output.normal_reference_fasta_removed} &&"
-        "bgzip -c -f {output.vcf_file_out} > {output.vcf_file_out_compr} && tabix {output.vcf_file_out_compr}"
-
-
 rule mask_regions_consensus_medaka:
     input:
         consensus="align_samples/{sample}/medaka/pre_{sample}_consensus.fasta",
@@ -164,15 +161,15 @@ rule mask_regions_consensus_medaka:
         "python utils/mask_regions.py {input} {output} {params}"
 
 
-rule copy_to_compare:
-    input:
-        "align_samples/Demo_Sample_103/medaka/Demo_Sample_103_consensus.fasta",
-    output:
-        "test_results/AllConsensus_no_ref.fasta",
-    conda:
-        "test_insaflu"
-    shell:
-        "cp {input} {output} && "
-        "sed -i 's/Demo_Sample_/Sample/g' {output} && "
-        "python test_results/analyse_results.py test_results/AllConsensus.fasta {output} test_results/SARS_CoV_2_COVID_19_Wuhan_Hu_1_MN908947.gbk "
-        " test_results/show_me.csv && cat test_results/show_me.csv"
+# rule copy_to_compare:
+#     input:
+#         "align_samples/Demo_Sample_103/medaka/Demo_Sample_103_consensus.fasta",
+#     output:
+#         "test_results/AllConsensus_no_ref.fasta",
+#     conda:
+#         "test_insaflu"
+#     shell:
+#         "cp {input} {output} && "
+#         "sed -i 's/Demo_Sample_/Sample/g' {output} && "
+#         "python test_results/analyse_results.py test_results/AllConsensus.fasta {output} test_results/SARS_CoV_2_COVID_19_Wuhan_Hu_1_MN908947.gbk "
+#         " test_results/show_me.csv && cat test_results/show_me.csv"

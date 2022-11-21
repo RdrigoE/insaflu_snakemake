@@ -40,21 +40,20 @@ def read_text_file(file_name):
     return vect_out
 
 
-def get_coverage_by_pos(file_coverage, chr_name, position_start, position_end):
+def get_coverage_by_pos(
+    file_coverage, chr_name, position_start, position_end, temp_file
+):
 
-    # print(" i was called get_Coveraaaage")
     if not os.path.exists(file_coverage):
 
         print(" failed")
         return -1
-    temp_file = "temp.txt"
     cmd = "{} {} {}:{}-{} > {}".format(
         "tabix", file_coverage, chr_name, position_start, position_end, temp_file
     )
     os.system(cmd)
     ### get number
     vect_lines = read_text_file(temp_file)
-    # print(len(vect_lines) == 1 and len(vect_lines[0].split("\t")) == 3)
     if (
         len(vect_lines) == 1
         and len(vect_lines[0].split("\t")) == 3
@@ -108,6 +107,7 @@ def add_freq_ao_ad_and_type_to_vcf(
     freq_vcf_limit,
     coverage_limit,
     file_coverage,
+    temp_file,
 ):
     """add FREQ, AO, AF and TYPE to VCF, FREQ=AO/DP
     This case is used in MEDAKA only
@@ -194,7 +194,6 @@ def add_freq_ao_ad_and_type_to_vcf(
 
     for variant in vcf_hanlder:
         ### DP must be replaced by DPSP. DPSP is the sum of all reads Span and Ambiguous
-        print_me = False
         if (
             "SR" in variant.info and "DPSP" in variant.info and "AR" in variant.info
         ):  ## SR=0,0,15,6
@@ -203,18 +202,16 @@ def add_freq_ao_ad_and_type_to_vcf(
                 [int(_) for _ in variant.info["AR"]]
             )
             total_deep_samtools = get_coverage_by_pos(
-                file_coverage, variant.chrom, variant.pos, variant.pos
+                file_coverage, variant.chrom, variant.pos, variant.pos, temp_file
             )
             if (
                 coverage_limit > 0
                 and total_deep_samtools >= 0
                 and total_deep_samtools < coverage_limit
             ):
-                print("Coverage", variant)
                 continue
             if ((len(variant.info["SR"]) // 2) - 1) != len(variant.alts):
                 # vcf_hanlder_write.write(variant)
-                print("len something", variant)
                 continue  ### different numbers of Alleles and References
 
             #### extra info
@@ -243,7 +240,6 @@ def add_freq_ao_ad_and_type_to_vcf(
                                     float("{:.1f}".format(freq_value * 100))
                                 )
                             elif not vcf_file_out_removed_by_filter is None:
-                                print_me = True
 
                                 vect_out_freq_filtered.append(
                                     float("{:.1f}".format(freq_value * 100))
@@ -292,14 +288,11 @@ def add_freq_ao_ad_and_type_to_vcf(
 
                 ### Only save the ones with FREQ
                 vcf_hanlder_write_removed_by_filter.write(variant)
-        if print_me:
-            print(variant)
 
     vcf_hanlder_write.close()
     vcf_hanlder.close()
     if not vcf_file_out_removed_by_filter is None:
         vcf_hanlder_write_removed_by_filter.close()
-    return vcf_file_out
     return vcf_file_out
 
 
@@ -331,7 +324,7 @@ def compute_masking_sites(
 
 
 def main():
-    freq_vcf_limit = 0.8
+    freq_vcf_limit = 0.80
     coverage_limit = 29
     element_name_old = ""
     vect_sites = []
@@ -342,7 +335,7 @@ def main():
     vcf_file_out = sys.argv[4]
     vcf_file_out_removed_by_filter = sys.argv[5]
     file_coverage = sys.argv[3]
-
+    temp_file = sys.argv[8]
     add_freq_ao_ad_and_type_to_vcf(
         vcf_file,
         vcf_file_out,
@@ -350,6 +343,7 @@ def main():
         freq_vcf_limit,
         coverage_limit,
         file_coverage,
+        temp_file,
     )
 
     final_vcf_with_removed_variants = sys.argv[5]
