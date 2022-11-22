@@ -68,6 +68,10 @@ rule medaka_annotate:
         "medaka tools annotate {input.vcf} {input.ref} {input.bam} {output.snps} && bgzip {output.snps} -c > {output.vcf_zipped} && tabix {output.vcf_zipped}"
 
 
+def get_add_freq_medaka(software_parameters):
+    return f'{software_parameters["mincov_medaka"]} {software_parameters["min_prop_for_variant_evidence"]}'
+
+
 rule mask_between_top_and_50:
     input:
         vcf_file="align_samples/{sample}/medaka/snps_ann.vcf",
@@ -81,10 +85,12 @@ rule mask_between_top_and_50:
         vcf_file_out_compr="align_samples/{sample}/medaka/snps.vcf.gz",
     conda:
         "../envs/filter_medaka.yaml"
+    params:
+        get_add_freq_medaka,
     shell:
         "touch {output.temp_file} && "
         "python utils/add_freq_medaka_consensus.py {input.normal_reference_fasta} {input.vcf_file} {input.file_coverage} "
-        "{output.vcf_file_out} {output.vcf_file_out_removed_by_filter} {output.temp_file} {output.normal_reference_fasta_removed} {output.temp_file} &&"
+        "{output.vcf_file_out} {output.vcf_file_out_removed_by_filter} {output.temp_file} {output.normal_reference_fasta_removed} {output.temp_file} {params} &&"
         "bgzip -c -f {output.vcf_file_out} > {output.vcf_file_out_compr} && tabix {output.vcf_file_out_compr}"
 
 

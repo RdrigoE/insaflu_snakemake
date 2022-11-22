@@ -4,3 +4,4 @@ channels:
   - nodefaults
 dependencies:
   - abricate=0.8
+  

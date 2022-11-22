@@ -1,6 +1,6 @@
 identification: MN908947
 locus: SARS_CoV_2
-project: ont
+project: new
 proteins:
 - orf1ab
 - S
@@ -13,120 +13,25 @@ proteins:
 - N
 - ORF10
 sample_type:
-  Demo_Sample_069: medaka
-  Demo_Sample_070: medaka
-  Demo_Sample_072: medaka
-  Demo_Sample_073: medaka
-  Demo_Sample_075: medaka
-  Demo_Sample_076: medaka
-  Demo_Sample_077: medaka
-  Demo_Sample_078: medaka
-  Demo_Sample_080: medaka
-  Demo_Sample_081: medaka
-  Demo_Sample_082: medaka
-  Demo_Sample_083: medaka
-  Demo_Sample_085: medaka
-  Demo_Sample_087: medaka
-  Demo_Sample_089: medaka
-  Demo_Sample_091: medaka
-  Demo_Sample_093: medaka
-  Demo_Sample_094: medaka
-  Demo_Sample_096: medaka
-  Demo_Sample_100: medaka
-  Demo_Sample_101: medaka
-  Demo_Sample_102: medaka
-  Demo_Sample_103: medaka
+  Portugal_PT43103_2022: snippy
+  Portugal_PT43123_2022: snippy
+  Portugal_PT43260_2022: snippy
+  Portugal_PT43261_2022: snippy
 samples:
-  Demo_Sample_069:
-    fastq1: Demo_Sample_069
-    fastq2: null
-    tech: ont
-  Demo_Sample_070:
-    fastq1: Demo_Sample_070
-    fastq2: null
-    tech: ont
-  Demo_Sample_072:
-    fastq1: Demo_Sample_072
-    fastq2: null
-    tech: ont
-  Demo_Sample_073:
-    fastq1: Demo_Sample_073
-    fastq2: null
-    tech: ont
-  Demo_Sample_075:
-    fastq1: Demo_Sample_075
-    fastq2: null
-    tech: ont
-  Demo_Sample_076:
-    fastq1: Demo_Sample_076
-    fastq2: null
-    tech: ont
-  Demo_Sample_077:
-    fastq1: Demo_Sample_077
-    fastq2: null
-    tech: ont
-  Demo_Sample_078:
-    fastq1: Demo_Sample_078
-    fastq2: null
-    tech: ont
-  Demo_Sample_080:
-    fastq1: Demo_Sample_080
-    fastq2: null
-    tech: ont
-  Demo_Sample_081:
-    fastq1: Demo_Sample_081
-    fastq2: null
-    tech: ont
-  Demo_Sample_082:
-    fastq1: Demo_Sample_082
-    fastq2: null
-    tech: ont
-  Demo_Sample_083:
-    fastq1: Demo_Sample_083
-    fastq2: null
-    tech: ont
-  Demo_Sample_085:
-    fastq1: Demo_Sample_085
-    fastq2: null
-    tech: ont
-  Demo_Sample_087:
-    fastq1: Demo_Sample_087
-    fastq2: null
-    tech: ont
-  Demo_Sample_089:
-    fastq1: Demo_Sample_089
-    fastq2: null
-    tech: ont
-  Demo_Sample_091:
-    fastq1: Demo_Sample_091
-    fastq2: null
-    tech: ont
-  Demo_Sample_093:
-    fastq1: Demo_Sample_093
-    fastq2: null
-    tech: ont
-  Demo_Sample_094:
-    fastq1: Demo_Sample_094
-    fastq2: null
-    tech: ont
-  Demo_Sample_096:
-    fastq1: Demo_Sample_096
-    fastq2: null
-    tech: ont
-  Demo_Sample_100:
-    fastq1: Demo_Sample_100
-    fastq2: null
-    tech: ont
-  Demo_Sample_101:
-    fastq1: Demo_Sample_101
-    fastq2: null
-    tech: ont
-  Demo_Sample_102:
-    fastq1: Demo_Sample_102
-    fastq2: null
-    tech: ont
-  Demo_Sample_103:
-    fastq1: Demo_Sample_103
-    fastq2: null
-    tech: ont
+  Portugal_PT43103_2022:
+    fastq1: Portugal-PT43103-2022_R1_001
+    fastq2: Portugal-PT43103-2022_R2_001
+    tech: illumina
+  Portugal_PT43123_2022:
+    fastq1: Portugal-PT43123-2022_R1_001
+    fastq2: Portugal-PT43123-2022_R2_001
+    tech: illumina
+  Portugal_PT43260_2022:
+    fastq1: Portugal-PT43260-2022_R1_001
+    fastq2: Portugal-PT43260-2022_R2_001
+    tech: illumina
+  Portugal_PT43261_2022:
+    fastq1: Portugal-PT43261-2022_R1_001
+    fastq2: Portugal-PT43261-2022_R2_001
+    tech: illumina
 version: '3'

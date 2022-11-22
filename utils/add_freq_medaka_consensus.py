@@ -324,8 +324,8 @@ def compute_masking_sites(
 
 
 def main():
-    freq_vcf_limit = 0.80
-    coverage_limit = 29
+    freq_vcf_limit: str = sys.argv[10]
+    coverage_limit = sys.argv[9]
     element_name_old = ""
     vect_sites = []
     vect_ranges = []
