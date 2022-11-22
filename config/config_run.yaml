@@ -1,7 +1,7 @@
 identification: MN908947
 locus:
 - SARS_CoV_2
-project: test_illumina_pe_covid
+project: test_ont_covid
 proteins:
 - orf1ab
 - S
@@ -14,30 +14,30 @@ proteins:
 - N
 - ORF10
 sample_type:
-  Portugal_PT43103_2022: snippy
-  Portugal_PT43123_2022: snippy
-  Portugal_PT43260_2022: snippy
-  Portugal_PT43261_2022: snippy
-  Portugal_PT43262_2022: snippy
+  Demo_Sample_069: medaka
+  Demo_Sample_070: medaka
+  Demo_Sample_101: medaka
+  Demo_Sample_102: medaka
+  Demo_Sample_103: medaka
 samples:
-  Portugal_PT43103_2022:
-    fastq1: Portugal-PT43103-2022_R1_001
-    fastq2: Portugal-PT43103-2022_R2_001
-    tech: illumina
-  Portugal_PT43123_2022:
-    fastq1: Portugal-PT43123-2022_R1_001
-    fastq2: Portugal-PT43123-2022_R2_001
-    tech: illumina
-  Portugal_PT43260_2022:
-    fastq1: Portugal-PT43260-2022_R1_001
-    fastq2: Portugal-PT43260-2022_R2_001
-    tech: illumina
-  Portugal_PT43261_2022:
-    fastq1: Portugal-PT43261-2022_R1_001
-    fastq2: Portugal-PT43261-2022_R2_001
-    tech: illumina
-  Portugal_PT43262_2022:
-    fastq1: Portugal-PT43262-2022_R1_001
-    fastq2: Portugal-PT43262-2022_R2_001
-    tech: illumina
+  Demo_Sample_069:
+    fastq1: Demo_Sample_069
+    fastq2: null
+    tech: ont
+  Demo_Sample_070:
+    fastq1: Demo_Sample_070
+    fastq2: null
+    tech: ont
+  Demo_Sample_101:
+    fastq1: Demo_Sample_101
+    fastq2: null
+    tech: ont
+  Demo_Sample_102:
+    fastq1: Demo_Sample_102
+    fastq2: null
+    tech: ont
+  Demo_Sample_103:
+    fastq1: Demo_Sample_103
+    fastq2: null
+    tech: ont
 version: '3'

@@ -1,9 +1,10 @@
 rule create_segments:
     input:
-        expand(
+        actual_input = expand(
             "projects/{project}/main_result/Alignment_nt_All_sep.fasta",
             project=PROJECT_NAME,
         ),
+
     output:
         expand(
             "projects/{project}/main_result/{seg}/Alignment_nt_{seg}.fasta",

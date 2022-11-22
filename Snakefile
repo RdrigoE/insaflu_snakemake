@@ -14,11 +14,12 @@ from Bio import SeqIO
 
 
 class Checkpoint_Alignment_aa:
-    def __init__(self, prefix, sufix, genbank_file, coverage_file):
+    def __init__(self, prefix, sufix, genbank_file, coverage_file, coverage_limit):
         self.prefix = prefix
         self.sufix = sufix
         self.genbank_file = genbank_file
         self.coverage_file = coverage_file
+        self.coverage_limit = coverage_limit
 
     def __call__(self, w):
         global checkpoints
@@ -31,42 +32,53 @@ class Checkpoint_Alignment_aa:
         # information used to expand the pattern, using arbitrary
         # Python code.
 
-        pattern = self.get_output(self.genbank_file, self.coverage_file)
+        pattern = self.get_output(
+            self.genbank_file, self.coverage_file, self.coverage_limit
+        )
+        print("Checkpoint_Alignment_aa")
+        print(pattern[0])
         return pattern
 
-    def get_output(self, genbank_file, coverage_file):
-        locus_protein = []
-        valide_locus = self.get_locus_w_coverage(coverage_file)
-        handle_gb = open(genbank_file)
-        segments = get_locus_and_genes(genbank_file)
-        for seg in segments:
-            for gene in segments[seg]:
-                locus_protein.append(
-                    f"{self.prefix}{seg}/Alignment_aa_{seg}_{gene}{self.sufix}"
-                )
-        return locus_protein
-
-    def get_locus_w_coverage(self, coverage_file):
+    def get_locus_w_coverage(self, coverage_file, genbank_file, coverage_limit):
         with open(coverage_file, newline="") as csvfile:
             csv_reader = csv.reader(csvfile, delimiter=",")
             coverage_list = list(csv_reader)
-            size = len(coverage_list[0])
+            chrom = get_locus(genbank_file)
             final_output = []
-            for times in range(1, size):
+            for idx, _ in enumerate(chrom):
+                chrom_pass = False
                 for sample in coverage_list:
-                    print(float(sample[times]))
-                    if float(sample[times]) >= 90.0:
-                        final_output.append(times)
-                        break
+                    if not chrom_pass:
+                        if float(sample[idx + 1]) >= coverage_limit:
+                            chrom_pass = True
+                            final_output.append(chrom_pass)
+                if not chrom_pass:
+                    final_output.append(chrom_pass)
         return final_output
+
+    def get_output(self, genbank_file, coverage_file, coverage_limit):
+        locus_protein = []
+        valide_locus = self.get_locus_w_coverage(
+            coverage_file, genbank_file, coverage_limit
+        )
+        segments = get_locus_and_genes(genbank_file)
+        for idx, seg in enumerate(segments, start=0):
+            for gene in segments[seg]:
+                if valide_locus[idx]:
+                    locus_protein.append(
+                        f"{self.prefix}{seg}/Alignment_aa_{seg}_{gene}{self.sufix}"
+                    )
+                    break
+        return locus_protein
 
 
 class Checkpoint_Seg:
-    def __init__(self, prefix, sufix, genbank_file, coverage_file):
+    def __init__(self, prefix, sufix, genbank_file, coverage_file, coverage_limit):
         self.prefix = prefix
         self.sufix = sufix
         self.genbank_file = genbank_file
         self.coverage_file = coverage_file
+        self.coverage_limit = coverage_limit
 
     def __call__(self, w):
         global checkpoints
@@ -79,36 +91,251 @@ class Checkpoint_Seg:
         # information used to expand the pattern, using arbitrary
         # Python code.
 
-        pattern = self.get_output(self.genbank_file, self.coverage_file)
+        pattern = self.get_output(
+            self.genbank_file, self.coverage_file, self.coverage_limit
+        )
+        print("Checkpoint_Seg")
+        # print(pattern)
+        print(pattern[0])
         return pattern
 
-    def get_output(self, genbank_file, coverage_file):
-        locus_protein = []
-        valide_locus = self.get_locus_w_coverage(coverage_file)
-        segments = get_locus_and_genes(genbank_file)
-        for seg in segments:
-            for gene in segments[seg]:
-                locus_protein.append(
-                    f"{self.prefix}{seg}/Alignment_nt_{seg}{self.sufix}"
-                )
-        return locus_protein
-
-    def get_locus_w_coverage(self, coverage_file):
+    def get_locus_w_coverage(self, coverage_file, genbank_file, coverage_limit):
         with open(coverage_file, newline="") as csvfile:
             csv_reader = csv.reader(csvfile, delimiter=",")
             coverage_list = list(csv_reader)
-            size = len(coverage_list[0])
+            chrom = get_locus(genbank_file)
             final_output = []
-            for times in range(1, size):
+            for idx, _ in enumerate(chrom):
+                chrom_pass = False
                 for sample in coverage_list:
-                    print(float(sample[times]))
-                    if float(sample[times]) >= 90.0:
-                        final_output.append(times)
-                        break
+                    if not chrom_pass:
+                        if float(sample[idx + 1]) >= coverage_limit:
+                            chrom_pass = True
+                            final_output.append(chrom_pass)
+                if not chrom_pass:
+                    final_output.append(chrom_pass)
+        # print(final_output)
         return final_output
 
+    def get_output(self, genbank_file, coverage_file, coverage_limit):
+        locus_protein = []
+        valide_locus = self.get_locus_w_coverage(
+            coverage_file, genbank_file, coverage_limit
+        )
+        segments = get_locus_and_genes(genbank_file)
+        for idx, seg in enumerate(segments, start=0):
+            for _ in segments[seg]:
+                if valide_locus[idx]:
+                    locus_protein.append(
+                        f"{self.prefix}{seg}/Alignment_nt_{seg}{self.sufix}"
+                    )
+        return locus_protein
 
-sample_data = Data("./config_user/0_test_i_pe_covid.csv")
+
+# class Checkpoint_Main:
+#     def __init__(self, genbank_file, coverage_file, coverage_limit):
+#         self.genbank_file = genbank_file
+#         self.coverage_file = coverage_file
+#         self.coverage_limit = coverage_limit
+
+#     def __call__(self, w):
+#         global checkpoints
+
+#         # wait for the results of 'check_csv'; this will trigger an
+#         # exception until that rule has been run.
+#         checkpoints.mergeCoverage.get(**w)
+
+#         # the magic, such as it is, happens here: we create the
+#         # information used to expand the pattern, using arbitrary
+#         # Python code.
+
+#         pattern = self.get_output(
+#             self.genbank_file, self.coverage_file, self.coverage_limit
+#         )
+#         print("Checkpoint_Seg")
+#         # print(pattern)
+#         print(pattern[0])
+#         return pattern
+
+#     def get_locus_w_coverage(self, coverage_file, genbank_file, coverage_limit):
+#         with open(coverage_file, newline="") as csvfile:
+#             csv_reader = csv.reader(csvfile, delimiter=",")
+#             coverage_list = list(csv_reader)
+#             chrom = get_locus(genbank_file)
+#             final_output = []
+#             for idx, _ in enumerate(chrom):
+#                 chrom_pass = False
+#                 for sample in coverage_list:
+#                     if not chrom_pass:
+#                         if float(sample[idx + 1]) >= coverage_limit:
+#                             chrom_pass = True
+#                             final_output.append(chrom_pass)
+#                             break
+#                 if not chrom_pass:
+#                     final_output.append(chrom_pass)
+#         # print(final_output)
+#         return final_output
+
+#     def get_output(self, genbank_file, coverage_file, coverage_limit):
+#         locus_protein = []
+#         valide_locus = self.get_locus_w_coverage(
+#             coverage_file, genbank_file, coverage_limit
+#         )
+#         segments = get_locus_and_genes(genbank_file)
+#         for idx, seg in enumerate(segments, start=0):
+#             for _ in segments[seg]:
+#                 if valide_locus[idx]:
+#                     locus_protein.append(
+#                         f"{self.prefix}{seg}/Alignment_nt_{seg}{self.sufix}"
+#                     )
+#                     break
+#         return locus_protein
+
+
+class Checkpoint_Main:
+    def __init__(self, genbank_file, coverage_file, coverage_limit):
+        self.genbank_file = genbank_file
+        self.coverage_file = coverage_file
+        self.coverage_limit = coverage_limit
+
+    def __call__(self, w):
+        global checkpoints
+
+        # wait for the results of 'check_csv'; this will trigger an
+        # exception until that rule has been run.
+        checkpoints.mergeCoverage.get(**w)
+
+        # the magic, such as it is, happens here: we create the
+        # information used to expand the pattern, using arbitrary
+        # Python code.
+
+        pattern = self.get_output(
+            self.genbank_file, self.coverage_file, self.coverage_limit
+        )
+        print("Checkpoint_Main")
+        print(pattern[0])
+        return pattern
+
+    def get_locus_w_coverage(self, coverage_file, genbank_file, coverage_limit):
+        with open(coverage_file, newline="") as csvfile:
+            csv_reader = csv.reader(csvfile, delimiter=",")
+            coverage_list = list(csv_reader)
+            chrom = get_locus(genbank_file)
+            final_output = []
+            for idx, _ in enumerate(chrom):
+                chrom_pass = False
+                for sample in coverage_list:
+                    if not chrom_pass:
+                        if float(sample[idx + 1]) >= coverage_limit:
+                            chrom_pass = True
+                            final_output.append(chrom_pass)
+                if not chrom_pass:
+                    final_output.append(chrom_pass)
+        return final_output
+
+    def get_output(self, genbank_file, coverage_file, coverage_limit):
+        return_list = []
+        valide_locus = self.get_locus_w_coverage(
+            coverage_file, genbank_file, coverage_limit
+        )
+        segments = get_locus_and_genes(genbank_file)
+        leave = False
+        for idx, seg in enumerate(segments, start=0):
+            for _ in segments[seg]:
+                if valide_locus[idx]:
+                    output_files = [
+                        expand(
+                            "projects/{project}/main_result/validated_minor_iSNVs.csv",
+                            project=config_user["project"],
+                        ),
+                        expand(
+                            "projects/{project}/main_result/validated_variants.csv",
+                            project=config_user["project"],
+                        ),
+                        expand(
+                            "projects/{project}/main_result/validated_minor_iSNVs_inc_indels.csv",
+                            project=config_user["project"],
+                        ),
+                        expand(
+                            "projects/{project}/main_result/proportions_iSNVs_graph.csv",
+                            project=config_user["project"],
+                        ),
+                        expand(
+                            "projects/{project}/main_result/Alignment_nt_All.fasta",
+                            sample=config_user["samples"],
+                            project=config_user["project"],
+                        ),
+                        expand(
+                            "projects/{project}/main_result/All_nt_only_90plus.fasta",
+                            sample=config_user["samples"],
+                            project=config_user["project"],
+                        ),
+                        expand(
+                            "projects/{project}/main_result/AllConsensus.fasta",
+                            sample=config_user["samples"],
+                            project=config_user["project"],
+                        ),
+                        expand(
+                            "projects/{project}/main_result/All_nt.fasta",
+                            sample=config_user["samples"],
+                            project=config_user["project"],
+                        ),
+                        expand(
+                            "projects/{project}/main_result/All_nt.nex",
+                            sample=config_user["samples"],
+                            project=config_user["project"],
+                        ),
+                        expand(
+                            "projects/{project}/main_result/AllConsensus.nex",
+                            sample=config_user["samples"],
+                            project=config_user["project"],
+                        ),
+                        expand(
+                            "projects/{project}/main_result/Alignment_nt_All.nex",
+                            sample=config_user["samples"],
+                            project=config_user["project"],
+                        ),
+                        expand(
+                            "projects/{project}/main_result/All_nt_only_90plus.nex",
+                            sample=config_user["samples"],
+                            project=config_user["project"],
+                        ),
+                        expand(
+                            "projects/{project}/main_result/{seg}/Alignment_nt_{seg}.fasta",
+                            project=config_user["project"],
+                            seg=SEGMENTS,
+                        ),
+                        expand(
+                            "projects/{project}/main_result/{seg}/Alignment_nt_{seg}.nex",
+                            project=config_user["project"],
+                            seg=SEGMENTS,
+                        ),
+                        expand(
+                            "projects/{project}/main_result/snp_ready.txt",
+                            project=config_user["project"],
+                        ),
+                        expand(
+                            "projects/{project}/main_result/Tree_ML_All.tree",
+                            sample=config_user["samples"],
+                            project=config_user["project"],
+                        ),
+                        expand(
+                            "projects/{project}/main_result/lineage_report.csv",
+                            project=config_user["project"],
+                        ),
+                    ]
+                    for i in output_files:
+                        return_list.append(i[0])
+                    leave = True
+                if leave:
+                    break
+            if leave:
+                break
+
+        return return_list
+
+
+sample_data = Data("./config_user/0_test_ont_covid.csv")
 
 (
     paired_illumina,
@@ -134,7 +361,7 @@ elif ALIGNER == "iVar":
 
 ont_samples_keys = ont_samples.keys()
 
-run_config = read_yaml("./config_user/0_test_i_pe_covid.yaml")
+run_config = read_yaml("./config_user/0_test_ont_covid.yaml")
 
 REFERENCE_GB = run_config["gb_reference"]
 REFERENCE = run_config["fasta_reference"]
@@ -162,10 +389,10 @@ def get_output_sample():
             "samples/{sample}/abricate_pe/abricate_{sample}.csv",
             sample=paired_illumina.keys(),
         ),
-        # expand(
-        #     "samples/{sample}/abricate_pe/abricate_{sample}.yaml",
-        #     sample=paired_illumina.keys(),
-        # ),
+        expand(
+            "samples/{sample}/abricate_pe/abricate_{sample}.yaml",
+            sample=paired_illumina.keys(),
+        ),
         expand(
             "samples/{sample}/raw_fastqc/{sample}_fastqc.html",
             sample=single_illumina.keys(),
@@ -181,10 +408,10 @@ def get_output_sample():
             "samples/{sample}/abricate_se/abricate_{sample}.csv",
             sample=single_illumina.keys(),
         ),
-        # expand(
-        #     "samples/{sample}/abricate_se/abricate_{sample}.yaml",
-        #     sample=single_illumina.keys(),
-        # ),
+        expand(
+            "samples/{sample}/abricate_se/abricate_{sample}.yaml",
+            sample=single_illumina.keys(),
+        ),
         expand(
             "samples/{sample}/raw_nanostat/{sample}_stats.txt",
             sample=ont_samples.keys(),
@@ -195,6 +422,14 @@ def get_output_sample():
         ),
         expand(
             "samples/{sample}/nano_trimmed_fastqc/{sample}_stats.txt",
+            sample=ont_samples.keys(),
+        ),
+        expand(
+            "samples/{sample}/abricate_ont/abricate_{sample}.csv",
+            sample=ont_samples.keys(),
+        ),
+        expand(
+            "samples/{sample}/abricate_ont/abricate_{sample}.yaml",
             sample=ont_samples.keys(),
         ),
         # expand("samples/{sample}/rabbitqc/rabbit.html", sample =  ont_samples.keys()),
@@ -378,115 +613,46 @@ def get_output_project():
             ref=get_locus(REFERENCE_GB),
         ),
         # Trying to get the same consensus
-        expand(
-            "projects/{project}/main_result/validated_minor_iSNVs.csv",
-            project=config_user["project"],
-        ),
-        expand(
-            "projects/{project}/main_result/validated_variants.csv",
-            project=config_user["project"],
-        ),
-        expand(
-            "projects/{project}/main_result/validated_minor_iSNVs_inc_indels.csv",
-            project=config_user["project"],
-        ),
-        expand(
-            "projects/{project}/main_result/proportions_iSNVs_graph.csv",
-            project=config_user["project"],
-        ),
-        expand(
-            "projects/{project}/main_result/Alignment_nt_All.fasta",
-            sample=config_user["samples"],
-            project=config_user["project"],
-        ),
-        expand(
-            "projects/{project}/main_result/All_nt_only_90plus.fasta",
-            sample=config_user["samples"],
-            project=config_user["project"],
-        ),
-        expand(
-            "projects/{project}/main_result/AllConsensus.fasta",
-            sample=config_user["samples"],
-            project=config_user["project"],
-        ),
-        expand(
-            "projects/{project}/main_result/All_nt.fasta",
-            sample=config_user["samples"],
-            project=config_user["project"],
-        ),
-        expand(
-            "projects/{project}/main_result/All_nt.nex",
-            sample=config_user["samples"],
-            project=config_user["project"],
-        ),
-        expand(
-            "projects/{project}/main_result/AllConsensus.nex",
-            sample=config_user["samples"],
-            project=config_user["project"],
-        ),
-        expand(
-            "projects/{project}/main_result/Alignment_nt_All.nex",
-            sample=config_user["samples"],
-            project=config_user["project"],
-        ),
-        expand(
-            "projects/{project}/main_result/All_nt_only_90plus.nex",
-            sample=config_user["samples"],
-            project=config_user["project"],
-        ),
         # Trying to get the same consensus
         Checkpoint_Alignment_aa(
             f'projects/{config_user["project"]}/main_result/',
             "_trans.fasta",
             run_config["gb_reference"],
             f"projects/{config_user['project']}/main_result/coverage_translate.csv",
+            software_parameters["min_coverage_consensus"],
         ),
         Checkpoint_Alignment_aa(
             f'projects/{config_user["project"]}/main_result/',
             "_mafft.fasta",
             run_config["gb_reference"],
             f"projects/{config_user['project']}/main_result/coverage_translate.csv",
+            software_parameters["min_coverage_consensus"],
         ),
         Checkpoint_Alignment_aa(
             f'projects/{config_user["project"]}/main_result/',
             "_mafft.nex",
             run_config["gb_reference"],
             f"projects/{config_user['project']}/main_result/coverage_translate.csv",
+            software_parameters["min_coverage_consensus"],
         ),
         Checkpoint_Alignment_aa(
             f'projects/{config_user["project"]}/main_result/',
             "_tree.tree",
             run_config["gb_reference"],
             f"projects/{config_user['project']}/main_result/coverage_translate.csv",
+            software_parameters["min_coverage_consensus"],
         ),
         Checkpoint_Seg(
             f'projects/{config_user["project"]}/main_result/',
             "_tree.tree",
             run_config["gb_reference"],
             f"projects/{config_user['project']}/main_result/coverage_translate.csv",
+            software_parameters["min_coverage_consensus"],
         ),
-        expand(
-            "projects/{project}/main_result/{seg}/Alignment_nt_{seg}.fasta",
-            project=config_user["project"],
-            seg=SEGMENTS,
-        ),
-        expand(
-            "projects/{project}/main_result/{seg}/Alignment_nt_{seg}.nex",
-            project=config_user["project"],
-            seg=SEGMENTS,
-        ),
-        expand(
-            "projects/{project}/main_result/snp_ready.txt",
-            project=config_user["project"],
-        ),
-        expand(
-            "projects/{project}/main_result/Tree_ML_All.tree",
-            sample=config_user["samples"],
-            project=config_user["project"],
-        ),
-        expand(
-            "projects/{project}/main_result/lineage_report.csv",
-            project=config_user["project"],
+        Checkpoint_Main(
+            run_config["gb_reference"],
+            f"projects/{config_user['project']}/main_result/coverage_translate.csv",
+            software_parameters["min_coverage_consensus"],
         ),
     )
 

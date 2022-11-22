@@ -69,7 +69,8 @@ rule medaka_annotate:
 
 
 def get_add_freq_medaka(software_parameters):
-    return f'{software_parameters["mincov_medaka"]} {software_parameters["min_prop_for_variant_evidence"]}'
+    params = f'{software_parameters["mincov_medaka"]} {software_parameters["min_prop_for_variant_evidence"]}'
+    return params
 
 
 rule mask_between_top_and_50:
@@ -86,7 +87,7 @@ rule mask_between_top_and_50:
     conda:
         "../envs/filter_medaka.yaml"
     params:
-        get_add_freq_medaka,
+        get_add_freq_medaka(software_parameters),
     shell:
         "touch {output.temp_file} && "
         "python utils/add_freq_medaka_consensus.py {input.normal_reference_fasta} {input.vcf_file} {input.file_coverage} "
