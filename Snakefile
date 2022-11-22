@@ -1,7 +1,7 @@
 from utils.get_gene_bank import get_genes
 from utils.import_user_data import Data
 from utils.import_user_data import read_yaml
-from utils.get_locus import get_locus, get_id_version
+from utils.get_locus import get_locus, get_id_version, get_locus_and_genes
 from utils.get_software_parameters import (
     get_nanofilt_parameters,
     mask_regions_parameters,
@@ -14,11 +14,10 @@ from Bio import SeqIO
 
 
 class Checkpoint_Alignment_aa:
-    def __init__(self, prefix, sufix, genbank_file, possible_name, coverage_file):
+    def __init__(self, prefix, sufix, genbank_file, coverage_file):
         self.prefix = prefix
         self.sufix = sufix
         self.genbank_file = genbank_file
-        self.possible_name = possible_name
         self.coverage_file = coverage_file
 
     def __call__(self, w):
@@ -32,32 +31,19 @@ class Checkpoint_Alignment_aa:
         # information used to expand the pattern, using arbitrary
         # Python code.
 
-        pattern = self.get_output(
-            self.genbank_file, self.possible_name, self.coverage_file
-        )
+        pattern = self.get_output(self.genbank_file, self.coverage_file)
         return pattern
 
-    def get_output(self, genbank_file, possible_name, coverage_file):
+    def get_output(self, genbank_file, coverage_file):
         locus_protein = []
         valide_locus = self.get_locus_w_coverage(coverage_file)
         handle_gb = open(genbank_file)
-        for record in SeqIO.parse(handle_gb, "genbank"):
-            for features in record.features:
-                if features.type == "CDS":
-                    try:
-                        a = features.qualifiers["locus_tag"]
-                        if (
-                            int(features.qualifiers["locus_tag"][0][-5:])
-                            in valide_locus
-                        ):
-                            locus_protein.append(
-                                f"{self.prefix}{int(features.qualifiers['locus_tag'][0][-5:])}/Alignment_aa_{int(features.qualifiers['locus_tag'][0][-5:])}_{features.qualifiers['gene'][0]}{self.sufix}"
-                            )
-                    except:
-                        locus_protein.append(
-                            f"{self.prefix}{possible_name}/Alignment_aa_{possible_name}_{features.qualifiers['gene'][0]}{self.sufix}"
-                        )
-        handle_gb.close()
+        segments = get_locus_and_genes(genbank_file)
+        for seg in segments:
+            for gene in segments[seg]:
+                locus_protein.append(
+                    f"{self.prefix}{seg}/Alignment_aa_{seg}_{gene}{self.sufix}"
+                )
         return locus_protein
 
     def get_locus_w_coverage(self, coverage_file):
@@ -76,11 +62,10 @@ class Checkpoint_Alignment_aa:
 
 
 class Checkpoint_Seg:
-    def __init__(self, prefix, sufix, genbank_file, possible_name, coverage_file):
+    def __init__(self, prefix, sufix, genbank_file, coverage_file):
         self.prefix = prefix
         self.sufix = sufix
         self.genbank_file = genbank_file
-        self.possible_name = possible_name
         self.coverage_file = coverage_file
 
     def __call__(self, w):
@@ -94,32 +79,18 @@ class Checkpoint_Seg:
         # information used to expand the pattern, using arbitrary
         # Python code.
 
-        pattern = self.get_output(
-            self.genbank_file, self.possible_name, self.coverage_file
-        )
+        pattern = self.get_output(self.genbank_file, self.coverage_file)
         return pattern
 
-    def get_output(self, genbank_file, possible_name, coverage_file):
+    def get_output(self, genbank_file, coverage_file):
         locus_protein = []
         valide_locus = self.get_locus_w_coverage(coverage_file)
-        handle_gb = open(genbank_file)
-        for record in SeqIO.parse(handle_gb, "genbank"):
-            for features in record.features:
-                if features.type == "CDS":
-                    try:
-                        a = features.qualifiers["locus_tag"]
-                        if (
-                            int(features.qualifiers["locus_tag"][0][-5:])
-                            in valide_locus
-                        ):
-                            locus_protein.append(
-                                f"{self.prefix}{int(features.qualifiers['locus_tag'][0][-5:])}/Alignment_nt_{int(features.qualifiers['locus_tag'][0][-5:])}{self.sufix}"
-                            )
-                    except:
-                        locus_protein.append(
-                            f"{self.prefix}{possible_name}/Alignment_nt_{possible_name}{self.sufix}"
-                        )
-        handle_gb.close()
+        segments = get_locus_and_genes(genbank_file)
+        for seg in segments:
+            for gene in segments[seg]:
+                locus_protein.append(
+                    f"{self.prefix}{seg}/Alignment_nt_{seg}{self.sufix}"
+                )
         return locus_protein
 
     def get_locus_w_coverage(self, coverage_file):
@@ -137,7 +108,7 @@ class Checkpoint_Seg:
         return final_output
 
 
-sample_data = Data("./config_user/test_ont.csv")
+sample_data = Data("./config_user/0_test_i_pe_covid.csv")
 
 (
     paired_illumina,
@@ -163,7 +134,7 @@ elif ALIGNER == "iVar":
 
 ont_samples_keys = ont_samples.keys()
 
-run_config = read_yaml("./config_user/config_user_1.yaml")
+run_config = read_yaml("./config_user/0_test_i_pe_covid.yaml")
 
 REFERENCE_GB = run_config["gb_reference"]
 REFERENCE = run_config["fasta_reference"]
@@ -195,7 +166,6 @@ def get_output_sample():
         #     "samples/{sample}/abricate_pe/abricate_{sample}.yaml",
         #     sample=paired_illumina.keys(),
         # ),
-
         expand(
             "samples/{sample}/raw_fastqc/{sample}_fastqc.html",
             sample=single_illumina.keys(),
@@ -405,7 +375,7 @@ def get_output_project():
             "projects/{project}/main_result/depth/{sample}__{ref}.depth",
             sample=config_user["samples"],
             project=config_user["project"],
-            ref=get_locus(run_config["gb_reference"]),
+            ref=get_locus(REFERENCE_GB),
         ),
         # Trying to get the same consensus
         expand(
@@ -466,38 +436,33 @@ def get_output_project():
         ),
         # Trying to get the same consensus
         Checkpoint_Alignment_aa(
-            f'projects/{run_config["project_name"]}/main_result/',
+            f'projects/{config_user["project"]}/main_result/',
             "_trans.fasta",
             run_config["gb_reference"],
-            run_config["locus"],
             f"projects/{config_user['project']}/main_result/coverage_translate.csv",
         ),
         Checkpoint_Alignment_aa(
-            f'projects/{run_config["project_name"]}/main_result/',
+            f'projects/{config_user["project"]}/main_result/',
             "_mafft.fasta",
             run_config["gb_reference"],
-            run_config["locus"],
             f"projects/{config_user['project']}/main_result/coverage_translate.csv",
         ),
         Checkpoint_Alignment_aa(
-            f'projects/{run_config["project_name"]}/main_result/',
+            f'projects/{config_user["project"]}/main_result/',
             "_mafft.nex",
             run_config["gb_reference"],
-            run_config["locus"],
             f"projects/{config_user['project']}/main_result/coverage_translate.csv",
         ),
         Checkpoint_Alignment_aa(
-            f'projects/{run_config["project_name"]}/main_result/',
+            f'projects/{config_user["project"]}/main_result/',
             "_tree.tree",
             run_config["gb_reference"],
-            run_config["locus"],
             f"projects/{config_user['project']}/main_result/coverage_translate.csv",
         ),
         Checkpoint_Seg(
-            f'projects/{run_config["project_name"]}/main_result/',
+            f'projects/{config_user["project"]}/main_result/',
             "_tree.tree",
             run_config["gb_reference"],
-            run_config["locus"],
             f"projects/{config_user['project']}/main_result/coverage_translate.csv",
         ),
         expand(
@@ -547,7 +512,7 @@ else:
 config_user = {
     "samples": sample_info_dic,
     "project": run_config["project_name"],
-    "locus": run_config["locus"],
+    "locus": get_locus(run_config["gb_reference"]),
     "proteins": get_genes(run_config["gb_reference"]),
     "identification": identification,
     "version": version,

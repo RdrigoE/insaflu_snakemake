@@ -1,6 +1,7 @@
 identification: MN908947
-locus: SARS_CoV_2
-project: new
+locus:
+- SARS_CoV_2
+project: test_illumina_pe_covid
 proteins:
 - orf1ab
 - S
@@ -17,6 +18,7 @@ sample_type:
   Portugal_PT43123_2022: snippy
   Portugal_PT43260_2022: snippy
   Portugal_PT43261_2022: snippy
+  Portugal_PT43262_2022: snippy
 samples:
   Portugal_PT43103_2022:
     fastq1: Portugal-PT43103-2022_R1_001
@@ -33,5 +35,9 @@ samples:
   Portugal_PT43261_2022:
     fastq1: Portugal-PT43261-2022_R1_001
     fastq2: Portugal-PT43261-2022_R2_001
+    tech: illumina
+  Portugal_PT43262_2022:
+    fastq1: Portugal-PT43262-2022_R1_001
+    fastq2: Portugal-PT43262-2022_R2_001
     tech: illumina
 version: '3'
