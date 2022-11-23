@@ -1,4 +1,5 @@
 only_samples: False
-project_name: test_illumina_se_covid
-fasta_reference: reference/SARS_CoV_2_COVID_19_Wuhan_Hu_1_MN908947.fasta 
-gb_reference: reference/SARS_CoV_2_COVID_19_Wuhan_Hu_1_MN908947.gbk 
+project_name: test_illumina_se_flu
+fasta_reference: reference/A_H3N2_A_Texas_50_2012.fasta
+gb_reference: reference/A_H3N2_A_Texas_50_2012.gbk 
+

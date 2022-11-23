@@ -1,7 +1,9 @@
-LOCUS       MPXV              197205 bp    DNA     linear   VRL 30-MAY-2022
+LOCUS       ON563414              197205 bp    DNA     linear   VRL 01-SEP-2022
 DEFINITION  Monkeypox virus isolate MPXV_USA_2022_MA001, complete genome.
-ACCESSION   MPXV
+ACCESSION   ON563414
 VERSION     ON563414.3
+DBLINK      BioProject: PRJNA849962
+            BioSample: SAMN30616464
 KEYWORDS    .
 SOURCE      Monkeypox virus (monkeypox)
   ORGANISM  Monkeypox virus

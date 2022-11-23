@@ -18,8 +18,14 @@ def get_positions_gb(genbank_file):
     for record in SeqIO.parse(handle_gb, "genbank"):
         for features in record.features:
             if features.type == "CDS":
-                positions.append([features.qualifiers["gene"][0], features.location])
-    print(positions)
+                if features.qualifiers.get("gene", None) == None:
+                    positions.append(
+                        [features.qualifiers.get("locus_tag")[0], features.location]
+                    )
+                else:
+                    positions.append(
+                        [features.qualifiers.get("gene")[0], features.location]
+                    )
     positions_clean = []
 
     for idx, gene in enumerate(positions):

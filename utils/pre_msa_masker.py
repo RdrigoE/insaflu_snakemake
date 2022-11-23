@@ -18,17 +18,18 @@ def prepare_msa_masker(alignment, outdir, reference_gb):
     counter = 0
     seg_names = get_locus(reference_gb)
     n_locus = len(seg_names)
+    print(n_locus)
     list_of_segments = [[] for x in range(n_locus)]
     for record in SeqIO.parse(alignment, "fasta"):
+        print(record)
         if counter == len(list_of_segments):
             counter = 0
-        # print(counter)
         list_of_segments[counter].append(record)
         counter += 1
-
-    for index in range(len(list_of_segments)):
+    print(list_of_segments)
+    for index, seg in enumerate(list_of_segments):
         SeqIO.write(
-            list_of_segments[index],
+            seg,
             f"{outdir}/{seg_names[index]}/Alignment_nt_{seg_names[index]}.fasta",
             "fasta",
         )

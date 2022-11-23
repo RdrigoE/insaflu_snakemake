@@ -34,7 +34,10 @@ def get_locus_and_genes(genbank_file: str) -> dict[str, list[str]]:
         locus_gene[record.name] = []
         for feat in record.features:
             if feat.type == "CDS":
-                locus_gene[record.name].append(feat.qualifiers["gene"][0])
+                if feat.qualifiers.get("gene", None) == None:
+                    locus_gene[record.name].append(feat.qualifiers.get("locus_tag")[0])
+                else:
+                    locus_gene[record.name].append(feat.qualifiers["gene"][0])
     return locus_gene
 
 

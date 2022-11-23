@@ -1,5 +1,5 @@
-from Bio import SeqIO
 import sys
+from Bio import SeqIO
 
 reference_fasta = sys.argv[1]
 consensus_file = sys.argv[2]
@@ -8,7 +8,7 @@ segment_name = sys.argv[4]
 
 with open(reference_fasta, "r") as handle_fasta:
     dt_consensus = SeqIO.to_dict(SeqIO.parse(consensus_file, "fasta"))
-    print(dt_consensus)
+    print("hello", dt_consensus.keys())
     for record in SeqIO.parse(handle_fasta, "fasta"):
         if record.id == segment_name:  ### make mask
             ### get sequences

@@ -68,7 +68,7 @@ def prepare_snpeff_run(ref_path_gb, locus, ref_path_fa, reference_name, output):
             shell=True,
             check=False,
         )
-        with open("config/snpeff.config", "a", enconding="UTF8") as snpeff:
+        with open("config/snpeff.config", "a", encoding="UTF8") as snpeff:
             snpeff.writelines(text)
 
         subprocess.run(

@@ -12,7 +12,7 @@ rule medaka_consensus:
     conda:
         "../envs/medaka_1_4_4.yaml"
     shell:
-        "cp {input.ref} {output.ref_out} && medaka_consensus -i {input.i} -d {output.ref_out} -o align_samples/{wildcards.sample}/medaka -t 4 -m r941_min_high_g360"
+        "rm -r align_samples/{wildcards.sample}/medaka/ && mkdir align_samples/{wildcards.sample}/medaka/   && cp {input.ref} {output.ref_out} && medaka_consensus -i {input.i} -d {output.ref_out} -o align_samples/{wildcards.sample}/medaka -t 4 -m r941_min_high_g360"
         " && cp {output.i} {output.i2}"
 
 
@@ -44,7 +44,7 @@ rule medaka_depth_follow:
 rule medaka_vfc:
     input:
         hdf="align_samples/{sample}/medaka/consensus_probs.hdf",
-        ref=REFERENCE,
+        ref="align_samples/{sample}/medaka/ref.fasta",
         consensus="align_samples/{sample}/medaka/consensus.fasta",
     output:
         vcf="align_samples/{sample}/medaka/round_1.vcf",
@@ -56,7 +56,7 @@ rule medaka_vfc:
 
 rule medaka_annotate:
     input:
-        ref=REFERENCE,
+        ref="align_samples/{sample}/medaka/ref.fasta",
         vcf="align_samples/{sample}/medaka/round_1.vcf",
         bam="align_samples/{sample}/medaka/calls_to_draft.bam",
     output:

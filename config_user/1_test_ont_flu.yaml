@@ -1,4 +1,4 @@
-only_samples: False
-project_name: test_ont_covid
-fasta_reference: reference/SARS_CoV_2_COVID_19_Wuhan_Hu_1_MN908947.fasta 
-gb_reference: reference/SARS_CoV_2_COVID_19_Wuhan_Hu_1_MN908947.gbk 
+only_samples: True
+project_name: test_ont_flu
+fasta_reference: reference/A_H3N2_A_Texas_50_2012.fasta
+gb_reference: reference/A_H3N2_A_Texas_50_2012.gbk 

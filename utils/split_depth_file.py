@@ -22,7 +22,6 @@ def split_depth_file(file_path, reference_gb):
     path = file_path[:last_pos]
     reference_list = get_locus(reference_gb)
     for name in reference_list:
-        print(path)
         # if not exists(f"{path}{name}.depth"):
         with open(file_path, "r") as f:
             new_file = []
@@ -33,8 +32,8 @@ def split_depth_file(file_path, reference_gb):
                 output_file = open(f"{path}{name}.depth", "w")
                 output_file.writelines(new_file)
                 output_file.close()
-        # else:
-        # print("Action already taken.")
+            else:
+                print("Action already taken.")
 
 
 if __name__ == "__main__":
