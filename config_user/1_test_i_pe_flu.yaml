@@ -1,4 +1,4 @@
-only_samples: True
+only_samples: False
 project_name: test_illumina_pe_flu
-fasta_reference: reference/B_Vic_B_Brisbane_60_2008.fasta
-gb_reference: reference/B_Vic_B_Brisbane_60_2008.gbk 
+fasta_reference: reference/A_H1N1pdm09_A_Michigan_45_2015.fasta
+gb_reference: reference/A_H1N1pdm09_A_Michigan_45_2015.gbk 

@@ -43,16 +43,17 @@ class Checkpoint_Alignment_aa:
             csv_reader = csv.reader(csvfile, delimiter=",")
             coverage_list = list(csv_reader)
             chrom = get_locus(genbank_file)
+            coverage_list = list(map(lambda x: x[1:], coverage_list))
+            for idx, li in enumerate(coverage_list):
+                coverage_list[idx] = list(map(lambda x: float(x), li))
+
             final_output = []
-            for idx, _ in enumerate(chrom):
-                chrom_pass = False
-                for sample in coverage_list:
-                    if not chrom_pass:
-                        if float(sample[idx + 1]) >= coverage_limit:
-                            chrom_pass = True
-                            final_output.append(chrom_pass)
-                if not chrom_pass:
-                    final_output.append(chrom_pass)
+            for sample in coverage_list:
+                if min(sample) >= coverage_limit:
+                    final_output.append(True)
+                else:
+                    final_output.append(False)
+
         return final_output
 
     def get_output(self, genbank_file, coverage_file, coverage_limit):
@@ -61,10 +62,12 @@ class Checkpoint_Alignment_aa:
             coverage_file, genbank_file, coverage_limit
         )
         segments = get_locus_and_genes(genbank_file)
-        print(segments)
-        for idx, seg in enumerate(segments, start=0):
-            for gene in segments[seg]:
-                if valide_locus[idx]:
+        # segments = list(map(lambda x: x[1:], segments))
+
+        if True in valide_locus:
+            for idx, seg in enumerate(segments, start=0):
+                for gene in segments[seg]:
+
                     locus_protein.append(
                         f"{self.prefix}{seg}/Alignment_aa_{seg}_{gene}{self.sufix}"
                     )
@@ -104,17 +107,17 @@ class Checkpoint_Seg:
             csv_reader = csv.reader(csvfile, delimiter=",")
             coverage_list = list(csv_reader)
             chrom = get_locus(genbank_file)
+            coverage_list = list(map(lambda x: x[1:], coverage_list))
+            for idx, li in enumerate(coverage_list):
+                coverage_list[idx] = list(map(lambda x: float(x), li))
+
             final_output = []
-            for idx, _ in enumerate(chrom):
-                chrom_pass = False
-                for sample in coverage_list:
-                    if not chrom_pass:
-                        if float(sample[idx + 1]) >= coverage_limit:
-                            chrom_pass = True
-                            final_output.append(chrom_pass)
-                if not chrom_pass:
-                    final_output.append(chrom_pass)
-        # print(final_output)
+            for sample in coverage_list:
+                if min(sample) >= coverage_limit:
+                    final_output.append(True)
+                else:
+                    final_output.append(False)
+
         return final_output
 
     def get_output(self, genbank_file, coverage_file, coverage_limit):
@@ -123,14 +126,13 @@ class Checkpoint_Seg:
             coverage_file, genbank_file, coverage_limit
         )
         segments = get_locus_and_genes(genbank_file)
-        print(segments)
+        # segments = list(map(lambda x: x[1:], segments))
 
-        for idx, seg in enumerate(segments, start=0):
-            for _ in segments[seg]:
-                if valide_locus[idx]:
-                    locus_protein.append(
-                        f"{self.prefix}{seg}/Alignment_nt_{seg}{self.sufix}"
-                    )
+        if True in valide_locus:
+            for seg in segments:
+                locus_protein.append(
+                    f"{self.prefix}{seg}/Alignment_nt_{seg}{self.sufix}"
+                )
         return locus_protein
 
 
@@ -154,6 +156,9 @@ class Checkpoint_Main:
         pattern = self.get_output(
             self.genbank_file, self.coverage_file, self.coverage_limit
         )
+        print(pattern)
+        if pattern == []:
+            return expand("template_{to_fail}", to_fail=[])
         print("Checkpoint_Main")
         return pattern
 
@@ -162,16 +167,17 @@ class Checkpoint_Main:
             csv_reader = csv.reader(csvfile, delimiter=",")
             coverage_list = list(csv_reader)
             chrom = get_locus(genbank_file)
+            coverage_list = list(map(lambda x: x[1:], coverage_list))
+            for idx, li in enumerate(coverage_list):
+                coverage_list[idx] = list(map(lambda x: float(x), li))
+
             final_output = []
-            for idx, _ in enumerate(chrom):
-                chrom_pass = False
-                for sample in coverage_list:
-                    if not chrom_pass:
-                        if float(sample[idx + 1]) >= coverage_limit:
-                            chrom_pass = True
-                            final_output.append(chrom_pass)
-                if not chrom_pass:
-                    final_output.append(chrom_pass)
+            for sample in coverage_list:
+                if min(sample) >= coverage_limit:
+                    final_output.append(True)
+                else:
+                    final_output.append(False)
+
         return final_output
 
     def get_output(self, genbank_file, coverage_file, coverage_limit):
@@ -180,105 +186,103 @@ class Checkpoint_Main:
             coverage_file, genbank_file, coverage_limit
         )
         segments = get_locus_and_genes(genbank_file)
+        # segments = list(map(lambda x: x[1:], segments))
+
         leave = False
-        print(segments)
-        for idx, seg in enumerate(segments, start=0):
-
-            for _ in segments[seg]:
-                if valide_locus[idx]:
-                    output_files = [
-                        expand(
-                            "projects/{project}/main_result/validated_minor_iSNVs.csv",
-                            project=config_user["project"],
-                        ),
-                        expand(
-                            "projects/{project}/main_result/validated_variants.csv",
-                            project=config_user["project"],
-                        ),
-                        expand(
-                            "projects/{project}/main_result/validated_minor_iSNVs_inc_indels.csv",
-                            project=config_user["project"],
-                        ),
-                        expand(
-                            "projects/{project}/main_result/proportions_iSNVs_graph.csv",
-                            project=config_user["project"],
-                        ),
-                        expand(
-                            "projects/{project}/main_result/Alignment_nt_All.fasta",
-                            sample=config_user["samples"],
-                            project=config_user["project"],
-                        ),
-                        expand(
-                            "projects/{project}/main_result/All_nt_only_90plus.fasta",
-                            sample=config_user["samples"],
-                            project=config_user["project"],
-                        ),
-                        expand(
-                            "projects/{project}/main_result/AllConsensus.fasta",
-                            sample=config_user["samples"],
-                            project=config_user["project"],
-                        ),
-                        expand(
-                            "projects/{project}/main_result/All_nt.fasta",
-                            sample=config_user["samples"],
-                            project=config_user["project"],
-                        ),
-                        expand(
-                            "projects/{project}/main_result/All_nt.nex",
-                            sample=config_user["samples"],
-                            project=config_user["project"],
-                        ),
-                        expand(
-                            "projects/{project}/main_result/AllConsensus.nex",
-                            sample=config_user["samples"],
-                            project=config_user["project"],
-                        ),
-                        expand(
-                            "projects/{project}/main_result/Alignment_nt_All.nex",
-                            sample=config_user["samples"],
-                            project=config_user["project"],
-                        ),
-                        expand(
-                            "projects/{project}/main_result/All_nt_only_90plus.nex",
-                            sample=config_user["samples"],
-                            project=config_user["project"],
-                        ),
-                        expand(
-                            "projects/{project}/main_result/{seg}/Alignment_nt_{seg}.fasta",
-                            project=config_user["project"],
-                            seg=SEGMENTS,
-                        ),
-                        expand(
-                            "projects/{project}/main_result/{seg}/Alignment_nt_{seg}.nex",
-                            project=config_user["project"],
-                            seg=SEGMENTS,
-                        ),
-                        expand(
-                            "projects/{project}/main_result/snp_ready.txt",
-                            project=config_user["project"],
-                        ),
-                        expand(
-                            "projects/{project}/main_result/Tree_ML_All.tree",
-                            sample=config_user["samples"],
-                            project=config_user["project"],
-                        ),
-                        expand(
-                            "projects/{project}/main_result/lineage_report.csv",
-                            project=config_user["project"],
-                        ),
-                    ]
-                    for i in output_files:
-                        return_list.append(i[0])
-                    leave = True
-                if leave:
-                    break
-            if leave:
-                break
-
-        return return_list
+        if True in valide_locus:
+            files = [
+                expand(
+                    "projects/{project}/main_result/validated_minor_iSNVs.csv",
+                    project=config_user["project"],
+                ),
+                expand(
+                    "projects/{project}/main_result/validated_variants.csv",
+                    project=config_user["project"],
+                ),
+                expand(
+                    "projects/{project}/main_result/validated_minor_iSNVs_inc_indels.csv",
+                    project=config_user["project"],
+                ),
+                expand(
+                    "projects/{project}/main_result/proportions_iSNVs_graph.csv",
+                    project=config_user["project"],
+                ),
+                expand(
+                    "projects/{project}/main_result/Alignment_nt_All.fasta",
+                    sample=config_user["samples"],
+                    project=config_user["project"],
+                ),
+                expand(
+                    "projects/{project}/main_result/All_nt_only_90plus.fasta",
+                    sample=config_user["samples"],
+                    project=config_user["project"],
+                ),
+                expand(
+                    "projects/{project}/main_result/AllConsensus.fasta",
+                    sample=config_user["samples"],
+                    project=config_user["project"],
+                ),
+                expand(
+                    "projects/{project}/main_result/All_nt.fasta",
+                    sample=config_user["samples"],
+                    project=config_user["project"],
+                ),
+                expand(
+                    "projects/{project}/main_result/All_nt.nex",
+                    sample=config_user["samples"],
+                    project=config_user["project"],
+                ),
+                expand(
+                    "projects/{project}/main_result/AllConsensus.nex",
+                    sample=config_user["samples"],
+                    project=config_user["project"],
+                ),
+                expand(
+                    "projects/{project}/main_result/Alignment_nt_All.nex",
+                    sample=config_user["samples"],
+                    project=config_user["project"],
+                ),
+                expand(
+                    "projects/{project}/main_result/All_nt_only_90plus.nex",
+                    sample=config_user["samples"],
+                    project=config_user["project"],
+                ),
+                expand(
+                    "projects/{project}/main_result/{seg}/Alignment_nt_{seg}.fasta",
+                    project=config_user["project"],
+                    seg=SEGMENTS,
+                ),
+                expand(
+                    "projects/{project}/main_result/{seg}/Alignment_nt_{seg}.nex",
+                    project=config_user["project"],
+                    seg=SEGMENTS,
+                ),
+                expand(
+                    "projects/{project}/main_result/snp_ready.txt",
+                    project=config_user["project"],
+                ),
+                expand(
+                    "projects/{project}/main_result/Tree_ML_All.tree",
+                    sample=config_user["samples"],
+                    project=config_user["project"],
+                ),
+                expand(
+                    "projects/{project}/main_result/lineage_report.csv",
+                    project=config_user["project"],
+                ),
+            ]
+            for new in files:
+                if isinstance(new, list):
+                    for new_2 in new:
+                        return_list.append(new_2)
+                else:
+                    return_list.append(new)
+            return return_list
+        else:
+            return []
 
 
-sample_data = Data("./config_user/2_test_i_se_mp.csv")
+sample_data = Data("./config_user/0_test_i_pe_covid.csv")
 
 (
     paired_illumina,
@@ -304,7 +308,7 @@ elif ALIGNER == "iVar":
 
 ont_samples_keys = ont_samples.keys()
 
-run_config = read_yaml("./config_user/2_test_i_se_mp.yaml")
+run_config = read_yaml("./config_user/0_test_i_pe_covid.yaml")
 
 REFERENCE_GB = run_config["gb_reference"]
 REFERENCE = run_config["fasta_reference"]

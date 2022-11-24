@@ -39,4 +39,7 @@
    - Each project will recive a copy of this file inside projects/project_name_folder/
 
 ## Run your project or analyse your samples with the following command:
-   $snakemake -c {threads} --use-conda
+   `$ snakemake -c {threads} --use-conda`
+
+## You must keep the fasta identifier equal to the GenBank Locus
+">ON563414" == "LOCUS       ON563414"
