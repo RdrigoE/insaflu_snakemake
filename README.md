@@ -4,27 +4,27 @@
 
 ### install mamba forge:
     
-   $ curl -L https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-Linux-x86_64.sh -o Mambaforge-Linux-x86_64.sh
+   `$ curl -L https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-Linux-x86_64.sh -o Mambaforge-Linux-x86_64.sh`
     
-   $ bash Mambaforge-Linux-x86_64.sh
+   `$ bash Mambaforge-Linux-x86_64.sh`
 
 ### activate conda:
     
-   $ conda activate base
+   `$ conda activate base`
 
 ### create environment:
     
-   $ mamba env create --name insaflu --file config/insaflu.yaml
+   `$ mamba env create --name insaflu --file config/insaflu.yaml`
 
 ## Activate Environment 
-   $ conda activate insaflu
+   `$ conda activate insaflu`
 
 ## Deactivate Enviroment
-   $ conda deactivate insaflu
+   `$ conda deactivate insaflu`
 
 ## Create new folder named 'user_data'
-   $ mkdir user_data
-   $ cp path/to/your/files/your_files path/to/user_data
+   `$ mkdir user_data`
+   `$ cp path/to/your/files/your_files path/to/user_data`
 ## Create a csv in the folder config_user called sample_info.csv
  This csv has to have the following format: sample_name,fastq1,fastq2,tech
  All samples much be in fastq.gz format
