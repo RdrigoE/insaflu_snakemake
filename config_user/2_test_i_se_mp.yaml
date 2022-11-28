@@ -1,4 +1,4 @@
 only_samples: False
-project_name: test_illumina_se_mpx
+project_name: test_mpx
 fasta_reference: reference/monkeypox_MPXV_USA_2022_MA001_ON563414.fasta
 gb_reference: reference/monkeypox_MPXV_USA_2022_MA001_ON563414.gbk
