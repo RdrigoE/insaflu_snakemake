@@ -1,7 +1,7 @@
 rule medaka_consensus:
     input:
-        # i="samples/{sample}/trimmed_reads/nano_{sample}.trimmed.fastq.gz",
-        i="user_data/{sample}.fastq.gz",
+        i="samples/{sample}/trimmed_reads/nano_{sample}.trimmed.fastq.gz",
+        #="user_data/{sample}.fastq.gz",
         ref=REFERENCE,
     output:
         out="align_samples/{sample}/medaka/consensus.fasta",

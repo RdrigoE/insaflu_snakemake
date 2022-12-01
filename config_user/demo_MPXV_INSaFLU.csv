@@ -1,0 +1,9 @@
+sample_name,fastq1,fastq2,tech
+demo_MPXV_001,demo_MPXV_001,,ont
+demo_MPXV_002,demo_MPXV_002,,ont
+demo_MPXV_003,demo_MPXV_003,,ont
+demo_MPXV_004,demo_MPXV_004_R1_001,demo_MPXV_004_R2_001,illumina
+demo_MPXV_005,demo_MPXV_005_R1_001,demo_MPXV_005_R2_001,illumina
+demo_MPXV_006,demo_MPXV_006_R1_001,demo_MPXV_006_R2_001,illumina
+demo_MPXV_007,demo_MPXV_007_R1_001,demo_MPXV_007_R2_001,illumina
+demo_MPXV_008,demo_MPXV_008_R1_001,demo_MPXV_008_R2_001,illumina

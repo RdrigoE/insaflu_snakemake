@@ -1,0 +1,4 @@
+only_samples: False
+project_name: test_mpx_no_mafft
+fasta_reference: reference/monkeypox_MT903344_MPXV_UK_P2_wo_NN.fasta
+gb_reference: reference/monkeypox_MT903344_MPXV_UK_P2_wo_NN.gb

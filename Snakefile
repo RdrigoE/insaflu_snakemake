@@ -186,8 +186,6 @@ class Checkpoint_Main:
             coverage_file, genbank_file, coverage_limit
         )
         segments = get_locus_and_genes(genbank_file)
-        # segments = list(map(lambda x: x[1:], segments))
-
         leave = False
         if True in valide_locus:
             files = [
@@ -248,16 +246,6 @@ class Checkpoint_Main:
                     project=config_user["project"],
                 ),
                 expand(
-                    "projects/{project}/main_result/{seg}/Alignment_nt_{seg}.fasta",
-                    project=config_user["project"],
-                    seg=SEGMENTS,
-                ),
-                expand(
-                    "projects/{project}/main_result/{seg}/Alignment_nt_{seg}.nex",
-                    project=config_user["project"],
-                    seg=SEGMENTS,
-                ),
-                expand(
                     "projects/{project}/main_result/snp_ready.txt",
                     project=config_user["project"],
                 ),
@@ -271,6 +259,43 @@ class Checkpoint_Main:
                     project=config_user["project"],
                 ),
             ]
+            if len(segments.keys()) > 1:
+                files.append(
+                    expand(
+                        "projects/{project}/main_result/{seg}/Alignment_nt_{seg}.fasta",
+                        project=config_user["project"],
+                        seg=SEGMENTS,
+                    ),
+                )
+                files.append(
+                    expand(
+                        "projects/{project}/main_result/{seg}/Alignment_nt_{seg}.nex",
+                        project=config_user["project"],
+                        seg=SEGMENTS,
+                    ),
+                )
+            else:
+                files.append(
+                    expand(
+                        "projects/{project}/main_result/Alignment_nt_{seg}.fasta",
+                        project=config_user["project"],
+                        seg=SEGMENTS,
+                    ),
+                )
+                files.append(
+                    expand(
+                        "projects/{project}/main_result/Alignment_nt_{seg}.nwk",
+                        project=config_user["project"],
+                        seg=SEGMENTS,
+                    ),
+                )
+            # files.append(
+            #     expand(
+            #         "projects/{project}/main_result/Alignment_nt_{seg}.tree",
+            #         project=config_user["project"],
+            #         seg=SEGMENTS,
+            #     ),
+            # )
             for new in files:
                 if isinstance(new, list):
                     for new_2 in new:
@@ -282,7 +307,7 @@ class Checkpoint_Main:
             return []
 
 
-sample_data = Data("./config_user/0_test_i_pe_covid.csv")
+sample_data = Data("./config_user/demo_SARS_CoV_2_INSaFLU.csv")
 
 (
     paired_illumina,
@@ -308,7 +333,7 @@ elif ALIGNER == "iVar":
 
 ont_samples_keys = ont_samples.keys()
 
-run_config = read_yaml("./config_user/0_test_i_pe_covid.yaml")
+run_config = read_yaml("./config_user/covid_test.yaml")
 
 REFERENCE_GB = run_config["gb_reference"]
 REFERENCE = run_config["fasta_reference"]
@@ -397,13 +422,13 @@ def get_output_project():
             direction=["1", "2"],
         ),
         # Trying to get the same consensus
-        expand(
-            "samples/{sample}/spades_pe/contigs.fasta", sample=paired_illumina.keys()
-        ),
-        expand(
-            "samples/{sample}/abricate_pe/abricate_{sample}.csv",
-            sample=paired_illumina.keys(),
-        ),
+        # expand(
+        #     "samples/{sample}/spades_pe/contigs.fasta", sample=paired_illumina.keys()
+        # ),
+        # expand(
+        #     "samples/{sample}/abricate_pe/abricate_{sample}.csv",
+        #     sample=paired_illumina.keys(),
+        # ),
         # Analyse Illumina Sample Single-End
         expand(
             "samples/{sample}/raw_fastqc/{sample}_fastqc.html",
@@ -414,13 +439,13 @@ def get_output_project():
             sample=single_illumina_iVar.keys(),
         ),
         # Trying to get the same consensus
-        expand(
-            "samples/{sample}/spades_se/contigs.fasta", sample=single_illumina.keys()
-        ),
-        expand(
-            "samples/{sample}/abricate_se/abricate_{sample}.csv",
-            sample=single_illumina.keys(),
-        ),
+        # expand(
+        #     "samples/{sample}/spades_se/contigs.fasta", sample=single_illumina.keys()
+        # ),
+        # expand(
+        #     "samples/{sample}/abricate_se/abricate_{sample}.csv",
+        #     sample=single_illumina.keys(),
+        # ),
         expand(
             "align_samples/{sample}/iVar/{sample}_consensus.fasta",
             sample=single_illumina_iVar.keys(),
@@ -496,10 +521,10 @@ def get_output_project():
             sample=ont_samples.keys(),
         ),
         # Trying to get the same consensus
-        expand(
-            "samples/{sample}/abricate_ont/abricate_{sample}.csv",
-            sample=ont_samples.keys(),
-        ),
+        # expand(
+        #     "samples/{sample}/abricate_ont/abricate_{sample}.csv",
+        #     sample=ont_samples.keys(),
+        # ),
         # expand("samples/{sample}/rabbitqc/rabbit.html", sample=config_user["samples"]),
         expand(
             "align_samples/{sample}/medaka/consensus.fasta", sample=ont_samples.keys()
@@ -561,41 +586,13 @@ def get_output_project():
         ),
         # Trying to get the same consensus
         # Trying to get the same consensus
-        Checkpoint_Alignment_aa(
-            f'projects/{config_user["project"]}/main_result/',
-            "_trans.fasta",
-            run_config["gb_reference"],
-            f"projects/{config_user['project']}/main_result/coverage_translate.csv",
-            software_parameters["min_coverage_consensus"],
-        ),
-        Checkpoint_Alignment_aa(
-            f'projects/{config_user["project"]}/main_result/',
-            "_mafft.fasta",
-            run_config["gb_reference"],
-            f"projects/{config_user['project']}/main_result/coverage_translate.csv",
-            software_parameters["min_coverage_consensus"],
-        ),
-        Checkpoint_Alignment_aa(
-            f'projects/{config_user["project"]}/main_result/',
-            "_mafft.nex",
-            run_config["gb_reference"],
-            f"projects/{config_user['project']}/main_result/coverage_translate.csv",
-            software_parameters["min_coverage_consensus"],
-        ),
-        Checkpoint_Alignment_aa(
-            f'projects/{config_user["project"]}/main_result/',
-            "_tree.tree",
-            run_config["gb_reference"],
-            f"projects/{config_user['project']}/main_result/coverage_translate.csv",
-            software_parameters["min_coverage_consensus"],
-        ),
-        Checkpoint_Seg(
-            f'projects/{config_user["project"]}/main_result/',
-            "_tree.tree",
-            run_config["gb_reference"],
-            f"projects/{config_user['project']}/main_result/coverage_translate.csv",
-            software_parameters["min_coverage_consensus"],
-        ),
+        # Checkpoint_Seg(
+        #     f'projects/{config_user["project"]}/main_result/',
+        #     "_tree.tree",
+        #     run_config["gb_reference"],
+        #     f"projects/{config_user['project']}/main_result/coverage_translate.csv",
+        #     software_parameters["min_coverage_consensus"],
+        # ),
         Checkpoint_Main(
             run_config["gb_reference"],
             f"projects/{config_user['project']}/main_result/coverage_translate.csv",

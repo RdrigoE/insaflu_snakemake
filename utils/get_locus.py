@@ -54,5 +54,6 @@ def get_id_version(genbank_file):
     :doc-author: Trelent
     """
     handle_gb = open(genbank_file)
-    for record in SeqIO.parse(handle_gb, "genbank"):
-        return record.id
+    for line in handle_gb:
+        if "VERSION" in line:
+            return line.split(" ")[-1].strip()

@@ -76,11 +76,11 @@ rule alignment_nt_All_seqret:
         "seqret {params} -sequence {input} -outseq {output}"
 
 
-rule alignment_nt_seg_seqret:
+rule alignment_nt_specific_seqret:
     input:
-        "projects/{project}/main_result/{seg}/Alignment_nt_{seg}.fasta",
+        "projects/{project}/main_result/Alignment_nt_{seg}_mafft.fasta",
     output:
-        "projects/{project}/main_result/{seg}/Alignment_nt_{seg}.nex",
+        "projects/{project}/main_result/Alignment_nt_{seg}_mafft.nex",
     conda:
         "../envs/seqret.yaml"
     params:
