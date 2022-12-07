@@ -4,3 +4,4 @@ snippy_threads: 12
 spades_threads: 5
 snpeff_threads: 5
 mafft_threads: 5
+nextalign_theads: 5
