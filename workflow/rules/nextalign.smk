@@ -10,9 +10,9 @@ rule nextalign_pre_aa:l
         "../envs/nextalign.yaml"
     threads: config["nextalign_threads"]
     params:
-        "--preservecase",
+        "-j {threads} -n Alignment_nt_All_sep.fasta",
     shell:
-        "nextalign --thread {threads} {params} {input} > {output}"
+        "nextalign run {params} -r {REFERENCE_FASTA} {input}"
 
 
 # rule nextalign_p_way_1:
@@ -33,10 +33,9 @@ rule nextalign:
         "../envs/nextalign.yaml"
     threads: config["nextalign_threads"]
     params:
-        "--preservecase",
+        "-j {threads} -n Alignment_nt_All_sep.fasta",
     shell:
-        "nextalign --thread {threads} {params} {input} > {output}"
-
+        "nextalign run {params} -r {REFERENCE_FASTA} {input}"
 
 rule nextalign_nt:
     input:
@@ -47,10 +46,9 @@ rule nextalign_nt:
         "../envs/nextalign.yaml"
     threads: config["nextalign_threads"]
     params:
-        "--preservecase",
+        "-j {threads} -n Alignment_nt_All_sep.fasta",
     shell:
-        "nextalign --thread {threads} {params} {input} > {output}"
-
+        "nextalign run {params} -r {REFERENCE_FASTA} {input}"
 
 rule nextalign_proteins:
     input:
@@ -61,10 +59,9 @@ rule nextalign_proteins:
         "../envs/nextalign.yaml"
     threads: config["nextalign_threads"]
     params:
-        "--preservecase --amino",
+        "-j {threads} -n Alignment_nt_All_sep.fasta",
     shell:
-        "nextalign --thread {threads} {params} {input} > {output}"
-
+        "nextalign run {params} -r {REFERENCE_FASTA} {input}"
 
 rule cp_Alignment_nt:
     input:

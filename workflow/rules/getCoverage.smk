@@ -24,11 +24,9 @@ checkpoint mergeCoverage:
             "projects/{project}/main_result/coverage.csv",
             project=config_user["project"],
         ),
-        coverage_translate=temp(
-            expand(
-                "projects/{project}/main_result/coverage_translate.csv",
-                project=config_user["project"],
-            )
+        coverage_translate=expand(
+            "projects/{project}/main_result/coverage_translate.csv",
+            project=config_user["project"],
         ),
     shell:
         "python {scripts_directory}mergeCoverage.py '{input}' {output.coverage_regular} {output.coverage_translate} {REFERENCE_GB}"

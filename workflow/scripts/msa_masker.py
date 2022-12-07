@@ -130,8 +130,6 @@ def process_data(reference_sequence, samples, sample_map, cutoff, mask_gaps):
         left_pos = len(sequence) - len(left_trimmed)
         right_trimmed = sequence.rstrip("-")
         right_pos = len(sequence) - (len(sequence) - len(right_trimmed))
-        print("------->", seqid)
-        print(":::::::>", sample_map)
         assert seqid in sample_map, "Error, SeqId-{} not in depth file".format(seqid)
         depth_info = sample_map[seqid]
 

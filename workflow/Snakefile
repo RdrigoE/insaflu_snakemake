@@ -21,6 +21,33 @@ import csv
 workdir: "../results/"
 
 
+class Abricate_Pangolin:
+    def __init__(self, abricate_output, output, project):
+        self.abricate_output = abricate_output
+        self.output = output
+        self.project = project
+
+    def __call__(self, w):
+        global checkpoints
+
+        checkpoints.abricate_pangolin.get(**w)
+        pattern = self.get_output()
+        return pattern
+
+    def get_output(self):
+        abricate_dic = read_yaml(self.abricate_output)
+
+        go_pangolin = bool(abricate_dic.get("Species") or abricate_dic.get("Genus"))
+        pattern = (
+            self.output
+            if go_pangolin
+            else expand(
+                "projects/{project}/main_result/not_pangolin.csv", project=self.project
+            )
+        )
+        return pattern
+
+
 class Checkpoint_Alignment_aa:
     def __init__(self, prefix, sufix, genbank_file, coverage_file, coverage_limit):
         self.prefix = prefix
@@ -128,6 +155,7 @@ class Checkpoint_Main:
         )
         segments = get_locus_and_genes(genbank_file)
         leave = False
+
         if True in valide_locus:
             files = [
                 expand(
@@ -193,10 +221,6 @@ class Checkpoint_Main:
                 expand(
                     "projects/{project}/main_result/Tree_ML_All.tree",
                     sample=config_user["samples"],
-                    project=config_user["project"],
-                ),
-                expand(
-                    "projects/{project}/main_result/lineage_report.csv",
                     project=config_user["project"],
                 ),
             ]
@@ -462,36 +486,41 @@ def get_output_project():
             f"projects/{config_user['project']}/main_result/coverage_translate.csv",
             software_parameters["min_coverage_consensus"],
         ),
-        expand(
-            "samples/{sample}/spades_se/contigs.fasta", sample=single_illumina.keys()
+        Abricate_Pangolin(
+            f"projects/{config_user['project']}/ref.yaml",
+            f"projects/{config_user['project']}/main_result/lineage_report.csv",
+            config_user["project"],
         ),
-        expand(
-            "samples/{sample}/abricate_se/abricate_{sample}.csv",
-            sample=single_illumina.keys(),
-        ),
-        expand(
-            "samples/{sample}/abricate_se/abricate_{sample}.yaml",
-            sample=single_illumina.keys(),
-        ),
-        expand(
-            "samples/{sample}/spades_pe/contigs.fasta", sample=paired_illumina.keys()
-        ),
-        expand(
-            "samples/{sample}/abricate_pe/abricate_{sample}.csv",
-            sample=paired_illumina.keys(),
-        ),
-        expand(
-            "samples/{sample}/abricate_pe/abricate_{sample}.yaml",
-            sample=paired_illumina.keys(),
-        ),
+        # expand(
+        #     "samples/{sample}/spades_se/contigs.fasta", sample=single_illumina.keys()
+        # ),
+        # expand(
+        #     "samples/{sample}/abricate_se/abricate_{sample}.csv",
+        #     sample=single_illumina.keys(),
+        # ),
+        # expand(
+        #     "samples/{sample}/abricate_se/abricate_{sample}.yaml",
+        #     sample=single_illumina.keys(),
+        # ),
+        # expand(
+        #     "samples/{sample}/spades_pe/contigs.fasta", sample=paired_illumina.keys()
+        # ),
+        # expand(
+        #     "samples/{sample}/abricate_pe/abricate_{sample}.csv",
+        #     sample=paired_illumina.keys(),
+        # ),
+        # expand(
+        #     "samples/{sample}/abricate_pe/abricate_{sample}.yaml",
+        #     sample=paired_illumina.keys(),
+        # ),
         expand(
             "samples/{sample}/abricate_ont/abricate_{sample}.csv",
             sample=ont_samples.keys(),
         ),
-        expand(
-            "samples/{sample}/abricate_ont/abricate_{sample}.yaml",
-            sample=ont_samples.keys(),
-        ),
+        # expand(
+        #     "samples/{sample}/abricate_ont/abricate_{sample}.yaml",
+        #     sample=ont_samples.keys(),
+        # ),
         # expand("samples/{sample}/rabbitqc/rabbit.html", sample =  ont_samples.keys()),
     )
 

@@ -10,7 +10,7 @@ rule abricate_se:
         "--db insaflu --minid 70 --mincov 30",
     shell:
         "abricate {params} {input} > {output.csv}"
-        " && python3 {scripts_directory}get_abricate_info.py {output.csv} {output.yaml}"
+        " && python3 {scripts_directory}get_abricate_info_list.py {output.csv} {output.yaml}"
 
 
 rule abricate_pe:
@@ -25,7 +25,7 @@ rule abricate_pe:
         "--db insaflu --minid 70 --mincov 30",
     shell:
         "abricate {params} {input} > {output.csv}"
-        " && python3 {scripts_directory}get_abricate_info.py {output.csv} {output.yaml}"
+        " && python3 {scripts_directory}get_abricate_info_list.py {output.csv} {output.yaml}"
 
 
 rule abricate_ont:
@@ -40,4 +40,4 @@ rule abricate_ont:
         "--db insaflu --minid 70 --mincov 30",
     shell:
         "abricate {params} {input} > {output.csv}"
-        " && python3 {scripts_directory}get_abricate_info.py {output.csv} {output.yaml}"
+        " && python3 {scripts_directory}get_abricate_info_list.py {output.csv} {output.yaml}"
