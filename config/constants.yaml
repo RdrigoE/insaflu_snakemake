@@ -1,12 +1,12 @@
 working: ../results/
 user_metadata: ../user_metadata/
-sample_yaml: ../user_metadata/sample_metadata.yaml
+sample_yaml: ../user_metadata/config_run.yaml
 sample_csv: ../user_metadata/sample_metadata.csv
 references: ../workflow/references/
 rules: ../workflow/rules/
 envs: ../envs/
 scripts: ../workflow/scripts/
-samples: ../data/
+samples: ../user_data/
 config_file: ../config/config.yaml
 software_parameters: ../user_metadata/parameters.yaml
 get_coverage: ../workflow/software/getCoverage/getCoverage.py
