@@ -47,5 +47,6 @@
 
 ## Run your project or analyse your samples with the following command:
    `$ cd workflow`
+   
    `$ snakemake -c {threads} --use-conda`
 
