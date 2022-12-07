@@ -33,9 +33,9 @@ rule nextalign:
         "../envs/nextalign.yaml"
     threads: config["nextalign_threads"]
     params:
-        "-j {threads} -n Alignment_nt_All_sep.fasta",
+        "-j {threads}",
     shell:
-        "nextalign run {params} -r {REFERENCE_FASTA} {input}"
+        "nextalign run -r {REFERENCE_FASTA} {params} --output-fasta {output} {input}"
 
 rule nextalign_nt:
     input:
@@ -46,9 +46,9 @@ rule nextalign_nt:
         "../envs/nextalign.yaml"
     threads: config["nextalign_threads"]
     params:
-        "-j {threads} -n Alignment_nt_All_sep.fasta",
+        "-j {threads} ",
     shell:
-        "nextalign run {params} -r {REFERENCE_FASTA} {input}"
+        "nextalign run -r {REFERENCE_FASTA} {params} --output-fasta {output} {input}"
 
 rule nextalign_proteins:
     input:
@@ -59,16 +59,16 @@ rule nextalign_proteins:
         "../envs/nextalign.yaml"
     threads: config["nextalign_threads"]
     params:
-        "-j {threads} -n Alignment_nt_All_sep.fasta",
+        "-j {threads}",
     shell:
-        "nextalign run {params} -r {REFERENCE_FASTA} {input}"
+        "nextalign run -r {REFERENCE_FASTA} {params} --output-fasta {output} {input}"
 
-rule cp_Alignment_nt:
-    input:
-        "projects/{project}/main_result/{seg}/Alignment_nt_{seg}.fasta",
-    output:
-        "projects/{project}/main_result/Alignment_nt_{seg}.fasta",
-    conda:
-        "../envs/nextalign.yaml"
-    shell:
-        "cp {input} {output}"
+# rule cp_Alignment_nt:
+#     input:
+#         "projects/{project}/main_result/{seg}/Alignment_nt_{seg}.fasta",
+#     output:
+#         "projects/{project}/main_result/Alignment_nt_{seg}.fasta",
+#     conda:
+#         "../envs/nextalign.yaml"
+#     shell:
+#         "cp {input} {output}"
