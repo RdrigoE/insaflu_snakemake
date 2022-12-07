@@ -48,3 +48,4 @@
 ## Run your project or analyse your samples with the following command:
    `$ snakemake -c {threads} --use-conda`
 
+eqwewq
