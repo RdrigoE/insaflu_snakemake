@@ -1,0 +1,532 @@
+from scripts.import_user_data import Data, get_data_in_align_form
+from scripts.yaml_io import read_yaml, write_yaml
+from scripts.extract_gb_info import (
+    get_locus,
+    get_id_version,
+    get_locus_and_genes,
+    get_genes,
+    get_identification_version,
+)
+from scripts.get_software_parameters import (
+    get_nanofilt_parameters,
+    mask_regions_parameters,
+    get_trimmomatic_parameters,
+    get_snippy_parameters,
+)
+import yaml
+import re
+import csv
+
+
+workdir: "../results/"
+
+
+class Checkpoint_Alignment_aa:
+    def __init__(self, prefix, sufix, genbank_file, coverage_file, coverage_limit):
+        self.prefix = prefix
+        self.sufix = sufix
+        self.genbank_file = genbank_file
+        self.coverage_file = coverage_file
+        self.coverage_limit = coverage_limit
+
+    def __call__(self, w):
+        global checkpoints
+
+        # wait for the results of 'check_csv'; this will trigger an
+        # exception until that rule has been run.
+        checkpoints.mergeCoverage.get(**w)
+
+        # the magic, such as it is, happens here: we create the
+        # information used to expand the pattern, using arbitrary
+        # Python code.
+
+        pattern = self.get_output(
+            self.genbank_file, self.coverage_file, self.coverage_limit
+        )
+        return pattern
+
+    def get_locus_w_coverage(self, coverage_file, genbank_file, coverage_limit):
+        with open(coverage_file, newline="") as csvfile:
+            csv_reader = csv.reader(csvfile, delimiter=",")
+            coverage_list = list(csv_reader)
+            chrom = get_locus(genbank_file)
+            coverage_list = list(map(lambda x: x[1:], coverage_list))
+            for idx, li in enumerate(coverage_list):
+                coverage_list[idx] = list(map(lambda x: float(x), li))
+
+            final_output = []
+            for sample in coverage_list:
+                if min(sample) >= coverage_limit:
+                    final_output.append(True)
+                else:
+                    final_output.append(False)
+
+        return final_output
+
+    def get_output(self, genbank_file, coverage_file, coverage_limit):
+        locus_protein = []
+        valide_locus = self.get_locus_w_coverage(
+            coverage_file, genbank_file, coverage_limit
+        )
+        segments = get_locus_and_genes(genbank_file)
+        if True in valide_locus:
+            for idx, seg in enumerate(segments, start=0):
+                for gene in segments[seg]:
+
+                    locus_protein.append(
+                        f"{self.prefix}{seg}/Alignment_aa_{seg}_{gene}{self.sufix}"
+                    )
+        return locus_protein
+
+
+class Checkpoint_Main:
+    def __init__(self, genbank_file, coverage_file, coverage_limit):
+        self.genbank_file = genbank_file
+        self.coverage_file = coverage_file
+        self.coverage_limit = coverage_limit
+
+    def __call__(self, w):
+        global checkpoints
+
+        # wait for the results of 'check_csv'; this will trigger an
+        # exception until that rule has been run.
+        checkpoints.mergeCoverage.get(**w)
+
+        # the magic, such as it is, happens here: we create the
+        # information used to expand the pattern, using arbitrary
+        # Python code.
+
+        pattern = self.get_output(
+            self.genbank_file, self.coverage_file, self.coverage_limit
+        )
+        if pattern == []:
+            return expand("template_{to_fail}", to_fail=[])
+        return pattern
+
+    def get_locus_w_coverage(self, coverage_file, genbank_file, coverage_limit):
+        with open(coverage_file, newline="") as csvfile:
+            csv_reader = csv.reader(csvfile, delimiter=",")
+            coverage_list = list(csv_reader)
+            chrom = get_locus(genbank_file)
+            coverage_list = list(map(lambda x: x[1:], coverage_list))
+            for idx, li in enumerate(coverage_list):
+                coverage_list[idx] = list(map(lambda x: float(x), li))
+
+            final_output = []
+            for sample in coverage_list:
+                if min(sample) >= coverage_limit:
+                    final_output.append(True)
+                else:
+                    final_output.append(False)
+
+        return final_output
+
+    def get_output(self, genbank_file, coverage_file, coverage_limit):
+        return_list = []
+        valide_locus = self.get_locus_w_coverage(
+            coverage_file, genbank_file, coverage_limit
+        )
+        segments = get_locus_and_genes(genbank_file)
+        leave = False
+        if True in valide_locus:
+            files = [
+                expand(
+                    "projects/{project}/main_result/validated_minor_iSNVs.csv",
+                    project=config_user["project"],
+                ),
+                expand(
+                    "projects/{project}/main_result/validated_variants.csv",
+                    project=config_user["project"],
+                ),
+                expand(
+                    "projects/{project}/main_result/validated_minor_iSNVs_inc_indels.csv",
+                    project=config_user["project"],
+                ),
+                expand(
+                    "projects/{project}/main_result/proportions_iSNVs_graph.csv",
+                    project=config_user["project"],
+                ),
+                expand(
+                    "projects/{project}/main_result/Alignment_nt_All.fasta",
+                    sample=config_user["samples"],
+                    project=config_user["project"],
+                ),
+                expand(
+                    "projects/{project}/main_result/All_nt_only_90plus.fasta",
+                    sample=config_user["samples"],
+                    project=config_user["project"],
+                ),
+                expand(
+                    "projects/{project}/main_result/AllConsensus.fasta",
+                    sample=config_user["samples"],
+                    project=config_user["project"],
+                ),
+                expand(
+                    "projects/{project}/main_result/All_nt.fasta",
+                    sample=config_user["samples"],
+                    project=config_user["project"],
+                ),
+                expand(
+                    "projects/{project}/main_result/All_nt.nex",
+                    sample=config_user["samples"],
+                    project=config_user["project"],
+                ),
+                expand(
+                    "projects/{project}/main_result/AllConsensus.nex",
+                    sample=config_user["samples"],
+                    project=config_user["project"],
+                ),
+                expand(
+                    "projects/{project}/main_result/Alignment_nt_All.nex",
+                    sample=config_user["samples"],
+                    project=config_user["project"],
+                ),
+                expand(
+                    "projects/{project}/main_result/All_nt_only_90plus.nex",
+                    sample=config_user["samples"],
+                    project=config_user["project"],
+                ),
+                expand(
+                    "projects/{project}/main_result/snp_ready.txt",
+                    project=config_user["project"],
+                ),
+                expand(
+                    "projects/{project}/main_result/Tree_ML_All.tree",
+                    sample=config_user["samples"],
+                    project=config_user["project"],
+                ),
+                expand(
+                    "projects/{project}/main_result/lineage_report.csv",
+                    project=config_user["project"],
+                ),
+            ]
+            if len(segments.keys()) > 1:
+                files.append(
+                    expand(
+                        "projects/{project}/main_result/{seg}/Alignment_nt_{seg}.fasta",
+                        project=config_user["project"],
+                        seg=SEGMENTS,
+                    ),
+                )
+                files.append(
+                    expand(
+                        "projects/{project}/main_result/{seg}/Alignment_nt_{seg}.nex",
+                        project=config_user["project"],
+                        seg=SEGMENTS,
+                    ),
+                )
+            else:
+                files.append(
+                    expand(
+                        "projects/{project}/main_result/Alignment_nt_{seg}.fasta",
+                        project=config_user["project"],
+                        seg=SEGMENTS,
+                    ),
+                )
+                files.append(
+                    expand(
+                        "projects/{project}/main_result/Alignment_nt_{seg}.nwk",
+                        project=config_user["project"],
+                        seg=SEGMENTS,
+                    ),
+                )
+            files.append(
+                expand(
+                    "projects/{project}/main_result/Alignment_nt_{seg}.tree",
+                    project=config_user["project"],
+                    seg=SEGMENTS,
+                ),
+            )
+            for new in files:
+                if isinstance(new, list):
+                    for new_2 in new:
+                        return_list.append(new_2)
+                else:
+                    return_list.append(new)
+            return return_list
+        else:
+            return [
+                expand(
+                    "projects/{project}/main_result/warning.txt",
+                    project=config_user["project"],
+                )
+            ]
+
+
+dic_directory = read_yaml("../config/constants.yaml")
+scripts_directory = dic_directory["scripts"]
+coverage_script = dic_directory["get_coverage"]
+user_metadata_directort = dic_directory["user_metadata"]
+
+# Load in sample data
+sample_data: Data = Data(dic_directory["sample_csv"])
+(
+    paired_illumina,
+    single_illumina,
+    ont_samples,
+    sample_info_dic,
+) = sample_data.get_options()
+
+illumina_assembler = sample_data.get_assembler()
+(
+    paired_illumina_snippy,
+    single_illumina_snippy,
+    paired_illumina_ivar,
+    single_illumina_ivar,
+) = get_data_in_align_form(illumina_assembler, single_illumina, paired_illumina)
+
+# Load in run config
+user_metadata = read_yaml(dic_directory["sample_yaml"])
+
+REFERENCE_GB = user_metadata["gb_reference"]
+
+REFERENCE_FASTA = user_metadata["fasta_reference"]
+REFERENCE_NAME = re.findall("(?<=references/)(.*?)(?=.fasta)", REFERENCE_FASTA)[0]
+
+SEGMENTS = get_locus(REFERENCE_GB)
+
+PROJECT_NAME = user_metadata["project_name"]
+
+identification, version = get_identification_version(SEGMENTS, REFERENCE_GB)
+
+config_user = {
+    "samples": sample_info_dic,
+    "project": user_metadata["project_name"],
+    "locus": get_locus(REFERENCE_GB),
+    "proteins": get_genes(REFERENCE_GB),
+    "identification": identification,
+    "version": version,
+    "sample_type": sample_data.get_sample_type(),
+}
+
+
+PROJECT_NAME = config_user["project"]
+
+write_yaml(dic_directory["config_file"], config_user)
+
+software_parameters = read_yaml(dic_directory["software_parameters"])
+
+
+def get_output_sample():
+    return (
+        expand(
+            "samples/{sample}/raw_fastqc/{sample}_{direction}_fastqc.html",
+            sample=paired_illumina.keys(),
+            direction=["1", "2"],
+        ),  # generalizar
+        expand(
+            "samples/{sample}/trimmed_fastqc/{sample}_{direction}.trimmed_fastqc.html",
+            sample=paired_illumina.keys(),
+            direction=["1", "2"],
+        ),
+        expand(
+            "samples/{sample}/raw_fastqc/{sample}_fastqc.html",
+            sample=single_illumina.keys(),
+        ),
+        expand(
+            "samples/{sample}/trimmed_fastqc/{sample}.trimmed_fastqc.html",
+            sample=single_illumina.keys(),
+        ),
+        expand(
+            "samples/{sample}/raw_nanostat/{sample}_stats.txt",
+            sample=ont_samples.keys(),
+        ),  # generalizar
+        expand(
+            "samples/{sample}/trimmed_reads/nano_{sample}.trimmed.fastq.gz",
+            sample=ont_samples.keys(),
+        ),
+        expand(
+            "samples/{sample}/nano_trimmed_fastqc/{sample}_stats.txt",
+            sample=ont_samples.keys(),
+        ),
+        expand(
+            "samples/{sample}/spades_se/contigs.fasta", sample=single_illumina.keys()
+        ),
+        expand(
+            "samples/{sample}/abricate_se/abricate_{sample}.csv",
+            sample=single_illumina.keys(),
+        ),
+        expand(
+            "samples/{sample}/abricate_se/abricate_{sample}.yaml",
+            sample=single_illumina.keys(),
+        ),
+        expand(
+            "samples/{sample}/spades_pe/contigs.fasta", sample=paired_illumina.keys()
+        ),
+        expand(
+            "samples/{sample}/abricate_pe/abricate_{sample}.csv",
+            sample=paired_illumina.keys(),
+        ),
+        expand(
+            "samples/{sample}/abricate_pe/abricate_{sample}.yaml",
+            sample=paired_illumina.keys(),
+        ),
+        expand(
+            "samples/{sample}/abricate_ont/abricate_{sample}.csv",
+            sample=ont_samples.keys(),
+        ),
+        expand(
+            "samples/{sample}/abricate_ont/abricate_{sample}.yaml",
+            sample=ont_samples.keys(),
+        ),
+        # expand("samples/{sample}/rabbitqc/rabbit.html", sample=ont_samples.keys()),
+    )
+
+
+def get_output_project():
+    return (
+        expand(
+            "samples/{sample}/raw_fastqc/{sample}_{direction}_fastqc.html",
+            sample=paired_illumina.keys(),
+            direction=["1", "2"],
+        ),  # generalizar
+        expand(
+            "samples/{sample}/trimmed_fastqc/{sample}_{direction}.trimmed_fastqc.html",
+            sample=paired_illumina.keys(),
+            direction=["1", "2"],
+        ),
+        expand(
+            "samples/{sample}/raw_fastqc/{sample}_fastqc.html",
+            sample=single_illumina.keys(),
+        ),
+        expand(
+            "samples/{sample}/trimmed_fastqc/{sample}.trimmed_fastqc.html",
+            sample=single_illumina.keys(),
+        ),
+        expand(
+            "align_samples/{sample}/{illumina_genome_assembly_software}/{sample}_consensus.fasta",
+            illumina_genome_assembly_software=illumina_assembler,
+            sample=single_illumina.keys(),
+        ),
+        expand(
+            "align_samples/{sample}/{illumina_genome_assembly_software}/{sample}_consensus.fasta",
+            illumina_genome_assembly_software=illumina_assembler,
+            sample=paired_illumina.keys(),
+        ),
+        expand(
+            "align_samples/{sample}/{sample}_coverage.csv",
+            sample=single_illumina.keys(),
+        ),
+        expand(
+            "align_samples/{sample}/{sample}_coverage.csv",
+            sample=paired_illumina.keys(),
+        ),
+        expand(
+            expand(
+                "projects/{project}/main_result/coverage_translate.csv",
+                project=config_user["project"],
+            )
+        ),
+        expand(
+            "samples/{sample}/raw_nanostat/{sample}_stats.txt",
+            sample=ont_samples.keys(),
+        ),  # generalizar
+        expand(
+            "samples/{sample}/trimmed_reads/nano_{sample}.trimmed.fastq.gz",
+            sample=ont_samples.keys(),
+        ),
+        expand(
+            "samples/{sample}/nano_trimmed_fastqc/{sample}_stats.txt",
+            sample=ont_samples.keys(),
+        ),
+        Checkpoint_Main(
+            REFERENCE_GB,
+            f"projects/{config_user['project']}/main_result/coverage_translate.csv",
+            software_parameters["min_coverage_consensus"],
+        ),
+        Checkpoint_Alignment_aa(
+            f'projects/{config_user["project"]}/main_result/',
+            "_trans.fasta",
+            REFERENCE_GB,
+            f"projects/{config_user['project']}/main_result/coverage_translate.csv",
+            software_parameters["min_coverage_consensus"],
+        ),
+        Checkpoint_Alignment_aa(
+            f'projects/{config_user["project"]}/main_result/',
+            "_mafft.fasta",
+            REFERENCE_GB,
+            f"projects/{config_user['project']}/main_result/coverage_translate.csv",
+            software_parameters["min_coverage_consensus"],
+        ),
+        Checkpoint_Alignment_aa(
+            f'projects/{config_user["project"]}/main_result/',
+            "_mafft.nex",
+            REFERENCE_GB,
+            f"projects/{config_user['project']}/main_result/coverage_translate.csv",
+            software_parameters["min_coverage_consensus"],
+        ),
+        Checkpoint_Alignment_aa(
+            f'projects/{config_user["project"]}/main_result/',
+            "_tree.tree",
+            REFERENCE_GB,
+            f"projects/{config_user['project']}/main_result/coverage_translate.csv",
+            software_parameters["min_coverage_consensus"],
+        ),
+        expand(
+            "samples/{sample}/spades_se/contigs.fasta", sample=single_illumina.keys()
+        ),
+        expand(
+            "samples/{sample}/abricate_se/abricate_{sample}.csv",
+            sample=single_illumina.keys(),
+        ),
+        expand(
+            "samples/{sample}/abricate_se/abricate_{sample}.yaml",
+            sample=single_illumina.keys(),
+        ),
+        expand(
+            "samples/{sample}/spades_pe/contigs.fasta", sample=paired_illumina.keys()
+        ),
+        expand(
+            "samples/{sample}/abricate_pe/abricate_{sample}.csv",
+            sample=paired_illumina.keys(),
+        ),
+        expand(
+            "samples/{sample}/abricate_pe/abricate_{sample}.yaml",
+            sample=paired_illumina.keys(),
+        ),
+        expand(
+            "samples/{sample}/abricate_ont/abricate_{sample}.csv",
+            sample=ont_samples.keys(),
+        ),
+        expand(
+            "samples/{sample}/abricate_ont/abricate_{sample}.yaml",
+            sample=ont_samples.keys(),
+        ),
+        # expand("samples/{sample}/rabbitqc/rabbit.html", sample =  ont_samples.keys()),
+    )
+
+
+def prepare_run(settings):
+    if settings["only_samples"] == True:
+        return get_output_sample
+    else:
+        return get_output_project
+
+
+get_output = prepare_run(user_metadata)
+
+
+# CLOSE
+include: "../workflow/rules/fastqc.smk"
+include: "../workflow/rules/trimmomatic.smk"
+include: "../workflow/rules/snippy.smk"
+include: "../workflow/rules/getCoverage.smk"
+include: "../workflow/rules/nanostat.smk"
+include: "../workflow/rules/nanofilt.smk"
+include: "../workflow/rules/medaka.smk"
+include: "../workflow/rules/make_project.smk"
+include: "../workflow/rules/seqret.smk"
+include: "../workflow/rules/mafft.smk"
+include: "../workflow/rules/fasttree.smk"
+include: "../workflow/rules/snpeff.smk"
+include: "../workflow/rules/freebayes.smk"
+include: "../workflow/rules/translate.smk"
+include: "../workflow/rules/variants.smk"
+include: "../workflow/rules/spades.smk"
+include: "../workflow/rules/abricate.smk"
+include: "../workflow/rules/pangolin.smk"
+
+
+rule all:
+    input:
+        get_output(),

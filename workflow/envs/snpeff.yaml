@@ -1,0 +1,8 @@
+channels:
+  - conda-forge
+  - bioconda
+  - nodefaults
+dependencies:
+  - snpeff =5.1
+  - python =3.7
+  - biopython =1.79

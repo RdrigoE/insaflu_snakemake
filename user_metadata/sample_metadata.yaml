@@ -1,0 +1,4 @@
+only_samples: False
+project_name: test_mpx
+fasta_reference: ../workflow/references/SARS_CoV_2_COVID_19_Wuhan_Hu_1_MN908947.fasta
+gb_reference: ../workflow/references/SARS_CoV_2_COVID_19_Wuhan_Hu_1_MN908947.gbk

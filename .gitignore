@@ -6,3 +6,6 @@ projects
 user_data
 align_samples
 test_results
+data
+results
+.vscode

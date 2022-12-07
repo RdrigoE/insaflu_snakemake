@@ -1,5 +1,0 @@
-only_samples: False
-project_name: flu_iVar
-locus: Flu
-fasta_reference: reference/A_H3N2_A_Texas_50_2012.fasta 
-gb_reference: reference/A_H3N2_A_Texas_50_2012.gbk 

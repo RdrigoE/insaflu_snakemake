@@ -1,0 +1,38 @@
+identification: MN908947
+locus:
+- SARS_CoV_2
+project: test_mpx
+proteins:
+- orf1ab
+- S
+- ORF3a
+- E
+- M
+- ORF6
+- ORF7a
+- ORF8
+- N
+- ORF10
+sample_type:
+  demo_SARSCoV2_001: snippy
+  demo_SARSCoV2_002: snippy
+  demo_sarscov2_083: medaka
+  demo_sarscov2_085: medaka
+samples:
+  demo_SARSCoV2_001:
+    fastq1: Demo_Sample_001_R1_001
+    fastq2: Demo_Sample_001_R2_001
+    tech: illumina
+  demo_SARSCoV2_002:
+    fastq1: Demo_Sample_002_R1_001
+    fastq2: null
+    tech: illumina
+  demo_sarscov2_083:
+    fastq1: Demo_Sample_083
+    fastq2: null
+    tech: ont
+  demo_sarscov2_085:
+    fastq1: Demo_Sample_085
+    fastq2: null
+    tech: ont
+version: '3'
