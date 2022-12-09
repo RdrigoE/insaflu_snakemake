@@ -174,11 +174,11 @@ class Checkpoint_Main:
                     "projects/{project}/main_result/proportions_iSNVs_graph.csv",
                     project=config_user["project"],
                 ),
-                expand(
-                    "projects/{project}/main_result/Alignment_nt_All.fasta",
-                    sample=config_user["samples"],
-                    project=config_user["project"],
-                ),
+                # expand(
+                #     "projects/{project}/main_result/Alignment_nt_All.fasta",
+                #     sample=config_user["samples"],
+                #     project=config_user["project"],
+                # ),
                 # expand(
                 #     "projects/{project}/main_result/All_nt_only_90plus.fasta",
                 #     sample=config_user["samples"],
@@ -204,11 +204,11 @@ class Checkpoint_Main:
                     sample=config_user["samples"],
                     project=config_user["project"],
                 ),
-                expand(
-                    "projects/{project}/main_result/Alignment_nt_All.nex",
-                    sample=config_user["samples"],
-                    project=config_user["project"],
-                ),
+                # expand(
+                #     "projects/{project}/main_result/Alignment_nt_All.nex",
+                #     sample=config_user["samples"],
+                #     project=config_user["project"],
+                # ),
                 # expand(
                 #     "projects/{project}/main_result/All_nt_only_90plus.nex",
                 #     sample=config_user["samples"],
@@ -218,11 +218,11 @@ class Checkpoint_Main:
                     "projects/{project}/main_result/snp_ready.txt",
                     project=config_user["project"],
                 ),
-                expand(
-                    "projects/{project}/main_result/Tree_ML_All.tree",
-                    sample=config_user["samples"],
-                    project=config_user["project"],
-                ),
+                # expand(
+                #     "projects/{project}/main_result/Tree_ML_All.tree",
+                #     sample=config_user["samples"],
+                #     project=config_user["project"],
+                # ),
             ]
             if len(segments.keys()) > 1:
                 files.append(
@@ -247,20 +247,20 @@ class Checkpoint_Main:
                         seg=SEGMENTS,
                     ),
                 )
-                files.append(
-                    expand(
-                        "projects/{project}/main_result/Alignment_nt_{seg}.nwk",
-                        project=config_user["project"],
-                        seg=SEGMENTS,
-                    ),
-                )
-            files.append(
-                expand(
-                    "projects/{project}/main_result/Alignment_nt_{seg}.tree",
-                    project=config_user["project"],
-                    seg=SEGMENTS,
-                ),
-            )
+            # files.append(
+            #     expand(
+            #         "projects/{project}/main_result/Alignment_nt_{seg}.nwk",
+            #         project=config_user["project"],
+            #         seg=SEGMENTS,
+            #     ),
+            # )
+            # files.append(
+            #     expand(
+            #         "projects/{project}/main_result/Alignment_nt_{seg}.tree",
+            #         project=config_user["project"],
+            #         seg=SEGMENTS,
+            #     ),
+            # )
             for new in files:
                 if isinstance(new, list):
                     for new_2 in new:

@@ -1,7 +1,7 @@
 checkpoint abricate_pangolin:
     output:
-        csv=expand("projects/{project}/ref.csv", project=config_user["project"]),
-        yaml=expand("projects/{project}/ref.yaml", project=config_user["project"]),
+        csv=temp(expand("projects/{project}/ref.csv", project=config_user["project"])),
+        yaml=temp(expand("projects/{project}/ref.yaml", project=config_user["project"])),
     conda:
         "../envs/abricate.yaml"
     params:
