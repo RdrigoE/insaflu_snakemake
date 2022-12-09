@@ -1,5 +1,6 @@
 import sys
 import csv
+from typing import Counter
 from Bio import SeqIO
 import extract_gb_info as ggb
 from yaml_io import read_yaml
@@ -141,6 +142,7 @@ def write_fast_aa(reference, alignment, output, locus, gene, coverage):
                             .translate(table=11, to_stop=False)
                         )
                 elif record.id == reference_id:
+                    # can be refactored with dict.get() method
                     try:
                         new_consensus[gene[0]][record.id] += (
                             record.seq[pos[0] : pos[1]]
@@ -157,6 +159,25 @@ def write_fast_aa(reference, alignment, output, locus, gene, coverage):
         write_fasta(new_consensus[gene], output)
 
 
+def check_for_undefined(filename):
+    checked_sequences = []
+
+    with open(filename, "r", encoding="utf-8") as handler:
+        fasta_files = SeqIO.parse(handler, "fasta")
+        for fasta in fasta_files:
+            counter_dic = Counter(fasta.seq)
+            total_undefined = (
+                counter_dic.get("*", 0)
+                + counter_dic.get("X", 0)
+                + counter_dic.get("-", 0)
+            )
+            total_char = len(fasta.seq)
+            if (total_char - total_undefined) / total_char * 100 >= 90:
+                checked_sequences.append(fasta)
+    with open(filename, "w", encoding="utf-8") as handler:
+        SeqIO.write(checked_sequences, handler, "fasta")
+
+
 if __name__ == "__main__":
     reference = sys.argv[1]
     alignment = sys.argv[2]
@@ -166,3 +187,4 @@ if __name__ == "__main__":
     coverage = sys.argv[6]
 
     write_fast_aa(reference, alignment, output, locus, gene, coverage)
+    check_for_undefined(output)
