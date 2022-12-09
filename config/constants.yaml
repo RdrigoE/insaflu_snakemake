@@ -6,7 +6,7 @@ references: ../workflow/references/
 rules: ../workflow/rules/
 envs: ../envs/
 scripts: ../workflow/scripts/
-samples: ../data/
+samples: ../user_data/
 config_file: ../config/config.yaml
 software_parameters: ../user_metadata/parameters.yaml
 get_coverage: ../workflow/software/getCoverage/getCoverage.py
