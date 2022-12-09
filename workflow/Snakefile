@@ -179,26 +179,26 @@ class Checkpoint_Main:
                     sample=config_user["samples"],
                     project=config_user["project"],
                 ),
-                expand(
-                    "projects/{project}/main_result/All_nt_only_90plus.fasta",
-                    sample=config_user["samples"],
-                    project=config_user["project"],
-                ),
+                # expand(
+                #     "projects/{project}/main_result/All_nt_only_90plus.fasta",
+                #     sample=config_user["samples"],
+                #     project=config_user["project"],
+                # ),
                 expand(
                     "projects/{project}/main_result/AllConsensus.fasta",
                     sample=config_user["samples"],
                     project=config_user["project"],
                 ),
-                expand(
-                    "projects/{project}/main_result/All_nt.fasta",
-                    sample=config_user["samples"],
-                    project=config_user["project"],
-                ),
-                expand(
-                    "projects/{project}/main_result/All_nt.nex",
-                    sample=config_user["samples"],
-                    project=config_user["project"],
-                ),
+                # expand(
+                #     "projects/{project}/main_result/All_nt.fasta",
+                #     sample=config_user["samples"],
+                #     project=config_user["project"],
+                # ),
+                # expand(
+                #     "projects/{project}/main_result/All_nt.nex",
+                #     sample=config_user["samples"],
+                #     project=config_user["project"],
+                # ),
                 expand(
                     "projects/{project}/main_result/AllConsensus.nex",
                     sample=config_user["samples"],
@@ -209,11 +209,11 @@ class Checkpoint_Main:
                     sample=config_user["samples"],
                     project=config_user["project"],
                 ),
-                expand(
-                    "projects/{project}/main_result/All_nt_only_90plus.nex",
-                    sample=config_user["samples"],
-                    project=config_user["project"],
-                ),
+                # expand(
+                #     "projects/{project}/main_result/All_nt_only_90plus.nex",
+                #     sample=config_user["samples"],
+                #     project=config_user["project"],
+                # ),
                 expand(
                     "projects/{project}/main_result/snp_ready.txt",
                     project=config_user["project"],

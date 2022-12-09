@@ -1,14 +1,14 @@
-rule seqret_all_nt:
-    input:
-        "projects/{project}/main_result/All_nt.fasta",
-    output:
-        "projects/{project}/main_result/All_nt.nex",
-    conda:
-        "../envs/seqret.yaml"
-    params:
-        "-sformat fasta -osformat2 nexusnon",
-    shell:
-        "seqret {params} -sequence {input} -outseq {output}"
+# rule seqret_all_nt:
+#     input:
+#         "projects/{project}/main_result/All_nt.fasta",
+#     output:
+#         "projects/{project}/main_result/All_nt.nex",
+#     conda:
+#         "../envs/seqret.yaml"
+#     params:
+#         "-sformat fasta -osformat2 nexusnon",
+#     shell:
+#         "seqret {params} -sequence {input} -outseq {output}"
 
 
 rule seqret_all_nt_only_90:
@@ -76,17 +76,17 @@ rule alignment_nt_seg_seqret:
         "seqret {params} -sequence {input} -outseq {output}"
 
 
-rule alignment_nt_All_seqret:
-    input:
-        "projects/{project}/main_result/Alignment_nt_All.fasta",
-    output:
-        "projects/{project}/main_result/Alignment_nt_All.nex",
-    conda:
-        "../envs/seqret.yaml"
-    params:
-        "-sformat fasta -osformat2 nexusnon",
-    shell:
-        "seqret {params} -sequence {input} -outseq {output}"
+# rule alignment_nt_All_seqret:
+#     input:
+#         "projects/{project}/main_result/Alignment_nt_All.fasta",
+#     output:
+#         "projects/{project}/main_result/Alignment_nt_All.nex",
+#     conda:
+#         "../envs/seqret.yaml"
+#     params:
+#         "-sformat fasta -osformat2 nexusnon",
+#     shell:
+#         "seqret {params} -sequence {input} -outseq {output}"
 
 
 rule alignment_nt_specific_seqret:

@@ -24,18 +24,18 @@ rule nextalign_pre_aa:l
 #         "cp {input} {output}"
 
 
-rule nextalign:
-    input:
-        "projects/{project}/main_result/All_nt.fasta",
-    output:
-        "projects/{project}/main_result/Alignment_nt_All.fasta",
-    conda:
-        "../envs/nextalign.yaml"
-    threads: config["nextalign_threads"]
-    params:
-        "-j {threads}",
-    shell:
-        "nextalign run -r {REFERENCE_FASTA} {params} --output-fasta {output} {input}"
+# rule nextalign:
+#     input:
+#         "projects/{project}/main_result/All_nt.fasta",
+#     output:
+#         "projects/{project}/main_result/Alignment_nt_All.fasta",
+#     conda:
+#         "../envs/nextalign.yaml"
+#     threads: config["nextalign_threads"]
+#     params:
+#         "-j {threads}",
+#     shell:
+#         "nextalign run -r {REFERENCE_FASTA} {params} --output-fasta {output} {input}"
 
 rule nextalign_nt:
     input:
