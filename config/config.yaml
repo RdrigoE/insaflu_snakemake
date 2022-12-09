@@ -1,38 +1,89 @@
-identification: MN908947
+identification: ''
 locus:
-- SARS_CoV_2
-project: test_covid
+- '1'
+- '2'
+- '3'
+- '4'
+- '5'
+- '6'
+- '7'
+- '8'
+project: test_flu
 proteins:
-- orf1ab
-- S
-- ORF3a
-- E
+- PB2
+- PB1
+- PA
+- HA
+- NP
+- locus_00006
+- NA
 - M
-- ORF6
-- ORF7a
-- ORF8
-- N
-- ORF10
+- NS
 sample_type:
-  demo_SARSCoV2_001: snippy
-  demo_SARSCoV2_002: snippy
-  demo_sarscov2_083: medaka
-  demo_sarscov2_085: medaka
+  influenza_01: snippy
+  influenza_02: snippy
+  influenza_03: snippy
+  influenza_04: snippy
+  influenza_05: snippy
+  influenza_06: snippy
+  influenza_07: snippy
+  influenza_08: snippy
+  influenza_09: snippy
+  influenza_10: snippy
+  influenza_11: snippy
+  influenza_12: snippy
+  influenza_13: snippy
 samples:
-  demo_SARSCoV2_001:
-    fastq1: Demo_Sample_001_R1_001
-    fastq2: Demo_Sample_001_R2_001
+  influenza_01:
+    fastq1: influenza_01_R1_001
+    fastq2: influenza_01_R2_001
     tech: illumina
-  demo_SARSCoV2_002:
-    fastq1: Demo_Sample_002_R1_001
-    fastq2: null
+  influenza_02:
+    fastq1: influenza_02_R1_001
+    fastq2: influenza_02_R2_001
     tech: illumina
-  demo_sarscov2_083:
-    fastq1: demo_sarscov2_083
-    fastq2: null
-    tech: ont
-  demo_sarscov2_085:
-    fastq1: demo_sarscov2_085
-    fastq2: null
-    tech: ont
-version: '3'
+  influenza_03:
+    fastq1: influenza_03_R1_001
+    fastq2: influenza_03_R2_001
+    tech: illumina
+  influenza_04:
+    fastq1: influenza_04_R1_001
+    fastq2: influenza_04_R2_001
+    tech: illumina
+  influenza_05:
+    fastq1: influenza_05_R1_001
+    fastq2: influenza_05_R2_001
+    tech: illumina
+  influenza_06:
+    fastq1: influenza_06_R1_001
+    fastq2: influenza_06_R2_001
+    tech: illumina
+  influenza_07:
+    fastq1: influenza_07_R1_001
+    fastq2: influenza_07_R2_001
+    tech: illumina
+  influenza_08:
+    fastq1: influenza_08_R1_001
+    fastq2: influenza_08_R2_001
+    tech: illumina
+  influenza_09:
+    fastq1: influenza_09_R1_001
+    fastq2: influenza_09_R2_001
+    tech: illumina
+  influenza_10:
+    fastq1: influenza_10_R1_001
+    fastq2: influenza_10_R2_001
+    tech: illumina
+  influenza_11:
+    fastq1: influenza_11_R1_001
+    fastq2: influenza_11_R2_001
+    tech: illumina
+  influenza_12:
+    fastq1: influenza_12_R1_001
+    fastq2: influenza_12_R2_001
+    tech: illumina
+  influenza_13:
+    fastq1: influenza_13_R1_001
+    fastq2: influenza_13_R2_001
+    tech: illumina
+version: ''

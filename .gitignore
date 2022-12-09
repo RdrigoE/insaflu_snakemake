@@ -6,3 +6,5 @@ user_data
 data
 results
 .vscode
+snpeff.config
+config.yaml
