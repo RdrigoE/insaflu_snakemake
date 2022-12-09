@@ -52,18 +52,18 @@ rule mafft_pre_aa:
 #         "cp {input} {output}"
 
 
-# rule mafft:
-#     input:
-#         "projects/{project}/main_result/All_nt.fasta",
-#     output:
-#         "projects/{project}/main_result/Alignment_nt_All.fasta",
-#     conda:
-#         "../envs/mafft.yaml"
-#     threads: config["mafft_threads"]
-#     params:
-#         "--preservecase",
-#     shell:
-#         "mafft --thread {threads} {params} {input} > {output}"
+rule mafft:
+    input:
+        "projects/{project}/main_result/All_nt.fasta",
+    output:
+        "projects/{project}/main_result/Alignment_nt_All.fasta",
+    conda:
+        "../envs/mafft.yaml"
+    threads: config["mafft_threads"]
+    params:
+        "--preservecase",
+    shell:
+        "mafft --thread {threads} {params} {input} > {output}"
 
 
 rule mafft_nt:
