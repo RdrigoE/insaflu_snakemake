@@ -13,7 +13,7 @@ rule raw_fastqc_se:
     params:
         "--nogroup",
     shell:
-        "fastqc {input} -o {output.dir} {params} && python3 {scripts_directory}change_fastqc_output.py {wildcards.sample}"
+        "fastqc {input} -o {output.dir} {params} && python3 {scripts_directory}move_fastqc_output.py {wildcards.sample}"
 
 
 def get_raw_input_fastq_pe(wildcards):
