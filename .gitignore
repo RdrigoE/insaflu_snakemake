@@ -3,8 +3,9 @@ results
 __pycache__
 projects
 user_data
-data
+reads
 results
 .vscode
 snpeff.config
 config.yaml
+workflow/db/data
