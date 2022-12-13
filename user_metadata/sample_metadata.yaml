@@ -1,4 +1,4 @@
 only_samples: False
 project_name: test_flu
-fasta_reference: ../workflow/references/A_H3N2_A_Victoria_361_2011.fasta
-gb_reference: ../workflow/references/A_H3N2_A_Victoria_361_2011.gbk
+fasta_reference: ../references/A_H3N2_A_Victoria_361_2011.fasta
+gb_reference: ../references/A_H3N2_A_Victoria_361_2011.gbk

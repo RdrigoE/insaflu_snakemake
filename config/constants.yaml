@@ -2,7 +2,7 @@ working: ../results/
 user_metadata: ../user_metadata/
 sample_yaml: ../user_metadata/sample_metadata.yaml
 sample_csv: ../user_metadata/sample_metadata.csv
-references: ../workflow/references/
+references: ../references/
 rules: ../workflow/rules/
 envs: ../envs/
 scripts: ../workflow/scripts/
