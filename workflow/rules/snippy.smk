@@ -71,18 +71,18 @@ rule create_align_file_snippy:
         "python {scripts_directory}mask_consensus_by_deep.py {REFERENCE_FASTA} {input.first_consensus} {output.align_file} {wildcards.seg}"
 
 
-rule align_mafft_snippy:
-    input:
-        align_file="align_samples/{sample}/snippy/snippy_align_{seg}.fasta",
-    output:
-        aligned_file=temp("align_samples/{sample}/snippy/snippy_aligned_{seg}.fasta"),
-    conda:
-        "../envs/mafft.yaml"
-    threads: config["mafft_threads"]
-    params:
-        "--preservecase",
-    shell:
-        "mafft --thread {threads} {params} {input.align_file} > {output.aligned_file}"
+# rule align_mafft_snippy:
+#     input:
+#         align_file="align_samples/{sample}/snippy/snippy_align_{seg}.fasta",
+#     output:
+#         aligned_file=temp("align_samples/{sample}/snippy/snippy_aligned_{seg}.fasta"),
+#     conda:
+#         "../envs/mafft.yaml"
+#     threads: config["mafft_threads"]
+#     params:
+#         "--preservecase",
+#     shell:
+#         "mafft --thread {threads} {params} {input.align_file} > {output.aligned_file}"
 
 
 rule msa_masker_snippy:

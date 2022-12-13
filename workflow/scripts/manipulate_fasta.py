@@ -13,14 +13,16 @@ def detach_reference(input_file, ref):
     :return: The reference sequence
     :doc-author: Trelent
     """
-    with open(input_file, "r", encoding="utf8") as handle:
-        record_list = list(SeqIO.parse(handle, "fasta"))
+    with open(input_file, "r", encoding="utf8") as handle_input:
+        record_list = list(SeqIO.parse(handle_input, "fasta"))
+        print("Number of records in input file: ", len(record_list))
         reference = record_list.pop(0)
-    with open(input_file, "w", encoding="utf8") as handle:
-        SeqIO.write(record_list, handle, "fasta")
+    with open(input_file, "w", encoding="utf8") as handle_input_write:
+        SeqIO.write(record_list, handle_input_write, "fasta")
 
-    with open(ref, "w", encoding="utf8") as handle:
-        SeqIO.write(reference, handle, "fasta")
+    with open(ref, "w", encoding="utf8") as handle_reference:
+        print(reference)
+        SeqIO.write(reference, handle_reference, "fasta")
 
 
 def attach_reference(input_file, ref):
@@ -36,7 +38,7 @@ def attach_reference(input_file, ref):
     with open(ref, "r", encoding="utf8") as handle:
         reference = list(SeqIO.parse(handle, "fasta"))[0]
     with open(input_file, "r", encoding="utf8") as handle:
-        records = list(SeqIO.parse(handle, "fasta"))[0]
+        records = list(SeqIO.parse(handle, "fasta"))
         records.insert(0, reference)
     with open(input_file, "w", encoding="utf8") as handle:
         SeqIO.write(records, handle, "fasta")

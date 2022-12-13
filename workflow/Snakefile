@@ -1,5 +1,6 @@
 from scripts.import_user_data import Data, get_data_in_align_form
 from scripts.yaml_io import read_yaml, write_yaml
+from scripts.random_string import random_string
 from scripts.extract_gb_info import (
     get_locus,
     get_id_version,
@@ -525,7 +526,6 @@ include: "../workflow/rules/nanofilt.smk"
 include: "../workflow/rules/medaka.smk"
 include: "../workflow/rules/make_project.smk"
 include: "../workflow/rules/seqret.smk"
-include: "../workflow/rules/mafft.smk"
 include: "../workflow/rules/fasttree.smk"
 include: "../workflow/rules/snpeff.smk"
 include: "../workflow/rules/freebayes.smk"
@@ -534,6 +534,10 @@ include: "../workflow/rules/variants.smk"
 include: "../workflow/rules/spades.smk"
 include: "../workflow/rules/abricate.smk"
 include: "../workflow/rules/pangolin.smk"
+include: "../workflow/rules/mafft.smk"
+
+
+# include: "../workflow/rules/nextalign.smk"
 
 
 rule all:

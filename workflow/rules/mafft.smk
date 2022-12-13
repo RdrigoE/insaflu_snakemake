@@ -1,32 +1,32 @@
 configfile: "../config/threads.yaml"
 
 
-# rule align_w_mafft:
-#     input:
-#         align_file="align_samples/{sample}/medaka/medaka_align_{seg}.fasta",
-#     output:
-#         aligned_file=temp("align_samples/{sample}/medaka/medaka_aligned_{seg}.fasta"),
-#     conda:
-#         "../envs/mafft.yaml"
-#     threads: 8
-#     params:
-#         "--preservecase",
-#     shell:
-#         "mafft --thread {threads} {params} {input.align_file} > {output.aligned_file}"
+rule align_w_mafft_medaka:
+    input:
+        align_file="align_samples/{sample}/medaka/medaka_align_{seg}.fasta",
+    output:
+        aligned_file=temp("align_samples/{sample}/medaka/medaka_aligned_{seg}.fasta"),
+    conda:
+        "../envs/mafft.yaml"
+    threads: 8
+    params:
+        "--preservecase",
+    shell:
+        "mafft --thread {threads} {params} {input.align_file} > {output.aligned_file}"
 
 
-# rule align_mafft_snippy:
-#     input:
-#         align_file="align_samples/{sample}/snippy/snippy_align_{seg}.fasta",
-#     output:
-#         aligned_file=temp("align_samples/{sample}/snippy/snippy_aligned_{seg}.fasta"),
-#     conda:
-#         "../envs/mafft.yaml"
-#     threads: config["mafft_threads"]
-#     params:
-#         "--preservecase",
-#     shell:
-#         "mafft --thread {threads} {params} {input.align_file} > {output.aligned_file}"
+rule align_mafft_snippy:
+    input:
+        align_file="align_samples/{sample}/snippy/snippy_align_{seg}.fasta",
+    output:
+        aligned_file=temp("align_samples/{sample}/snippy/snippy_aligned_{seg}.fasta"),
+    conda:
+        "../envs/mafft.yaml"
+    threads: config["mafft_threads"]
+    params:
+        "--preservecase",
+    shell:
+        "mafft --thread {threads} {params} {input.align_file} > {output.aligned_file}"
 
 
 rule mafft_pre_aa:
