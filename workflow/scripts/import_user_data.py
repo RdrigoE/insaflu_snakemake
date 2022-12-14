@@ -1,7 +1,7 @@
 """Import sample data from user"""
 from typing import Optional
 import pandas
-from yaml_io import read_yaml
+from scripts.yaml_io import read_yaml
 
 dic_directory = read_yaml("config/constants.yaml")
 
