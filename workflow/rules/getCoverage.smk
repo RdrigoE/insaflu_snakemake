@@ -29,4 +29,4 @@ checkpoint mergeCoverage:
             project=config_user["project"],
         ),
     shell:
-        "python {scripts_directory}mergeCoverage.py '{input}' {output.coverage_regular} {output.coverage_translate} {REFERENCE_GB}"
+        "python {scripts_directory}merge_coverage.py '{input}' {output.coverage_regular} {output.coverage_translate} {REFERENCE_GB}"
