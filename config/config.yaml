@@ -1,0 +1,34 @@
+identification: ''
+locus:
+- '1'
+- '2'
+- '3'
+- '4'
+- '5'
+- '6'
+- '7'
+- '8'
+project: test_flu_34
+proteins:
+- PB2
+- PB1
+- PA
+- HA
+- NP
+- locus_00006
+- NA
+- M
+- NS
+sample_type:
+  influenza_03: snippy
+  influenza_04: snippy
+samples:
+  influenza_03:
+    fastq1: influenza_03_R1_001
+    fastq2: influenza_03_R2_001
+    tech: illumina
+  influenza_04:
+    fastq1: influenza_04_R1_001
+    fastq2: influenza_04_R2_001
+    tech: illumina
+version: ''

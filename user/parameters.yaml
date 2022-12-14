@@ -1,7 +1,7 @@
 min_coverage_consensus: 70
 
 ##ILLUMINA / Ion Torrent data##
-# Trimmomatic 
+# Trimmomatic
 trimmo-ILLUMINACLIP: null #(default: Not apply)
 trimmo-HEADCROP: null #(default = 0)
 trimmo-CROP: null #(default = 0)
@@ -12,7 +12,7 @@ trimmo-TRAILING: 3 #(default = 3)
 trimmo-MINLEN: 35 #(default = 35)
 
 ## Oxford Nanopore Technologies (ONT) data ##
-# NanoFilt 
+# NanoFilt
 QUALITY: 10 #(default: 10)
 LENGTH: 50 #(default: 50)
 HEADCROP: 70 #(default: 70)
@@ -30,8 +30,6 @@ mincov: 10 #default = 10)
 
 minfrac: 0.51 #(default = 0.51)
 
-msa_masker: 9
-
 ## Oxford Nanopore Technologies (ONT) data ##
 ## Medaka
 
@@ -41,7 +39,7 @@ mincov_medaka: 29 #(default: 29) #msa_masker medaka
 
 min_prop_for_variant_evidence: 0.8 #(default: 0.8).
 
-# MASK ALL CONSENSUS IN PROJECT 
+# MASK ALL CONSENSUS IN PROJECT
 MASK_SITES: null #1,2,3,4
 MASK_REGIONS: null #200-250
 MASK_F_BEGINNING: null #40

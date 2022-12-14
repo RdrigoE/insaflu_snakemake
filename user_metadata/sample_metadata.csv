@@ -1,5 +1,0 @@
-sample_name,fastq1,fastq2,tech
-demo_SARSCoV2_001,Demo_Sample_001_R1_001,Demo_Sample_001_R2_001,illumina
-demo_SARSCoV2_002,Demo_Sample_002_R1_001,,illumina
-demo_sarscov2_083,Demo_Sample_083,,ont
-demo_sarscov2_085,Demo_Sample_085,,ont
