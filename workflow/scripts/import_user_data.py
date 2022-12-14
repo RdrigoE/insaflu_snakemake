@@ -1,9 +1,9 @@
 """Import sample data from user"""
 from typing import Optional
 import pandas
-from scripts.yaml_io import read_yaml
+from yaml_io import read_yaml
 
-dic_directory = read_yaml("../config/constants.yaml")
+dic_directory = read_yaml("config/constants.yaml")
 
 ASSEMBLER: str = dic_directory["assembler"]
 

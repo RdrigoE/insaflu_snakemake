@@ -19,7 +19,7 @@ import re
 import csv
 
 
-workdir: "../results/"
+workdir: "./results/"
 
 
 class Abricate_Pangolin:
