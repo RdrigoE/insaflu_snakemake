@@ -44,8 +44,9 @@
 ## Change the parameters in the run in user/parameters.yaml
    - Here is possible to change the parameters in some softwares, change at your own responsability. A copy of the default parameters are in config/default_parameters.yaml
    - Each project will recive a copy of this file inside projects/project_name_folder/
-
-## You must keep the fasta identifier equal to the GenBank Locus
+## The references are in user/references folder
+To add new ones just copy your fasta and genbank file.
+### You must keep the fasta identifier equal to the GenBank Locus
    ">ON563414" == "LOCUS       ON563414"
 
 ## Run your project or analyse your samples with the following command:
