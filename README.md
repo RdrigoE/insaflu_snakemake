@@ -1,18 +1,18 @@
 # INSaFLU snakemake
 
-## Create environment 
+## Create Environment 
 
-### install mamba forge:
+### Install Mamba Forge:
     
    ```$ curl -L https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-Linux-x86_64.sh -o Mambaforge-Linux-x86_64.sh```
     
    ```$ bash Mambaforge-Linux-x86_64.sh```
 
-### activate conda:
+### Activate Conda:
     
    ```$ conda activate base```
 
-### create environment:
+### Create Environment:
     
    ```$ mamba env create --name insaflu --file config/insaflu.yaml```
 
