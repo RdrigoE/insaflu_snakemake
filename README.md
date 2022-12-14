@@ -49,7 +49,6 @@
    ">ON563414" == "LOCUS       ON563414"
 
 ## Run your project or analyse your samples with the following command:
-   ```
-   $ snakemake -c {threads} --use-conda
-   ```
-
+   `$ cd workflow`
+   
+   `$ snakemake -c {threads} --use-conda`
