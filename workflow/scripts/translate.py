@@ -176,6 +176,9 @@ def check_for_undefined(filename):
                 checked_sequences.append(fasta)
     with open(filename, "w", encoding="utf-8") as handler:
         SeqIO.write(checked_sequences, handler, "fasta")
+    if len(checked_sequences) == 1:
+        with open(filename[:-11] + "mafft.fasta", "w", encoding="utf-8") as handler_2:
+            SeqIO.write(checked_sequences, handler_2, "fasta")
 
 
 if __name__ == "__main__":

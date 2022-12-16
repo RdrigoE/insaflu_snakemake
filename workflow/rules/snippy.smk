@@ -18,7 +18,6 @@ rule snippy_pe:
         get_snippy_parameters(software_parameters),
     shell:
         "rm -r align_samples/{wildcards.sample}/snippy/ && "
-
         "snippy --cpus {threads} --pe1 {input.reads_1} --pe2 {input.reads_2} --ref {REFERENCE_FASTA} --outdir align_samples/{wildcards.sample}/snippy/ {params}"
 
 

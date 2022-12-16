@@ -52,10 +52,12 @@ rule create_segments:
             project=PROJECT_NAME,
         ),
     output:
-        expand(
-            "projects/{project}/main_result/{seg}/Alignment_nt_{seg}.fasta",
-            project=PROJECT_NAME,
-            seg=SEGMENTS,
+        temp(
+            expand(
+                "projects/{project}/main_result/{seg}/Alignment_nt_{seg}.fasta",
+                project=PROJECT_NAME,
+                seg=SEGMENTS,
+            )
         ),
     shell:
         "python {scripts_directory}split_files_by_locus.py {input} projects/{PROJECT_NAME}/main_result {REFERENCE_GB}"
