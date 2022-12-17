@@ -1,0 +1,3 @@
+sample_name,fastq1,fastq2,tech
+demo_RSV_005,SRR6849632_1,SRR6849632_2,illumina
+demo_RSV_006,SRR6849631_1,SRR6849631_2,illumina

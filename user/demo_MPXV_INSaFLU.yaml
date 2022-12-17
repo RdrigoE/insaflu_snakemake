@@ -1,0 +1,4 @@
+only_samples: False
+project_name: mpox_dataset
+fasta_reference: monkeypox_MT903344_MPXV_UK_P2_wo_NN.fasta
+gb_reference: monkeypox_MT903344_MPXV_UK_P2_wo_NN.gb

@@ -8,9 +8,13 @@ if __name__ == "__main__":
     output_file = sys.argv[3]
     segment_name = sys.argv[4]
 
+    print(reference_fasta, "\n", consensus_file, "\n", output_file, "\n", segment_name)
+
     with open(reference_fasta, "r", encoding="utf-8") as handle_fasta:
         dt_consensus = SeqIO.to_dict(SeqIO.parse(consensus_file, "fasta"))
+        print("------------>", dt_consensus)
         for record in SeqIO.parse(handle_fasta, "fasta"):
+            print(record)
             if record.id == segment_name:  ### make mask
                 ### get sequences
                 vect_out_fasta_to_align = []

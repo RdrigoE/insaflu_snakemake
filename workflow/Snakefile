@@ -17,7 +17,6 @@ from scripts.get_software_parameters import (
 import yaml
 import re
 import csv
-import pdb
 
 
 workdir: "./results/"
@@ -46,7 +45,6 @@ class Abricate_Pangolin:
             "coronavirus" in abricate_dic.get("Species")
             or "coronavirus" in abricate_dic.get("Genus")
         )
-        print(go_pangolin)
         pattern = (
             self.output
             if go_pangolin
@@ -139,6 +137,7 @@ class Checkpoint_Main:
 
         if pattern == []:
             return "template_empty.txt"
+        print(pattern)
         return pattern
 
     def get_locus_w_coverage(self, coverage_file, genbank_file, coverage_limit):
@@ -251,7 +250,14 @@ class Checkpoint_Main:
                 #     seg=SEGMENTS,
                 # ),
             ]
-            return files
+            return_list = []
+            for new in files:
+                if isinstance(new, list):
+                    for new_2 in new:
+                        return_list.append(new_2)
+                else:
+                    return_list.append(new)
+            return return_list
         else:
             return expand("projects/{p}/main_result/warning.txt", p=self.project)
 

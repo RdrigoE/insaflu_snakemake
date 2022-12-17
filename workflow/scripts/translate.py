@@ -176,7 +176,7 @@ def check_for_undefined(filename):
                 checked_sequences.append(fasta)
     with open(filename, "w", encoding="utf-8") as handler:
         SeqIO.write(checked_sequences, handler, "fasta")
-    if len(checked_sequences) == 1:
+    if len(checked_sequences) < 2:
         with open(filename[:-11] + "mafft.fasta", "w", encoding="utf-8") as handler_2:
             SeqIO.write(checked_sequences, handler_2, "fasta")
 
@@ -190,4 +190,4 @@ if __name__ == "__main__":
     coverage = sys.argv[6]
 
     write_fast_aa(reference, alignment, output, locus, gene, coverage)
-    check_for_undefined(output)
+    # check_for_undefined(output)

@@ -29,11 +29,11 @@ def get_abricate_info(path):
     for entry_list in info_list:
         entry = entry_list[0]
         if "genus" in entry:
-            genus = re.findall("(?<=genus~~~)(.*?)(?=~~~)", entry)[0]
+            genus = re.findall("(?<=insaflu~~~)(.*?)(?=_genus)", entry)[0]
             genus_list.append(genus)
 
         elif "species" in entry:
-            species = re.findall("(?<=species~~~)(.*?)(?=~~~)", entry)[0]
+            species = re.findall("(?<=insaflu~~~)(.*?)(?=_species)", entry)[0]
             species_list.append(species)
     # print(Counter(genus_list))
     # print(Counter(species_list))
