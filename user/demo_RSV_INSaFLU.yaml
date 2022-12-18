@@ -1,4 +1,0 @@
-only_samples: False
-project_name: rsv_dataset
-fasta_reference: RSV_A_strain_S2_ts1C_NC_001803.fasta
-gb_reference: RSV_A_strain_S2_ts1C_NC_001803.gb

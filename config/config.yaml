@@ -1,53 +1,39 @@
-identification: MN908947
+identification: ''
 locus:
-- SARS_CoV_2
-project: sars_dataset
+- '1'
+- '2'
+- '3'
+- '4'
+- '5'
+- '6'
+- '7'
+- '8'
+project: influenza_dataset
 proteins:
-- orf1ab
-- S
-- ORF3a
-- E
+- PB2
+- PB1
+- PA
+- HA
+- NP
+- locus_00006
+- NA
 - M
-- ORF6
-- ORF7a
-- ORF8
-- N
-- ORF10
+- NS
 sample_type:
-  demo_SARSCoV2_065: snippy
-  demo_SARSCoV2_066: snippy
-  demo_SARSCoV2_067: snippy
-  demo_SARSCoV2_069: medaka
-  demo_SARSCoV2_070: medaka
-  demo_SARSCoV2_072: medaka
-  demo_SARSCoV2_073: medaka
+  demo_influenza_01: snippy
+  demo_influenza_02: snippy
+  demo_influenza_03: snippy
 samples:
-  demo_SARSCoV2_065:
-    fastq1: Demo_Sample_065_R1_001
-    fastq2: Demo_Sample_065_R2_001
+  demo_influenza_01:
+    fastq1: influenza_01_R1_001
+    fastq2: influenza_01_R2_001
     tech: illumina
-  demo_SARSCoV2_066:
-    fastq1: Demo_Sample_066_R1_001
-    fastq2: Demo_Sample_066_R2_001
+  demo_influenza_02:
+    fastq1: influenza_02_R1_001
+    fastq2: influenza_02_R2_001
     tech: illumina
-  demo_SARSCoV2_067:
-    fastq1: Demo_Sample_067_R1_001
-    fastq2: null
+  demo_influenza_03:
+    fastq1: influenza_03_R1_001
+    fastq2: influenza_03_R2_001
     tech: illumina
-  demo_SARSCoV2_069:
-    fastq1: Demo_Sample_069
-    fastq2: null
-    tech: ont
-  demo_SARSCoV2_070:
-    fastq1: Demo_Sample_070
-    fastq2: null
-    tech: ont
-  demo_SARSCoV2_072:
-    fastq1: Demo_Sample_072
-    fastq2: null
-    tech: ont
-  demo_SARSCoV2_073:
-    fastq1: Demo_Sample_073
-    fastq2: null
-    tech: ont
-version: '3'
+version: ''

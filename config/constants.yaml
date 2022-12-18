@@ -1,7 +1,7 @@
 working: ../results/
 user_metadata: ../user_metadata/
-sample_yaml: ../user/demo_SARS_CoV_2_INSaFLU.yaml
-sample_csv: ../user/demo_SARS_CoV_2_INSaFLU.csv
+sample_yaml: ../user/project_info.yaml
+sample_csv: ../user/sample_metadata.csv
 references: ../user/references/
 rules: ../workflow/rules/
 envs: ../envs/
@@ -10,4 +10,4 @@ samples: ../user/reads/
 config_file: ../config/config.yaml
 software_parameters: ../user/parameters.yaml
 get_coverage: ../workflow/software/getCoverage/getCoverage.py
-assembler: snippy #"iVar"
+assembler: snippy
