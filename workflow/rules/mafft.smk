@@ -85,19 +85,6 @@ rule mafft_proteins:
         "mafft --thread {threads} {params} {input} > {output}"
 
 
-# rule fallback_mafft_proteins:
-#     input:
-#         "projects/{project}/main_result/{locus}/Alignment_aa_{locus}_{gene}_trans.fasta",
-#     output:
-#         nex="projects/{project}/main_result/{locus}/Alignment_aa_{locus}_{gene}_mafft.nex",
-#         mafft="projects/{project}/main_result/{locus}/Alignment_aa_{locus}_{gene}_mafft.fasta",
-#     shell:
-#         "cat {input} > {output.mafft} && cat {input} > {output.nex}"
-
-
-# ruleorder: fallback_mafft_proteins > mafft_proteins
-
-
 rule cp_Alignment_nt:
     input:
         "projects/{project}/main_result/{seg}/Alignment_nt_{seg}.fasta",

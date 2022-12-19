@@ -1,3 +1,4 @@
+"""Get validated Variants"""
 import re
 import csv
 import sys

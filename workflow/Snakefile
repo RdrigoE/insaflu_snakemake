@@ -322,7 +322,7 @@ def get_output_sample():
             "samples/{sample}/raw_fastqc/{sample}_{direction}_fastqc.html",
             sample=paired_illumina.keys(),
             direction=["1", "2"],
-        ),  # generalizar
+        ),
         expand(
             "samples/{sample}/trimmed_fastqc/{sample}_{direction}.trimmed_fastqc.html",
             sample=paired_illumina.keys(),
@@ -339,7 +339,7 @@ def get_output_sample():
         expand(
             "samples/{sample}/raw_nanostat/{sample}_stats.txt",
             sample=ont_samples.keys(),
-        ),  # generalizar
+        ),
         expand(
             "samples/{sample}/trimmed_reads/nano_{sample}.trimmed.fastq.gz",
             sample=ont_samples.keys(),
@@ -429,7 +429,7 @@ def get_output_project():
         expand(
             "samples/{sample}/raw_nanostat/{sample}_stats.txt",
             sample=ont_samples.keys(),
-        ),  # generalizar
+        ),
         expand(
             "samples/{sample}/trimmed_reads/nano_{sample}.trimmed.fastq.gz",
             sample=ont_samples.keys(),
@@ -477,36 +477,36 @@ def get_output_project():
             f"projects/{config_user['project']}/main_result/lineage_report.csv",
             config_user["project"],
         ),
-        # expand(
-        #     "samples/{sample}/spades_se/contigs.fasta", sample=single_illumina.keys()
-        # ),
-        # expand(
-        #     "samples/{sample}/abricate_se/abricate_{sample}.csv",
-        #     sample=single_illumina.keys(),
-        # ),
-        # expand(
-        #     "samples/{sample}/abricate_se/abricate_{sample}.yaml",
-        #     sample=single_illumina.keys(),
-        # ),
-        # expand(
-        #     "samples/{sample}/spades_pe/contigs.fasta", sample=paired_illumina.keys()
-        # ),
-        # expand(
-        #     "samples/{sample}/abricate_pe/abricate_{sample}.csv",
-        #     sample=paired_illumina.keys(),
-        # ),
-        # expand(
-        #     "samples/{sample}/abricate_pe/abricate_{sample}.yaml",
-        #     sample=paired_illumina.keys(),
-        # ),
+        expand(
+            "samples/{sample}/spades_se/contigs.fasta", sample=single_illumina.keys()
+        ),
+        expand(
+            "samples/{sample}/abricate_se/abricate_{sample}.csv",
+            sample=single_illumina.keys(),
+        ),
+        expand(
+            "samples/{sample}/abricate_se/abricate_{sample}.yaml",
+            sample=single_illumina.keys(),
+        ),
+        expand(
+            "samples/{sample}/spades_pe/contigs.fasta", sample=paired_illumina.keys()
+        ),
+        expand(
+            "samples/{sample}/abricate_pe/abricate_{sample}.csv",
+            sample=paired_illumina.keys(),
+        ),
+        expand(
+            "samples/{sample}/abricate_pe/abricate_{sample}.yaml",
+            sample=paired_illumina.keys(),
+        ),
         expand(
             "samples/{sample}/abricate_ont/abricate_{sample}.csv",
             sample=ont_samples.keys(),
         ),
-        # expand(
-        #     "samples/{sample}/abricate_ont/abricate_{sample}.yaml",
-        #     sample=ont_samples.keys(),
-        # ),
+        expand(
+            "samples/{sample}/abricate_ont/abricate_{sample}.yaml",
+            sample=ont_samples.keys(),
+        ),
         # expand("samples/{sample}/rabbitqc/rabbit.html", sample =  ont_samples.keys()),
     ]
 

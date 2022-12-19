@@ -32,7 +32,6 @@ rule snpeff:
     params:
         "-no-downstream -no-upstream -no-intergenic -no-utr -noStats -c ../workflow/db/snpeff.config",
     shell:
-        #not ready for multithreading >< -t {threads}
         "echo '{replace}' && "
         "{replace} {input.snp_file} &&"
         "snpEff {params} -v {REFERENCE_NAME} {input.snp_file} > {output}"

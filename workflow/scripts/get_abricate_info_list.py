@@ -35,8 +35,6 @@ def get_abricate_info(path):
         elif "species" in entry:
             species = re.findall("(?<=species~~~)(.*?)(?=~~~)", entry)[0]
             species_list.append(species)
-    # print(Counter(genus_list))
-    # print(Counter(species_list))
     if genus_list and species_list:
         final_genus = set(genus_list)
         final_species = set(species_list)

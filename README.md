@@ -1,4 +1,4 @@
-# INSaFLU snakemake
+# INSaFLU snakemake - UNDER DEVELOPMENT
 
 ## Create Environment 
 

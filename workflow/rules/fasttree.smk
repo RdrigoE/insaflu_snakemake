@@ -41,19 +41,6 @@ rule fasttree_nt:
         "fasttree {params} {input} > {output}"
 
 
-# rule fallback_fasttree_nt:
-#     input:
-#         "projects/{project}/main_result/{seg}/Alignment_nt_{seg}_mafft.fasta",
-#     output:
-#         tree="projects/{project}/main_result/{seg}/Alignment_nt_{seg}_tree.tree",
-#         nwk="projects/{project}/main_result/{seg}/Alignment_nt_{seg}_tree.nwk",
-#     shell:
-#         "echo '0 or 1 sequence in the protein alignment.' > {output.tree} && echo '0 or 1 sequence in the protein alignment.' > {output.nwk} "
-
-
-# ruleorder: fallback_fasttree_nt > fasttree_nt
-
-
 rule cp_Alignment_nt_tree:
     input:
         tree="projects/{project}/main_result/{seg}/Alignment_nt_{seg}_tree.tree",

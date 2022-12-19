@@ -1,5 +1,4 @@
 """Prepare config file in main_directory."""
-# change shell == True to shell == False
 import subprocess
 import sys
 from extract_gb_info import get_id_version, get_locus
@@ -43,15 +42,6 @@ def prepare_snpeff_run(ref_path_gb, locus, ref_path_fa, reference_name, output):
             f"\n{reference_name}.genome: {reference_name}\n",
             f"{reference_name}.{get_id_version(ref_path_gb)}.codonTable : Bacterial_and_Plant_Plastid\n",
         ]
-        # project = sys.argv[5]
-        # samples = sys.argv[6]
-
-        # samples = samples.split(" ")
-        # for sample in samples:
-        #     os.system(f"sed -i 's/{locus}/{identification}.{version}/g' projects/{project}/main_result/freebayes/{sample}_var.vcf")
-        # for sample in samples:
-        #     os.system(f"sed -i 's/{locus}/{identification}.{version}/g' projects/{project}/sample_{sample}/snippy/snps.vcf")
-
     with open(CONFIG_FILE, "r", encoding="UTF8") as snpeff_config:
         lines = snpeff_config.readlines()
         joined = "".join(lines)

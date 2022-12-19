@@ -1,4 +1,3 @@
-
 rule translate:
     input:
         Alignment_nt="projects/{project}/main_result/{locus}/Alignment_nt_{locus}_mafft.fasta",

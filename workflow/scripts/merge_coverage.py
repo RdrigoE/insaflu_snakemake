@@ -2,10 +2,6 @@
 import re
 import sys
 import csv
-
-# from yaml_io import read_yaml
-
-# from extract_gb_info import get_locus, get_locus_len
 import yaml
 
 from Bio import SeqIO

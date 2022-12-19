@@ -105,5 +105,4 @@ def get_nanofilt_parameters(software_parameters):
         if software_parameters["TAILCROP"] is not None
         else ""
     )
-    # nanofilt_parameters += f' --maxlength {software_parameters["MAXLENGTH"]}' if software_parameters["MAXLENGTH"] is not None else ''
     return nanofilt_parameters

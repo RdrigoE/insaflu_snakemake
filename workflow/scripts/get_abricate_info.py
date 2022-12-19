@@ -35,8 +35,6 @@ def get_abricate_info(path):
         elif "species" in entry:
             species = re.findall("(?<=insaflu~~~)(.*?)(?=_species)", entry)[0]
             species_list.append(species)
-    # print(Counter(genus_list))
-    # print(Counter(species_list))
     if genus_list and species_list:
         final_genus = max(Counter(genus_list).items(), key=lambda x: x[1])[0]
         final_species = max(Counter(species_list).items(), key=lambda x: x[1])[0]

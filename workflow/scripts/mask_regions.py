@@ -29,11 +29,7 @@ def compute_masking_sites(
     return masking_sites
 
 
-# consensus = '/home/reusebio/tese/insaflu_snakemake/projects/flu_testing_BVictoria/sample_SRR10885406/snippy/SRR10885406_consensus.fasta'
-# single_positions = '1,2,10,400'.split(',')
-# ranges = [x.split('-') for x in '10-30,40-50,60-90'.split(',')]
-# from_beggining = '2'
-# from_end = '2'
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("consensus", type=str, help="Consensus File Path")

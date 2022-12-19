@@ -13,7 +13,7 @@ rule spades_se:
     params:
         "--only-assembler",
     shell:
-        "spades.py -t {threads} {params} -s {input} -o {output.dir}"  #isolate is just to keep this working
+        "spades.py -t {threads} {params} -s {input} -o {output.dir}"
 
 
 rule spades_pe:
@@ -29,4 +29,4 @@ rule spades_pe:
     params:
         "--only-assembler",
     shell:
-        "spades.py -t {threads}  {params} -1 {input.read_1} -2 {input.read_2} -o {output.dir}"  #isolate is just to keep this working
+        "spades.py -t {threads}  {params} -1 {input.read_1} -2 {input.read_2} -o {output.dir}"

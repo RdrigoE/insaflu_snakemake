@@ -39,14 +39,6 @@ def prepare_snpeff_run(snpeff_path, ref_path_gb, locus, ref_path_fa, reference_n
             f"\n{reference_name}.genome: {reference_name}\n",
             f"{reference_name}.{get_id_version(ref_path_gb)}.codonTable : Bacterial_and_Plant_Plastid\n",
         ]
-        # project = sys.argv[5]
-        # samples = sys.argv[6]
-
-        # samples = samples.split(" ")
-        # for sample in samples:
-        #     os.system(f"sed -i 's/{locus}/{identification}.{version}/g' projects/{project}/main_result/freebayes/{sample}_var.vcf")
-        # for sample in samples:
-        #     os.system(f"sed -i 's/{locus}/{identification}.{version}/g' projects/{project}/sample_{sample}/snippy/snps.vcf")
 
     with open(
         f"{snpeff_path}/share/snpeff-4.3.1t-5/snpEff.config", "r", encoding="UTF8"

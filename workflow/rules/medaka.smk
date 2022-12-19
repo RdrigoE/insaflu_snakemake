@@ -1,7 +1,6 @@
 rule medaka_consensus:
     input:
         i="samples/{sample}/trimmed_reads/nano_{sample}.trimmed.fastq.gz",
-        #="user_data/{sample}.fastq.gz",
         ref=REFERENCE_FASTA,
     output:
         out="align_samples/{sample}/medaka/consensus.fasta",
@@ -115,20 +114,6 @@ rule create_align_file:
         align_file=temp("align_samples/{sample}/medaka/medaka_align_{seg}.fasta"),
     shell:
         "python {scripts_directory}mask_consensus_by_deep.py {REFERENCE_FASTA} {input.first_consensus} {output.align_file} {wildcards.seg}"
-
-
-# rule align_w_mafft:
-#     input:
-#         align_file="align_samples/{sample}/medaka/medaka_align_{seg}.fasta",
-#     output:
-#         aligned_file=temp("align_samples/{sample}/medaka/medaka_aligned_{seg}.fasta"),
-#     conda:
-#         "../envs/mafft.yaml"
-#     threads: 8
-#     params:
-#         "--preservecase",
-#     shell:
-#         "mafft --thread {threads} {params} {input.align_file} > {output.aligned_file}"
 
 
 rule msa_masker_medaka:
