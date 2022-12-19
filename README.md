@@ -53,3 +53,5 @@ To add new ones just copy your fasta and genbank file.
    `$ cd workflow`
    
    `$ snakemake -c {threads} --use-conda`
+   If it doesn't work there is an alternative:
+   `$ snakemake -s workflow/Snakefile --use-conda --cores {threads}`
