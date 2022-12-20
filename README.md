@@ -49,9 +49,7 @@ To add new ones just copy your fasta and genbank file.
 ### You must keep the fasta identifier equal to the GenBank Locus
    ">ON563414" == "LOCUS       ON563414"
 
-## Run your project or analyse your samples with the following command:
-   `$ cd workflow`
-   
+## Run your project or analyse your samples with the following command:  
    `$ snakemake -c {threads} --use-conda`
    If it doesn't work there is an alternative:
    `$ snakemake -s workflow/Snakefile --use-conda --cores {threads}`
