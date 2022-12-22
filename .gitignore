@@ -10,3 +10,6 @@ snpeff.config
 config.yaml
 workflow/db/data
 software
+user/project_info.yaml
+user/sample_matadata.yaml
+config/config.yaml

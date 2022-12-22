@@ -1,0 +1,5 @@
+sample_name,fastq1,fastq2,tech
+demo_SARSCoV2_065,Demo_Sample_065_R1_001,Demo_Sample_065_R2_001,illumina
+demo_SARSCoV2_066,Demo_Sample_066_R1_001,Demo_Sample_066_R2_001,illumina
+demo_SARSCoV2_067,Demo_Sample_067_R1_001,,illumina
+demo_SARSCoV2_069,Demo_Sample_069,,ont
