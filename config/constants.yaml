@@ -10,4 +10,4 @@ samples: ../user/reads/
 config_file: ../config/config.yaml
 software_parameters: ../user/parameters.yaml
 get_coverage: ../workflow/software/getCoverage/getCoverage.py
-assembler: snippy
+# assembler: snippy

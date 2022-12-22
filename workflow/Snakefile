@@ -268,7 +268,11 @@ coverage_script = dic_directory["get_coverage"]
 user_metadata_directort = dic_directory["user_metadata"]
 
 # Load in sample data
-sample_data: Data = Data(dic_directory["sample_csv"])
+user_metadata = read_yaml(dic_directory["sample_yaml"])
+sample_data: Data = Data(
+    dic_directory["sample_csv"], user_metadata["illumina_consensus"]
+)
+
 (
     paired_illumina,
     single_illumina,
@@ -285,7 +289,6 @@ illumina_assembler = sample_data.get_assembler()
 ) = get_data_in_align_form(illumina_assembler, single_illumina, paired_illumina)
 
 # Load in run config
-user_metadata = read_yaml(dic_directory["sample_yaml"])
 
 REFERENCE_GB = "../user/references/" + user_metadata["gb_reference"]
 
@@ -298,6 +301,15 @@ SEGMENTS = get_locus(REFERENCE_GB)
 PROJECT_NAME = user_metadata["project_name"]
 
 ABRICATE = user_metadata["abricate"]
+
+PRIMERS = (
+    user_metadata.get("primers") if user_metadata.get("primers") is not None else False
+)
+
+PRIMERS = "../user/primers/" + user_metadata["primers"] if PRIMERS else False
+
+
+CONSENSUS_TOOL = user_metadata["illumina_consensus"]
 
 identification, version = get_identification_version(SEGMENTS, REFERENCE_GB)
 
@@ -557,6 +569,16 @@ include: "../workflow/rules/abricate.smk"
 include: "../workflow/rules/pangolin.smk"
 include: "../workflow/rules/mafft.smk"
 include: "../workflow/rules/warnings.smk"
+
+
+if PRIMERS:
+
+    include: "rules/iVar.smk"
+
+
+else:
+
+    include: "rules/iVar_noPrimer.smk"
 
 
 # include: "../workflow/rules/nextalign.smk"

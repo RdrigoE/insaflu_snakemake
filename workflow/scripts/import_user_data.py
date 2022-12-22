@@ -5,14 +5,13 @@ from scripts.yaml_io import read_yaml
 
 dic_directory = read_yaml("config/constants.yaml")
 
-ASSEMBLER: str = dic_directory["assembler"]
-
 
 class Data:
     """Object with sample data information"""
 
-    def __init__(self, file: str) -> None:
+    def __init__(self, file: str, consensus_illumina) -> None:
         self.user_df: pandas.DataFrame = pandas.read_csv(file)
+        self.consensus_illumina = consensus_illumina
 
     def get_sample_names(self) -> list[str]:
         """
@@ -63,7 +62,7 @@ class Data:
         type_dic: dict[str, str] = {}
         for index, _ in enumerate(names):
             type_dic[names[index]] = (
-                "medaka" if tech_type[index] == "ont" else ASSEMBLER
+                "medaka" if tech_type[index] == "ont" else self.consensus_illumina
             )
         return type_dic
 
@@ -154,7 +153,7 @@ class Data:
         :return: The assembler that is being used in the current instance of the class
         :doc-author: Trelent
         """
-        return ASSEMBLER
+        return self.consensus_illumina
 
 
 def get_data_in_align_form(
