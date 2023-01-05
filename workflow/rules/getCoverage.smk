@@ -1,16 +1,16 @@
-def get_consensus(wildcards):
+def get_depth(wildcards):
     return f"align_samples/{wildcards.sample}/{config_user['sample_type'][wildcards.sample]}/snps.depth.gz"
 
 
 rule getCoverage:
     input:
-        consensus=get_consensus,
+        depth=get_depth,
     output:
         coverage="align_samples/{sample}/{sample}_coverage.csv",
     conda:
         "../envs/coverage.yaml"
     shell:
-        "python {coverage_script} -i {input.consensus} -r {REFERENCE_FASTA} -o {output.coverage}"
+        "python {coverage_script} -i {input.depth} -r {REFERENCE_FASTA} -o {output.coverage}"
 
 
 checkpoint mergeCoverage:
