@@ -13,3 +13,5 @@ software
 user/project_info.yaml
 user/sample_metadata.csv
 config/config.yaml
+output.txt
+*.png
