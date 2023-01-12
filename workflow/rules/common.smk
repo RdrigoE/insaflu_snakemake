@@ -33,8 +33,8 @@ def get_raw_input_ont(wildcards):
 
 
 # NANOFILT
-def get_raw_input_ont(wildcards):
-    return f"{dic_directory['samples']}{config_user['samples'][wildcards.sample]['fastq1']}.fastq.gz"
+# def get_raw_input_ont(wildcards):
+#     return f"{dic_directory['samples']}{config_user['samples'][wildcards.sample]['fastq1']}.fastq.gz"
 
 
 # MEDAKA
@@ -44,7 +44,7 @@ def get_add_freq_medaka(software_parameters):
 
 
 # MAKE PROJECT
-def get_consensus(wildcards):
+def get_consensus_project(wildcards):
     return f"align_samples/{wildcards.sample}/{config_user['sample_type'][wildcards.sample]}/{wildcards.sample}_consensus.fasta"
 
 
@@ -53,5 +53,5 @@ def get_directory(wildcards):
 
 
 # FREEBAYES
-def get_consensus(wildcards):
+def get_consensus_freebayes(wildcards):
     return f"align_samples/{wildcards.sample}/{config_user['sample_type'][wildcards.sample]}/snps.bam"

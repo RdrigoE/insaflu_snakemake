@@ -13,7 +13,7 @@ rule prepare_snpeff:
         ref_gb=REFERENCE_GB,
         ref_fa=REFERENCE_FASTA,
     output:
-        temp("projects/{project}/main_result/snp_ready.txt"),
+        "projects/{project}/main_result/snp_ready.txt",
     conda:
         "../envs/snpeff.yaml"
     shell:

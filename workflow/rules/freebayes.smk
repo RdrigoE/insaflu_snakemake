@@ -2,7 +2,7 @@
 
 rule freebayes:
     input:
-        samples=get_consensus,
+        samples=get_consensus_freebayes,
         ref=REFERENCE_FASTA,
     output:
         "projects/{project}/sample_{sample}/freebayes/{sample}_var.vcf",

@@ -7,11 +7,11 @@ rule initiate_folder:
 
 rule makeproject:
     input:
-        get_consensus,
+        get_consensus_project,
     output:
-        consensus="projects/{project}/sample_{sample}/{sample}_consensus.fasta",
         depth="projects/{project}/sample_{sample}/snps.depth.gz",
         vcf="projects/{project}/sample_{sample}/snps.vcf",
+        consensus="projects/{project}/sample_{sample}/{sample}_consensus.fasta",
     params:
         get_directory,
     shell:
@@ -44,12 +44,10 @@ rule create_segments:
             project=PROJECT_NAME,
         ),
     output:
-        temp(
-            expand(
-                "projects/{project}/main_result/{seg}/Alignment_nt_{seg}.fasta",
-                project=PROJECT_NAME,
-                seg=SEGMENTS,
-            )
+        expand(
+            "projects/{project}/main_result/{seg}/Alignment_nt_{seg}.fasta",
+            project=PROJECT_NAME,
+            seg=SEGMENTS,
         ),
     shell:
         "python {scripts_directory}split_files_by_locus.py {input} projects/{PROJECT_NAME}/main_result {REFERENCE_GB}"
