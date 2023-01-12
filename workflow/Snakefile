@@ -290,9 +290,9 @@ illumina_assembler = sample_data.get_assembler()
 
 # Load in run config
 
-REFERENCE_GB = "../user/references/" + user_metadata["gb_reference"]
+REFERENCE_GB = f"../user/references/{user_metadata['gb_reference']}"
 
-REFERENCE_FASTA = "../user/references/" + user_metadata["fasta_reference"]
+REFERENCE_FASTA = f"../user/references/{user_metadata['fasta_reference']}"
 
 REFERENCE_NAME = re.findall("(?<=references/)(.*?)(?=.fasta)", REFERENCE_FASTA)[0]
 
@@ -306,7 +306,7 @@ PRIMERS = (
     user_metadata.get("primers") if user_metadata.get("primers") is not None else False
 )
 
-PRIMERS = "../user/primers/" + user_metadata["primers"] if PRIMERS else False
+PRIMERS = f"../user/primers/{user_metadata['primers']}" if PRIMERS else False
 
 
 CONSENSUS_TOOL = user_metadata["illumina_consensus"]
@@ -498,7 +498,7 @@ def get_output_project():
             config_user["project"],
         ),
     ]
-    if ABRICATE is TRUE:
+    if ABRICATE is True:
         files.extend(
             [
                 expand(
@@ -539,14 +539,9 @@ def get_output_project():
     return files
 
 
-def prepare_run(settings):
-    if settings["only_samples"] == True:
-        return get_output_sample
-    else:
-        return get_output_project
-
-
-get_output = prepare_run(user_metadata)
+get_output = (
+    get_output_sample if user_metadata["only_samples"] is True else get_output_project
+)
 
 
 # CLOSE
