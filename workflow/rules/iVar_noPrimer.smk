@@ -141,6 +141,8 @@ rule msa_masker_iVar:
         "../envs/msa_masker.yaml"
     params:
         "--c " + str(software_parameters["mincov"] - 1),
+    log:
+        "logs/msa_masker_{sample}_{seg}.log",
     shell:
         "python ../workflow/scripts/msa_masker.py -i {input.align_file} -df {input.depth} -o {output} {params}"
 
@@ -154,6 +156,8 @@ rule get_masked_consensus_iVar:
         ),
     output:
         final_consensus="align_samples/{sample}/iVar/pre_{sample}_consensus.fasta",
+    log:
+        "logs/get_consensus_{sample}.log",
     shell:
         "python ../workflow/scripts/get_consensus_medaka.py '{input}' {output}"
 
@@ -165,5 +169,7 @@ rule mask_regions_consensus_iVar:
         final_consensus="align_samples/{sample}/iVar/{sample}_consensus.fasta",
     params:
         mask_regions_parameters(software_parameters),
+    log:
+        "logs/mask_regions_{sample}.log",
     shell:
         "python ../workflow/scripts/mask_regions.py {input} {output} {params}"

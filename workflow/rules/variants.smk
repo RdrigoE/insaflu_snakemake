@@ -46,5 +46,7 @@ rule proportions_iSNVs_graph:
         ),
     output:
         out_file="projects/{project}/main_result/proportions_iSNVs_graph.csv",
+    log:
+        "projects/{project}/main_result/proportions_iSNVs_graph.log",
     shell:
         "python {scripts_directory}proportions_iSNVs_graph.py '{input}' {output.out_file}"

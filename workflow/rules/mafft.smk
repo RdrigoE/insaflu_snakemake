@@ -11,6 +11,8 @@ rule align_w_mafft_medaka:
     threads: 8
     params:
         "--preservecase",
+    log:
+        "logs/align_samples/{sample}/medaka/medaka_align_{seg}.log",
     shell:
         "mafft --thread {threads} {params} {input.align_file} > {output.aligned_file}"
 
@@ -25,6 +27,8 @@ rule align_mafft_snippy:
     threads: config["mafft_threads"]
     params:
         "--preservecase",
+    log:
+        "logs/align_samples/{sample}/snippy/snippy_align_{seg}.log",
     shell:
         "mafft --thread {threads} {params} {input.align_file} > {output.aligned_file}"
 
@@ -39,6 +43,8 @@ rule mafft_pre_aa:
     threads: config["mafft_threads"]
     params:
         "--preservecase",
+    log:
+        "logs/{project}/mafft_pre_aa.log",
     shell:
         "mafft --thread {threads} {params} {input} > {output}"
 
@@ -53,6 +59,8 @@ rule mafft:
     threads: config["mafft_threads"]
     params:
         "--preservecase",
+    log:
+        "logs/{project}/mafft.log",
     shell:
         "mafft --thread {threads} {params} {input} > {output}"
 
@@ -67,6 +75,8 @@ rule mafft_nt:
     threads: config["mafft_threads"]
     params:
         "--preservecase",
+    # log:
+    #     "logs/{project}/mafft_nt.log",
     shell:
         "mafft --thread {threads} {params} {input} > {output}"
 
@@ -81,6 +91,8 @@ rule mafft_proteins:
     threads: config["mafft_threads"]
     params:
         "--preservecase --amino",
+    # log:
+    #     "logs/{project}/mafft_proteins.log",
     shell:
         "mafft --thread {threads} {params} {input} > {output}"
 
@@ -92,5 +104,7 @@ rule cp_Alignment_nt:
         "projects/{project}/main_result/Alignment_nt_{seg}.fasta",
     conda:
         "../envs/mafft.yaml"
+    # log:
+    #     "logs/{project}/cp_Alignment_nt.log",
     shell:
         "cp {input} {output}"

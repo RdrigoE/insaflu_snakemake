@@ -5,6 +5,8 @@ rule getCoverage:
         coverage="align_samples/{sample}/{sample}_coverage.csv",
     conda:
         "../envs/coverage.yaml"
+    log:
+        "logs/coverage/{sample}.log",
     shell:
         "python {coverage_script} -i {input.depth} -r {REFERENCE_FASTA} -o {output.coverage}"
 
@@ -24,5 +26,7 @@ checkpoint mergeCoverage:
             "projects/{project}/main_result/coverage_translate.csv",
             project=config_user["project"],
         ),
+    log:
+        "logs/coverage/merge.log",
     shell:
         "python {scripts_directory}merge_coverage.py '{input}' {output.coverage_regular} {output.coverage_translate} {REFERENCE_GB}"

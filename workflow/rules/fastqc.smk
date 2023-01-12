@@ -44,6 +44,8 @@ rule trimmed_fastqc_pe:
         "../envs/fastqc.yaml"
     params:
         "--nogroup",
+    log:
+        "logs/{sample}/trimmed_fastqc.log",
     shell:
         "fastqc {input.read_1} {input.read_2} -o {output.dir} {params}"
 
@@ -58,5 +60,7 @@ rule trimmed_fastqc_se:
         "../envs/fastqc.yaml"
     params:
         "--nogroup",
+    log:
+        "logs/{sample}/trimmed_fastqc.log",
     shell:
         "fastqc {input.read} -o {output.dir} {params}"

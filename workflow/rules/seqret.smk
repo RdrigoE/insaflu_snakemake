@@ -7,6 +7,8 @@ rule seqret_all_nt:
         "../envs/seqret.yaml"
     params:
         "-sformat fasta -osformat2 nexusnon",
+    log:
+        "projects/{project}/main_result/All_nt_to_nex.log",
     shell:
         "seqret {params} -sequence {input} -outseq {output}"
 
@@ -20,6 +22,8 @@ rule seqret_all_nt_only_90:
         "../envs/seqret.yaml"
     params:
         "-sformat fasta -osformat2 nexusnon",
+    log:
+        "projects/{project}/main_result/All_nt_only_90plus_to_nex.log",
     shell:
         "seqret {params} -sequence {input} -outseq {output}"
 
@@ -33,6 +37,8 @@ rule seqret_all_consensus:
         "../envs/seqret.yaml"
     params:
         "-sformat fasta -osformat2 nexusnon",
+    log:
+        "projects/{project}/main_result/AllConsensus_to_nex.log",
     shell:
         "seqret {params} -sequence {input} -outseq {output}"
 
@@ -46,6 +52,8 @@ rule seqret_alignment_aa_gene:
         "../envs/seqret.yaml"
     params:
         "-sformat fasta -osformat2 nexusnon",
+    log:
+        "projects/{project}/main_result/{locus}/Alignment_aa_{locus}_{gene}_mafft_to_nex.log",
     shell:
         "seqret {params} -sequence {input} -outseq {output}"
 
@@ -59,6 +67,8 @@ rule alignment_nt_seg_mafft_seqret:
         "../envs/seqret.yaml"
     params:
         "-sformat fasta -osformat2 nexusnon",
+    log:
+        "projects/{project}/main_result/{seg}/Alignment_nt_{seg}_mafft_to_nex.log",
     shell:
         "seqret {params} -sequence {input} -outseq {output}"
 
@@ -72,6 +82,8 @@ rule alignment_nt_seg_seqret:
         "../envs/seqret.yaml"
     params:
         "-sformat fasta -osformat2 nexusnon",
+    log:
+        "projects/{project}/main_result/{seg}/Alignment_nt_{seg}_to_nex.log",
     shell:
         "seqret {params} -sequence {input} -outseq {output}"
 
@@ -85,6 +97,8 @@ rule alignment_nt_All_seqret:
         "../envs/seqret.yaml"
     params:
         "-sformat fasta -osformat2 nexusnon",
+    log:
+        "projects/{project}/main_result/Alignment_nt_All_to_nex.log",
     shell:
         "seqret {params} -sequence {input} -outseq {output}"
 
@@ -98,5 +112,7 @@ rule alignment_nt_specific_seqret:
         "../envs/seqret.yaml"
     params:
         "-sformat fasta -osformat2 nexusnon",
+    log:
+        "projects/{project}/main_result/Alignment_nt_{seg}_mafft_to_nex.log",
     shell:
         "seqret {params} -sequence {input} -outseq {output}"

@@ -10,5 +10,7 @@ rule nanofilt_SE:
         "../envs/nanofilt.yaml"
     params:
         get_nanofilt_parameters(software_parameters),
+    log:
+        "logs/nanofilt/{sample}.log",
     shell:
         "gunzip -cd {input} | NanoFilt {params} | gzip > {output}"

@@ -10,6 +10,8 @@ rule medaka_consensus:
         ref_out="align_samples/{sample}/medaka/ref.fasta",
     conda:
         "../envs/medaka_1_4_4.yaml"
+    log:
+        "logs/medaka_consensus_{sample}.log",
     shell:
         "rm -r align_samples/{wildcards.sample}/medaka/ && mkdir align_samples/{wildcards.sample}/medaka/   && cp {input.ref} {output.ref_out} && medaka_consensus -i {input.i} -d {output.ref_out} -o align_samples/{wildcards.sample}/medaka -t 4 -m r941_min_high_g360"
         " && cp {output.i} {output.i2}"
@@ -26,6 +28,8 @@ rule medaka_get_depth:
         "../envs/medaka_1_2_1.yaml"
     params:
         "-aa ",
+    log:
+        "logs/medaka_get_depth_{sample}.log",
     shell:
         "samtools depth {params} {input.i} | bgzip -c > {output.only_depth} "
         "&& tabix -p vcf {output.only_depth} && gunzip -c {output.only_depth}  > {output.depth} "
@@ -36,6 +40,8 @@ rule medaka_split_depth:
         "align_samples/{sample}/medaka/snps.depth",
     output:
         "align_samples/{sample}/medaka/{seg}.depth",
+    log:
+        "logs/medaka_split_depth_{sample}_{seg}.log",
     shell:
         "python3 {scripts_directory}split_depth_file.py {input} {REFERENCE_GB}"
 
@@ -49,6 +55,8 @@ rule medaka_call_variants:
         vcf="align_samples/{sample}/medaka/round_1.vcf",
     conda:
         "../envs/medaka_1_4_4.yaml"
+    log:
+        "logs/medaka_call_variants_{sample}.log",
     shell:
         "medaka variant --verbose {input.ref} {input.hdf} {output.vcf}"
 
@@ -63,6 +71,8 @@ rule medaka_annotate_variants:
         vcf_zipped="align_samples/{sample}/medaka/snps_ann.vcf.gz",
     conda:
         "../envs/medaka_1_2_1.yaml"
+    log:
+        "logs/medaka_annotate_variants_{sample}.log",
     shell:
         "medaka tools annotate {input.vcf} {input.ref} {input.bam} {output.snps} && "
         "bgzip {output.snps} -c > {output.vcf_zipped} && tabix {output.vcf_zipped}"
@@ -83,6 +93,8 @@ rule mask_between_top_and_50:
         "../envs/filter_medaka.yaml"
     params:
         get_add_freq_medaka(software_parameters),
+    log:
+        "logs/filter_medaka_{sample}.log",
     shell:
         "touch {output.temp_file} && "
         "python {scripts_directory}add_freq_medaka_consensus.py {input.normal_reference_fasta} {input.vcf_file} {input.file_coverage} "
@@ -98,6 +110,8 @@ rule bcf_consensus:
         temp("align_samples/{sample}/medaka/first_consensus.fasta"),
     conda:
         "../envs/bcftools.yaml"
+    log:
+        "logs/bcf_medaka_consensus_{sample}.log",
     shell:
         "bcftools consensus -s SAMPLE -f {REFERENCE_FASTA} {input.vcf_ziped} -o {output}"
 
@@ -107,6 +121,8 @@ rule create_align_file:
         first_consensus="align_samples/{sample}/medaka/first_consensus.fasta",
     output:
         align_file=temp("align_samples/{sample}/medaka/medaka_align_{seg}.fasta"),
+    log:
+        "logs/medaka_create_align_file_{sample}_{seg}.log",
     shell:
         "python {scripts_directory}mask_consensus_by_deep.py {REFERENCE_FASTA} {input.first_consensus} {output.align_file} {wildcards.seg}"
 
@@ -121,6 +137,8 @@ rule msa_masker_medaka:
         "../envs/msa_masker.yaml"
     params:
         "--c " + str(software_parameters["mincov_medaka"]),
+    log:
+        "logs/msa_masker_medaka_{sample}_{seg}.log",
     shell:
         "python {scripts_directory}msa_masker.py -i {input.align_file} -df {input.depth} -o {output} {params}"
 
@@ -134,6 +152,8 @@ rule get_masked_consensus_medaka:
         ),
     output:
         final_consensus="align_samples/{sample}/medaka/pre_{sample}_consensus.fasta",
+    log:
+        "logs/get_masked_consensus_medaka_{sample}.log",
     shell:
         "python {scripts_directory}get_consensus_medaka.py '{input}' {output}"
 
@@ -145,5 +165,7 @@ rule mask_regions_consensus_medaka:
         final_consensus="align_samples/{sample}/medaka/{sample}_consensus.fasta",
     params:
         mask_regions_parameters(software_parameters),
+    log:
+        "logs/mask_regions_consensus_medaka_{sample}.log",
     shell:
         "python {scripts_directory}mask_regions.py {input} {output} {params}"

@@ -12,6 +12,8 @@ rule spades_se:
     threads: config["spades_threads"]
     params:
         "--only-assembler",
+    log:
+        "spades/{sample}/spades.log",
     shell:
         "spades.py -t {threads} {params} -s {input} -o {output.dir}"
 
@@ -28,5 +30,7 @@ rule spades_pe:
         "../envs/spades.yaml"
     params:
         "--only-assembler",
+    log:
+        "spades/{sample}/spades.log",
     shell:
         "spades.py -t {threads}  {params} -1 {input.read_1} -2 {input.read_2} -o {output.dir}"

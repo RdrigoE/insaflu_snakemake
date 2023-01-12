@@ -6,6 +6,8 @@ checkpoint abricate_pangolin:
         "../envs/abricate.yaml"
     params:
         "--db insaflu --minid 70 --mincov 30",
+    # log:
+    #     "projects/{project}/main_result/abricate.log",
     shell:
         "abricate {params} {REFERENCE_FASTA} > {output.csv}"
         " && python3 {scripts_directory}get_abricate_info.py {output.csv} {output.yaml}"
@@ -16,6 +18,8 @@ rule not_pangolin:
         yaml=expand("projects/{project}/ref.yaml", project=config_user["project"]),
     output:
         temp("projects/{project}/main_result/not_pangolin.csv"),
+    log:
+        "projects/{project}/main_result/not_pangolin.log",
     shell:
         "echo 'This is not SARS-CoV-2' > {output}"
 
@@ -30,5 +34,7 @@ rule pangolin:
         "../envs/pangolin.yaml"
     params:
         "--analysis-mode fast",  #pangolearn
+    log:
+        "projects/{project}/main_result/pangolin.log",
     shell:
         "pangolin {input.consensus} --outfile {output} -t 2"

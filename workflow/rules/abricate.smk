@@ -8,6 +8,8 @@ rule abricate_se:
         "../envs/abricate.yaml"
     params:
         "--db insaflu --minid 70 --mincov 30",
+    log:
+        "samples/{sample}/abricate_{sample}.log",
     shell:
         "abricate {params} {input} > {output.csv}"
         " && python3 {scripts_directory}get_abricate_info_list.py {output.csv} {output.yaml}"
@@ -23,6 +25,8 @@ rule abricate_pe:
         "../envs/abricate.yaml"
     params:
         "--db insaflu --minid 70 --mincov 30",
+    log:
+        "samples/{sample}/abricate_{sample}.log",
     shell:
         "abricate {params} {input} > {output.csv}"
         " && python3 {scripts_directory}get_abricate_info_list.py {output.csv} {output.yaml}"

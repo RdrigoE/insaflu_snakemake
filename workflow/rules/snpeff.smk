@@ -16,6 +16,8 @@ rule prepare_snpeff:
         "projects/{project}/main_result/snp_ready.txt",
     conda:
         "../envs/snpeff.yaml"
+    log:
+        "projects/{project}/main_result/snp_ready.log"
     shell:
         "python {scripts_directory}create_snpeff_text.py $CONDA_PREFIX {input.ref_gb} {input.ref_fa} {REFERENCE_NAME} {output} "
 
@@ -31,6 +33,8 @@ rule snpeff:
     threads: config["snpeff_threads"]
     params:
         "-no-downstream -no-upstream -no-intergenic -no-utr -noStats -c ../workflow/db/snpeff.config",
+    log:
+        "projects/{project}/sample_{sample}/freebayes/{sample}_snpeff.log"
     shell:
         "echo '{replace}' && "
         "{replace} {input.snp_file} &&"
@@ -46,6 +50,8 @@ rule snpeff_sample:
     conda:
         "../envs/snpeff.yaml"
     threads: config["snpeff_threads"]
+    log:
+        "projects/{project}/sample_{sample}/{sample}_snpeff.log"
     params:
         "-no-downstream -no-upstream -no-intergenic -no-utr -noStats -c ../workflow/db/snpeff.config",
     shell:
