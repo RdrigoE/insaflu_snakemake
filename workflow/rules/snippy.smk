@@ -1,4 +1,4 @@
-configfile: "../config/threads.yaml"
+configfile: f"../config/threads.yaml"
 
 
 rule snippy_pe:

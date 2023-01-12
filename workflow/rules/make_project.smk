@@ -5,14 +5,6 @@ rule initiate_folder:
         "mkdir {output} && cp {user_metadata_directort}parameters.yaml projects/{wildcards.project}/"
 
 
-def get_consensus(wildcards):
-    return f"align_samples/{wildcards.sample}/{config_user['sample_type'][wildcards.sample]}/{wildcards.sample}_consensus.fasta"
-
-
-def get_directory(wildcards):
-    return f"align_samples/{wildcards.sample}/{config_user['sample_type'][wildcards.sample]}/*"
-
-
 rule makeproject:
     input:
         get_consensus,

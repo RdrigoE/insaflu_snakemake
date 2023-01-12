@@ -1,10 +1,6 @@
 configfile: "../config/threads.yaml"
 
 
-def get_raw_input_trimmomatic_se(wildcards):
-    return f"{dic_directory['samples']}{config_user['samples'][wildcards.sample]['fastq1']}.fastq.gz"
-
-
 rule trimme_reads_SE:
     input:
         get_raw_input_trimmomatic_se,
@@ -21,13 +17,6 @@ rule trimme_reads_SE:
         "{input} "
         "{output} "
         "{params}"
-
-
-def get_raw_input_trimmomatic(wildcards):
-    return [
-        f"{dic_directory['samples']}{config_user['samples'][wildcards.sample]['fastq1']}.fastq.gz",
-        f"{dic_directory['samples']}{config_user['samples'][wildcards.sample]['fastq2']}.fastq.gz",
-    ]
 
 
 rule trimme_reads_PE:

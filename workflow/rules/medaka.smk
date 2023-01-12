@@ -68,11 +68,6 @@ rule medaka_annotate_variants:
         "bgzip {output.snps} -c > {output.vcf_zipped} && tabix {output.vcf_zipped}"
 
 
-def get_add_freq_medaka(software_parameters):
-    params = f'{software_parameters["mincov_medaka"]} {software_parameters["min_prop_for_variant_evidence"]}'
-    return params
-
-
 rule mask_between_top_and_50:
     input:
         vcf_file="align_samples/{sample}/medaka/snps_ann.vcf",

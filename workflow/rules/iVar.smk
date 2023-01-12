@@ -33,13 +33,6 @@ rule align_se:
 ruleorder: align_pe > align_se
 
 
-# rule conver_gbk_to_gff:
-#     input:"reference/{REFERENCE_NAME}.gbk"
-#     output:"reference/{REFERENCE_NAME}.gff"
-#     conda:"../envs/perl.yaml"
-#     shell:"perl software/bp_genbank2gff3.pl {input}"
-
-
 rule primers_bam:
     input:
         pre_snps="align_samples/{sample}/iVar/pre_snps.bam",
@@ -162,7 +155,7 @@ rule msa_masker_iVar:
     conda:
         "../envs/msa_masker.yaml"
     params:
-        "--c " + str(software_parameters["msa_masker"]),
+        "--c " + str(software_parameters["mincov"] - 1),
     shell:
         "python ../workflow/scripts/msa_masker.py -i {input.align_file} -df {input.depth} -o {output} {params}"
 

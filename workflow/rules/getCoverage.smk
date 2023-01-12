@@ -1,7 +1,3 @@
-def get_depth(wildcards):
-    return f"align_samples/{wildcards.sample}/{config_user['sample_type'][wildcards.sample]}/snps.depth.gz"
-
-
 rule getCoverage:
     input:
         depth=get_depth,

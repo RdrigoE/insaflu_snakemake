@@ -1,6 +1,3 @@
-def get_raw_input_ont(wildcards):
-    return f"{dic_directory['samples']}{config_user['samples'][wildcards.sample]['fastq1']}.fastq.gz"
-
 
 rule raw_nanostat:
     input:

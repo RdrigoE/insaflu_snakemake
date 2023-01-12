@@ -11,5 +11,5 @@ config.yaml
 workflow/db/data
 software
 user/project_info.yaml
-user/sample_matadata.yaml
+user/sample_metadata.csv
 config/config.yaml

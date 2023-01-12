@@ -1,5 +1,3 @@
-def get_consensus(wildcards):
-    return f"align_samples/{wildcards.sample}/{config_user['sample_type'][wildcards.sample]}/snps.bam"
 
 
 rule freebayes:

@@ -1,10 +1,6 @@
 configfile: "../config/threads.yaml"
 
 
-def get_raw_input_ont(wildcards):
-    return f"{dic_directory['samples']}{config_user['samples'][wildcards.sample]['fastq1']}.fastq.gz"
-
-
 rule nanofilt_SE:
     input:
         get_raw_input_ont,

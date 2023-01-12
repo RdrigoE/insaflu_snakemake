@@ -140,7 +140,7 @@ rule msa_masker_iVar:
     conda:
         "../envs/msa_masker.yaml"
     params:
-        "--c " + str(software_parameters["msa_masker"]),
+        "--c " + str(software_parameters["mincov"] - 1),
     shell:
         "python ../workflow/scripts/msa_masker.py -i {input.align_file} -df {input.depth} -o {output} {params}"
 
