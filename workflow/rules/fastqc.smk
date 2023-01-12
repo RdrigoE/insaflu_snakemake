@@ -1,6 +1,3 @@
-def get_raw_input_fastq_se(wildcards):
-    return f"{dic_directory['samples']}{config_user['samples'][wildcards.sample]['fastq1']}.fastq.gz"
-
 
 rule raw_fastqc_se:
     input:
@@ -14,13 +11,6 @@ rule raw_fastqc_se:
         "--nogroup",
     shell:
         "fastqc {input} -o {output.dir} {params} && python3 {scripts_directory}move_fastqc_output.py {wildcards.sample}"
-
-
-def get_raw_input_fastq_pe(wildcards):
-    return [
-        f"{dic_directory['samples']}{config_user['samples'][wildcards.sample]['fastq1']}.fastq.gz",
-        f"{dic_directory['samples']}{config_user['samples'][wildcards.sample]['fastq2']}.fastq.gz",
-    ]
 
 
 rule raw_fastqc_pe:
