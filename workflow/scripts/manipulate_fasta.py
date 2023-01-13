@@ -15,13 +15,11 @@ def detach_reference(input_file, ref):
     """
     with open(input_file, "r", encoding="utf8") as handle_input:
         record_list = list(SeqIO.parse(handle_input, "fasta"))
-        print("Number of records in input file: ", len(record_list))
         reference = record_list.pop(0)
     with open(input_file, "w", encoding="utf8") as handle_input_write:
         SeqIO.write(record_list, handle_input_write, "fasta")
 
     with open(ref, "w", encoding="utf8") as handle_reference:
-        print(reference)
         SeqIO.write(reference, handle_reference, "fasta")
 
 

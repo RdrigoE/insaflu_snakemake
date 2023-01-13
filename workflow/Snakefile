@@ -137,7 +137,6 @@ class Checkpoint_Main:
 
         if pattern == []:
             return "template_empty.txt"
-        print(pattern)
         return pattern
 
     def get_locus_w_coverage(self, coverage_file, genbank_file, coverage_limit):

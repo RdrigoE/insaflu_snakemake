@@ -71,7 +71,6 @@ def merge_coverage(file_list, output_file):
 
     species = get_locus(REFERENCE_GB)
     length = get_locus_len(REFERENCE_GB)
-    print(species)
     super_header = ["Name", *species, "", ""]
     super_header_1 = ["Length", *length, "", ""]
 
