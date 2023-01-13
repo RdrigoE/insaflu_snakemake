@@ -6,8 +6,10 @@ checkpoint abricate_pangolin:
         "../envs/abricate.yaml"
     params:
         "--db insaflu --minid 70 --mincov 30",
-    # log:
-    #     "projects/{project}/main_result/abricate.log",
+    log:
+        expand(
+            "logs/{project}/main_result/abricate.log", project=config_user["project"]
+        ),
     shell:
         "abricate {params} {REFERENCE_FASTA} > {output.csv}"
         " && python3 {scripts_directory}get_abricate_info.py {output.csv} {output.yaml}"

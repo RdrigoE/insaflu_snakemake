@@ -75,8 +75,8 @@ rule mafft_nt:
     threads: config["mafft_threads"]
     params:
         "--preservecase",
-    # log:
-    #     "logs/{project}/mafft_nt.log",
+    log:
+        "logs/{project}/mafft_nt_{seg}.log",
     shell:
         "mafft --thread {threads} {params} {input} > {output}"
 
@@ -91,8 +91,8 @@ rule mafft_proteins:
     threads: config["mafft_threads"]
     params:
         "--preservecase --amino",
-    # log:
-    #     "logs/{project}/mafft_proteins.log",
+    log:
+        "logs/{project}/mafft_proteins_{locus}_{gene}.log",
     shell:
         "mafft --thread {threads} {params} {input} > {output}"
 
@@ -104,7 +104,7 @@ rule cp_Alignment_nt:
         "projects/{project}/main_result/Alignment_nt_{seg}.fasta",
     conda:
         "../envs/mafft.yaml"
-    # log:
-    #     "logs/{project}/cp_Alignment_nt.log",
+    log:
+        "logs/{project}/cp_Alignment_nt_{seg}.log",
     shell:
         "cp {input} {output}"

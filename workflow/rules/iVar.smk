@@ -135,8 +135,8 @@ rule iVar_depth_step_2:
         zipped="align_samples/{sample}/iVar/snps.depth",
     output:
         unzipped="align_samples/{sample}/iVar/{seg}.depth",
-    # log:
-    #     "logs/align_samples/iVar_depth_step_2_2_{sample}.log",
+    log:
+        "logs/align_samples/iVar_depth_step_2_2_{sample}_{seg}.log",
     shell:
         "python ../workflow/scripts/split_depth_file.py {input.zipped} {REFERENCE_GB}"
 
@@ -146,8 +146,8 @@ rule create_align_file_iVar:
         first_consensus="align_samples/{sample}/iVar/new_snps.consensus.fa",
     output:
         align_file=temp("align_samples/{sample}/iVar/iVar_align_{seg}.fasta"),
-    # log:
-    #     "logs/align_samples/create_align_file_iVar_{sample}.log",
+    log:
+        "logs/align_samples/create_align_file_iVar_{sample}_{seg}.log",
     shell:
         "python ../workflow/scripts/mask_consensus_by_deep.py align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta {input.first_consensus} {output.align_file} {wildcards.seg}"
 
@@ -162,8 +162,8 @@ rule align_mafft_iVar:
     threads: 12
     params:
         "--preservecase",
-    # log:
-    #     "logs/align_samples/align_mafft_iVar_{sample}.log",
+    log:
+        "logs/align_samples/align_mafft_iVar_{sample}_{seg}.log",
     shell:
         "mafft --thread {threads} {params} {input.align_file} > {output.aligned_file}"
 
@@ -178,8 +178,8 @@ rule msa_masker_iVar:
         "../envs/msa_masker.yaml"
     params:
         "--c " + str(software_parameters["mincov"] - 1),
-    # log:
-    #     "logs/align_samples/msa_masker_iVar_{sample}.log",
+    log:
+        "logs/align_samples/msa_masker_iVar_{sample}_{seg}.log",
     shell:
         "python ../workflow/scripts/msa_masker.py -i {input.align_file} -df {input.depth} -o {output} {params}"
 
