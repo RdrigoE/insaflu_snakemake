@@ -579,7 +579,7 @@ else:
 # include: "../workflow/rules/nextalign.smk"
 
 
-containerized: "docker://username/my_workflows_envs:latest"
+singularity: "docker://continuumio/miniconda3"
 
 
 rule all:
