@@ -1,4 +1,6 @@
 rule initiate_folder:
+    conda:
+        "../envs/base.yaml"
     output:
         dir("projects/{project}/main_result/"),
     shell:
@@ -12,6 +14,8 @@ rule makeproject:
         depth="projects/{project}/sample_{sample}/snps.depth.gz",
         vcf="projects/{project}/sample_{sample}/snps.vcf",
         consensus="projects/{project}/sample_{sample}/{sample}_consensus.fasta",
+    conda:
+        "../envs/base.yaml"
     params:
         get_directory,
     log:
@@ -34,6 +38,8 @@ rule assemble_consensus:
         all_consensus_no_ref="projects/{project}/main_result/AllConsensus_no_ref.fasta",
         All_nt="projects/{project}/main_result/All_nt.fasta",
         All_nt_only_90plus="projects/{project}/main_result/All_nt_only_90plus.fasta",
+    conda:
+        "../envs/base.yaml"
     log:
         "projects/{project}/main_result/consensus.log",
     shell:
@@ -53,5 +59,7 @@ rule create_segments:
             project=PROJECT_NAME,
             seg=SEGMENTS,
         ),
+    conda:
+        "../envs/base.yaml"
     shell:
         "python {scripts_directory}split_files_by_locus.py {input} projects/{PROJECT_NAME}/main_result {REFERENCE_GB}"

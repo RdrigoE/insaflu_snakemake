@@ -4,6 +4,8 @@ rule translate:
         coverage="projects/{project}/main_result/coverage_translate.csv",
     output:
         "projects/{project}/main_result/{locus}/Alignment_aa_{locus}_{gene}_trans.fasta",
+    conda:
+        "../envs/base.yaml"
     log:
         "logs/{project}/main_result/{locus}/translate_{locus}_{gene}.log",
     shell:

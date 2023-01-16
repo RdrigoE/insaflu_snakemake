@@ -5,6 +5,8 @@ rule variant_validated:
             sample=config_user["samples"],
             project=config_user["project"],
         ),
+    conda:
+        "../envs/base.yaml"
     output:
         "projects/{project}/main_result/validated_variants.csv",
     shell:
@@ -18,6 +20,8 @@ rule snpeff_concat:
             sample=config_user["samples"],
             project=config_user["project"],
         ),
+    conda:
+        "../envs/base.yaml"
     output:
         "projects/{project}/main_result/validated_minor_iSNVs.csv",
     shell:
@@ -31,6 +35,8 @@ rule snpeff_concat_indels:
             sample=config_user["samples"],
             project=config_user["project"],
         ),
+    conda:
+        "../envs/base.yaml"
     output:
         "projects/{project}/main_result/validated_minor_iSNVs_inc_indels.csv",
     shell:
@@ -46,6 +52,8 @@ rule proportions_iSNVs_graph:
         ),
     output:
         out_file="projects/{project}/main_result/proportions_iSNVs_graph.csv",
+    conda:
+        "../envs/base.yaml"
     log:
         "projects/{project}/main_result/proportions_iSNVs_graph.log",
     shell:

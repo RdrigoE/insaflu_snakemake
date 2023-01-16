@@ -124,6 +124,8 @@ rule iVar_depth_1_2:
         depth="align_samples/{sample}/iVar/snps.depth",
     output:
         consensus="align_samples/{sample}/iVar/new_snps.consensus.fa",
+    conda:
+        "../envs/base.yaml"
     log:
         "logs/align_samples/iVar_depth_step_1_2_{sample}.log",
     shell:
@@ -135,6 +137,8 @@ rule iVar_depth_step_2:
         zipped="align_samples/{sample}/iVar/snps.depth",
     output:
         unzipped="align_samples/{sample}/iVar/{seg}.depth",
+    conda:
+        "../envs/base.yaml"
     log:
         "logs/align_samples/iVar_depth_step_2_2_{sample}_{seg}.log",
     shell:
@@ -146,6 +150,8 @@ rule create_align_file_iVar:
         first_consensus="align_samples/{sample}/iVar/new_snps.consensus.fa",
     output:
         align_file=temp("align_samples/{sample}/iVar/iVar_align_{seg}.fasta"),
+    conda:
+        "../envs/base.yaml"
     log:
         "logs/align_samples/create_align_file_iVar_{sample}_{seg}.log",
     shell:
@@ -193,6 +199,8 @@ rule get_masked_consensus_iVar:
         ),
     output:
         final_consensus="align_samples/{sample}/iVar/pre_{sample}_consensus.fasta",
+    conda:
+        "../envs/base.yaml"
     log:
         "logs/align_samples/get_masked_consensus_iVar_{sample}.log",
     shell:
@@ -204,6 +212,8 @@ rule mask_regions_consensus_iVar:
         consensus="align_samples/{sample}/iVar/pre_{sample}_consensus.fasta",
     output:
         final_consensus="align_samples/{sample}/iVar/{sample}_consensus.fasta",
+    conda:
+        "../envs/base.yaml"
     params:
         mask_regions_parameters(software_parameters),
     log:

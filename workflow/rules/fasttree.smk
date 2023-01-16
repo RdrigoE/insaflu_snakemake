@@ -54,6 +54,8 @@ rule cp_Alignment_nt_tree:
     output:
         tree="projects/{project}/main_result/Tree_ML_{seg}.tree",
         nwk="projects/{project}/main_result/Tree_ML_{seg}.nwk",
+    conda:
+        "../envs/base.yaml"
     log:
         "logs/{project}/fasttree_cp_Tree_ML_{seg}.log",
     shell:

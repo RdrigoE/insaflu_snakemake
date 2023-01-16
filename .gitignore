@@ -15,3 +15,4 @@ user/sample_metadata.csv
 config/config.yaml
 output.txt
 *.png
+*.pdf

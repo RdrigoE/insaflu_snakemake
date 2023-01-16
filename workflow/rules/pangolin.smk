@@ -20,6 +20,8 @@ rule not_pangolin:
         yaml=expand("projects/{project}/ref.yaml", project=config_user["project"]),
     output:
         temp("projects/{project}/main_result/not_pangolin.csv"),
+    conda:
+        "../envs/base.yaml"
     log:
         "projects/{project}/main_result/not_pangolin.log",
     shell:

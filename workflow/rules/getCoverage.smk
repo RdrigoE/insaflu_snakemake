@@ -26,6 +26,8 @@ checkpoint mergeCoverage:
             "projects/{project}/main_result/coverage_translate.csv",
             project=config_user["project"],
         ),
+    conda:
+        "../envs/base.yaml"
     log:
         "logs/coverage/merge.log",
     shell:

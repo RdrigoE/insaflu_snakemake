@@ -1,6 +1,8 @@
 rule:
     output:
         "projects/{project}/main_result/warning.txt",
+    conda:
+        "../envs/base.yaml"
     log:
         "projects/{project}/main_result/warning.log",
     shell:

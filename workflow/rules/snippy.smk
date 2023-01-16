@@ -51,6 +51,8 @@ rule snippy_unzip_depth:
         zipped="align_samples/{sample}/snippy/snps.depth.gz",
     output:
         unzipped="align_samples/{sample}/snippy/depth/snps.depth",
+    conda:
+        "../envs/base.yaml"
     log:
         "logs/snippy_unzip_depth_{sample}.log",
     shell:
@@ -62,6 +64,8 @@ rule snippy_split_depth:
         zipped="align_samples/{sample}/snippy/depth/snps.depth",
     output:
         unzipped="align_samples/{sample}/snippy/depth/{seg}.depth",
+    conda:
+        "../envs/base.yaml"
     log:
         "logs/snippy_split_depth_{sample}_{seg}.log",
     shell:
@@ -74,6 +78,8 @@ rule create_align_file_snippy:
         first_consensus="align_samples/{sample}/snippy/snps.consensus.fa",
     output:
         align_file=temp("align_samples/{sample}/snippy/snippy_align_{seg}.fasta"),
+    conda:
+        "../envs/base.yaml"
     log:
         "logs/snippy_create_align_{sample}_{seg}.log",
     shell:
@@ -105,6 +111,8 @@ rule get_masked_consensus_snippy:
         ),
     output:
         final_consensus="align_samples/{sample}/snippy/pre_{sample}_consensus.fasta",
+    conda:
+        "../envs/base.yaml"
     log:
         "logs/snippy_get_consensus_{sample}.log",
     shell:
@@ -116,6 +124,8 @@ rule mask_regions_consensus_snippy:
         consensus="align_samples/{sample}/snippy/pre_{sample}_consensus.fasta",
     output:
         final_consensus="align_samples/{sample}/snippy/{sample}_consensus.fasta",
+    conda:
+        "../envs/base.yaml"
     params:
         mask_regions_parameters(software_parameters),
     log:

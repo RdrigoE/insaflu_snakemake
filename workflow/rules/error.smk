@@ -2,6 +2,8 @@
 
 
 rule warning_no_coverage:
+    conda:
+        "../envs/base.yaml"
     output:
         "projects/{project}/main_result/warning.txt",
     shell:

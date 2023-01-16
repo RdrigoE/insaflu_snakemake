@@ -40,6 +40,8 @@ rule medaka_split_depth:
         "align_samples/{sample}/medaka/snps.depth",
     output:
         "align_samples/{sample}/medaka/{seg}.depth",
+    conda:
+        "../envs/base.yaml"
     log:
         "logs/medaka_split_depth_{sample}_{seg}.log",
     shell:
@@ -121,6 +123,8 @@ rule create_align_file:
         first_consensus="align_samples/{sample}/medaka/first_consensus.fasta",
     output:
         align_file=temp("align_samples/{sample}/medaka/medaka_align_{seg}.fasta"),
+    conda:
+        "../envs/base.yaml"
     log:
         "logs/medaka_create_align_file_{sample}_{seg}.log",
     shell:
@@ -152,6 +156,8 @@ rule get_masked_consensus_medaka:
         ),
     output:
         final_consensus="align_samples/{sample}/medaka/pre_{sample}_consensus.fasta",
+    conda:
+        "../envs/base.yaml"
     log:
         "logs/get_masked_consensus_medaka_{sample}.log",
     shell:
@@ -163,6 +169,8 @@ rule mask_regions_consensus_medaka:
         consensus="align_samples/{sample}/medaka/pre_{sample}_consensus.fasta",
     output:
         final_consensus="align_samples/{sample}/medaka/{sample}_consensus.fasta",
+    conda:
+        "../envs/base.yaml"
     params:
         mask_regions_parameters(software_parameters),
     log:
