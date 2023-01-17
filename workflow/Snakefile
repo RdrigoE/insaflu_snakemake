@@ -578,7 +578,10 @@ else:
 
 # include: "../workflow/rules/nextalign.smk"
 
-containerize: "docker://rodrigoeusebio/insaflu_envs:1.0"
+import os
+
+
+containeraized: "docker://rodrigoeusebio/insaflu_envs:latest"
 
 
 rule all:
