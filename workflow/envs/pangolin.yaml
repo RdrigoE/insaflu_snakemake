@@ -3,5 +3,5 @@ channels:
   - bioconda
   - nodefaults
 dependencies:
-  - pangolin =3.1.14 
+  - pangolin =4.2
   - tabulate =0.8.10
