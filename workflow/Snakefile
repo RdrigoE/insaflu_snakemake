@@ -579,7 +579,6 @@ else:
 # include: "../workflow/rules/nextalign.smk"
 
 
-# singularity: "docker://continuumio/miniconda3"
 
 
 rule all:

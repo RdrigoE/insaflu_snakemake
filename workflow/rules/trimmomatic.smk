@@ -12,7 +12,7 @@ rule trimme_reads_SE:
     params:
         get_trimmomatic_parameters(software_parameters),
     log:
-        "logs/trimmomatic/{sample}.log",
+        "logs/samples/{sample}/trimmomatic.log",
     shell:
         "trimmomatic SE "
         "-threads {threads} "
@@ -35,7 +35,7 @@ rule trimme_reads_PE:
     params:
         get_trimmomatic_parameters(software_parameters),
     log:
-        "logs/trimmomatic/{sample}.log",
+        "logs/samples/{sample}/trimmomatic.log",
     shell:
         "trimmomatic PE "
         "{input} "

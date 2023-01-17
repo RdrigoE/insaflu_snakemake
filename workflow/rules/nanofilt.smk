@@ -11,6 +11,6 @@ rule nanofilt_SE:
     params:
         get_nanofilt_parameters(software_parameters),
     log:
-        "logs/nanofilt/{sample}.log",
+        "logs/samples/{sample}/nanofilt.log",
     shell:
         "gunzip -cd {input} | NanoFilt {params} | gzip > {output}"

@@ -3,6 +3,10 @@ rule initiate_folder:
         "../envs/base.yaml"
     output:
         dir("projects/{project}/main_result/"),
+    log:
+        expand(
+            "projects/{project}/main_result/initiate_folder.log", project=PROJECT_NAME
+        ),
     shell:
         "mkdir {output} && cp {user_metadata_directort}parameters.yaml projects/{wildcards.project}/"
 
@@ -19,7 +23,7 @@ rule makeproject:
     params:
         get_directory,
     log:
-        "projects/{project}/sample_{sample}/makeproject.log",
+        "logs/projects/{project}/makeproject/{sample}.log",
     shell:
         "mkdir projects/{wildcards.project}/sample_{wildcards.sample}/ -p && "
         " cp -r {params} projects/{wildcards.project}/sample_{wildcards.sample}/ "
@@ -41,7 +45,7 @@ rule assemble_consensus:
     conda:
         "../envs/base.yaml"
     log:
-        "projects/{project}/main_result/consensus.log",
+        "logs/projects/{project}/main_result/assemble_consensus.log",
     shell:
         "python {scripts_directory}generate_AllConsensus.py {input.coverage} {REFERENCE_GB} '{input.every_consensus}' {REFERENCE_FASTA} {output.AllConsensus} {output.all_consensus_no_ref} "
         "&& python {scripts_directory}concat_segments.py '{input.every_consensus}' {REFERENCE_GB} {output.All_nt} {input.coverage} {REFERENCE_FASTA} {output.All_nt_only_90plus}"
@@ -56,6 +60,12 @@ rule create_segments:
     output:
         expand(
             "projects/{project}/main_result/{seg}/Alignment_nt_{seg}.fasta",
+            project=PROJECT_NAME,
+            seg=SEGMENTS,
+        ),
+    log:
+        expand(
+            "logs/projects/{project}/main_result/create_segments/{seg}.log",
             project=PROJECT_NAME,
             seg=SEGMENTS,
         ),

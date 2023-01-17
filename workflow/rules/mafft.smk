@@ -12,7 +12,7 @@ rule align_w_mafft_medaka:
     params:
         "--preservecase",
     log:
-        "logs/align_samples/{sample}/medaka/medaka_align_{seg}.log",
+        "logs/align_samples/{sample}/medaka/medaka_align/{seg}.log",
     shell:
         "mafft --thread {threads} {params} {input.align_file} > {output.aligned_file}"
 
@@ -28,7 +28,7 @@ rule align_mafft_snippy:
     params:
         "--preservecase",
     log:
-        "logs/align_samples/{sample}/snippy/snippy_align_{seg}.log",
+        "logs/align_samples/{sample}/snippy/snippy_align/{seg}.log",
     shell:
         "mafft --thread {threads} {params} {input.align_file} > {output.aligned_file}"
 
@@ -44,7 +44,7 @@ rule mafft_pre_aa:
     params:
         "--preservecase",
     log:
-        "logs/{project}/mafft_pre_aa.log",
+        "logs/projects/{project}/main_result/Alignment_nt_All_sep.log",
     shell:
         "mafft --thread {threads} {params} {input} > {output}"
 
@@ -60,7 +60,7 @@ rule mafft:
     params:
         "--preservecase",
     log:
-        "logs/{project}/mafft.log",
+        "logs/projects/{project}/main_result/Alignment_nt_All.log",
     shell:
         "mafft --thread {threads} {params} {input} > {output}"
 
@@ -76,7 +76,7 @@ rule mafft_nt:
     params:
         "--preservecase",
     log:
-        "logs/{project}/mafft_nt_{seg}.log",
+        "logs/projects/{project}/main_result/{seg}/Alignment_nt_{seg}_mafft.log",
     shell:
         "mafft --thread {threads} {params} {input} > {output}"
 
@@ -92,7 +92,7 @@ rule mafft_proteins:
     params:
         "--preservecase --amino",
     log:
-        "logs/{project}/mafft_proteins_{locus}_{gene}.log",
+        "logs/projects/{project}/main_result/{locus}/Alignment_aa_{locus}_{gene}_mafft.log",
     shell:
         "mafft --thread {threads} {params} {input} > {output}"
 
@@ -105,6 +105,6 @@ rule cp_Alignment_nt:
     conda:
         "../envs/mafft.yaml"
     log:
-        "logs/{project}/cp_Alignment_nt_{seg}.log",
+        "logs/projects/{project}/main_results/copy_Alignment_nt_{seg}.log",
     shell:
         "cp {input} {output}"

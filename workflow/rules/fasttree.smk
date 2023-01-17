@@ -9,9 +9,8 @@ rule fasttree:
     params:
         "-gtr -boot 1000 -nt",
     log:
-        "logs/{project}/fasttree_Tree_ML_All.log",
+        "logs/projects/{project}/main_result/Tree_ML_All.log",
     shell:
-        #FastTreeDbl
         "fasttree {params} {input} > {output.tree} && cp {output.tree} {output.nwk}"
 
 
@@ -26,9 +25,8 @@ rule fasttree_proteins:
     params:
         "-gtr -boot 1000",
     log:
-        "logs/{project}/fasttree_Alignment_aa_{ref}_{protein}_tree.log",
+        "logs/projects/{project}/main_result/{ref}/Alignment_aa_{ref}_{protein}_tree.log",
     shell:
-        #FastTreeDbls
         "fasttree {params} {input} > {output.tree} && cp {output.tree} {output.nwk}"
 
 
@@ -42,7 +40,7 @@ rule fasttree_nt:
     params:
         "-gtr -boot 1000",
     log:
-        "logs/{project}/fasttree_Alignment_nt_{seg}_tree.log",
+        "logs/projects/{project}/main_result/{seg}/Alignment_nt_{seg}_tree.log",
     shell:
         "fasttree {params} {input} > {output}"
 
@@ -57,7 +55,7 @@ rule cp_Alignment_nt_tree:
     conda:
         "../envs/base.yaml"
     log:
-        "logs/{project}/fasttree_cp_Tree_ML_{seg}.log",
+        "logs/projects/{project}/main_result/copy_Tree_ML_All/{seg}.log",
     shell:
         "cp {input.tree} {output.tree} &&"
         "cp {input.tree} {output.nwk}"

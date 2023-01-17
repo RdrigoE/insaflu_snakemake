@@ -6,6 +6,8 @@ rule align_pe:
         bam="align_samples/{sample}/iVar/snps.bam",
     conda:
         "../envs/ivar.yaml"
+    log:
+        "logs/align_samples/{sample}/iVar_noPrimers/mapping.log",
     shell:
         "mkdir align_samples/{wildcards.sample}/reference -p && "
         "cp {REFERENCE_FASTA} align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta && "
@@ -22,6 +24,8 @@ rule align_se:
         "align_samples/{sample}/iVar/snps.bam",
     conda:
         "../envs/ivar.yaml"
+    log:
+        "logs/align_samples/{sample}/iVar_noPrimers/mapping.log",
     shell:
         "bwa index align_samples/{wildcards.sample}/{REFERENCE_FASTA} && "
 
@@ -40,6 +44,8 @@ rule call_variant:
         vcf_file="align_samples/{sample}/iVar/snps.tsv",
     conda:
         "../envs/ivar.yaml"
+    log:
+        "logs/align_samples/{sample}/iVar_noPrimers/call_variant.log",
     shell:
         "samtools mpileup -A -d 600000 -B -Q 0 {input.bam} | "
         "ivar variants -p align_samples/{wildcards.sample}/iVar/snps -q 20 -t 0.51  align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta "
@@ -53,6 +59,8 @@ rule filter_variants:
         "align_samples/{sample}/iVar/snps_filtered.tsv",
     conda:
         "../envs/ivar.yaml"
+    log:
+        "logs/align_samples/{sample}/iVar_noPrimers/filter_variants.log",
     params:
         "snps_filtered",
     shell:
@@ -66,6 +74,8 @@ rule generate_consensus:
         consensus="align_samples/{sample}/iVar/snps.consensus.fa",
     conda:
         "../envs/ivar.yaml"
+    log:
+        "logs/align_samples/{sample}/iVar_noPrimers/generate_consensus.log",
     params:
         "snps.consensus",
     shell:
@@ -82,6 +92,8 @@ rule get_depth:
         ind="align_samples/{sample}/iVar/snps.depth.gz.tbi",
     conda:
         "../envs/snippy.yaml"
+    log:
+        "logs/align_samples/{sample}/iVar_noPrimers/get_depth.log",
     params:
         "-aa -q 20",
     shell:
@@ -97,6 +109,8 @@ rule iVar_depth_1_2:
         consensus="align_samples/{sample}/iVar/new_snps.consensus.fa",
     conda:
         "../envs/base.yaml"
+    log:
+        "logs/align_samples/{sample}/iVar_noPrimers/depth_1_2.log",
     shell:
         "python ../workflow/scripts/split_consensus.py {input.consensus} {input.depth} {REFERENCE_GB} {output.consensus}"
 
@@ -108,6 +122,8 @@ rule iVar_depth_step_2:
         unzipped="align_samples/{sample}/iVar/{seg}.depth",
     conda:
         "../envs/base.yaml"
+    log:
+        "logs/align_samples/{sample}/iVar_noPrimers/depth_step_2/{seg}.log",
     shell:
         "python ../workflow/scripts/split_depth_file.py {input.zipped} {REFERENCE_GB}"
 
@@ -119,6 +135,8 @@ rule create_align_file_iVar:
         align_file=temp("align_samples/{sample}/iVar/iVar_align_{seg}.fasta"),
     conda:
         "../envs/base.yaml"
+    log:
+        "logs/align_samples/{sample}/iVar_noPrimers/create_align_file/{seg}.log",
     shell:
         "python ../workflow/scripts/mask_consensus_by_deep.py align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta {input.first_consensus} {output.align_file} {wildcards.seg}"
 
@@ -130,6 +148,8 @@ rule align_mafft_iVar:
         aligned_file=temp("align_samples/{sample}/iVar/iVar_aligned_{seg}.fasta"),
     conda:
         "../envs/mafft.yaml"
+    log:
+        "logs/align_samples/{sample}/iVar_noPrimers/align_mafft/{seg}.log",
     threads: 12
     params:
         "--preservecase",
@@ -148,7 +168,7 @@ rule msa_masker_iVar:
     params:
         "--c " + str(software_parameters["mincov"] - 1),
     log:
-        "logs/msa_masker_{sample}_{seg}.log",
+        "logs/align_samples/{sample}/iVar_noPrimers/msa_masker/{seg}.log",
     shell:
         "python ../workflow/scripts/msa_masker.py -i {input.align_file} -df {input.depth} -o {output} {params}"
 
@@ -165,7 +185,7 @@ rule get_masked_consensus_iVar:
     conda:
         "../envs/base.yaml"
     log:
-        "logs/get_consensus_{sample}.log",
+        "logs/align_samples/{sample}/iVar_noPrimers/get_masked_consensus.log",
     shell:
         "python ../workflow/scripts/get_consensus_medaka.py '{input}' {output}"
 
@@ -180,6 +200,6 @@ rule mask_regions_consensus_iVar:
     params:
         mask_regions_parameters(software_parameters),
     log:
-        "logs/mask_regions_{sample}.log",
+        "logs/align_samples/{sample}/iVar_noPrimers/mask_regions_consensus.log",
     shell:
         "python ../workflow/scripts/mask_regions.py {input} {output} {params}"

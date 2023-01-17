@@ -6,5 +6,7 @@ rule warning_no_coverage:
         "../envs/base.yaml"
     output:
         "projects/{project}/main_result/warning.txt",
+    log:
+        "logs/projects/{project}/main_result/warning.log",
     shell:
         "echo 'Not enough coverage in any sample to continue the analysis' > {output}"

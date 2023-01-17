@@ -10,7 +10,7 @@ rule raw_fastqc_se:
     params:
         "--nogroup",
     log:
-        "logs/{sample}/raw_fastqc.log",
+        "logs/samples/{sample}/raw_fastqc.log",
     shell:
         "fastqc {input} -o {output.dir} {params} && python3 {scripts_directory}move_fastqc_output.py {wildcards.sample}"
 
@@ -27,7 +27,7 @@ rule raw_fastqc_pe:
     params:
         "--nogroup",
     log:
-        "logs/{sample}/raw_fastqc.log",
+        "logs/samples/{sample}/raw_fastqc.log",
     shell:
         "fastqc {input} -o {output.dir} {params} && python3 {scripts_directory}move_fastqc_output.py {wildcards.sample}"
 
@@ -45,7 +45,7 @@ rule trimmed_fastqc_pe:
     params:
         "--nogroup",
     log:
-        "logs/{sample}/trimmed_fastqc.log",
+        "logs/samples/{sample}/trimmed_fastqc.log",
     shell:
         "fastqc {input.read_1} {input.read_2} -o {output.dir} {params}"
 
@@ -61,6 +61,6 @@ rule trimmed_fastqc_se:
     params:
         "--nogroup",
     log:
-        "logs/{sample}/trimmed_fastqc.log",
+        "logs/samples/{sample}/trimmed_fastqc.log",
     shell:
         "fastqc {input.read} -o {output.dir} {params}"

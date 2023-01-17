@@ -6,7 +6,7 @@ rule getCoverage:
     conda:
         "../envs/coverage.yaml"
     log:
-        "logs/coverage/{sample}.log",
+        "logs/samples/{sample}/coverage.log",
     shell:
         "python {coverage_script} -i {input.depth} -r {REFERENCE_FASTA} -o {output.coverage}"
 
@@ -29,6 +29,9 @@ checkpoint mergeCoverage:
     conda:
         "../envs/base.yaml"
     log:
-        "logs/coverage/merge.log",
+        expand(
+            "logs/projects/{project}/coverage.log",
+            project=config_user["project"],
+        ),
     shell:
         "python {scripts_directory}merge_coverage.py '{input}' {output.coverage_regular} {output.coverage_translate} {REFERENCE_GB}"

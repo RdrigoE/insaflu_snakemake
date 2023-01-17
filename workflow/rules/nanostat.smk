@@ -8,7 +8,7 @@ rule raw_nanostat:
     conda:
         "../envs/nanostat.yaml"
     log:
-        "logs/raw_nanostat/{sample}.log",
+        "logs/samples/{sample}/raw_nanostat/{sample}.log",
     shell:
         "mkdir {output.dir} -p && NanoStat --fastq {input} --outdir {output.dir} -n {wildcards.sample}_stats.txt"
 
@@ -22,6 +22,6 @@ rule trimmed_nanostat:
     conda:
         "../envs/nanostat.yaml"
     log:
-        "logs/nano_trimmed_fastqc/{sample}.log",
+        "logs/samples/{sample}/nano_trimmed_fastqc/{sample}.log",
     shell:
         "NanoStat --fastq {input} --outdir {output.dir} -n {wildcards.sample}_stats.txt"

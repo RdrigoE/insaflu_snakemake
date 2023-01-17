@@ -13,7 +13,7 @@ rule spades_se:
     params:
         "--only-assembler",
     log:
-        "logs/{sample}/spades.log",
+        "logs/samples/{sample}/spades.log",
     shell:
         "spades.py -t {threads} {params} -s {input} -o {output.dir}"
 
@@ -31,6 +31,6 @@ rule spades_pe:
     params:
         "--only-assembler",
     log:
-        "logs/{sample}/spades.log",
+        "logs/samples/{sample}/spades.log",
     shell:
         "spades.py -t {threads}  {params} -1 {input.read_1} -2 {input.read_2} -o {output.dir}"
