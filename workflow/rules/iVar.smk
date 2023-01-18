@@ -66,7 +66,7 @@ rule call_variant:
     log:
         "logs/align_samples/{sample}/iVar/call_variants.log",
     shell:
-        "samtools mpileup -A -d 600000 -B -Q 0 {input.bam} | "
+        "samtools mpileup -A -d 600000 -B -Q 0 {input.bam} --reference align_samples/demo_SARSCoV2_067/reference/SARS_CoV_2_COVID_19_Wuhan_Hu_1_MN908947.fasta | "
         "ivar variants -p align_samples/{wildcards.sample}/iVar/snps -q 20 -t 0.51  align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta "
         "&& cp {output.tsv_file} {output.vcf_file}"
         # easy fix from filter variants

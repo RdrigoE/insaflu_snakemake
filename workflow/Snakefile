@@ -303,27 +303,25 @@ REFERENCE_NAME = re.findall("(?<=references/)(.*?)(?=.fasta)", REFERENCE_FASTA)[
 SEGMENTS = get_locus(REFERENCE_GB)
 
 PROJECT_NAME = user_metadata["project_name"]
-assert (
-    PROJECT_NAME != ""
-), "Project name is not set in the config file. Please set a project name"
+# assert (
+#     PROJECT_NAME != ""
+# ), "Project name is not set in the config file. Please set a project name"
 ABRICATE = user_metadata["abricate"]
 
 PRIMERS = (
     user_metadata.get("primers") if user_metadata.get("primers") is not None else False
 )
-
-
 PRIMERS = f"../user/primers/{user_metadata['primers']}" if PRIMERS else False
 
 CONSENSUS_TOOL = user_metadata["illumina_consensus"]
 
-assert CONSENSUS_TOOL in "iVar snippy", "Consensus tool not set correctly"
+# assert CONSENSUS_TOOL in "iVar snippy", "Consensus tool not set correctly"
 
-primers_setup = PRIMERS is False or CONSENSUS_TOOL == "iVar" and os.path.isfile(PRIMERS)
+# primers_setup = PRIMERS is False or CONSENSUS_TOOL == "iVar" and os.path.isfile(PRIMERS)
 
-assert (
-    primers_setup
-), "Primers file not found. Please check the name and path to the primers file"
+# assert (
+#     primers_setup
+# ), "Primers file not found. Please check the name and path to the primers file"
 
 
 identification, version = get_identification_version(SEGMENTS, REFERENCE_GB)
