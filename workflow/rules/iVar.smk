@@ -1,4 +1,4 @@
-rule align_pe:
+rule iVar_align_pe:
     input:
         reads_1="samples/{sample}/trimmed_reads/{sample}_1.trimmed.fastq.gz",
         reads_2="samples/{sample}/trimmed_reads/{sample}_2.trimmed.fastq.gz",
@@ -17,7 +17,7 @@ rule align_pe:
         "samtools sort --reference align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta > {output}"
 
 
-rule align_se:
+rule iVar_align_se:
     input:
         reads_1="samples/{sample}/trimmed_reads/{sample}.trimmed.fastq.gz",
     output:
@@ -27,14 +27,15 @@ rule align_se:
     log:
         "logs/align_samples/{sample}/iVar/mapping.log",
     shell:
-        "bwa index align_samples/{wildcards.sample}/{REFERENCE_FASTA} && "
+        "mkdir align_samples/{wildcards.sample}/reference -p && "
+        "cp {REFERENCE_FASTA} align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta && "
+        "bwa index align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta && "
+        "bwa mem align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta {input.reads_1} | "
+        "samtools view -u -T align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta -q 20 | "
+        "samtools sort --reference align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta > {output}"
 
-        "bwa mem align_samples/{wildcards.sample}/{REFERENCE_FASTA} {input.reads_1} | "
-        "samtools view -u -T align_samples/{wildcards.sample}/{REFERENCE_FASTA} -q 20 | "
-        "samtools sort --reference align_samples/{wildcards.sample}/{REFERENCE_FASTA} > {output}"
 
-
-ruleorder: align_pe > align_se
+ruleorder: iVar_align_pe > iVar_align_se
 
 
 rule primers_bam:
@@ -49,16 +50,17 @@ rule primers_bam:
     log:
         "logs/align_samples/{sample}/iVar/primers.log",
     shell:
-        "samtools sort -o {input.pre_snps}.sorted {input.pre_snps} && "
-        "ivar trim -i {input.pre_snps}.sorted -b {PRIMERS} -p {output} -m 35 -e -s 5 &&"
-        " samtools sort -o {output} {output} "
+        "samtools sort -o {input.pre_snps}.sorted {input.pre_snps} "
+        "&& ivar trim -b {PRIMERS} -i {input.pre_snps}.sorted -m 35 -s 5  -p {output} -e "
+        "&& samtools sort -o {output} {output}"
 
 
 rule call_variant:
     input:
         bam="align_samples/{sample}/iVar/snps.bam",
     output:
-        vcf_file="align_samples/{sample}/iVar/snps.tsv",
+        tsv_file="align_samples/{sample}/iVar/snps.tsv",
+        vcf_file="align_samples/{sample}/iVar/snps.vcf",  # easy fix from filter variants
     conda:
         "../envs/ivar.yaml"
     log:
@@ -66,22 +68,27 @@ rule call_variant:
     shell:
         "samtools mpileup -A -d 600000 -B -Q 0 {input.bam} | "
         "ivar variants -p align_samples/{wildcards.sample}/iVar/snps -q 20 -t 0.51  align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta "
+        "&& cp {output.tsv_file} {output.vcf_file}"
+        # easy fix from filter variants
 
 
-rule filter_variants:
-    input:
-        bam="align_samples/{sample}/iVar/snps.bam",
-        vcf_file="align_samples/{sample}/iVar/snps.tsv",
-    output:
-        "align_samples/{sample}/iVar/snps_filtered.tsv",
-    conda:
-        "../envs/ivar.yaml"
-    params:
-        "snps_filtered",
-    log:
-        "logs/align_samples/{sample}/iVar/filter_variants.log",
-    shell:
-        "ivar filtervariants -p align_samples/{wildcards.sample}/iVar/snps_filtered -t 0.51 -f {input.vcf_file}"
+# this should be done in the future but it is not working right now due to double free or corruption (out)
+# rule filter_variants:
+#     input:
+#         bam="align_samples/{sample}/iVar/snps.bam",
+#         vcf_file="align_samples/{sample}/iVar/snps.tsv",
+#     output:
+#         tsv="align_samples/{sample}/iVar/snps_filtered.tsv",
+#         vcf="align_samples/{sample}/iVar/snps.vcf",
+#     conda:
+#         "../envs/ivar.yaml"
+#     params:
+#         "snps_filtered",
+#     log:
+#         "logs/align_samples/{sample}/iVar/filter_variants.log",
+#     shell:
+#         "ivar filtervariants -p align_samples/{wildcards.sample}/iVar/snps_filtered -t 0.51 -f {input.vcf_file} &&"
+#         " cp {output.tsv} {output.vcf}"
 
 
 rule generate_consensus:

@@ -48,6 +48,10 @@ def get_consensus_project(wildcards):
     return f"align_samples/{wildcards.sample}/{config_user['sample_type'][wildcards.sample]}/{wildcards.sample}_consensus.fasta"
 
 
+def get_vcf_project(wildcards):
+    return f"align_samples/{wildcards.sample}/{config_user['sample_type'][wildcards.sample]}/snps.vcf"
+
+
 def get_directory(wildcards):
     return f"align_samples/{wildcards.sample}/{config_user['sample_type'][wildcards.sample]}/*"
 
