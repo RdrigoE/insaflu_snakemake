@@ -1,7 +1,7 @@
 working: ../results/
 user_metadata: ../user_metadata/
-sample_yaml: ../user/project_info_example.yaml
-sample_csv: ../user/sample_metadata_example.csv
+sample_yaml: ../user/covid_ivar.yaml
+sample_csv: ../user/covid_samples.csv
 references: ../user/references/
 rules: ../workflow/rules/
 envs: ../envs/

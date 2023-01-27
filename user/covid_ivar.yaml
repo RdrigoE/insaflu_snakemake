@@ -1,0 +1,7 @@
+only_samples: False
+project_name: covid_problematic_ivar
+fasta_reference: SARS_CoV_2_Wuhan_Hu_1_MN908947.fasta
+gb_reference: SARS_CoV_2_Wuhan_Hu_1_MN908947.gb
+abricate: False
+illumina_consensus: iVar
+primers: sars_cov_2_primers.bed

@@ -16,3 +16,4 @@ config/config.yaml
 output.txt
 *.png
 *.pdf
+workflow/db/snpeff.config

@@ -60,35 +60,13 @@ rule call_variant:
         bam="align_samples/{sample}/iVar/snps.bam",
     output:
         tsv_file="align_samples/{sample}/iVar/snps.tsv",
-        vcf_file="align_samples/{sample}/iVar/snps.vcf",  # easy fix from filter variants
     conda:
         "../envs/ivar.yaml"
     log:
         "logs/align_samples/{sample}/iVar/call_variants.log",
     shell:
-        "samtools mpileup -A -d 600000 -B -Q 0 {input.bam} --reference align_samples/demo_SARSCoV2_067/reference/SARS_CoV_2_COVID_19_Wuhan_Hu_1_MN908947.fasta | "
+        "samtools mpileup -A -d 600000 -B -Q 0 {input.bam} --reference align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta | "
         "ivar variants -p align_samples/{wildcards.sample}/iVar/snps -q 20 -t 0.51  align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta "
-        "&& cp {output.tsv_file} {output.vcf_file}"
-        # easy fix from filter variants
-
-
-# this should be done in the future but it is not working right now due to double free or corruption (out)
-# rule filter_variants:
-#     input:
-#         bam="align_samples/{sample}/iVar/snps.bam",
-#         vcf_file="align_samples/{sample}/iVar/snps.tsv",
-#     output:
-#         tsv="align_samples/{sample}/iVar/snps_filtered.tsv",
-#         vcf="align_samples/{sample}/iVar/snps.vcf",
-#     conda:
-#         "../envs/ivar.yaml"
-#     params:
-#         "snps_filtered",
-#     log:
-#         "logs/align_samples/{sample}/iVar/filter_variants.log",
-#     shell:
-#         "ivar filtervariants -p align_samples/{wildcards.sample}/iVar/snps_filtered -t 0.51 -f {input.vcf_file} &&"
-#         " cp {output.tsv} {output.vcf}"
 
 
 rule generate_consensus:
@@ -103,7 +81,7 @@ rule generate_consensus:
     log:
         "logs/align_samples/{sample}/iVar/generate_consensus.log",
     shell:
-        "samtools mpileup -aa -A -Q 0 {input.bam} | ivar consensus -p align_samples/{wildcards.sample}/iVar/{params} -q 20 -t 0.51 -n N"
+        "samtools mpileup -aa -A -Q 0 {input.bam} --reference align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta | ivar consensus -p align_samples/{wildcards.sample}/iVar/{params} -q 20 -t 0.51 -n N"
 
 
 rule get_depth:
@@ -217,8 +195,10 @@ rule get_masked_consensus_iVar:
 rule mask_regions_consensus_iVar:
     input:
         consensus="align_samples/{sample}/iVar/pre_{sample}_consensus.fasta",
+        tsv_file="align_samples/{sample}/iVar/snps.tsv",
     output:
         final_consensus="align_samples/{sample}/iVar/{sample}_consensus.fasta",
+        vcf_file="align_samples/{sample}/iVar/snps.vcf",
     conda:
         "../envs/base.yaml"
     params:
@@ -226,4 +206,6 @@ rule mask_regions_consensus_iVar:
     log:
         "logs/align_samples/{sample}/iVar/mask_regions_consensus.log",
     shell:
-        "python ../workflow/scripts/mask_regions.py {input} {output} {params}"
+        "python {scripts_directory}mask_regions.py {input.consensus} {output.final_consensus} {params} "
+        " && "
+        "python {scripts_directory}convert_vcf.py {input.tsv_file} {output.vcf_file} "

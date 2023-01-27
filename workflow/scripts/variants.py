@@ -2,6 +2,7 @@
 import re
 import csv
 import sys
+from types import NoneType
 
 
 def get_info_dic(info_list):
@@ -55,7 +56,19 @@ def comparison(value1, value2, signal):
     return None
 
 
-def validated_variants(files_path, output_file, signal, re_expression, list_of_types):
+def discover_my_type(line):
+    if len(line[3]) == 1 and len(line[3]) == len(line[4]):
+        return "snp"
+    if len(line[3]) > len(line[4]):
+        return "del"
+    if len(line[3]) < len(line[4]):
+        return "ins"
+    return "OTHER"
+
+
+def validated_variants(
+    files_path, output_file, signal, re_expression, list_of_types
+):
     """
     The validated_variants function takes a list of vcf files and outputs a csv file with the following columns:
         ID, CHROM, POS, TYPE, REF, ALT, FREQ (allele frequency), COVERAGE (total depth at that position), EVIDENCE (number of reads supporting variant)
@@ -95,44 +108,60 @@ def validated_variants(files_path, output_file, signal, re_expression, list_of_t
     ]
     for file in files_path:
         with open(file, "r") as invcf:
-            for line in invcf:
+            print(f"i am in {file}")
+            for original_line in invcf:
                 try:
-                    if line.startswith("#"):
+                    if original_line.startswith("#"):
                         continue
                     new_entry = []
-                    line = line.strip().split()
+                    line = original_line.strip().split()
                     info = line[7].split(";")
                     info_dic = get_info_dic(info)
                     row_dic = get_row_dict(line)
                     if "ANN" not in info_dic:
-                        info_dic["ANN"] = "|||||||||||||||||||||||||||||||||||||||"
+                        info_dic[
+                            "ANN"
+                        ] = "|||||||||||||||||||||||||||||||||||||||"
                         info_dic["FTYPE"] = ""
                     else:
                         info_dic["FTYPE"] = "CDS"
-                    if word_in_list(list_of_types, info_dic["TYPE"]):
+                    discover_type = info_dic.get("TYPE", discover_my_type(line))
+                    if word_in_list(list_of_types, discover_type):
+                        get_frequency = 0
+                        # print(
+                        #     float(info_dic["AO"].replace(",", "."))
+                        #     / float(info_dic["DP"].replace(",", "."))
+                        # )
+                        try:
+
+                            temp_freq = float(
+                                info_dic["AO"].replace(",", ".")
+                            ) / float(info_dic["DP"].replace(",", "."))
+                            get_frequency = round(temp_freq, 2)
+
+                        except:
+                            get_frequency = float(
+                                original_line[
+                                    len(original_line)
+                                    - original_line[::-1].index(":") :
+                                ]
+                            )
                         if comparison(
-                            round(
-                                float(info_dic["AO"].replace(",", "."))
-                                / float(info_dic["DP"].replace(",", ".")),
-                                2,
-                            ),
+                            get_frequency,
                             0.50,
                             signal,
                         ):
                             ann_list = info_dic["ANN"].split("|")
-                            new_entry.append(re.findall(re_expression, file)[0])  # ID
+                            new_entry.append(
+                                re.findall(re_expression, file)[0]
+                            )  # ID
+                            print("here")
                             new_entry.append(row_dic["CHROM"])  # CHROM
                             new_entry.append(row_dic["POS"])  # POS
-                            new_entry.append(info_dic["TYPE"])  # TYPE
+                            new_entry.append(discover_type)  # TYPE
                             new_entry.append(row_dic["REF"])  # REF
                             new_entry.append(row_dic["ALT"])  # ALT
-                            new_entry.append(
-                                round(
-                                    float(info_dic["AO"].replace(",", "."))
-                                    / float(info_dic["DP"].replace(",", ".")),
-                                    2,
-                                )
-                            )  # FREQ
+                            new_entry.append(get_frequency)  # FREQ
                             new_entry.append(0)  # COVERAGE
                             new_entry.append(0)  # EVIDENCE
                             new_entry.append(info_dic["FTYPE"])  # FTYPE
@@ -148,9 +177,9 @@ def validated_variants(files_path, output_file, signal, re_expression, list_of_t
                             new_entry.append(0)  # PRODUCT
                             new_entry.append(0)  # VARIANTS IN INCOMPLETE LOCUS
                             vcf_final.append(new_entry)
-                except:
+                except Exception as err:
+                    print("Error in file: " + file + "\n" + str(err))
                     continue
-
     with open(output_file, mode="w") as f:
         f_writer = csv.writer(f, delimiter=",")
         f_writer.writerows(vcf_final)
@@ -163,7 +192,7 @@ if __name__ == "__main__":
     type_of_file = sys.argv[3]
     if type_of_file == "validated_variants":
         signal = "bigger"
-        re_expression = "(?<=/sample_)(.*?)(?=/)"
+        re_expression = "(?<=sample__)(.*?)(?=_snpeff.vcf)"
         list_of_words = ["snp"]
     elif type_of_file == "minor_iSNVs_inc_indels":
         signal = "smaller"

@@ -4,7 +4,11 @@ import argparse
 
 
 def compute_masking_sites(
-    sequence, ranges=None, singles_positions=None, from_beggining=None, from_end=None
+    sequence,
+    ranges=None,
+    singles_positions=None,
+    from_beggining=None,
+    from_end=None,
 ):
     length = len(sequence)
     masking_sites = []
@@ -29,16 +33,21 @@ def compute_masking_sites(
     return masking_sites
 
 
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("consensus", type=str, help="Consensus File Path")
     parser.add_argument("output", type=str, help="Output File Path")
     parser.add_argument(
-        "-r", "--regions", type=str, help="Pass a string with the format x-y,n-z,..."
+        "-r",
+        "--regions",
+        type=str,
+        help="Pass a string with the format x-y,n-z,...",
     )
     parser.add_argument(
-        "-s", "--single", type=str, help="Pass a string with the format x,y,n,z,..."
+        "-s",
+        "--single",
+        type=str,
+        help="Pass a string with the format x,y,n,z,...",
     )
     parser.add_argument(
         "-b", "--beggining", type=int, help="Pass a integer with the format x"

@@ -36,7 +36,6 @@ rule snpeff:
     log:
         "logs/projects/{project}/{sample}/snpeff.log",
     shell:
-        "echo '{replace}' && "
         "{replace} {input.snp_file} &&"
         "snpEff {params} -v {REFERENCE_NAME} {input.snp_file} > {output}"
 
@@ -46,7 +45,7 @@ rule snpeff_sample:
         i1="projects/{project}/sample_{sample}/snps.vcf",
         i2="projects/{project}/main_result/snp_ready.txt",
     output:
-        "projects/{project}/sample_{sample}/{sample}_snpeff.vcf",
+        "projects/{project}/sample_{sample}/sample__{sample}_snpeff.vcf",
     conda:
         "../envs/snpeff.yaml"
     threads: config["snpeff_threads"]

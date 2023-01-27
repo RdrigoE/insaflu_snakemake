@@ -14,7 +14,6 @@ rule initiate_folder:
 rule makeproject:
     input:
         get_consensus_project,
-        get_vcf_project,
     output:
         depth="projects/{project}/sample_{sample}/snps.depth.gz",
         vcf="projects/{project}/sample_{sample}/snps.vcf",

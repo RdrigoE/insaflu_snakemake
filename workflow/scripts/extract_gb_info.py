@@ -63,9 +63,17 @@ def get_locus_and_genes(genbank_file):
                             feat.qualifiers.get("locus_tag")[0]
                         )
                     else:
-                        locus_gene[record.name].append(feat.qualifiers["gene"][0])
+                        locus_gene[record.name].append(
+                            feat.qualifiers["gene"][0]
+                        )
 
     return locus_gene
+
+
+def get_gb_name(genbank_file):
+    with open(genbank_file, encoding="utf-8") as handle_gb:
+        gbk = list(SeqIO.parse(handle_gb, "genbank"))[0]
+        return gbk.name
 
 
 def get_id_version(genbank_file):
@@ -105,11 +113,17 @@ def get_positions_gb(genbank_file):
                 if features.type == "CDS":
                     if features.qualifiers.get("gene", None) is None:
                         positions.append(
-                            [features.qualifiers.get("locus_tag")[0], features.location]
+                            [
+                                features.qualifiers.get("locus_tag")[0],
+                                features.location,
+                            ]
                         )
                     else:
                         positions.append(
-                            [features.qualifiers.get("gene")[0], features.location]
+                            [
+                                features.qualifiers.get("gene")[0],
+                                features.location,
+                            ]
                         )
     positions_clean = []
 
@@ -155,8 +169,11 @@ def get_identification_version(segments, reference_gb):
     """
     if len(segments) == 1:
         version_id = get_id_version(reference_gb).split(".")
-        identification = version_id[0]
-        version = version_id[1]
+        identification = version_id[0] if len(version_id) > 0 else ""
+        version = version_id[1] if len(version_id) > 1 else ""
+        print(version_id)
+        if len(version_id) == 1:
+            return get_gb_name(reference_gb), ""
     else:
         identification = ""
         version = ""

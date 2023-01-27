@@ -1,7 +1,7 @@
 rule variant_validated:
     input:
         expand(
-            "projects/{project}/sample_{sample}/{sample}_snpeff.vcf",
+            "projects/{project}/sample_{sample}/sample__{sample}_snpeff.vcf",
             sample=config_user["samples"],
             project=config_user["project"],
         ),

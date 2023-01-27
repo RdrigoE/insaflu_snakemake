@@ -3,5 +3,5 @@ project_name: sars_dataset
 fasta_reference: SARS_CoV_2_COVID_19_Wuhan_Hu_1_MN908947.fasta
 gb_reference: SARS_CoV_2_COVID_19_Wuhan_Hu_1_MN908947.gbk
 abricate: False
-illumina_consensus: snippy
-primers: asdadsads
+illumina_consensus: iVar
+primers: sars_cov_2_primers.bed

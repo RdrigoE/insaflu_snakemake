@@ -57,5 +57,5 @@ def get_directory(wildcards):
 
 
 # FREEBAYES
-def get_consensus_freebayes(wildcards):
+def get_snps_freebayes(wildcards):
     return f"align_samples/{wildcards.sample}/{config_user['sample_type'][wildcards.sample]}/snps.bam"

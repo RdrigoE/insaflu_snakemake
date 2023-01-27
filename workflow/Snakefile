@@ -590,13 +590,6 @@ else:
 
 
 # include: "../workflow/rules/nextalign.smk"
-
-import os
-
-
-containeraized: "docker://rodrigoeusebio/insaflu_envs:latest"
-
-
 rule all:
     input:
         get_output(),
