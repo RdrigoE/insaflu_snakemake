@@ -1,7 +1,0 @@
-only_samples: False
-project_name: mpox_problematic_snippy
-fasta_reference: monkeypox_MT903344_MPXV_UK_P2_wo_NNcut_191315.fasta
-gb_reference: monkeypox_MT903344_MPXV_UK_P2_wo_NNcut_191315.gbk
-abricate: False
-illumina_consensus: snippy
-primers: mpox.bed
