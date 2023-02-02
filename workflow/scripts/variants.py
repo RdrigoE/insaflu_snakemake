@@ -108,7 +108,6 @@ def validated_variants(
     ]
     for file in files_path:
         with open(file, "r") as invcf:
-            print(f"i am in {file}")
             for original_line in invcf:
                 try:
                     if original_line.startswith("#"):
@@ -128,10 +127,7 @@ def validated_variants(
                     discover_type = info_dic.get("TYPE", discover_my_type(line))
                     if word_in_list(list_of_types, discover_type):
                         get_frequency = 0
-                        # print(
-                        #     float(info_dic["AO"].replace(",", "."))
-                        #     / float(info_dic["DP"].replace(",", "."))
-                        # )
+
                         try:
 
                             temp_freq = float(
@@ -155,7 +151,6 @@ def validated_variants(
                             new_entry.append(
                                 re.findall(re_expression, file)[0]
                             )  # ID
-                            print("here")
                             new_entry.append(row_dic["CHROM"])  # CHROM
                             new_entry.append(row_dic["POS"])  # POS
                             new_entry.append(discover_type)  # TYPE

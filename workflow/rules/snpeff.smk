@@ -2,7 +2,7 @@ configfile: "../config/threads.yaml"
 
 
 replace = (
-    f"sed -i 's/{SEGMENTS[0]}/{get_id_version(REFERENCE_GB)}/g' "
+    f"sed -i 's/{SEGMENTS[0]}/{get_identification_version_string(SEGMENTS,REFERENCE_GB)}/g' "
     if len(SEGMENTS) == 1
     else "true "
 )

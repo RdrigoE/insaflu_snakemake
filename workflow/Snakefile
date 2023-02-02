@@ -8,6 +8,7 @@ from scripts.extract_gb_info import (
     get_locus_and_genes,
     get_genes,
     get_identification_version,
+    get_identification_version_string,
 )
 from scripts.get_software_parameters import (
     get_nanofilt_parameters,
