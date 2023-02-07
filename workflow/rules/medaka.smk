@@ -10,10 +10,11 @@ rule medaka_consensus:
         ref_out="align_samples/{sample}/medaka/ref.fasta",
     conda:
         "../envs/medaka_1_4_4.yaml"
+    threads: 2
     log:
         "logs/align_samples/{sample}/medaka/medaka_consensus.log",
     shell:
-        "rm -r align_samples/{wildcards.sample}/medaka/ && mkdir align_samples/{wildcards.sample}/medaka/   && cp {input.ref} {output.ref_out} && medaka_consensus -i {input.i} -d {output.ref_out} -o align_samples/{wildcards.sample}/medaka -t 4 -m r941_min_high_g360"
+        "rm -r align_samples/{wildcards.sample}/medaka/ && mkdir align_samples/{wildcards.sample}/medaka/   && cp {input.ref} {output.ref_out} && medaka_consensus -i {input.i} -d {output.ref_out} -o align_samples/{wildcards.sample}/medaka -t {threads} -m r941_min_high_g360"
         " && cp {output.i} {output.i2}"
 
 

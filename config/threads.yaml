@@ -1,7 +1,7 @@
-fastqc_threads: 1
-trimmomatic_threads: 5
+trimmomatic_threads: 12
 snippy_threads: 12
-spades_threads: 5
-snpeff_threads: 5
-mafft_threads: 5
-nextalign_threads: 5
+spades_threads: 12
+mafft_threads: 12
+nextalign_threads: 12
+nanostat_threads: 12
+pangolin_threads: 12

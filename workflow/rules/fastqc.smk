@@ -9,6 +9,7 @@ rule raw_fastqc_se:
         "../envs/fastqc.yaml"
     params:
         "--nogroup",
+    threads: 1
     log:
         "logs/samples/{sample}/raw_fastqc.log",
     shell:
@@ -26,6 +27,7 @@ rule raw_fastqc_pe:
         "../envs/fastqc.yaml"
     params:
         "--nogroup",
+    threads: 1
     log:
         "logs/samples/{sample}/raw_fastqc.log",
     shell:
@@ -46,8 +48,9 @@ rule trimmed_fastqc_pe:
         "--nogroup",
     log:
         "logs/samples/{sample}/trimmed_fastqc.log",
+    threads: 2
     shell:
-        "fastqc {input.read_1} {input.read_2} -o {output.dir} {params}"
+        "fastqc {input.read_1} {input.read_2} -o {output.dir} {params} -t {threads}"
 
 
 rule trimmed_fastqc_se:
@@ -60,7 +63,8 @@ rule trimmed_fastqc_se:
         "../envs/fastqc.yaml"
     params:
         "--nogroup",
+    threads: 2
     log:
         "logs/samples/{sample}/trimmed_fastqc.log",
     shell:
-        "fastqc {input.read} -o {output.dir} {params}"
+        "fastqc {input.read} -o {output.dir} {params} -t {threads}"

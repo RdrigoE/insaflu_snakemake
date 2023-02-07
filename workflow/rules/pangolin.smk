@@ -39,7 +39,8 @@ rule pangolin:
         "../envs/pangolin.yaml"
     params:
         "--analysis-mode fast",  #pangolearn
+    threads: config["pangolin_threads"]
     log:
         "logs/projects/{project}/main_result/pangolin.log",
     shell:
-        "pangolin {input.consensus} --outfile {output} -t 2"
+        "pangolin {input.consensus} --outfile {output} -t {threads}"

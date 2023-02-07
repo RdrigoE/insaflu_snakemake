@@ -30,7 +30,6 @@ rule snpeff:
         "projects/{project}/sample_{sample}/freebayes/{sample}_snpeff.vcf",
     conda:
         "../envs/snpeff.yaml"
-    threads: config["snpeff_threads"]
     params:
         "-no-downstream -no-upstream -no-intergenic -no-utr -noStats -c ../workflow/db/snpeff.config",
     log:
@@ -48,7 +47,6 @@ rule snpeff_sample:
         "projects/{project}/sample_{sample}/sample__{sample}_snpeff.vcf",
     conda:
         "../envs/snpeff.yaml"
-    threads: config["snpeff_threads"]
     log:
         "logs/projects/{project}/{sample}/{sample}_snpeff.log",
     params:
@@ -56,4 +54,3 @@ rule snpeff_sample:
     shell:
         "{replace} {input.i1} && "
         "snpEff {params} -v {REFERENCE_NAME} {input.i1}  > {output}"
-        #-t {threads}

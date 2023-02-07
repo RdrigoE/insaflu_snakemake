@@ -8,7 +8,7 @@ rule align_w_mafft_medaka:
         aligned_file=temp("align_samples/{sample}/medaka/medaka_aligned_{seg}.fasta"),
     conda:
         "../envs/mafft.yaml"
-    threads: 8
+    threads: config["mafft_threads"]
     params:
         "--preservecase",
     log:

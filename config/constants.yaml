@@ -1,12 +1,13 @@
 working: ../results/
 user_metadata: ../user_metadata/
-sample_yaml: ../user/project_info.yaml
-sample_csv: ../user/sample_metadata.csv
+sample_yaml: ../user/mpox_snippy.yaml
+sample_csv: ../user/mpox_samples.csv
+config_file: ../config/config.yaml
+software_parameters: ../user/parameters.yaml
+get_coverage: ../workflow/software/getCoverage/getCoverage.py
+
 references: ../user/references/
 rules: ../workflow/rules/
 envs: ../envs/
 scripts: ../workflow/scripts/
 samples: ../user/reads/
-config_file: ../config/config.yaml
-software_parameters: ../user/parameters.yaml
-get_coverage: ../workflow/software/getCoverage/getCoverage.py

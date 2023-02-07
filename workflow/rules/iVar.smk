@@ -150,7 +150,7 @@ rule align_mafft_iVar:
         aligned_file=temp("align_samples/{sample}/iVar/iVar_aligned_{seg}.fasta"),
     conda:
         "../envs/mafft.yaml"
-    threads: 12
+    threads: config["mafft_threads"]
     params:
         "--preservecase",
     log:

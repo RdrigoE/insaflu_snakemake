@@ -1,0 +1,7 @@
+trimmomatic_threads: 16
+snippy_threads: 16
+spades_threads: 16
+mafft_threads: 16
+nextalign_threads: 16
+nanostat_threads: 16
+pangolin_threads: 12

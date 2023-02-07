@@ -9,8 +9,9 @@ rule raw_nanostat:
         "../envs/nanostat.yaml"
     log:
         "logs/samples/{sample}/raw_nanostat/{sample}.log",
+    threads: config["nanostat_threads"]
     shell:
-        "mkdir {output.dir} -p && NanoStat --fastq {input} --outdir {output.dir} -n {wildcards.sample}_stats.txt"
+        "mkdir {output.dir} -p && NanoStat --fastq {input} --outdir {output.dir} -n {wildcards.sample}_stats.txt -t {threads}"
 
 
 rule trimmed_nanostat:
@@ -23,5 +24,6 @@ rule trimmed_nanostat:
         "../envs/nanostat.yaml"
     log:
         "logs/samples/{sample}/nano_trimmed_fastqc/{sample}.log",
+    threads: config["nanostat_threads"]
     shell:
-        "NanoStat --fastq {input} --outdir {output.dir} -n {wildcards.sample}_stats.txt"
+        "NanoStat --fastq {input} --outdir {output.dir} -n {wildcards.sample}_stats.txt -t {threads}"

@@ -1,6 +1,3 @@
-configfile: "../config/threads.yaml"
-
-
 rule nanofilt_SE:
     input:
         get_raw_input_ont,
