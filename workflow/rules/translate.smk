@@ -8,5 +8,7 @@ rule translate:
         "../envs/base.yaml"
     log:
         "logs/projects/{project}/main_result/{locus}/translate_{locus}_{gene}.log",
+    benchmark:
+        "benchmark/projects/{project}/main_result/{locus}/translate_{locus}_{gene}.tsv",
     shell:
         "python {scripts_directory}translate.py {REFERENCE_GB} {input.Alignment_nt} {output} '{wildcards.locus}' '{wildcards.gene}' {input.coverage}"

@@ -9,5 +9,7 @@ rule nanofilt_SE:
         get_nanofilt_parameters(software_parameters),
     log:
         "logs/samples/{sample}/nanofilt.log",
+    benchmark:
+        "benchmark/samples/{sample}/nanofilt.tsv",
     shell:
         "gunzip -cd {input} | NanoFilt {params} | gzip > {output}"

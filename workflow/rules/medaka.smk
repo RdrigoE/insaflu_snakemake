@@ -13,6 +13,8 @@ rule medaka_consensus:
     threads: 2
     log:
         "logs/align_samples/{sample}/medaka/medaka_consensus.log",
+    benchmark:
+        "benchmark/align_samples/{sample}/medaka/medaka_consensus.tsv",
     shell:
         "rm -r align_samples/{wildcards.sample}/medaka/ && mkdir align_samples/{wildcards.sample}/medaka/   && cp {input.ref} {output.ref_out} && medaka_consensus -i {input.i} -d {output.ref_out} -o align_samples/{wildcards.sample}/medaka -t {threads} -m r941_min_high_g360"
         " && cp {output.i} {output.i2}"
@@ -31,6 +33,8 @@ rule medaka_get_depth:
         "-aa ",
     log:
         "logs/align_samples/{sample}/medaka/medaka_get_depth.log",
+    benchmark:
+        "benchmark/align_samples/{sample}/medaka/medaka_get_depth.tsv",
     shell:
         "samtools depth {params} {input.i} | bgzip -c > {output.only_depth} "
         "&& tabix -p vcf {output.only_depth} && gunzip -c {output.only_depth}  > {output.depth} "
@@ -45,6 +49,8 @@ rule medaka_split_depth:
         "../envs/base.yaml"
     log:
         "logs/align_samples/{sample}/medaka/medaka_split_depth/{seg}.log",
+    benchmark:
+        "benchmark/align_samples/{sample}/medaka/medaka_split_depth/{seg}.tsv",
     shell:
         "python3 {scripts_directory}split_depth_file.py {input} {REFERENCE_GB}"
 
@@ -60,6 +66,8 @@ rule medaka_call_variants:
         "../envs/medaka_1_4_4.yaml"
     log:
         "logs/align_samples/{sample}/medaka/medaka_call_variants.log",
+    benchmark:
+        "benchmark/align_samples/{sample}/medaka/medaka_call_variants.tsv",
     shell:
         "medaka variant --verbose {input.ref} {input.hdf} {output.vcf}"
 
@@ -76,6 +84,8 @@ rule medaka_annotate_variants:
         "../envs/medaka_1_2_1.yaml"
     log:
         "logs/align_samples/{sample}/medaka/medaka_annotate_variants.log",
+    benchmark:
+        "benchmark/align_samples/{sample}/medaka/medaka_annotate_variants.tsv",
     shell:
         "medaka tools annotate {input.vcf} {input.ref} {input.bam} {output.snps} && "
         "bgzip {output.snps} -c > {output.vcf_zipped} && tabix {output.vcf_zipped}"
@@ -98,6 +108,8 @@ rule mask_between_top_and_50:
         get_add_freq_medaka(software_parameters),
     log:
         "logs/align_samples/{sample}/medaka/filter_medaka.log",
+    benchmark:
+        "benchmark/align_samples/{sample}/medaka/filter_medaka.tsv",
     shell:
         "touch {output.temp_file} && "
         "python {scripts_directory}add_freq_medaka_consensus.py {input.normal_reference_fasta} {input.vcf_file} {input.file_coverage} "
@@ -115,6 +127,8 @@ rule bcf_consensus:
         "../envs/bcftools.yaml"
     log:
         "logs/align_samples/{sample}/medaka/bcf_consensus.log",
+    benchmark:
+        "benchmark/align_samples/{sample}/medaka/bcf_consensus.tsv",
     shell:
         "bcftools consensus -s SAMPLE -f {REFERENCE_FASTA} {input.vcf_ziped} -o {output}"
 
@@ -128,6 +142,8 @@ rule create_align_file:
         "../envs/base.yaml"
     log:
         "logs/align_samples/{sample}/medaka/create_align_file_{seg}.log",
+    benchmark:
+        "benchmark/align_samples/{sample}/medaka/create_align_file_{seg}.tsv",
     shell:
         "python {scripts_directory}mask_consensus_by_deep.py {REFERENCE_FASTA} {input.first_consensus} {output.align_file} {wildcards.seg}"
 
@@ -144,6 +160,8 @@ rule msa_masker_medaka:
         "--c " + str(software_parameters["mincov_medaka"]),
     log:
         "logs/align_samples/{sample}/medaka/msa_masker_medaka_{seg}.log",
+    benchmark:
+        "benchmark/align_samples/{sample}/medaka/msa_masker_medaka_{seg}.tsv",
     shell:
         "python {scripts_directory}msa_masker.py -i {input.align_file} -df {input.depth} -o {output} {params}"
 
@@ -161,6 +179,8 @@ rule get_masked_consensus_medaka:
         "../envs/base.yaml"
     log:
         "logs/align_samples/{sample}/medaka/get_masked_consensus_medaka.log",
+    benchmark:
+        "benchmark/align_samples/{sample}/medaka/get_masked_consensus_medaka.tsv",
     shell:
         "python {scripts_directory}get_consensus_medaka.py '{input}' {output}"
 
@@ -176,5 +196,7 @@ rule mask_regions_consensus_medaka:
         mask_regions_parameters(software_parameters),
     log:
         "logs/align_samples/{sample}/medaka/mask_regions_consensus_medaka.log",
+    benchmark:
+        "benchmark/align_samples/{sample}/medaka/mask_regions_consensus_medaka.tsv",
     shell:
         "python {scripts_directory}mask_regions.py {input} {output} {params}"

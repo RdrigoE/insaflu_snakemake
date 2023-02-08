@@ -12,6 +12,8 @@ rule raw_fastqc_se:
     threads: 1
     log:
         "logs/samples/{sample}/raw_fastqc.log",
+    benchmark:
+        "benchmark/samples/{sample}/raw_fastqc.tsv",
     shell:
         "fastqc {input} -o {output.dir} {params} && python3 {scripts_directory}move_fastqc_output.py {wildcards.sample}"
 
@@ -30,6 +32,8 @@ rule raw_fastqc_pe:
     threads: 1
     log:
         "logs/samples/{sample}/raw_fastqc.log",
+    benchmark:
+        "benchmark/samples/{sample}/raw_fastqc.tsv",
     shell:
         "fastqc {input} -o {output.dir} {params} && python3 {scripts_directory}move_fastqc_output.py {wildcards.sample}"
 
@@ -48,6 +52,8 @@ rule trimmed_fastqc_pe:
         "--nogroup",
     log:
         "logs/samples/{sample}/trimmed_fastqc.log",
+    benchmark:
+        "benchmark/samples/{sample}/trimmed_fastqc.tsv",
     threads: 2
     shell:
         "fastqc {input.read_1} {input.read_2} -o {output.dir} {params} -t {threads}"
@@ -66,5 +72,7 @@ rule trimmed_fastqc_se:
     threads: 2
     log:
         "logs/samples/{sample}/trimmed_fastqc.log",
+    benchmark:
+        "benchmark/samples/{sample}/trimmed_fastqc.tsv",
     shell:
         "fastqc {input.read} -o {output.dir} {params} -t {threads}"

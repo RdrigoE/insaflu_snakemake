@@ -10,6 +10,8 @@ rule abricate_se:
         "--db insaflu --minid 70 --mincov 30",
     log:
         "logs/samples/{sample}/abricate.log",
+    benchmark:
+        "benchmark/samples/{sample}/abricate.tsv",
     shell:
         "abricate {params} {input} > {output.csv}"
         " && python3 {scripts_directory}get_abricate_info_list.py {output.csv} {output.yaml}"
@@ -27,6 +29,8 @@ rule abricate_pe:
         "--db insaflu --minid 70 --mincov 30",
     log:
         "logs/samples/{sample}/abricate.log",
+    benchmark:
+        "benchmark/samples/{sample}/abricate.tsv",
     shell:
         "abricate {params} {input} > {output.csv}"
         " && python3 {scripts_directory}get_abricate_info_list.py {output.csv} {output.yaml}"
@@ -42,6 +46,8 @@ rule abricate_ont:
         "../envs/abricate.yaml"
     log:
         "logs/samples/{sample}/abricate.log",
+    benchmark:
+        "benchmark/samples/{sample}/abricate.tsv",
     params:
         "--db insaflu --minid 70 --mincov 30",
     shell:

@@ -11,6 +11,8 @@ checkpoint abricate_pangolin:
             "logs/projects/{project}/main_result/abricate.log",
             project=config_user["project"],
         ),
+    benchmark:
+        f"benchmark/projects/{PROJECT_NAME}/main_result/abricate.tsv"
     shell:
         "abricate {params} {REFERENCE_FASTA} > {output.csv}"
         " && python3 {scripts_directory}get_abricate_info.py {output.csv} {output.yaml}"
@@ -25,6 +27,8 @@ rule not_pangolin:
         "../envs/base.yaml"
     log:
         "logs/projects/{project}/main_result/not_pangolin.log",
+    benchmark:
+        "benchmark/projects/{project}/main_result/not_pangolin.tsv"
     shell:
         "echo 'This is not SARS-CoV-2' > {output}"
 
@@ -42,5 +46,7 @@ rule pangolin:
     threads: config["pangolin_threads"]
     log:
         "logs/projects/{project}/main_result/pangolin.log",
+    benchmark:
+        "benchmark/projects/{project}/main_result/pangolin.tsv"
     shell:
         "pangolin {input.consensus} --outfile {output} -t {threads}"

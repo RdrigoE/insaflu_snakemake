@@ -16,6 +16,8 @@ rule trimme_reads_PE:
     threads: config["trimmomatic_threads"]
     log:
         "logs/samples/{sample}/trimmomatic.log",
+    benchmark:
+        "benchmark/samples/{sample}/trimmomatic.tsv",
     shell:
         "trimmomatic PE "
         "{input} "
@@ -39,6 +41,8 @@ rule trimme_reads_SE:
         get_trimmomatic_parameters(software_parameters),
     log:
         "logs/samples/{sample}/trimmomatic.log",
+    benchmark:
+        "benchmark/samples/{sample}/trimmomatic.tsv",
     shell:
         "trimmomatic SE "
         "-threads {threads} "

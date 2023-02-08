@@ -7,6 +7,8 @@ rule getCoverage:
         "../envs/coverage.yaml"
     log:
         "logs/samples/{sample}/coverage.log",
+    benchmark:
+        "benchmark/samples/{sample}/coverage.tsv"
     shell:
         "python {coverage_script} -i {input.depth} -r {REFERENCE_FASTA} -o {output.coverage}"
 
@@ -33,5 +35,7 @@ checkpoint mergeCoverage:
             "logs/projects/{project}/coverage.log",
             project=config_user["project"],
         ),
+    benchmark:
+        f"benchmark/projects/{PROJECT_NAME}/coverage.tsv"
     shell:
         "python {scripts_directory}merge_coverage.py '{input}' {output.coverage_regular} {output.coverage_translate} {REFERENCE_GB}"

@@ -8,5 +8,7 @@ rule warning_no_coverage:
         "projects/{project}/main_result/warning.txt",
     log:
         "logs/projects/{project}/main_result/warning.log",
+    benchmark:
+        "benchmark/projects/{project}/main_result/warning.tsv",
     shell:
         "echo 'Not enough coverage in any sample to continue the analysis' > {output}"

@@ -14,6 +14,8 @@ rule spades_se:
         "--only-assembler",
     log:
         "logs/samples/{sample}/spades.log",
+    benchmark:
+        "benchmark/samples/{sample}/spades.tsv",
     shell:
         "spades.py -t {threads} {params} -s {input} -o {output.dir}"
 
@@ -32,5 +34,7 @@ rule spades_pe:
         "--only-assembler",
     log:
         "logs/samples/{sample}/spades.log",
+    benchmark:
+        "benchmark/samples/{sample}/spades.tsv",
     shell:
         "spades.py -t {threads}  {params} -1 {input.read_1} -2 {input.read_2} -o {output.dir}"
