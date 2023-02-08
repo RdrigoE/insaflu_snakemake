@@ -7,7 +7,7 @@ reads
 results
 .vscode
 snpeff.config
-config.yaml
+config/config.yaml
 workflow/db/data
 software
 user/project_info.yaml
