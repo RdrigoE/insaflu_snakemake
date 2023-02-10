@@ -11,6 +11,8 @@ rule medaka_consensus:
     conda:
         "../envs/medaka_1_4_4.yaml"
     threads: 2
+    resources:
+        mem_mb=memory["medaka_consensus"],
     log:
         "logs/align_samples/{sample}/medaka/medaka_consensus.log",
     benchmark:
@@ -31,6 +33,8 @@ rule medaka_get_depth:
         "../envs/medaka_1_2_1.yaml"
     params:
         "-aa ",
+    resources:
+        mem_mb=memory["medaka_get_depth"],
     log:
         "logs/align_samples/{sample}/medaka/medaka_get_depth.log",
     benchmark:
@@ -47,6 +51,8 @@ rule medaka_split_depth:
         "align_samples/{sample}/medaka/{seg}.depth",
     conda:
         "../envs/base.yaml"
+    resources:
+        mem_mb=memory["medaka_split_depth"],
     log:
         "logs/align_samples/{sample}/medaka/medaka_split_depth/{seg}.log",
     benchmark:
@@ -64,6 +70,8 @@ rule medaka_call_variants:
         vcf="align_samples/{sample}/medaka/round_1.vcf",
     conda:
         "../envs/medaka_1_4_4.yaml"
+    resources:
+        mem_mb=memory["medaka_call_variants"],
     log:
         "logs/align_samples/{sample}/medaka/medaka_call_variants.log",
     benchmark:
@@ -82,6 +90,8 @@ rule medaka_annotate_variants:
         vcf_zipped="align_samples/{sample}/medaka/snps_ann.vcf.gz",
     conda:
         "../envs/medaka_1_2_1.yaml"
+    resources:
+        mem_mb=memory["medaka_annotate_variants"],
     log:
         "logs/align_samples/{sample}/medaka/medaka_annotate_variants.log",
     benchmark:
@@ -106,6 +116,8 @@ rule mask_between_top_and_50:
         "../envs/filter_medaka.yaml"
     params:
         get_add_freq_medaka(software_parameters),
+    resources:
+        mem_mb=memory["mask_between_top_and_50"],
     log:
         "logs/align_samples/{sample}/medaka/filter_medaka.log",
     benchmark:
@@ -125,6 +137,8 @@ rule bcf_consensus:
         temp("align_samples/{sample}/medaka/first_consensus.fasta"),
     conda:
         "../envs/bcftools.yaml"
+    resources:
+        mem_mb=memory["bcf_consensus"],
     log:
         "logs/align_samples/{sample}/medaka/bcf_consensus.log",
     benchmark:
@@ -140,6 +154,8 @@ rule create_align_file:
         align_file=temp("align_samples/{sample}/medaka/medaka_align_{seg}.fasta"),
     conda:
         "../envs/base.yaml"
+    resources:
+        mem_mb=memory["create_align_file"],
     log:
         "logs/align_samples/{sample}/medaka/create_align_file_{seg}.log",
     benchmark:
@@ -158,6 +174,8 @@ rule msa_masker_medaka:
         "../envs/msa_masker.yaml"
     params:
         "--c " + str(software_parameters["mincov_medaka"]),
+    resources:
+        mem_mb=memory["msa_masker_medaka"],
     log:
         "logs/align_samples/{sample}/medaka/msa_masker_medaka_{seg}.log",
     benchmark:
@@ -177,6 +195,8 @@ rule get_masked_consensus_medaka:
         final_consensus="align_samples/{sample}/medaka/pre_{sample}_consensus.fasta",
     conda:
         "../envs/base.yaml"
+    resources:
+        mem_mb=memory["get_masked_consensus_medaka"],
     log:
         "logs/align_samples/{sample}/medaka/get_masked_consensus_medaka.log",
     benchmark:
@@ -194,6 +214,8 @@ rule mask_regions_consensus_medaka:
         "../envs/base.yaml"
     params:
         mask_regions_parameters(software_parameters),
+    resources:
+        mem_mb=memory["mask_regions_consensus_medaka"],
     log:
         "logs/align_samples/{sample}/medaka/mask_regions_consensus_medaka.log",
     benchmark:

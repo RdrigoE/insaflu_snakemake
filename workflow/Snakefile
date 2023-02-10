@@ -319,7 +319,7 @@ CONSENSUS_TOOL = user_metadata["illumina_consensus"]
 assert CONSENSUS_TOOL in "iVar snippy", "Consensus tool not set correctly"
 
 primers_setup = PRIMERS is False or CONSENSUS_TOOL == "iVar" and os.path.isfile(PRIMERS)
-if CONSENSUS_TOOL == "iVar": 
+if CONSENSUS_TOOL == "iVar":
     assert (
         primers_setup
     ), "Primers file not found. Please check the name and path to the primers file"
@@ -588,6 +588,9 @@ if PRIMERS:
 else:
 
     include: "rules/iVar_noPrimer.smk"
+
+
+memory = read_yaml("../config/mem_max_RSS.yaml")
 
 
 # include: "../workflow/rules/nextalign.smk"

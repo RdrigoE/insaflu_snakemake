@@ -6,6 +6,8 @@ rule warning_no_coverage:
         "../envs/base.yaml"
     output:
         "projects/{project}/main_result/warning.txt",
+    resources:
+        mem_mb=memory["warning_no_coverage"],
     log:
         "logs/projects/{project}/main_result/warning.log",
     benchmark:

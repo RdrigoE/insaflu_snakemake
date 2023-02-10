@@ -3,6 +3,8 @@ rule initiate_folder:
         "../envs/base.yaml"
     output:
         dir("projects/{project}/main_result/"),
+    resources:
+        mem_mb=memory["initiate_folder"],
     log:
         expand("logs/{project}/main_result/initiate_folder.log", project=PROJECT_NAME),
     benchmark:
@@ -22,6 +24,8 @@ rule makeproject:
         "../envs/base.yaml"
     params:
         get_directory,
+    resources:
+        mem_mb=memory["makeproject"],
     log:
         "logs/projects/{project}/makeproject/{sample}.log",
     benchmark:
@@ -46,6 +50,8 @@ rule assemble_consensus:
         All_nt_only_90plus="projects/{project}/main_result/All_nt_only_90plus.fasta",
     conda:
         "../envs/base.yaml"
+    resources:
+        mem_mb=memory["assemble_consensus"],
     log:
         "logs/projects/{project}/main_result/assemble_consensus.log",
     benchmark:
@@ -67,6 +73,8 @@ rule create_segments:
             project=PROJECT_NAME,
             seg=SEGMENTS,
         ),
+    resources:
+        mem_mb=memory["create_segments"],
     log:
         expand(
             "logs/projects/{project}/main_result/create_segments/{seg}.log",

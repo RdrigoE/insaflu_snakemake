@@ -6,6 +6,8 @@ rule translate:
         "projects/{project}/main_result/{locus}/Alignment_aa_{locus}_{gene}_trans.fasta",
     conda:
         "../envs/base.yaml"
+    resources:
+        mem_mb=memory["translate"],
     log:
         "logs/projects/{project}/main_result/{locus}/translate_{locus}_{gene}.log",
     benchmark:

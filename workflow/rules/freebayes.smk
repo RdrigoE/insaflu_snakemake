@@ -23,9 +23,11 @@ rule freebayes:
         "../envs/freebayes.yaml"
     params:
         "--min-mapping-quality 20 --min-base-quality 20 --min-coverage 100 --min-alternate-count 10  --min-alternate-fraction 0.01 --ploidy 2 -V ",
+    resources:
+        mem_mb=memory["freebayes"],
     log:
         "logs/projects/{project}/{sample}/freebayes_{sample}_var.log",
     benchmark:
-        "benchmark/projects/{project}/{sample}/freebayes_{sample}_var.tsv",
+        "benchmark/projects/{project}/{sample}/freebayes_{sample}_var.tsv"
     shell:
         "freebayes {params} -f {input.ref} {input.samples} > {output}"

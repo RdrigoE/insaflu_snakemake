@@ -16,6 +16,8 @@ rule snippy_pe:
     threads: config["snippy_threads"]
     params:
         get_snippy_parameters(software_parameters),
+    resources:
+        mem_mb=memory["snippy_pe"],
     log:
         "logs/align_samples/{sample}/snippy/snippy_pe.log",
     benchmark:
@@ -38,6 +40,8 @@ rule snippy_se:
         "../envs/snippy.yaml"
     params:
         get_snippy_parameters(software_parameters),
+    resources:
+        mem_mb=memory["snippy_se"],
     log:
         "logs/align_samples/{sample}/snippy/snippy_se.log",
     benchmark:
@@ -57,6 +61,8 @@ rule snippy_unzip_depth:
         unzipped="align_samples/{sample}/snippy/depth/snps.depth",
     conda:
         "../envs/base.yaml"
+    resources:
+        mem_mb=memory["snippy_unzip_depth"],
     log:
         "logs/align_samples/{sample}/snippy/unzip_depth.log",
     benchmark:
@@ -72,6 +78,8 @@ rule snippy_split_depth:
         unzipped="align_samples/{sample}/snippy/depth/{seg}.depth",
     conda:
         "../envs/base.yaml"
+    resources:
+        mem_mb=memory["snippy_split_depth"],
     log:
         "logs/align_samples/{sample}/snippy/split_depth_{seg}.log",
     benchmark:
@@ -88,6 +96,8 @@ rule create_align_file_snippy:
         align_file=temp("align_samples/{sample}/snippy/snippy_align_{seg}.fasta"),
     conda:
         "../envs/base.yaml"
+    resources:
+        mem_mb=memory["create_align_file_snippy"],
     log:
         "logs/align_samples/{sample}/snippy/create_align_file_{seg}.log",
     benchmark:
@@ -106,6 +116,8 @@ rule msa_masker_snippy:
         "../envs/msa_masker.yaml"
     params:
         "--c " + str(int(software_parameters["mincov"]) - 1),
+    resources:
+        mem_mb=memory["msa_masker_snippy"],
     log:
         "logs/align_samples/{sample}/snippy/msa_masker_{seg}.log",
     benchmark:
@@ -125,6 +137,8 @@ rule get_masked_consensus_snippy:
         final_consensus="align_samples/{sample}/snippy/pre_{sample}_consensus.fasta",
     conda:
         "../envs/base.yaml"
+    resources:
+        mem_mb=memory["get_masked_consensus_snippy"],
     log:
         "logs/align_samples/{sample}/snippy/get_masked_consensus.log",
     benchmark:
@@ -142,6 +156,8 @@ rule mask_regions_consensus_snippy:
         "../envs/base.yaml"
     params:
         mask_regions_parameters(software_parameters),
+    resources:
+        mem_mb=memory["mask_regions_consensus_snippy"],
     log:
         "logs/align_samples/{sample}/snippy/mask_regions_consensus.log",
     benchmark:

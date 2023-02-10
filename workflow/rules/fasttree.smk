@@ -8,10 +8,12 @@ rule fasttree:
         "../envs/fasttree.yaml"
     params:
         "-gtr -boot 1000 -nt",
+    resources:
+        mem_mb=memory["fasttree"],
     log:
         "logs/projects/{project}/main_result/Tree_ML_All.log",
     benchmark:
-        "benchmark/projects/{project}/main_result/Tree_ML_All.tsv",
+        "benchmark/projects/{project}/main_result/Tree_ML_All.tsv"
     shell:
         "fasttree {params} {input} > {output.tree} && cp {output.tree} {output.nwk}"
 
@@ -26,10 +28,12 @@ rule fasttree_proteins:
         "../envs/fasttree.yaml"
     params:
         "-gtr -boot 1000",
+    resources:
+        mem_mb=memory["fasttree_proteins"],
     log:
         "logs/projects/{project}/main_result/{ref}/Alignment_aa_{ref}_{protein}_tree.log",
     benchmark:
-        "benchmark/projects/{project}/main_result/{ref}/Alignment_aa_{ref}_{protein}_tree.tsv",
+        "benchmark/projects/{project}/main_result/{ref}/Alignment_aa_{ref}_{protein}_tree.tsv"
     shell:
         "fasttree {params} {input} > {output.tree} && cp {output.tree} {output.nwk}"
 
@@ -43,10 +47,12 @@ rule fasttree_nt:
         "../envs/fasttree.yaml"
     params:
         "-gtr -boot 1000",
+    resources:
+        mem_mb=memory["fasttree_nt"],
     log:
         "logs/projects/{project}/main_result/{seg}/Alignment_nt_{seg}_tree.log",
     benchmark:
-        "benchmark/projects/{project}/main_result/{seg}/Alignment_nt_{seg}_tree.tsv",
+        "benchmark/projects/{project}/main_result/{seg}/Alignment_nt_{seg}_tree.tsv"
     shell:
         "fasttree {params} {input} > {output}"
 
@@ -60,10 +66,12 @@ rule cp_Alignment_nt_tree:
         nwk="projects/{project}/main_result/Tree_ML_{seg}.nwk",
     conda:
         "../envs/base.yaml"
+    resources:
+        mem_mb=memory["cp_Alignment_nt_tree"],
     log:
         "logs/projects/{project}/main_result/copy_Tree_ML_All/{seg}.log",
     benchmark:
-        "benchmark/projects/{project}/main_result/copy_Tree_ML_All/{seg}.tsv",
+        "benchmark/projects/{project}/main_result/copy_Tree_ML_All/{seg}.tsv"
     shell:
         "cp {input.tree} {output.tree} &&"
         "cp {input.tree} {output.nwk}"

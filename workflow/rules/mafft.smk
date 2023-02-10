@@ -11,6 +11,8 @@ rule align_w_mafft_medaka:
     threads: config["mafft_threads"]
     params:
         "--preservecase",
+    resources:
+        mem_mb=memory["align_w_mafft_medaka"],
     log:
         "logs/align_samples/{sample}/medaka/medaka_align/{seg}.log",
     benchmark:
@@ -29,6 +31,8 @@ rule align_mafft_snippy:
     threads: config["mafft_threads"]
     params:
         "--preservecase",
+    resources:
+        mem_mb=memory["align_mafft_snippy"],
     log:
         "logs/align_samples/{sample}/snippy/snippy_align/{seg}.log",
     benchmark:
@@ -47,6 +51,8 @@ rule mafft_pre_aa:
     threads: config["mafft_threads"]
     params:
         "--preservecase",
+    resources:
+        mem_mb=memory["mafft_pre_aa"],
     log:
         "logs/projects/{project}/main_result/Alignment_nt_All_sep.log",
     benchmark:
@@ -65,6 +71,8 @@ rule mafft:
     threads: config["mafft_threads"]
     params:
         "--preservecase",
+    resources:
+        mem_mb=memory["mafft"],
     log:
         "logs/projects/{project}/main_result/Alignment_nt_All.log",
     benchmark:
@@ -83,6 +91,8 @@ rule mafft_nt:
     threads: config["mafft_threads"]
     params:
         "--preservecase",
+    resources:
+        mem_mb=memory["mafft_nt"],
     log:
         "logs/projects/{project}/main_result/{seg}/Alignment_nt_{seg}_mafft.log",
     benchmark:
@@ -101,6 +111,8 @@ rule mafft_proteins:
     threads: config["mafft_threads"]
     params:
         "--preservecase --amino",
+    resources:
+        mem_mb=memory["mafft_proteins"],
     log:
         "logs/projects/{project}/main_result/{locus}/Alignment_aa_{locus}_{gene}_mafft.log",
     benchmark:
@@ -116,6 +128,8 @@ rule cp_Alignment_nt:
         "projects/{project}/main_result/Alignment_nt_{seg}.fasta",
     conda:
         "../envs/mafft.yaml"
+    resources:
+        mem_mb=memory["cp_Alignment_nt"],
     log:
         "logs/projects/{project}/main_results/copy_Alignment_nt_{seg}.log",
     benchmark:

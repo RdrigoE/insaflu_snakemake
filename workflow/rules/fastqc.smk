@@ -10,6 +10,8 @@ rule raw_fastqc_se:
     params:
         "--nogroup",
     threads: 1
+    resources:
+        mem_mb=memory["raw_fastqc_se"],
     log:
         "logs/samples/{sample}/raw_fastqc.log",
     benchmark:
@@ -30,6 +32,8 @@ rule raw_fastqc_pe:
     params:
         "--nogroup",
     threads: 1
+    resources:
+        mem_mb=memory["raw_fastqc_pe"],
     log:
         "logs/samples/{sample}/raw_fastqc.log",
     benchmark:
@@ -50,6 +54,8 @@ rule trimmed_fastqc_pe:
         "../envs/fastqc.yaml"
     params:
         "--nogroup",
+    resources:
+        mem_mb=memory["trimmed_fastqc_pe"],
     log:
         "logs/samples/{sample}/trimmed_fastqc.log",
     benchmark:
@@ -70,6 +76,8 @@ rule trimmed_fastqc_se:
     params:
         "--nogroup",
     threads: 2
+    resources:
+        mem_mb=memory["trimmed_fastqc_se"],
     log:
         "logs/samples/{sample}/trimmed_fastqc.log",
     benchmark:

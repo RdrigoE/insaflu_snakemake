@@ -7,6 +7,8 @@ rule nanofilt_SE:
         "../envs/nanofilt.yaml"
     params:
         get_nanofilt_parameters(software_parameters),
+    resources:
+        mem_mb=memory["nanofilt_SE"],
     log:
         "logs/samples/{sample}/nanofilt.log",
     benchmark:

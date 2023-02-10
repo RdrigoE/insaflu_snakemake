@@ -7,6 +7,8 @@ rule raw_nanostat:
         stats="samples/{sample}/raw_nanostat/{sample}_stats.txt",
     conda:
         "../envs/nanostat.yaml"
+    resources:
+        mem_mb=memory["raw_nanostat"],
     log:
         "logs/samples/{sample}/raw_nanostat/{sample}.log",
     benchmark:
@@ -24,6 +26,8 @@ rule trimmed_nanostat:
         stats="samples/{sample}/nano_trimmed_fastqc/{sample}_stats.txt",
     conda:
         "../envs/nanostat.yaml"
+    resources:
+        mem_mb=memory["trimmed_nanostat"],
     log:
         "logs/samples/{sample}/nano_trimmed_fastqc/{sample}.log",
     benchmark:

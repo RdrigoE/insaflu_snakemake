@@ -16,6 +16,8 @@ rule prepare_snpeff:
         "projects/{project}/main_result/snp_ready.txt",
     conda:
         "../envs/snpeff.yaml"
+    resources:
+        mem_mb=memory["prepare_snpeff"],
     log:
         "logs/projects/{project}/main_result/snpeff_prepare.log",
     benchmark:
@@ -34,6 +36,8 @@ rule snpeff:
         "../envs/snpeff.yaml"
     params:
         "-no-downstream -no-upstream -no-intergenic -no-utr -noStats -c ../workflow/db/snpeff.config",
+    resources:
+        mem_mb=memory["snpeff"],
     log:
         "logs/projects/{project}/{sample}/snpeff.log",
     benchmark:
@@ -51,6 +55,8 @@ rule snpeff_sample:
         "projects/{project}/sample_{sample}/sample__{sample}_snpeff.vcf",
     conda:
         "../envs/snpeff.yaml"
+    resources:
+        mem_mb=memory["snpeff_sample"],
     log:
         "logs/projects/{project}/{sample}/{sample}_snpeff.log",
     benchmark:

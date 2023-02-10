@@ -25,6 +25,8 @@ rule not_pangolin:
         temp("projects/{project}/main_result/not_pangolin.csv"),
     conda:
         "../envs/base.yaml"
+    resources:
+        mem_mb=memory["not_pangolin"],
     log:
         "logs/projects/{project}/main_result/not_pangolin.log",
     benchmark:
@@ -44,6 +46,8 @@ rule pangolin:
     params:
         "--analysis-mode fast",  #pangolearn
     threads: config["pangolin_threads"]
+    resources:
+        mem_mb=memory["pangolin"],
     log:
         "logs/projects/{project}/main_result/pangolin.log",
     benchmark:

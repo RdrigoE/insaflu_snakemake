@@ -9,6 +9,8 @@ rule variant_validated:
         "../envs/base.yaml"
     output:
         "projects/{project}/main_result/validated_variants.csv",
+    resources:
+        mem_mb=memory["variant_validated"],
     log:
         "logs/projects/{project}/main_result/validated_variants.log",
     benchmark:
@@ -28,6 +30,8 @@ rule snpeff_concat:
         "../envs/base.yaml"
     output:
         "projects/{project}/main_result/validated_minor_iSNVs.csv",
+    resources:
+        mem_mb=memory["snpeff_concat"],
     log:
         "logs/projects/{project}/main_result/validated_minor_iSNVs.log",
     benchmark:
@@ -47,6 +51,8 @@ rule snpeff_concat_indels:
         "../envs/base.yaml"
     output:
         "projects/{project}/main_result/validated_minor_iSNVs_inc_indels.csv",
+    resources:
+        mem_mb=memory["snpeff_concat_indels"],
     log:
         "logs/projects/{project}/main_result/validated_minor_iSNVs_inc_indels.log",
     benchmark:
@@ -66,6 +72,8 @@ rule proportions_iSNVs_graph:
         out_file="projects/{project}/main_result/proportions_iSNVs_graph.csv",
     conda:
         "../envs/base.yaml"
+    resources:
+        mem_mb=memory["proportions_iSNVs_graph"],
     log:
         "logs/projects/{project}/main_result/proportions_iSNVs_graph.log",
     benchmark:

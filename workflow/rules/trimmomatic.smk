@@ -14,6 +14,8 @@ rule trimme_reads_PE:
     params:
         get_trimmomatic_parameters(software_parameters),
     threads: config["trimmomatic_threads"]
+    resources:
+        mem_mb=memory["trimme_reads_PE"],
     log:
         "logs/samples/{sample}/trimmomatic.log",
     benchmark:
@@ -39,6 +41,8 @@ rule trimme_reads_SE:
     threads: config["trimmomatic_threads"]
     params:
         get_trimmomatic_parameters(software_parameters),
+    resources:
+        mem_mb=memory["trimme_reads_SE"],
     log:
         "logs/samples/{sample}/trimmomatic.log",
     benchmark:

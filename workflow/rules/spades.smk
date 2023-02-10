@@ -12,6 +12,8 @@ rule spades_se:
     threads: config["spades_threads"]
     params:
         "--only-assembler",
+    resources:
+        mem_mb=memory["spades_se"],
     log:
         "logs/samples/{sample}/spades.log",
     benchmark:
@@ -32,6 +34,8 @@ rule spades_pe:
         "../envs/spades.yaml"
     params:
         "--only-assembler",
+    resources:
+        mem_mb=memory["spades_pe"],
     log:
         "logs/samples/{sample}/spades.log",
     benchmark:

@@ -8,6 +8,8 @@ rule abricate_se:
         "../envs/abricate.yaml"
     params:
         "--db insaflu --minid 70 --mincov 30",
+    resources:
+        mem_mb=memory["abricate_se"],
     log:
         "logs/samples/{sample}/abricate.log",
     benchmark:
@@ -27,6 +29,8 @@ rule abricate_pe:
         "../envs/abricate.yaml"
     params:
         "--db insaflu --minid 70 --mincov 30",
+    resources:
+        mem_mb=memory["abricate_pe"],
     log:
         "logs/samples/{sample}/abricate.log",
     benchmark:
@@ -44,6 +48,8 @@ rule abricate_ont:
         yaml="samples/{sample}/abricate_ont/abricate_{sample}.yaml",
     conda:
         "../envs/abricate.yaml"
+    resources:
+        mem_mb=memory["abricate_ont"],
     log:
         "logs/samples/{sample}/abricate.log",
     benchmark:

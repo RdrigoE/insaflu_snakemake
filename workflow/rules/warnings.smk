@@ -3,6 +3,8 @@ rule warning:
         "projects/{project}/main_result/warning.txt",
     conda:
         "../envs/base.yaml"
+    resources:
+        mem_mb=memory["warning"],
     log:
         "logs/projects/{project}/main_result/warning.log",
     benchmark:

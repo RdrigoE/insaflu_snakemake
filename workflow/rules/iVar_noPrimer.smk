@@ -6,6 +6,8 @@ rule align_pe:
         bam="align_samples/{sample}/iVar/snps.bam",
     conda:
         "../envs/ivar.yaml"
+    resources:
+        mem_mb=memory["align_pe"],
     log:
         "logs/align_samples/{sample}/iVar_noPrimers/mapping.log",
     benchmark:
@@ -26,6 +28,8 @@ rule align_se:
         "align_samples/{sample}/iVar/snps.bam",
     conda:
         "../envs/ivar.yaml"
+    resources:
+        mem_mb=memory["align_se"],
     log:
         "logs/align_samples/{sample}/iVar_noPrimers/mapping.log",
     benchmark:
@@ -48,6 +52,8 @@ rule call_variant:
         vcf_file="align_samples/{sample}/iVar/snps.tsv",
     conda:
         "../envs/ivar.yaml"
+    resources:
+        mem_mb=memory["call_variant"],
     log:
         "logs/align_samples/{sample}/iVar_noPrimers/call_variant.log",
     benchmark:
@@ -65,6 +71,8 @@ rule filter_variants:
         "align_samples/{sample}/iVar/snps_filtered.tsv",
     conda:
         "../envs/ivar.yaml"
+    resources:
+        mem_mb=memory["filter_variants"],
     log:
         "logs/align_samples/{sample}/iVar_noPrimers/filter_variants.log",
     benchmark:
@@ -82,6 +90,8 @@ rule generate_consensus:
         consensus="align_samples/{sample}/iVar/snps.consensus.fa",
     conda:
         "../envs/ivar.yaml"
+    resources:
+        mem_mb=memory["generate_consensus"],
     log:
         "logs/align_samples/{sample}/iVar_noPrimers/generate_consensus.log",
     benchmark:
@@ -102,6 +112,8 @@ rule get_depth:
         ind="align_samples/{sample}/iVar/snps.depth.gz.tbi",
     conda:
         "../envs/snippy.yaml"
+    resources:
+        mem_mb=memory["get_depth"],
     log:
         "logs/align_samples/{sample}/iVar_noPrimers/get_depth.log",
     benchmark:
@@ -121,6 +133,8 @@ rule iVar_depth_1_2:
         consensus="align_samples/{sample}/iVar/new_snps.consensus.fa",
     conda:
         "../envs/base.yaml"
+    resources:
+        mem_mb=memory["iVar_depth_1_2"],
     log:
         "logs/align_samples/{sample}/iVar_noPrimers/depth_1_2.log",
     benchmark:
@@ -136,6 +150,8 @@ rule iVar_depth_step_2:
         unzipped="align_samples/{sample}/iVar/{seg}.depth",
     conda:
         "../envs/base.yaml"
+    resources:
+        mem_mb=memory["iVar_depth_step_2"],
     log:
         "logs/align_samples/{sample}/iVar_noPrimers/depth_step_2/{seg}.log",
     benchmark:
@@ -151,6 +167,8 @@ rule create_align_file_iVar:
         align_file=temp("align_samples/{sample}/iVar/iVar_align_{seg}.fasta"),
     conda:
         "../envs/base.yaml"
+    resources:
+        mem_mb=memory["create_align_file_iVar"],
     log:
         "logs/align_samples/{sample}/iVar_noPrimers/create_align_file/{seg}.log",
     benchmark:
@@ -166,6 +184,8 @@ rule align_mafft_iVar:
         aligned_file=temp("align_samples/{sample}/iVar/iVar_aligned_{seg}.fasta"),
     conda:
         "../envs/mafft.yaml"
+    resources:
+        mem_mb=memory["align_mafft_iVar"],
     log:
         "logs/align_samples/{sample}/iVar_noPrimers/align_mafft/{seg}.log",
     benchmark:
@@ -187,6 +207,8 @@ rule msa_masker_iVar:
         "../envs/msa_masker.yaml"
     params:
         "--c " + str(software_parameters["mincov"] - 1),
+    resources:
+        mem_mb=memory["msa_masker_iVar"],
     log:
         "logs/align_samples/{sample}/iVar_noPrimers/msa_masker/{seg}.log",
     benchmark:
@@ -206,6 +228,8 @@ rule get_masked_consensus_iVar:
         final_consensus="align_samples/{sample}/iVar/pre_{sample}_consensus.fasta",
     conda:
         "../envs/base.yaml"
+    resources:
+        mem_mb=memory["get_masked_consensus_iVar"],
     log:
         "logs/align_samples/{sample}/iVar_noPrimers/get_masked_consensus.log",
     benchmark:
@@ -223,6 +247,8 @@ rule mask_regions_consensus_iVar:
         "../envs/base.yaml"
     params:
         mask_regions_parameters(software_parameters),
+    resources:
+        mem_mb=memory["mask_regions_consensus_iVar"],
     log:
         "logs/align_samples/{sample}/iVar_noPrimers/mask_regions_consensus.log",
     benchmark:

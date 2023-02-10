@@ -5,6 +5,8 @@ rule getCoverage:
         coverage="align_samples/{sample}/{sample}_coverage.csv",
     conda:
         "../envs/coverage.yaml"
+    resources:
+        mem_mb=memory["getCoverage"],
     log:
         "logs/samples/{sample}/coverage.log",
     benchmark:
