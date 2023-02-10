@@ -10,7 +10,7 @@ rule seqret_all_nt:
     log:
         "logs/projects/{project}/nex/main_result/All_nt_to_nex.log",
     benchmark:
-        "benchmark/projects/{project}/nex/main_result/All_nt_to_nex.tsv",
+        "benchmark/projects/{project}/nex/main_result/All_nt_to_nex.tsv"
     shell:
         "seqret {params} -sequence {input} -outseq {output}"
 
@@ -27,7 +27,7 @@ rule seqret_all_nt_only_90:
     log:
         "logs/projects/{project}/nex/main_result/All_nt_only_90plus_to_nex.log",
     benchmark:
-        "benchmark/projects/{project}/nex/main_result/All_nt_only_90plus_to_nex.tsv",
+        "benchmark/projects/{project}/nex/main_result/All_nt_only_90plus_to_nex.tsv"
     shell:
         "seqret {params} -sequence {input} -outseq {output}"
 
@@ -44,7 +44,7 @@ rule seqret_all_consensus:
     log:
         "logs/projects/{project}/nex/main_result/AllConsensus_to_nex.log",
     benchmark:
-        "benchmark/projects/{project}/nex/main_result/AllConsensus_to_nex.tsv",
+        "benchmark/projects/{project}/nex/main_result/AllConsensus_to_nex.tsv"
     shell:
         "seqret {params} -sequence {input} -outseq {output}"
 
@@ -61,7 +61,7 @@ rule seqret_alignment_aa_gene:
     log:
         "logs/projects/{project}/nex/main_result/{locus}/Alignment_aa_{locus}_{gene}_mafft_to_nex.log",
     benchmark:
-        "logs/projects/{project}/nex/main_result/{locus}/Alignment_aa_{locus}_{gene}_mafft_to_nex.tsv",
+        "logs/projects/{project}/nex/main_result/{locus}/Alignment_aa_{locus}_{gene}_mafft_to_nex.tsv"
     shell:
         "seqret {params} -sequence {input} -outseq {output}"
 
@@ -78,7 +78,7 @@ rule alignment_nt_seg_mafft_seqret:
     log:
         "logs/projects/{project}/nex/main_result/{seg}/Alignment_nt_{seg}_mafft_to_nex.log",
     benchmark:
-        "benchmark/projects/{project}/nex/main_result/{seg}/Alignment_nt_{seg}_mafft_to_nex.tsv",
+        "benchmark/projects/{project}/nex/main_result/{seg}/Alignment_nt_{seg}_mafft_to_nex.tsv"
     shell:
         "seqret {params} -sequence {input} -outseq {output}"
 
@@ -95,7 +95,7 @@ rule alignment_nt_seg_seqret:
     log:
         "logs/projects/{project}/nex/main_result/{seg}/Alignment_nt_{seg}_to_nex.log",
     benchmark:
-        "benchmark/projects/{project}/nex/main_result/{seg}/Alignment_nt_{seg}_to_nex.tsv",
+        "benchmark/projects/{project}/nex/main_result/{seg}/Alignment_nt_{seg}_to_nex.tsv"
     shell:
         "seqret {params} -sequence {input} -outseq {output}"
 
@@ -112,7 +112,7 @@ rule alignment_nt_All_seqret:
     log:
         "logs/projects/{project}/nex/main_result/Alignment_nt_All_to_nex.log",
     benchmark:
-        "benchmark/projects/{project}/nex/main_result/Alignment_nt_All_to_nex.tsv",
+        "benchmark/projects/{project}/nex/main_result/Alignment_nt_All_to_nex.tsv"
     shell:
         "seqret {params} -sequence {input} -outseq {output}"
 
@@ -129,6 +129,6 @@ rule alignment_nt_specific_seqret:
     log:
         "logs/projects/{project}/nex/main_result/Alignment_nt_{seg}_mafft_to_nex.log",
     benchmark:
-        "benchmark/projects/{project}/nex/main_result/Alignment_nt_{seg}_mafft_to_nex.tsv",
+        "benchmark/projects/{project}/nex/main_result/Alignment_nt_{seg}_mafft_to_nex.tsv"
     shell:
         "seqret {params} -sequence {input} -outseq {output}"

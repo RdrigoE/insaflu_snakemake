@@ -19,7 +19,7 @@ rule prepare_snpeff:
     log:
         "logs/projects/{project}/main_result/snpeff_prepare.log",
     benchmark:
-        "benchmark/projects/{project}/main_result/snpeff_prepare.tsv",
+        "benchmark/projects/{project}/main_result/snpeff_prepare.tsv"
     shell:
         "python {scripts_directory}create_snpeff_text.py $CONDA_PREFIX {input.ref_gb} {input.ref_fa} {REFERENCE_NAME} {output} "
 
@@ -37,7 +37,7 @@ rule snpeff:
     log:
         "logs/projects/{project}/{sample}/snpeff.log",
     benchmark:
-        "benchmark/projects/{project}/{sample}/snpeff.tsv",
+        "benchmark/projects/{project}/{sample}/snpeff.tsv"
     shell:
         "{replace} {input.snp_file} &&"
         "snpEff {params} -v {REFERENCE_NAME} {input.snp_file} > {output}"
@@ -54,7 +54,7 @@ rule snpeff_sample:
     log:
         "logs/projects/{project}/{sample}/{sample}_snpeff.log",
     benchmark:
-        "benchmark/projects/{project}/{sample}/{sample}_snpeff.tsv",
+        "benchmark/projects/{project}/{sample}/{sample}_snpeff.tsv"
     params:
         "-no-downstream -no-upstream -no-intergenic -no-utr -noStats -c ../workflow/db/snpeff.config",
     shell:

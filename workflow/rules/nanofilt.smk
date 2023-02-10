@@ -10,6 +10,6 @@ rule nanofilt_SE:
     log:
         "logs/samples/{sample}/nanofilt.log",
     benchmark:
-        "benchmark/samples/{sample}/nanofilt.tsv",
+        "benchmark/samples/{sample}/nanofilt.tsv"
     shell:
         "gunzip -cd {input} | NanoFilt {params} | gzip > {output}"

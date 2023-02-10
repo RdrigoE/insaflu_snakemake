@@ -12,7 +12,7 @@ rule variant_validated:
     log:
         "logs/projects/{project}/main_result/validated_variants.log",
     benchmark:
-        "benchmark/projects/{project}/main_result/validated_variants.tsv",
+        "benchmark/projects/{project}/main_result/validated_variants.tsv"
     shell:
         "python {scripts_directory}variants.py '{input}' '{output}' validated_variants"
 
@@ -31,7 +31,7 @@ rule snpeff_concat:
     log:
         "logs/projects/{project}/main_result/validated_minor_iSNVs.log",
     benchmark:
-        "benchmark/projects/{project}/main_result/validated_minor_iSNVs.tsv",
+        "benchmark/projects/{project}/main_result/validated_minor_iSNVs.tsv"
     shell:
         "python {scripts_directory}variants.py '{input}' {output} minor_iSNVs"
 
@@ -50,7 +50,7 @@ rule snpeff_concat_indels:
     log:
         "logs/projects/{project}/main_result/validated_minor_iSNVs_inc_indels.log",
     benchmark:
-        "benchmark/projects/{project}/main_result/validated_minor_iSNVs_inc_indels.tsv",
+        "benchmark/projects/{project}/main_result/validated_minor_iSNVs_inc_indels.tsv"
     shell:
         "python {scripts_directory}variants.py '{input}' {output} minor_iSNVs_inc_indels"
 
@@ -69,6 +69,6 @@ rule proportions_iSNVs_graph:
     log:
         "logs/projects/{project}/main_result/proportions_iSNVs_graph.log",
     benchmark:
-        "benchmark/projects/{project}/main_result/proportions_iSNVs_graph.tsv",
+        "benchmark/projects/{project}/main_result/proportions_iSNVs_graph.tsv"
     shell:
         "python {scripts_directory}proportions_iSNVs_graph.py '{input}' {output.out_file}"

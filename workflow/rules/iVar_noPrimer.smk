@@ -9,7 +9,7 @@ rule align_pe:
     log:
         "logs/align_samples/{sample}/iVar_noPrimers/mapping.log",
     benchmark:
-        "benchmark/align_samples/{sample}/iVar_noPrimers/mapping.tsv",
+        "benchmark/align_samples/{sample}/iVar_noPrimers/mapping.tsv"
     shell:
         "mkdir align_samples/{wildcards.sample}/reference -p && "
         "cp {REFERENCE_FASTA} align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta && "
@@ -29,7 +29,7 @@ rule align_se:
     log:
         "logs/align_samples/{sample}/iVar_noPrimers/mapping.log",
     benchmark:
-        "benchmark/align_samples/{sample}/iVar_noPrimers/mapping.tsv",
+        "benchmark/align_samples/{sample}/iVar_noPrimers/mapping.tsv"
     shell:
         "bwa index align_samples/{wildcards.sample}/{REFERENCE_FASTA} && "
 
@@ -51,7 +51,7 @@ rule call_variant:
     log:
         "logs/align_samples/{sample}/iVar_noPrimers/call_variant.log",
     benchmark:
-        "benchmark/align_samples/{sample}/iVar_noPrimers/call_variant.tsv",
+        "benchmark/align_samples/{sample}/iVar_noPrimers/call_variant.tsv"
     shell:
         "samtools mpileup -A -d 600000 -B -Q 0 {input.bam} | "
         "ivar variants -p align_samples/{wildcards.sample}/iVar/snps -q 20 -t 0.51  align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta "
@@ -68,7 +68,7 @@ rule filter_variants:
     log:
         "logs/align_samples/{sample}/iVar_noPrimers/filter_variants.log",
     benchmark:
-        "benchmark/align_samples/{sample}/iVar_noPrimers/filter_variants.tsv",
+        "benchmark/align_samples/{sample}/iVar_noPrimers/filter_variants.tsv"
     params:
         "snps_filtered",
     shell:
@@ -85,7 +85,7 @@ rule generate_consensus:
     log:
         "logs/align_samples/{sample}/iVar_noPrimers/generate_consensus.log",
     benchmark:
-        "benchmark/align_samples/{sample}/iVar_noPrimers/generate_consensus.tsv",
+        "benchmark/align_samples/{sample}/iVar_noPrimers/generate_consensus.tsv"
     params:
         "snps.consensus",
     shell:
@@ -105,7 +105,7 @@ rule get_depth:
     log:
         "logs/align_samples/{sample}/iVar_noPrimers/get_depth.log",
     benchmark:
-        "benchmark/align_samples/{sample}/iVar_noPrimers/get_depth.tsv",
+        "benchmark/align_samples/{sample}/iVar_noPrimers/get_depth.tsv"
     params:
         "-aa -q 20",
     shell:
@@ -124,7 +124,7 @@ rule iVar_depth_1_2:
     log:
         "logs/align_samples/{sample}/iVar_noPrimers/depth_1_2.log",
     benchmark:
-        "benchmark/align_samples/{sample}/iVar_noPrimers/depth_1_2.tsv",
+        "benchmark/align_samples/{sample}/iVar_noPrimers/depth_1_2.tsv"
     shell:
         "python ../workflow/scripts/split_consensus.py {input.consensus} {input.depth} {REFERENCE_GB} {output.consensus}"
 
@@ -139,7 +139,7 @@ rule iVar_depth_step_2:
     log:
         "logs/align_samples/{sample}/iVar_noPrimers/depth_step_2/{seg}.log",
     benchmark:
-        "benchmark/align_samples/{sample}/iVar_noPrimers/depth_step_2/{seg}.tsv",
+        "benchmark/align_samples/{sample}/iVar_noPrimers/depth_step_2/{seg}.tsv"
     shell:
         "python ../workflow/scripts/split_depth_file.py {input.zipped} {REFERENCE_GB}"
 
@@ -154,7 +154,7 @@ rule create_align_file_iVar:
     log:
         "logs/align_samples/{sample}/iVar_noPrimers/create_align_file/{seg}.log",
     benchmark:
-        "benchmark/align_samples/{sample}/iVar_noPrimers/create_align_file/{seg}.tsv",
+        "benchmark/align_samples/{sample}/iVar_noPrimers/create_align_file/{seg}.tsv"
     shell:
         "python ../workflow/scripts/mask_consensus_by_deep.py align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta {input.first_consensus} {output.align_file} {wildcards.seg}"
 
@@ -169,7 +169,7 @@ rule align_mafft_iVar:
     log:
         "logs/align_samples/{sample}/iVar_noPrimers/align_mafft/{seg}.log",
     benchmark:
-        "benchmark/align_samples/{sample}/iVar_noPrimers/align_mafft/{seg}.tsv",
+        "benchmark/align_samples/{sample}/iVar_noPrimers/align_mafft/{seg}.tsv"
     threads: 12
     params:
         "--preservecase",
@@ -190,7 +190,7 @@ rule msa_masker_iVar:
     log:
         "logs/align_samples/{sample}/iVar_noPrimers/msa_masker/{seg}.log",
     benchmark:
-        "benchmark/align_samples/{sample}/iVar_noPrimers/msa_masker/{seg}.tsv",
+        "benchmark/align_samples/{sample}/iVar_noPrimers/msa_masker/{seg}.tsv"
     shell:
         "python ../workflow/scripts/msa_masker.py -i {input.align_file} -df {input.depth} -o {output} {params}"
 
@@ -209,7 +209,7 @@ rule get_masked_consensus_iVar:
     log:
         "logs/align_samples/{sample}/iVar_noPrimers/get_masked_consensus.log",
     benchmark:
-        "benchmark/align_samples/{sample}/iVar_noPrimers/get_masked_consensus.tsv",
+        "benchmark/align_samples/{sample}/iVar_noPrimers/get_masked_consensus.tsv"
     shell:
         "python ../workflow/scripts/get_consensus_medaka.py '{input}' {output}"
 
@@ -226,6 +226,6 @@ rule mask_regions_consensus_iVar:
     log:
         "logs/align_samples/{sample}/iVar_noPrimers/mask_regions_consensus.log",
     benchmark:
-        "benchmark/align_samples/{sample}/iVar_noPrimers/mask_regions_consensus.log",
+        "benchmark/align_samples/{sample}/iVar_noPrimers/mask_regions_consensus.tsv"
     shell:
         "python ../workflow/scripts/mask_regions.py {input} {output} {params}"

@@ -1,5 +1,5 @@
 only_samples: False
-project_name: covid_problematic_ivar
+project_name: covid_alot_of_samples
 fasta_reference: SARS_CoV_2_Wuhan_Hu_1_MN908947.fasta
 gb_reference: SARS_CoV_2_Wuhan_Hu_1_MN908947.gbk
 abricate: False

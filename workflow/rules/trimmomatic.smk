@@ -17,7 +17,7 @@ rule trimme_reads_PE:
     log:
         "logs/samples/{sample}/trimmomatic.log",
     benchmark:
-        "benchmark/samples/{sample}/trimmomatic.tsv",
+        "benchmark/samples/{sample}/trimmomatic.tsv"
     shell:
         "trimmomatic PE "
         "{input} "
@@ -42,7 +42,7 @@ rule trimme_reads_SE:
     log:
         "logs/samples/{sample}/trimmomatic.log",
     benchmark:
-        "benchmark/samples/{sample}/trimmomatic.tsv",
+        "benchmark/samples/{sample}/trimmomatic.tsv"
     shell:
         "trimmomatic SE "
         "-threads {threads} "

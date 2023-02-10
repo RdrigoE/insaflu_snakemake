@@ -10,7 +10,7 @@ rule raw_nanostat:
     log:
         "logs/samples/{sample}/raw_nanostat/{sample}.log",
     benchmark:
-        "benchmark/samples/{sample}/raw_nanostat/{sample}.tsv",
+        "benchmark/samples/{sample}/raw_nanostat/{sample}.tsv"
     threads: config["nanostat_threads"]
     shell:
         "mkdir {output.dir} -p && NanoStat --fastq {input} --outdir {output.dir} -n {wildcards.sample}_stats.txt -t {threads}"
@@ -27,7 +27,7 @@ rule trimmed_nanostat:
     log:
         "logs/samples/{sample}/nano_trimmed_fastqc/{sample}.log",
     benchmark:
-        "benchmark/samples/{sample}/nano_trimmed_fastqc/{sample}.tsv",
+        "benchmark/samples/{sample}/nano_trimmed_fastqc/{sample}.tsv"
     threads: config["nanostat_threads"]
     shell:
         "NanoStat --fastq {input} --outdir {output.dir} -n {wildcards.sample}_stats.txt -t {threads}"

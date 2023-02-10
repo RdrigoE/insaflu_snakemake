@@ -1,11 +1,10 @@
 working: ../results/
 user_metadata: ../user_metadata/
-sample_yaml: ../user/mpox_snippy.yaml
-sample_csv: ../user/mpox_samples.csv
+sample_yaml: ../user/monkeypox_alot_of_samples_ivar.yaml
+sample_csv: ../user/monkeypox_alot_of_samples.csv
 config_file: ../config/config.yaml
 software_parameters: ../user/parameters.yaml
 get_coverage: ../workflow/software/getCoverage/getCoverage.py
-
 references: ../user/references/
 rules: ../workflow/rules/
 envs: ../envs/
