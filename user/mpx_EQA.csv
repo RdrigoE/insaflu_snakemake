@@ -1,0 +1,8 @@
+sample_name,fastq1,fastq2,tech
+Monkeypox-EQA-2023-1_S24,Monkeypox-EQA-2023-1_S24_L001_R1_001.fastq.gz,Monkeypox-EQA-2023-1_S24_L001_R2_001.fastq.gz,illumina
+Monkeypox-EQA-2023-2_S25,Monkeypox-EQA-2023-2_S25_L001_R1_001.fastq.gz,Monkeypox-EQA-2023-5_S25_L001_R2_001.fastq.gz,illumina
+Monkeypox-EQA-2023-3_S26,Monkeypox-EQA-2023-3_S26_L001_R1_001.fastq.gz,Monkeypox-EQA-2023-6_S26_L001_R2_001.fastq.gz,illumina
+Monkeypox-EQA-2023-4_S27,Monkeypox-EQA-2023-4_S27_L001_R1_001.fastq.gz,Monkeypox-EQA-2023-4_S27_L001_R2_001.fastq.gz,illumina
+Monkeypox-EQA-2023-5_S28,Monkeypox-EQA-2023-5_S28_L001_R1_001.fastq.gz,Monkeypox-EQA-2023-5_S28_L001_R2_001.fastq.gz,illumina
+Monkeypox-EQA-2023-6_S29,Monkeypox-EQA-2023-6_S29_L001_R1_001.fastq.gz,Monkeypox-EQA-2023-6_S29_L001_R2_001.fastq.gz,illumina
+Monkeypox-EQA-2023-7_S30,Monkeypox-EQA-2023-7_S30_L001_R1_001.fastq.gz,Monkeypox-EQA-2023-7_S30_L001_R2_001.fastq.gz,illumina

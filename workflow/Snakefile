@@ -301,6 +301,9 @@ assert same_identifiers(
 ), "Reference fasta and genbank files do not have the same identifiers"
 REFERENCE_NAME = re.findall("(?<=references/)(.*?)(?=.fasta)", REFERENCE_FASTA)[0]
 
+memory = read_yaml("../config/mem_max_RSS.yaml")
+
+
 SEGMENTS = get_locus(REFERENCE_GB)
 
 PROJECT_NAME = user_metadata["project_name"]
@@ -588,9 +591,6 @@ if PRIMERS:
 else:
 
     include: "rules/iVar_noPrimer.smk"
-
-
-memory = read_yaml("../config/mem_max_RSS.yaml")
 
 
 # include: "../workflow/rules/nextalign.smk"

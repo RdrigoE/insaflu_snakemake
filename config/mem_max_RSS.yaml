@@ -75,3 +75,12 @@ snpeff_concat_indels: 78
 proportions_iSNVs_graph: 24
 spades_se: 5468
 spades_pe: 5468
+
+snippy_unzip_depth: 100
+initiate_folder: 100
+seqret_alignment_aa_gene: 100
+alignment_nt_seg_mafft_seqret: 100
+alignment_nt_seg_seqret: 100
+alignment_nt_specific_seqret: 100
+cp_Alignment_nt: 100
+warning: 100
