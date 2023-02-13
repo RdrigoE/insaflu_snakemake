@@ -1,6 +1,6 @@
 working: ../results/
 user_metadata: ../user_metadata/
-sample_yaml: ../user/mpox_EQA.yaml
+sample_yaml: ../user/mpox_EQA_NC.yaml
 sample_csv: ../user/mpox_EQA.csv
 config_file: ../config/config.yaml
 software_parameters: ../user/parameters.yaml
