@@ -173,7 +173,7 @@ def validated_variants(
                             new_entry.append(0)  # VARIANTS IN INCOMPLETE LOCUS
                             vcf_final.append(new_entry)
                 except Exception as err:
-                    print("Error in file: " + file + "\n" + str(err))
+                    # print("Error in file: " + file + "\n" + str(err))
                     continue
     with open(output_file, mode="w") as f:
         f_writer = csv.writer(f, delimiter=",")

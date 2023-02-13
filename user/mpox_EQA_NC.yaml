@@ -1,0 +1,8 @@
+only_samples: False
+project_name: mpox_EQA_new
+fasta_reference: NC063383.fasta
+gb_reference: NC063383.gbk
+abricate: False
+illumina_consensus: iVar
+primers: mpox_new_pos.bed
+

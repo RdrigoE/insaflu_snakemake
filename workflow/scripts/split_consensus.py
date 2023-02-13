@@ -31,12 +31,12 @@ def split_consensus(consensus, depth, locus, output):
     for i in locus:
         numbers_list.append(int(dic[i]))
     consensus_seq = get_consensus(consensus)
-    print(len(consensus_seq))
+    # print(len(consensus_seq))
     # consensus_seq = "".join(['A' for x in range(0,13136)])
     # print(consensus_seq)
 
     last_list = []
-    count_nt = 0
+    # count_nt = 0
     seq = " "
 
     new_dic = {}
@@ -63,4 +63,6 @@ if __name__ == "__main__":
     DEPTH = sys.argv[2]
     LOCUS = sys.argv[3]
     OUTPUT = sys.argv[4]
-    split_consensus(consensus=CONSENSUS, depth=DEPTH, locus=LOCUS, output=OUTPUT)
+    split_consensus(
+        consensus=CONSENSUS, depth=DEPTH, locus=LOCUS, output=OUTPUT
+    )

@@ -1,7 +1,7 @@
 working: ../results/
 user_metadata: ../user_metadata/
-sample_yaml: ../user/covid_ivar.yaml
-sample_csv: ../user/covid_samples.csv
+sample_yaml: ../user/mpox_EQA.yaml
+sample_csv: ../user/mpox_EQA.csv
 config_file: ../config/config.yaml
 software_parameters: ../user/parameters.yaml
 get_coverage: ../workflow/software/getCoverage/getCoverage.py
