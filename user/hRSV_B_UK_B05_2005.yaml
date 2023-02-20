@@ -1,0 +1,7 @@
+abricate: false
+fasta_reference: hRSV_B_UK_B05_2005.fasta
+gb_reference: hRSV_B_UK_B05_2005.gb
+illumina_censensus: iVar
+only_samples: false
+primers: ''
+project_name: hRSV_B_UK_B05_2005

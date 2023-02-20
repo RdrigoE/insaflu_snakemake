@@ -130,7 +130,9 @@ def process_data(reference_sequence, samples, sample_map, cutoff, mask_gaps):
         left_pos = len(sequence) - len(left_trimmed)
         right_trimmed = sequence.rstrip("-")
         right_pos = len(sequence) - (len(sequence) - len(right_trimmed))
-        assert seqid in sample_map, "Error, SeqId-{} not in depth file".format(seqid)
+        assert seqid in sample_map, "Error, SeqId-{} not in depth file".format(
+            seqid
+        )
         depth_info = sample_map[seqid]
 
         # get positions with zero coverage
@@ -150,7 +152,9 @@ def process_data(reference_sequence, samples, sample_map, cutoff, mask_gaps):
         # after adjusting for gaps on reference we can remove
         # positions on trimmed regions
         zero_cov = [
-            z for z in zero_cov if int(z[1]) > left_pos and int(z[1]) <= right_pos
+            z
+            for z in zero_cov
+            if int(z[1]) > left_pos and int(z[1]) <= right_pos
         ]
 
         total = len(zero_cov)
@@ -319,7 +323,8 @@ def parse_arguments():
         required=False,
         action="store_true",
         dest="mask_gaps",
-        help="If the process should mask gaps (-) " "with low depth (default=False).",
+        help="If the process should mask gaps (-) "
+        "with low depth (default=False).",
     )
 
     args = parser.parse_args()

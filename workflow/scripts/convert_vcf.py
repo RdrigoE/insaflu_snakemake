@@ -152,7 +152,7 @@ def ivar_variants_to_vcf(FileIn, FileOut, passOnly=False, minAF=0):
     fout.close()
 
     ## Print variant counts to pass to MultiQC
-    varCountList = [(k, str(v)) for k, v in sorted(varCountDict.items())]
+    # varCountList = [(k, str(v)) for k, v in sorted(varCountDict.items())]
     # print("\t".join(["sample"] + [x[0] for x in varCountList]))
     # print("\t".join([filename] + [x[1] for x in varCountList]))
 

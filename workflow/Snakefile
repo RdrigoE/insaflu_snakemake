@@ -269,6 +269,10 @@ scripts_directory = dic_directory["scripts"]
 coverage_script = dic_directory["get_coverage"]
 user_metadata_directort = dic_directory["user_metadata"]
 
+
+config = read_yaml(dic_directory["threads"])
+
+
 # Load in sample data
 user_metadata = read_yaml(dic_directory["sample_yaml"])
 sample_data: Data = Data(
@@ -307,9 +311,9 @@ memory = read_yaml("../config/mem_max_RSS.yaml")
 SEGMENTS = get_locus(REFERENCE_GB)
 
 PROJECT_NAME = user_metadata["project_name"]
-# assert (
-#     PROJECT_NAME != ""
-# ), "Project name is not set in the config file. Please set a project name"
+assert (
+    PROJECT_NAME != ""
+), "Project name is not set in the config file. Please set a project name"
 ABRICATE = user_metadata["abricate"]
 
 PRIMERS = (

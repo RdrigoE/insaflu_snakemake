@@ -1,0 +1,7 @@
+abricate: false
+fasta_reference: hRSV_B_Netherlands_02_028215_2002.fasta
+gb_reference: hRSV_B_Netherlands_02_028215_2002.gb
+illumina_censensus: iVar
+only_samples: false
+primers: ''
+project_name: hRSV_B_Netherlands_02_028215_2002

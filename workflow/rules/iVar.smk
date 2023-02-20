@@ -101,7 +101,7 @@ rule generate_consensus:
     benchmark:
         "benchmark/align_samples/{sample}/iVar/generate_consensus.tsv"
     shell:
-        "samtools mpileup -d 1000 -A -Q 20 {input.bam} --reference align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta | ivar consensus -p align_samples/{wildcards.sample}/iVar/{params} -q 20 -t 0.51 -n N"
+        "samtools mpileup -d 1000 -A -Q 20 {input.bam} --reference align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta | ivar consensus -p align_samples/{wildcards.sample}/iVar/{params} -q 20 -t 0.51 -n -m 10 N"
 
 
 rule get_depth:

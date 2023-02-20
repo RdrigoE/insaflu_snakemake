@@ -1,0 +1,7 @@
+abricate: false
+fasta_reference: hRSV_B_Kenya_KHDSS_272_11_Jan_2016_SOK_2016.fasta
+gb_reference: hRSV_B_Kenya_KHDSS_272_11_Jan_2016_SOK_2016.gb
+illumina_censensus: iVar
+only_samples: false
+primers: ''
+project_name: hRSV_B_Kenya_KHDSS_272_11_Jan_2016_SOK_2016

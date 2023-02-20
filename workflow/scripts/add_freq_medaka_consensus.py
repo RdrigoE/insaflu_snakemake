@@ -48,7 +48,12 @@ def get_coverage_by_pos(
 
         return -1
     cmd = "{} {} {}:{}-{} > {}".format(
-        "tabix", file_coverage, chr_name, position_start, position_end, temp_file
+        "tabix",
+        file_coverage,
+        chr_name,
+        position_start,
+        position_end,
+        temp_file,
     )
     os.system(cmd)
     ### get number
@@ -152,19 +157,27 @@ def add_freq_ao_ad_and_type_to_vcf(
     for variant_sample in vcf_hanlder.header.samples:
         vcf_hanlder_write.header.add_sample(variant_sample)
         if not vcf_file_out_removed_by_filter is None:
-            vcf_hanlder_write_removed_by_filter.header.add_sample(variant_sample)
+            vcf_hanlder_write_removed_by_filter.header.add_sample(
+                variant_sample
+            )
 
     for variant in vcf_hanlder:
         ### DP must be replaced by DPSP. DPSP is the sum of all reads Span and Ambiguous
         if (
-            "SR" in variant.info and "DPSP" in variant.info and "AR" in variant.info
+            "SR" in variant.info
+            and "DPSP" in variant.info
+            and "AR" in variant.info
         ):  ## SR=0,0,15,6
             ### don't process this VCF because has a low coverage
             total_deep = int(variant.info["DPSP"]) - sum(
                 [int(_) for _ in variant.info["AR"]]
             )
             total_deep_samtools = get_coverage_by_pos(
-                file_coverage, variant.chrom, variant.pos, variant.pos, temp_file
+                file_coverage,
+                variant.chrom,
+                variant.pos,
+                variant.pos,
+                temp_file,
             )
             if (
                 coverage_limit > 0
@@ -210,7 +223,9 @@ def add_freq_ao_ad_and_type_to_vcf(
 
                     vect_out_ao.append(allele_count)
                     vect_out_type.append(
-                        get_type_variation(variant.ref, variant.alts[(value_ - 2) >> 1])
+                        get_type_variation(
+                            variant.ref, variant.alts[(value_ - 2) >> 1]
+                        )
                     )
                 vect_out_af.append(
                     int(variant.info["SR"][value_])
@@ -259,7 +274,11 @@ def add_freq_ao_ad_and_type_to_vcf(
 
 
 def compute_masking_sites(
-    sequence, ranges=None, single_positions=None, from_beggining=None, from_end=None
+    sequence,
+    ranges=None,
+    single_positions=None,
+    from_beggining=None,
+    from_end=None,
 ) -> list[int]:
     length = len(sequence)
     masking_sites = []

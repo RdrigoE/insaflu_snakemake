@@ -10,3 +10,4 @@ rules: ../workflow/rules/
 envs: ../envs/
 scripts: ../workflow/scripts/
 samples: ../user/reads/
+threads: ../config/threads.yaml
