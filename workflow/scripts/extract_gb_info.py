@@ -58,13 +58,21 @@ def get_locus_and_genes(genbank_file):
             locus_gene[record.name] = []
             for feat in record.features:
                 if feat.type == "CDS":
-                    if feat.qualifiers.get("gene", None) is None:
+                    if feat.qualifiers.get("locus_tag", False):
                         locus_gene[record.name].append(
-                            feat.qualifiers.get("locus_tag")[0]
+                            feat.qualifiers["locus_tag"][0]
                         )
-                    else:
+                    elif feat.qualifiers.get("gene", False):
                         locus_gene[record.name].append(
                             feat.qualifiers["gene"][0]
+                        )
+                    elif feat.qualifiers.get("note", False):
+                        locus_gene[record.name].append(
+                            feat.qualifiers["note"][0]
+                        )
+                    elif feat.qualifiers.get("product", False):
+                        locus_gene[record.name].append(
+                            feat.qualifiers["product"][0]
                         )
 
     return locus_gene
@@ -106,24 +114,25 @@ def get_positions_gb(genbank_file):
     :doc-author: Trelent
     """
     positions = []
-
     with open(genbank_file, encoding="utf-8") as handle_gb:
         for record in SeqIO.parse(handle_gb, "genbank"):
-            for features in record.features:
-                if features.type == "CDS":
-                    if features.qualifiers.get("gene", None) is None:
+            for feat in record.features:
+                if feat.type == "CDS":
+                    if feat.qualifiers.get("locus_tag", False):
                         positions.append(
-                            [
-                                features.qualifiers.get("locus_tag")[0],
-                                features.location,
-                            ]
+                            [feat.qualifiers.get("locus_tag")[0], feat.location]
                         )
-                    else:
+                    elif feat.qualifiers.get("gene", False):
                         positions.append(
-                            [
-                                features.qualifiers.get("gene")[0],
-                                features.location,
-                            ]
+                            [feat.qualifiers["gene"][0], feat.location]
+                        )
+                    elif feat.qualifiers.get("note", False):
+                        positions.append(
+                            [feat.qualifiers["note"][0], feat.location]
+                        )
+                    elif feat.qualifiers.get("product", False):
+                        positions.append(
+                            [feat.qualifiers["product"][0], feat.location]
                         )
     positions_clean = []
 
@@ -149,10 +158,14 @@ def get_genes(genbank_file):
         for record in SeqIO.parse(handle_gb, "genbank"):
             for features in record.features:
                 if features.type == "CDS":
-                    try:
+                    if features.qualifiers.get("gene"):
                         genes.append(features.qualifiers["gene"][0])
-                    except:
+                    elif features.qualifiers.get("locus_tag"):
                         genes.append(features.qualifiers["locus_tag"][0])
+                    elif features.qualifiers.get("note"):
+                        genes.append(features.qualifiers["note"][0])
+                    elif features.qualifiers.get("product"):
+                        genes.append(features.qualifiers["product"][0])
         handle_gb.close()
     return genes
 

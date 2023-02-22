@@ -587,12 +587,12 @@ include: "rules/mafft.smk"
 include: "rules/warnings.smk"
 
 
-if PRIMERS:
+if PRIMERS and CONSENSUS_TOOL == "iVar":
 
     include: "rules/iVar.smk"
 
 
-else:
+elif CONSENSUS_TOOL == "iVar":
 
     include: "rules/iVar_noPrimer.smk"
 

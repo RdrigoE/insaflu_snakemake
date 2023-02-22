@@ -1,7 +1,7 @@
 abricate: false
 fasta_reference: hRSV_B_Brazil_38442_2009.fasta
 gb_reference: hRSV_B_Brazil_38442_2009.gb
-illumina_censensus: iVar
+illumina_consensus: snippy
 only_samples: false
 primers: ''
 project_name: hRSV_B_Brazil_38442_2009
