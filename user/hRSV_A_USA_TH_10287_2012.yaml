@@ -1,7 +1,0 @@
-abricate: false
-fasta_reference: hRSV_A_USA_TH_10287_2012.fasta
-gb_reference: hRSV_A_USA_TH_10287_2012.gb
-illumina_consensus: snippy
-only_samples: false
-primers: ''
-project_name: hRSV_A_USA_TH_10287_2012

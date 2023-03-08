@@ -1,7 +1,0 @@
-abricate: false
-fasta_reference: hRSV_B_wild_type_strain_B1_WV_14617_1985.fasta
-gb_reference: hRSV_B_wild_type_strain_B1_WV_14617_1985.gb
-illumina_consensus: snippy
-only_samples: false
-primers: ''
-project_name: hRSV_B_wild_type_strain_B1_WV_14617_1985

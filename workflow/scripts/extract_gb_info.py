@@ -60,20 +60,20 @@ def get_locus_and_genes(genbank_file):
                 if feat.type == "CDS":
                     if feat.qualifiers.get("locus_tag", False):
                         locus_gene[record.name].append(
-                            feat.qualifiers["locus_tag"][0].replace(" ", "_")
-                        )
+                                feat.qualifiers["locus_tag"][0].replace(" ", "_")
+                                )
                     elif feat.qualifiers.get("gene", False):
                         locus_gene[record.name].append(
-                            feat.qualifiers["gene"][0].replace(" ", "_")
-                        )
+                                feat.qualifiers["gene"][0].replace(" ", "_")
+                                )
                     elif feat.qualifiers.get("note", False):
                         locus_gene[record.name].append(
-                            feat.qualifiers["note"][0].replace(" ", "_")
-                        )
+                                feat.qualifiers["note"][0].replace(" ", "_")
+                                )
                     elif feat.qualifiers.get("product", False):
                         locus_gene[record.name].append(
-                            feat.qualifiers["product"][0].replace(" ", "_")
-                        )
+                                feat.qualifiers["product"][0].replace(" ", "_")
+                                )
 
     return locus_gene
 
@@ -120,34 +120,34 @@ def get_positions_gb(genbank_file):
                 if feat.type == "CDS":
                     if feat.qualifiers.get("locus_tag", False):
                         positions.append(
-                            [
-                                feat.qualifiers.get("locus_tag")[0].replace(
-                                    " ", "_"
-                                ),
-                                feat.location,
-                            ]
-                        )
+                                [
+                                    feat.qualifiers.get("locus_tag")[0].replace(
+                                        " ", "_"
+                                        ),
+                                    feat.location,
+                                    ]
+                                )
                     elif feat.qualifiers.get("gene", False):
                         positions.append(
-                            [
-                                feat.qualifiers["gene"][0].replace(" ", "_"),
-                                feat.location,
-                            ]
-                        )
+                                [
+                                    feat.qualifiers["gene"][0].replace(" ", "_"),
+                                    feat.location,
+                                    ]
+                                )
                     elif feat.qualifiers.get("note", False):
                         positions.append(
-                            [
-                                feat.qualifiers["note"][0].replace(" ", "_"),
-                                feat.location,
-                            ]
-                        )
+                                [
+                                    feat.qualifiers["note"][0].replace(" ", "_"),
+                                    feat.location,
+                                    ]
+                                )
                     elif feat.qualifiers.get("product", False):
                         positions.append(
-                            [
-                                feat.qualifiers["product"][0].replace(" ", "_"),
-                                feat.location,
-                            ]
-                        )
+                                [
+                                    feat.qualifiers["product"][0].replace(" ", "_"),
+                                    feat.location,
+                                    ]
+                                )
     positions_clean = []
 
     for idx, gene in enumerate(positions):
@@ -174,22 +174,22 @@ def get_genes(genbank_file):
                 if features.type == "CDS":
                     if features.qualifiers.get("gene"):
                         genes.append(
-                            features.qualifiers["gene"][0].replace(" ", "_")
-                        )
+                                features.qualifiers["gene"][0].replace(" ", "_")
+                                )
                     elif features.qualifiers.get("locus_tag"):
                         genes.append(
-                            features.qualifiers["locus_tag"][0].replace(
-                                " ", "_"
-                            )
-                        )
+                                features.qualifiers["locus_tag"][0].replace(
+                                    " ", "_"
+                                    )
+                                )
                     elif features.qualifiers.get("note"):
                         genes.append(
-                            features.qualifiers["note"][0].replace(" ", "_")
-                        )
+                                features.qualifiers["note"][0].replace(" ", "_")
+                                )
                     elif features.qualifiers.get("product"):
                         genes.append(
-                            features.qualifiers["product"][0].replace(" ", "_")
-                        )
+                                features.qualifiers["product"][0].replace(" ", "_")
+                                )
         handle_gb.close()
     return genes
 
