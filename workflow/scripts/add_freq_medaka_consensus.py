@@ -15,15 +15,21 @@ def get_type_variation(ref, alt):
                     del	Deletion	ACGG => ACG
                     complex	Combination of snp/mnp
     """
-    if len(ref) == len(alt) and len(alt) == 1:
+    if ref == alt and alt == 1:
         return "snp"
-    if len(ref) > len(alt):
+    if ref > alt:
         return "del"
-    if len(ref) < len(alt):
+    if ref < alt:
         return "ins"
-    if len(ref) == len(alt) and len(alt) > 1:
+    if ref == alt and alt > 1:
         return "mnp"
     return "complex"
+
+
+def variant_has_SR_DPSP_AR(variant):
+    if "SR" in variant and "DPSP" in variant and "AR" in variant:
+        return True
+    return False
 
 
 def read_text_file(file_name):
@@ -31,7 +37,7 @@ def read_text_file(file_name):
     read text file and put the result in an vector
     """
     vect_out = []
-    with open(file_name) as handle:
+    with open(file_name, "r", encoding="utf-8") as handle:
         for line in handle:
             sz_temp = line.strip()
             if len(sz_temp) == 0:
@@ -43,9 +49,7 @@ def read_text_file(file_name):
 def get_coverage_by_pos(
     file_coverage, chr_name, position_start, position_end, temp_file
 ):
-
     if not os.path.exists(file_coverage):
-
         return -1
     cmd = "{} {} {}:{}-{} > {}".format(
         "tabix",
@@ -163,14 +167,10 @@ def add_freq_ao_ad_and_type_to_vcf(
 
     for variant in vcf_hanlder:
         ### DP must be replaced by DPSP. DPSP is the sum of all reads Span and Ambiguous
-        if (
-            "SR" in variant.info
-            and "DPSP" in variant.info
-            and "AR" in variant.info
-        ):  ## SR=0,0,15,6
+        if variant_has_SR_DPSP_AR(variant.info):  ## SR=0,0,15,6
             ### don't process this VCF because has a low coverage
             total_deep = int(variant.info["DPSP"]) - sum(
-                [int(_) for _ in variant.info["AR"]]
+                [int(x) for x in variant.info["AR"]]
             )
             total_deep_samtools = get_coverage_by_pos(
                 file_coverage,
@@ -179,11 +179,7 @@ def add_freq_ao_ad_and_type_to_vcf(
                 variant.pos,
                 temp_file,
             )
-            if (
-                coverage_limit > 0
-                and total_deep_samtools >= 0
-                and total_deep_samtools < coverage_limit
-            ):
+            if coverage_limit > 0 and total_deep_samtools < coverage_limit:
                 continue
             if ((len(variant.info["SR"]) // 2) - 1) != len(variant.alts):
                 # vcf_hanlder_write.write(variant)
@@ -215,7 +211,6 @@ def add_freq_ao_ad_and_type_to_vcf(
                                     float("{:.1f}".format(freq_value * 100))
                                 )
                             elif not vcf_file_out_removed_by_filter is None:
-
                                 vect_out_freq_filtered.append(
                                     float("{:.1f}".format(freq_value * 100))
                                 )
@@ -224,7 +219,8 @@ def add_freq_ao_ad_and_type_to_vcf(
                     vect_out_ao.append(allele_count)
                     vect_out_type.append(
                         get_type_variation(
-                            variant.ref, variant.alts[(value_ - 2) >> 1]
+                            len(variant.ref),
+                            len(variant.alts[(value_ - 2) >> 1]),
                         )
                     )
                 vect_out_af.append(
@@ -392,8 +388,8 @@ def main():
         ref_pos = 0
         ref_insertions = 0
         gap = 0
-        for _ in range(len(sequence)):
-            if sequence[_] == "-":
+        for idx in range(len(sequence)):
+            if sequence[idx] == "-":
                 # print("Hello")
                 gap += 1
                 # print(gap)

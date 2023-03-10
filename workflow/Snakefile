@@ -109,7 +109,6 @@ class Checkpoint_Alignment_aa:
         if True in valide_locus:
             for idx, seg in enumerate(segments, start=0):
                 for gene in segments[seg]:
-
                     locus_protein.append(
                         f"{self.prefix}{seg}/Alignment_aa_{seg}_{gene}{self.sufix}"
                     )
@@ -590,7 +589,6 @@ include: "rules/warnings.smk"
 if PRIMERS and CONSENSUS_TOOL == "iVar":
 
     include: "rules/iVar.smk"
-
 
 elif CONSENSUS_TOOL == "iVar":
 

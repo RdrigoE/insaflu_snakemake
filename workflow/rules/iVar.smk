@@ -243,10 +243,8 @@ rule get_masked_consensus_iVar:
 rule mask_regions_consensus_iVar:
     input:
         consensus="align_samples/{sample}/iVar/pre_{sample}_consensus.fasta",
-        tsv_file="align_samples/{sample}/iVar/snps.tsv",
     output:
         final_consensus="align_samples/{sample}/iVar/{sample}_consensus.fasta",
-        vcf_file="align_samples/{sample}/iVar/snps.vcf",
     conda:
         "../envs/base.yaml"
     params:
@@ -259,5 +257,14 @@ rule mask_regions_consensus_iVar:
         "benchmark/align_samples/{sample}/iVar/mask_regions_consensus.tsv"
     shell:
         "python {scripts_directory}mask_regions.py {input.consensus} {output.final_consensus} {params} "
-        " && "
+
+
+rule get_vcf:
+    input:
+        tsv_file="align_samples/{sample}/iVar/snps.tsv",
+    output:
+        vcf_file="align_samples/{sample}/iVar/snps.vcf",
+    conda:
+        "../envs/base.yaml"
+    shell:
         "python {scripts_directory}convert_vcf.py {input.tsv_file} {output.vcf_file} "
