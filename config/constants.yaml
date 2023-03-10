@@ -1,7 +1,7 @@
 working: ../results/
 user_metadata: ../user_metadata/
-sample_yaml: ../user/hRSV_A_USA_A1998_03_02_1998.yaml
-sample_csv: ../user/hRSV_A_USA_A1998_03_02_1998.csv
+sample_yaml: ../user/covid_ivar.yaml #sample
+sample_csv: ../user/covid_samples.csv #csv
 config_file: ../config/config.yaml
 software_parameters: ../user/parameters.yaml
 get_coverage: ../workflow/software/getCoverage/getCoverage.py

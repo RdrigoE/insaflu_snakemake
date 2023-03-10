@@ -1,4 +1,5 @@
 min_coverage_consensus: 70
+min_fold_coverage: 30
 
 ##ILLUMINA / Ion Torrent data##
 # Trimmomatic

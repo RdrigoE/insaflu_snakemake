@@ -1,7 +1,0 @@
-abricate: false
-fasta_reference: hRSV_A_USA_BID_V8526_2004.fasta
-gb_reference: hRSV_A_USA_BID_V8526_2004.gb
-illumina_consensus: snippy
-only_samples: false
-primers: ''
-project_name: hRSV_A_USA_BID_V8526_2004

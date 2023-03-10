@@ -1,7 +1,0 @@
-abricate: false
-fasta_reference: hRSV_A_AUS_248_2007.fasta
-gb_reference: hRSV_A_AUS_248_2007.gb
-illumina_consensus: snippy
-only_samples: false
-primers: ''
-project_name: hRSV_A_AUS_248_2007

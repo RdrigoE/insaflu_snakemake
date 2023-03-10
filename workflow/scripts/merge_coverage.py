@@ -87,7 +87,6 @@ def merge_coverage(file_list, output_file):
 
     for file in file_list:
         with open(file, "r", encoding="utf8") as f:
-
             sample_name = re.findall("(?<=/)(.*?)(?=_coverage.csv)", file)[0].split(
                 "/"
             )[0]

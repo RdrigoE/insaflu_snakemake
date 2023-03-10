@@ -1,7 +1,0 @@
-abricate: false
-fasta_reference: hRSV_B_Netherlands_03_000005_2003.fasta
-gb_reference: hRSV_B_Netherlands_03_000005_2003.gb
-illumina_consensus: snippy
-only_samples: false
-primers: ''
-project_name: hRSV_B_Netherlands_03_000005_2003
