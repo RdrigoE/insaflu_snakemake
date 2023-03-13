@@ -1,7 +1,0 @@
-only_samples: False
-project_name: mpox_EQA_P3
-fasta_reference: monkeypox_MT903345_MPXV_UK_P3.fasta
-gb_reference: monkeypox_MT903345_MPXV_UK_P3.gbk
-abricate: False
-illumina_consensus: iVar
-primers: mpox_UK_P3.bed

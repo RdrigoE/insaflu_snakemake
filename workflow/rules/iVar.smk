@@ -12,12 +12,14 @@ rule iVar_align_pe:
         "logs/align_samples/{sample}/iVar/mapping.log",
     benchmark:
         "benchmark/align_samples/{sample}/iVar/mapping.tsv"
+    params:
+        minqual=software_parameters["mapqual"],
     shell:
         "mkdir align_samples/{wildcards.sample}/reference -p && "
         "cp {REFERENCE_FASTA} align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta && "
         "bwa index align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta && "
         "bwa mem align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta {input.reads_1} {input.reads_2} | "
-        "samtools view -u -T align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta -q 20 | "
+        "samtools view -u -T align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta -q {params.minqual} | "
         "samtools sort --reference align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta > {output}"
 
 
@@ -34,12 +36,14 @@ rule iVar_align_se:
         "logs/align_samples/{sample}/iVar/mapping.log",
     benchmark:
         "benchmark/align_samples/{sample}/iVar/mapping.tsv"
+    params:
+        minqual=software_parameters["mapqual"],
     shell:
         "mkdir align_samples/{wildcards.sample}/reference -p && "
         "cp {REFERENCE_FASTA} align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta && "
         "bwa index align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta && "
         "bwa mem align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta {input.reads_1} | "
-        "samtools view -u -T align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta -q 20 | "
+        "samtools view -u -T align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta -q {params.minqual} | "
         "samtools sort --reference align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta > {output}"
 
 
@@ -80,9 +84,13 @@ rule call_variant:
         "logs/align_samples/{sample}/iVar/call_variants.log",
     benchmark:
         "benchmark/align_samples/{sample}/iVar/call_variants.tsv"
+    params:
+        mapqual=software_parameters["mapqual"],
+        mincov=software_parameters["mincov"],
+        minfrac=software_parameters["minfrac"],
     shell:
         "samtools mpileup -A -d 600000 -B -Q 0 {input.bam} --reference align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta | "
-        "ivar variants -p align_samples/{wildcards.sample}/iVar/snps -q 20 -t 0.51  align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta "
+        "ivar variants -p align_samples/{wildcards.sample}/iVar/snps -q {params.mapqual} -t {params.minfrac} -m {params.mincov}  align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta "
 
 
 rule generate_consensus:
@@ -93,7 +101,10 @@ rule generate_consensus:
     conda:
         "../envs/ivar.yaml"
     params:
-        "snps.consensus",
+        consensus="snps.consensus",
+        mapqual=software_parameters["mapqual"],
+        mincov=software_parameters["mincov"],
+        minfrac=software_parameters["minfrac"],
     resources:
         mem_mb=memory["generate_consensus"],
     log:
@@ -101,7 +112,7 @@ rule generate_consensus:
     benchmark:
         "benchmark/align_samples/{sample}/iVar/generate_consensus.tsv"
     shell:
-        "samtools mpileup -d 1000 -A -Q 20 {input.bam} --reference align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta | ivar consensus -p align_samples/{wildcards.sample}/iVar/{params} -q 20 -t 0.51 -n N -m 10 "
+        "samtools mpileup -d 1000 -A -Q {params.mapqual} {input.bam} --reference align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta | ivar consensus -p align_samples/{wildcards.sample}/iVar/{params.consensus} -q {params.mapqual} -t {params.minfrac} -n N -m {params.mincov} "
 
 
 rule get_depth:
@@ -243,6 +254,8 @@ rule get_masked_consensus_iVar:
 rule mask_regions_consensus_iVar:
     input:
         consensus="align_samples/{sample}/iVar/pre_{sample}_consensus.fasta",
+        snps="align_samples/{sample}/iVar/snps.vcf",
+        depth="align_samples/{sample}/iVar/snps.depth.gz",
     output:
         final_consensus="align_samples/{sample}/iVar/{sample}_consensus.fasta",
     conda:
@@ -264,6 +277,8 @@ rule get_vcf:
         tsv_file="align_samples/{sample}/iVar/snps.tsv",
     output:
         vcf_file="align_samples/{sample}/iVar/snps.vcf",
+    resources:
+        mem_mb=memory["get_vcf"],
     conda:
         "../envs/base.yaml"
     shell:

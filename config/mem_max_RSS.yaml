@@ -75,7 +75,7 @@ snpeff_concat_indels: 78
 proportions_iSNVs_graph: 24
 spades_se: 5468
 spades_pe: 5468
-
+get_vcf: 200
 snippy_unzip_depth: 100
 initiate_folder: 100
 seqret_alignment_aa_gene: 100
