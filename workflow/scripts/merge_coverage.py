@@ -1,4 +1,5 @@
 """Create coverage report"""
+from ast import Raise
 import re
 import sys
 import csv
@@ -79,27 +80,30 @@ def merge_coverage(file_list, output_file):
     header = [
         "SAMPLES",
         "Mean depth of coverage",
-        f"% of size covered by at least 1-fold",
-        f"% of size covered by at least X-fold",
+        r"% of size covered by at least 1-fold",
+        r"% of size covered by at least X-fold",
     ]
     sub_header = ["", *species, "", *species, "X-Fold", *species]
     final_output = [super_header, super_header_1, header, sub_header]
 
     for file in file_list:
         with open(file, "r", encoding="utf8") as f:
-            sample_name = re.findall("(?<=/)(.*?)(?=_coverage.csv)", file)[0].split(
-                "/"
-            )[0]
+            sample_name = re.findall("(?<=/)(.*?)(?=_coverage.csv)", file)[
+                0
+            ].split("/")[0]
             info = f.readlines()[6].split()
             sample_t = sample_type[sample_name]
-            sample_cov = (
-                software_parameters["mincov"]
-                if sample_t == "illumina"
-                else software_parameters["mincov_medaka"]
-            )
+            if sample_t in ("snippy", "iVar"):
+                sample_cov = software_parameters["mincov"]
+            elif sample_t == "medaka":
+                sample_cov = software_parameters["mincov_medaka"] + 1
+            else:
+                raise Exception(
+                    "There is no implementation for other tools than snippy, iVar and medaka."
+                )
             info[0] = sample_name
             info.insert(1 + len(species), "")
-            info.insert(2 + len(species) * 2, sample_cov + 1)
+            info.insert(2 + len(species) * 2, sample_cov)
             final_output.append(info)
 
     with open(output_file, mode="w", encoding="utf8") as f:
@@ -124,9 +128,9 @@ def get_coverage(filename: str, n_locus: int):
     with open(filename, newline="", encoding="UTF8") as csvfile:
         csv_reader = csv.reader(csvfile, delimiter="\t")
         coverage_list = []
-        sample_name = re.findall("(?<=/)(.*?)(?=_coverage.csv)", filename)[0].split(
-            "/"
-        )[0]
+        sample_name = re.findall("(?<=/)(.*?)(?=_coverage.csv)", filename)[
+            0
+        ].split("/")[0]
         for i in csv_reader:
             coverage_list.append(i)
         coverage_list = coverage_list[-1][-n_locus:]
@@ -171,4 +175,6 @@ if __name__ == "__main__":
 
     NUMBER_OF_LOCUS = len(get_locus(REFERENCE_GB))
     merge_coverage(COVERAGE_FILES, OUTPUT_FILE_1)
-    create_script_readable_coverage_file(COVERAGE_FILES, OUTPUT_FILE_2, NUMBER_OF_LOCUS)
+    create_script_readable_coverage_file(
+        COVERAGE_FILES, OUTPUT_FILE_2, NUMBER_OF_LOCUS
+    )
