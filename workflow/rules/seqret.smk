@@ -69,7 +69,7 @@ rule seqret_alignment_aa_gene:
     log:
         "logs/projects/{project}/nex/main_result/{locus}/Alignment_aa_{locus}_{gene}_mafft_to_nex.log",
     benchmark:
-        "logs/projects/{project}/nex/main_result/{locus}/Alignment_aa_{locus}_{gene}_mafft_to_nex.tsv"
+        "benchmark/projects/{project}/nex/main_result/{locus}/Alignment_aa_{locus}_{gene}_mafft_to_nex.tsv"
     shell:
         "seqret {params} -sequence {input} -outseq {output}"
 

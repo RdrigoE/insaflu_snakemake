@@ -13,9 +13,9 @@ rule raw_fastqc_se:
     resources:
         mem_mb=memory["raw_fastqc_se"],
     log:
-        "logs/samples/{sample}/raw_fastqc.log",
+        "logs/samples/{sample}/raw_fastqc_se.log",
     benchmark:
-        "benchmark/samples/{sample}/raw_fastqc.tsv"
+        "benchmark/samples/{sample}/raw_fastqc_se.tsv"
     shell:
         "fastqc {input} -o {output.dir} {params} && python3 {scripts_directory}move_fastqc_output.py {wildcards.sample}"
 
@@ -35,9 +35,9 @@ rule raw_fastqc_pe:
     resources:
         mem_mb=memory["raw_fastqc_pe"],
     log:
-        "logs/samples/{sample}/raw_fastqc.log",
+        "logs/samples/{sample}/raw_fastqc_pe.log",
     benchmark:
-        "benchmark/samples/{sample}/raw_fastqc.tsv"
+        "benchmark/samples/{sample}/raw_fastqc_pe.tsv"
     shell:
         "fastqc {input} -o {output.dir} {params} && python3 {scripts_directory}move_fastqc_output.py {wildcards.sample}"
 
@@ -57,9 +57,9 @@ rule trimmed_fastqc_pe:
     resources:
         mem_mb=memory["trimmed_fastqc_pe"],
     log:
-        "logs/samples/{sample}/trimmed_fastqc.log",
+        "logs/samples/{sample}/trimmed_fastqc_pe.log",
     benchmark:
-        "benchmark/samples/{sample}/trimmed_fastqc.tsv"
+        "benchmark/samples/{sample}/trimmed_fastqc_pe.tsv"
     threads: 2
     shell:
         "fastqc {input.read_1} {input.read_2} -o {output.dir} {params} -t {threads}"
@@ -79,8 +79,8 @@ rule trimmed_fastqc_se:
     resources:
         mem_mb=memory["trimmed_fastqc_se"],
     log:
-        "logs/samples/{sample}/trimmed_fastqc.log",
+        "logs/samples/{sample}/trimmed_fastqc_se.log",
     benchmark:
-        "benchmark/samples/{sample}/trimmed_fastqc.tsv"
+        "benchmark/samples/{sample}/trimmed_fastqc_se.tsv"
     shell:
         "fastqc {input.read} -o {output.dir} {params} -t {threads}"

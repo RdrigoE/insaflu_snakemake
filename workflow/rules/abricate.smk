@@ -13,7 +13,7 @@ rule abricate_se:
     log:
         "logs/samples/{sample}/abricate.log",
     benchmark:
-        "benchmark/samples/{sample}/abricate.tsv"
+        "benchmark/samples/{sample}/abricate_se.tsv"
     shell:
         "abricate {params} {input} > {output.csv}"
         " && python3 {scripts_directory}get_abricate_info_list.py {output.csv} {output.yaml}"
@@ -34,7 +34,7 @@ rule abricate_pe:
     log:
         "logs/samples/{sample}/abricate.log",
     benchmark:
-        "benchmark/samples/{sample}/abricate.tsv"
+        "benchmark/samples/{sample}/abricate_pe.tsv"
     shell:
         "abricate {params} {input} > {output.csv}"
         " && python3 {scripts_directory}get_abricate_info_list.py {output.csv} {output.yaml}"
@@ -53,7 +53,7 @@ rule abricate_ont:
     log:
         "logs/samples/{sample}/abricate.log",
     benchmark:
-        "benchmark/samples/{sample}/abricate.tsv"
+        "benchmark/samples/{sample}/abricate_ont.tsv"
     params:
         "--db insaflu --minid 70 --mincov 30",
     shell:

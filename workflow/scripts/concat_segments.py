@@ -161,7 +161,6 @@ def create_consensus_file_for_alignment(
         SeqIO.write(new_concat_file_strict, output_only_90_plus, "fasta")
         SeqIO.write(new_concat_file_strict, output, "fasta")
 
-
 if __name__ == "__main__":
     CONSENSUS_LIST = sys.argv[1].split(" ")
     REFERENCE_GB = sys.argv[2]

@@ -17,9 +17,9 @@ rule trimme_reads_PE:
     resources:
         mem_mb=memory["trimme_reads_PE"],
     log:
-        "logs/samples/{sample}/trimmomatic.log",
+        "logs/samples/{sample}/trimmomatic_pe.log",
     benchmark:
-        "benchmark/samples/{sample}/trimmomatic.tsv"
+        "benchmark/samples/{sample}/trimmomatic_pe.tsv"
     shell:
         "trimmomatic PE "
         "{input} "
@@ -44,9 +44,9 @@ rule trimme_reads_SE:
     resources:
         mem_mb=memory["trimme_reads_SE"],
     log:
-        "logs/samples/{sample}/trimmomatic.log",
+        "logs/samples/{sample}/trimmomatic_se.log",
     benchmark:
-        "benchmark/samples/{sample}/trimmomatic.tsv"
+        "benchmark/samples/{sample}/trimmomatic_se.tsv"
     shell:
         "trimmomatic SE "
         "-threads {threads} "

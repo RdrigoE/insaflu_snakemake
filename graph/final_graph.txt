@@ -1,0 +1,112 @@
+digraph snakemake_dag {
+    graph[bgcolor=white, margin=0];
+    node[shape=box, style=rounded, fontname=sans,                 fontsize=10, penwidth=2];
+    edge[penwidth=2, color=grey];
+	0[label = "raw_fastqc_pe", color = "#ff8000", style="rounded,filled"];
+	1[label = "trimmed_fastqc_pe", color = "#fff000", style="rounded,filled"];
+	2[label = "trimme_reads_PE", color = "#ffeb00", style="rounded,filled"];
+	3[label = "mask_regions_consensus_snippy", color = "#05ff00", style="rounded,filled"];
+	4[label = "get_masked_consensus_snippy", color = "#05ff00", style="rounded,filled"];
+	5[label = "msa_masker_snippy", color = "#0aff00", style="rounded,filled"];
+	6[label = "align_mafft_snippy", color = "#05ff00", style="rounded,filled"];
+	7[label = "create_align_file_snippy", color = "#0aff00", style="rounded,filled"];
+	8[label = "snippy_pe", color = "#ff0600", style="rounded,filled"];
+	9[label = "snippy_split_depth", color = "#05ff00", style="rounded,filled"];
+	10[label = "snippy_unzip_depth", color = "#05ff00", style="rounded,filled"];
+	11[label = "getCoverage", color = "#0fff00", style="rounded,filled"];
+	12[label = "mergeCoverage", color = "#05ff00", style="rounded,filled"];
+	13[label = "abricate_pangolin", color = "#0fff00", style="rounded,filled"];
+	14[label = "all", color = "#0000ff", style="rounded,filled"];
+	15[label = "snpeff_concat", color = "#05ff00", style="rounded,filled"];
+	16[label = "snpeff", color = "#47ff00", style="rounded,filled"];
+	17[label = "freebayes",  color = "#000000" fontcolor="#ffffff" , style="rounded,filled"];
+	18[label = "prepare_snpeff", color = "#0aff00", style="rounded,filled"];
+	19[label = "variant_validated", color = "#05ff00", style="rounded,filled"];
+	20[label = "snpeff_sample", color = "#2dff00", style="rounded,filled"];
+	21[label = "makeproject", color = "#0aff00", style="rounded,filled"];
+	22[label = "snpeff_concat_indels", color = "#05ff00", style="rounded,filled"];
+	23[label = "proportions_iSNVs_graph", color = "#05ff00", style="rounded,filled"];
+	24[label = "mafft", color = "#0aff00", style="rounded,filled"];
+	25[label = "assemble_consensus", color = "#0aff00", style="rounded,filled"];
+	26[label = "seqret_all_nt", color = "#05ff00", style="rounded,filled"];
+	27[label = "seqret_all_consensus", color = "#05ff00", style="rounded,filled"];
+	28[label = "alignment_nt_All_seqret", color = "#05ff00", style="rounded,filled"];
+	29[label = "seqret_all_nt_only_90", color = "#05ff00", style="rounded,filled"];
+	30[label = "fasttree", color = "#0fff00", style="rounded,filled"];
+	31[label = "cp_Alignment_nt_tree", color = "#05ff00", style="rounded,filled"];
+	32[label = "fasttree_nt", color = "#38ff00", style="rounded,filled"];
+	33[label = "mafft_nt", color = "#0aff00", style="rounded,filled"];
+	34[label = "create_segments", color = "#05ff00", style="rounded,filled"];
+	35[label = "mafft_pre_aa", color = "#0aff00", style="rounded,filled"];
+	36[label = "translate", color = "#0aff00", style="rounded,filled"];
+	37[label = "mafft_proteins", color = "#05ff00", style="rounded,filled"];
+	38[label = "seqret_alignment_aa_gene", color = "#05ff00", style="rounded,filled"];
+	39[label = "fasttree_proteins", color = "#14ff00", style="rounded,filled"];
+	40[label = "pangolin", color = "#9eff00", style="rounded,filled"];
+	2 -> 1
+	4 -> 3
+	5 -> 4
+	9 -> 5
+	6 -> 5
+	7 -> 6
+	8 -> 7
+	2 -> 8
+	10 -> 9
+	8 -> 10
+	8 -> 11
+	11 -> 12
+	39 -> 14
+	18 -> 14
+	34 -> 14
+	38 -> 14
+	36 -> 14
+	27 -> 14
+	22 -> 14
+	15 -> 14
+	0 -> 14
+	37 -> 14
+	40 -> 14
+	25 -> 14
+	23 -> 14
+	1 -> 14
+	26 -> 14
+	3 -> 14
+	12 -> 14
+	29 -> 14
+	30 -> 14
+	28 -> 14
+	19 -> 14
+	11 -> 14
+	31 -> 14
+	24 -> 14
+	16 -> 15
+	18 -> 16
+	17 -> 16
+	8 -> 17
+	20 -> 19
+	18 -> 20
+	21 -> 20
+	3 -> 21
+	16 -> 22
+	16 -> 23
+	25 -> 24
+	12 -> 25
+	21 -> 25
+	25 -> 26
+	25 -> 27
+	24 -> 28
+	25 -> 29
+	24 -> 30
+	32 -> 31
+	33 -> 32
+	34 -> 33
+	35 -> 34
+	25 -> 35
+	33 -> 36
+	12 -> 36
+	36 -> 37
+	37 -> 38
+	37 -> 39
+	13 -> 40
+	25 -> 40
+}            
