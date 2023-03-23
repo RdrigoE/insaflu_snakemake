@@ -17,4 +17,3 @@ output.txt
 *.png
 *.pdf
 workflow/db/snpeff.config
-workflow/tests
