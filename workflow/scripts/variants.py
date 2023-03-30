@@ -1,69 +1,181 @@
-"""Get validated Variants"""
-import re
 import csv
+import re
 import sys
-from types import NoneType
+
+DESCRIPTORS = [
+    "CHROM",
+    "POS",
+    "TYPE",
+    "REF",
+    "ALT",
+    "FREQ",
+    "COVERAGE",
+    "EVIDENCE",
+    "FTYPE",
+    "STRAND",
+    "NT_POS",
+    "AA_POS",
+    "EFFECT",
+    "NT CHANGE",
+    "AA CHANGE",
+    "AA CHANGE ALT",
+    "LOCUS_TAG",
+    "GENE",
+    "PRODUCT",
+    "VARIANTS IN INCOMPLETE LOCUS",
+]
+
+#
+# class SnakemakeEntry(TypedDict):
+#     chrom: str
+#     pos: int
+#     ref: str
+#     alt: str
+#     qual: float
+#     info: dict[str, str]
+#     ann: dict[str, str]
+#     names: list[str]
+#     values: list[str]
+#
+#
 
 
-def get_info_dic(info_list):
-    """
-    The get_info_dic function takes a list of strings and returns a dictionary with the first item in each string as the key and the second as its value.
-    For example, if info_list = ['ID=gene:AT3G20900.2', 'Name=NAC001', 'Dbxref=GeneID:844718'] then get_info_dic(info_list) will return {'ID':'gene:AT3G20900.2','Name':'NAC001','Dbxref':'GeneID:844718}
-
-    :param info_list: Create a dictionary of the information contained in the info column
-    :return: A dictionary with the following key/value pairs:
-    :doc-author: Trelent
-    """
-    info_dic = {}
-    for item in info_list:
-        pieces = item.split("=")
-        info_dic[pieces[0]] = pieces[1]
-    return info_dic
+def remove_smallcase(string):
+    word = ""
+    for letter in string:
+        if not letter.islower():
+            word += letter
+    return word
 
 
-def get_row_dict(row):
-    """
-    The get_row_dict function takes a row from the vcf file and returns a dictionary with the following keys:
-        CHROM, POS, ID, REF, ALT and QUAL.  These are all strings except for POS which is an int.
-
-    :param row: Pass the current row of the vcf file to get_row_dict
-    :return: A dictionary with the following keys:
-    :doc-author: Trelent
-    """
-    row_dic = {
-        "CHROM": row[0],
-        "POS": row[1],
-        "ID": row[2],
-        "REF": row[3],
-        "ALT": row[4],
-        "QUAL": row[5],
-    }
-    return row_dic
+def smaller(string: str) -> str:
+    return string[: 2] + remove_smallcase(string[2:])
 
 
-def word_in_list(word_list, check_list):
-    for item in word_list:
-        if item in check_list:
+def convert_list_to_dict(data: list[str]) -> tuple[dict[str, str], dict[str, str]]:
+    snp_annotation = ["Allele", "Annotation", "Annotation_Impact", "Gene_Name", "Gene_ID", "Feature_Type", "Feature_ID",
+                      "Transcript_BioType", "Rank", "HGVS.c", "HGVS.p", "cDNA.pos/cDNA.length", "CDS_CDSLength", "AA.pos/AA.length", "Distance", "ERRORS/WARNINGS/INFO"]
+    new_dict = {}
+
+    ann_dict = {}
+    for item in data:
+        if item:
+            k, v = item.split("=")
+            if k.upper() == "ANN":
+                ann_dict = {}
+                new_v = v.split("|")
+                for idx, v in enumerate(new_v):
+                    ann_dict[snp_annotation[idx]] = v
+            else:
+                new_dict[k] = v
+    return new_dict, ann_dict
+
+
+# class DataEntry(TypedDict, total=False):
+#     "CHROM"
+#     "POS"
+#     "TYPE"
+#     "REF"
+#     "ALT"
+#     "FREQ"
+#     "COVERAGE"
+#     "EVIDENCE"
+#     "FTYPE"
+#     "STRAND"
+#     "NT_POS"
+#     "AA_POS"
+#     "EFFECT"
+#     "NT CHANGE"
+#     "AA CHANGE"
+#     "AA CHANGE ALT"
+#     "LOCUS_TAG"
+#     "GENE"
+#     "PRODUCT"
+#     "VARIANTS IN INCOMPLETE LOCUS"
+#
+#
+def analyse_file(input_file):
+    with open(input_file) as handler:
+        lines = [line for line in handler.readlines() if not line[0] == '#']
+    vcf_data = []
+    for line in lines:
+        l = line.split()
+        info, ann = convert_list_to_dict(l[7].split(";"))
+        entry = dict(
+            chrom=l[0],
+            pos=int(l[1]),
+            ref=l[3],
+            alt=l[4],
+            qual=float(l[5]),
+            info=info,
+            ann=ann,
+            names=l[8].split(":"),
+            values=l[9].split(":")
+        )
+        print(entry["info"], input_file, entry["pos"])
+
+        get_freq = round(float(entry["info"]["AO"].replace(
+            ",", "."))/float(entry["info"]["DP"].replace(",", ".")) * 100, 1)
+        default = [entry["chrom"],
+                   entry["pos"],
+                   entry["info"]["TYPE"],
+                   entry["ref"],
+                   entry["alt"],
+                   get_freq,
+                   entry["info"]["DP"],
+                   entry["alt"] + ":" + entry["info"]["AO"],
+                   entry["ref"] + ":" + entry["info"]["RO"],
+                   ]
+
+        if entry.get("ann"):
+            ann = entry["ann"]
+
+            default.extend(["CDS",
+                            "+",
+                            ann["CDS_CDSLength"],
+                            ann["AA.pos/AA.length"],
+                            ann["Annotation"],
+                            ann["HGVS.c"],
+                            ann["HGVS.p"],
+                            smaller(ann["HGVS.p"]),
+                            ann["Gene_Name"],
+                            ann["Gene_Name"],
+                            "yes"
+                            ])
+        else:
+            default.extend(['', '', '', '', '', '', '', '', '', '', ''])
+        vcf_data.append(default)
+    return vcf_data
+
+
+def word_in_list(word, check_list):
+    for item in check_list:
+        if item in word:
             return True
     return False
 
 
 def comparison(value1, value2, signal):
     if signal == "bigger":
-        return value1 > value2
+        return value1 >= value2
     elif signal == "smaller":
         return value1 < value2
-    return None
 
 
-def discover_my_type(line):
-    if len(line[3]) == 1 and len(line[3]) == len(line[4]):
-        return "snp"
-    if len(line[3]) > len(line[4]):
-        return "del"
-    if len(line[3]) < len(line[4]):
-        return "ins"
-    return "OTHER"
+def filter_variants(data: list[list[str]], signal: str, list_of_types: list[str], identifier: str) -> list[list[str]]:
+    filtered_data = []
+    for entry in data:
+        entry_d = dict() # DataEntry()
+        for idx, value in enumerate(entry):
+            entry_d[DESCRIPTORS[idx]] = value
+        if not comparison(entry_d["FREQ"], 0.51, signal):
+            continue
+        if not word_in_list(entry_d["TYPE"], list_of_types):
+            continue
+        entry.insert(0, identifier)
+        filtered_data.append(entry)
+
+    return filtered_data
 
 
 def validated_variants(
@@ -107,74 +219,13 @@ def validated_variants(
         ]
     ]
     for file in files_path:
-        with open(file, "r") as invcf:
-            for original_line in invcf:
-                try:
-                    if original_line.startswith("#"):
-                        continue
-                    new_entry = []
-                    line = original_line.strip().split()
-                    info = line[7].split(";")
-                    info_dic = get_info_dic(info)
-                    row_dic = get_row_dict(line)
-                    if "ANN" not in info_dic:
-                        info_dic[
-                            "ANN"
-                        ] = "|||||||||||||||||||||||||||||||||||||||"
-                        info_dic["FTYPE"] = ""
-                    else:
-                        info_dic["FTYPE"] = "CDS"
-                    discover_type = info_dic.get("TYPE", discover_my_type(line))
-                    if word_in_list(list_of_types, discover_type):
-                        get_frequency = 0
-
-                        try:
-
-                            temp_freq = float(
-                                info_dic["AO"].replace(",", ".")
-                            ) / float(info_dic["DP"].replace(",", "."))
-                            get_frequency = round(temp_freq, 2)
-
-                        except:
-                            get_frequency = float(
-                                original_line[
-                                    len(original_line)
-                                    - original_line[::-1].index(":") :
-                                ]
-                            )
-                        if comparison(
-                            get_frequency,
-                            0.50,
-                            signal,
-                        ):
-                            ann_list = info_dic["ANN"].split("|")
-                            new_entry.append(
-                                re.findall(re_expression, file)[0]
-                            )  # ID
-                            new_entry.append(row_dic["CHROM"])  # CHROM
-                            new_entry.append(row_dic["POS"])  # POS
-                            new_entry.append(discover_type)  # TYPE
-                            new_entry.append(row_dic["REF"])  # REF
-                            new_entry.append(row_dic["ALT"])  # ALT
-                            new_entry.append(get_frequency)  # FREQ
-                            new_entry.append(0)  # COVERAGE
-                            new_entry.append(0)  # EVIDENCE
-                            new_entry.append(info_dic["FTYPE"])  # FTYPE
-                            new_entry.append(0)  # STRAND
-                            new_entry.append(ann_list[11])  # NT_POS
-                            new_entry.append(ann_list[13])  # AA_POS
-                            new_entry.append(ann_list[1])  # EFFECT
-                            new_entry.append(ann_list[9])  # NT CHANGE
-                            new_entry.append(ann_list[10])  # AA CHANGE
-                            new_entry.append(0)  # AA CHANGE ALT
-                            new_entry.append(0)  # LOCUS_TAG
-                            new_entry.append(ann_list[3])  # GENE
-                            new_entry.append(0)  # PRODUCT
-                            new_entry.append(0)  # VARIANTS IN INCOMPLETE LOCUS
-                            vcf_final.append(new_entry)
-                except Exception as err:
-                    # print("Error in file: " + file + "\n" + str(err))
-                    continue
+        identifier = re.findall(re_expression, file)[0]
+        clean_file = analyse_file(file)
+        filtered_file = filter_variants(
+            clean_file, signal, list_of_types, identifier
+        )
+        vcf_final.extend(filtered_file)
+    print(vcf_final)
     with open(output_file, mode="w") as f:
         f_writer = csv.writer(f, delimiter=",")
         f_writer.writerows(vcf_final)
@@ -188,7 +239,7 @@ if __name__ == "__main__":
     if type_of_file == "validated_variants":
         signal = "bigger"
         re_expression = "(?<=sample__)(.*?)(?=_snpeff.vcf)"
-        list_of_words = ["snp"]
+        list_of_words = ["snp", "mnp", "complex", "ins", "del"]
     elif type_of_file == "minor_iSNVs_inc_indels":
         signal = "smaller"
         re_expression = "(?<=/freebayes/)(.*?)(?=_snpeff.vcf)"

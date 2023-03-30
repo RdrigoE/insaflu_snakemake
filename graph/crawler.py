@@ -2,7 +2,7 @@ import csv
 import glob
 from pathlib import Path
 import sys
-from typing import NamedTuple, TypedDict
+from typing import NamedTuple
 
 
 class rule(NamedTuple):
@@ -27,7 +27,8 @@ def compare_with_rules(string, rules):
     for _, rule in rules.items():
         if sys.argv[1] + string[1:] in glob.glob(sys.argv[1] + rule.path[1:]):
             print(
-                sys.argv[1] + string[2:], glob.glob(sys.argv[1] + rule.path[1:])
+                sys.argv[1] +
+                string[2:], glob.glob(sys.argv[1] + rule.path[1:])
             )
             return rule
 

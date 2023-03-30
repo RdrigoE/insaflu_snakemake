@@ -2,3 +2,6 @@ sample_name,fastq1,fastq2,tech
 Portugal_PT43287_2022,Portugal-PT43287-2022_R1_001,Portugal-PT43287-2022_R2_001,illumina
 Portugal_PT43285_2022,Portugal-PT43285-2022_R1_001,Portugal-PT43285-2022_R2_001,illumina
 Portugal_PT43286_2022,Portugal-PT43286-2022_R1_001,Portugal-PT43286-2022_R2_001,illumina
+Demo_Sample_076,Demo_Sample_076,,ont
+Demo_Sample_085,Demo_Sample_085,,ont
+Demo_Sample_094,Demo_Sample_094,,ont
