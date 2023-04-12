@@ -36,6 +36,7 @@ def read_text_file(file_name):
     """
     read text file and put the result in an vector
     """
+    
     vect_out = []
     with open(file_name, "r", encoding="utf-8") as handle:
         for line in handle:
