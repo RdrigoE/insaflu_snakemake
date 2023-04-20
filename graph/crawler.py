@@ -25,11 +25,7 @@ def read_rules(rule_path):
 
 def compare_with_rules(string, rules):
     for _, rule in rules.items():
-        if sys.argv[1] + string[1:] in glob.glob(sys.argv[1] + rule.path[1:]):
-            print(
-                sys.argv[1] +
-                string[2:], glob.glob(sys.argv[1] + rule.path[1:])
-            )
+        if string in glob.glob(str(home.absolute()) + rule.path[1:]):
             return rule
 
 
@@ -40,12 +36,12 @@ def crawl_folder(folder_name):
     for item in Path(folder_name).iterdir():
         if item.is_file():
             full_path = str(item.absolute())
-            matched_rule = compare_with_rules(path, rules)
+            matched_rule = compare_with_rules(full_path, rules)
             if matched_rule is not None:
                 if not rule_dict.get(matched_rule.rule, False):
-                    rule_dict[matched_rule.rule] = [path]
+                    rule_dict[matched_rule.rule] = [full_path]
                 else:
-                    rule_dict[matched_rule.rule].append(path)
+                    rule_dict[matched_rule.rule].append(full_path)
         else:
             crawl_folder(item.absolute())
 
@@ -80,7 +76,7 @@ def get_time(path) -> benchmark:
     )
 
 
-os.system("cat hello")
+home = Path(sys.argv[1])
 rules = read_rules(sys.argv[2])
 crawl_folder(sys.argv[1])
 rule_seconds = {}
@@ -88,7 +84,7 @@ rule_seconds = {}
 for k, v in rule_dict.items():
     max_value = 0
     for path in v:
-        time = get_time(sys.argv[1] + path[1:]).max_rss
+        time = get_time(path).max_rss
         if time > max_value:
             max_value = time
     rule_seconds[k] = max_value
