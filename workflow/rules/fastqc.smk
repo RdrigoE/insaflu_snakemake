@@ -4,11 +4,11 @@ rule raw_fastqc_se:
         get_raw_input_fastq_se,
     output:
         html="samples/{sample}/raw_fastqc/{sample}_fastqc.html",
+        dir=directory("samples/{sample}/raw_fastqc"),
     conda:
         "../envs/fastqc.yaml"
     params:
-        fastqc = "--nogroup",
-        dir = "samples/{sample}/raw_fastqc"
+        "--nogroup",
     threads: 1
     resources:
         mem_mb=memory["raw_fastqc_se"],
@@ -17,7 +17,7 @@ rule raw_fastqc_se:
     benchmark:
         "benchmark/samples/{sample}/raw_fastqc_se.tsv"
     shell:
-        "fastqc {input} -o {params.dir} {params.fastqc} && python3 {scripts_directory}move_fastqc_output.py {wildcards.sample}"
+        "fastqc {input} -o {output.dir} {params} && python3 {scripts_directory}move_fastqc_output.py {wildcards.sample}"
 
 
 rule raw_fastqc_pe:
@@ -26,11 +26,11 @@ rule raw_fastqc_pe:
     output:
         html_1="samples/{sample}/raw_fastqc/{sample}_1_fastqc.html",
         html_2="samples/{sample}/raw_fastqc/{sample}_2_fastqc.html",
+        dir=directory("samples/{sample}/raw_fastqc"),
     conda:
         "../envs/fastqc.yaml"
     params:
-        fastqc = "--nogroup",
-        dir = "samples/{sample}/raw_fastqc"
+        "--nogroup",
     threads: 1
     resources:
         mem_mb=memory["raw_fastqc_pe"],
@@ -39,7 +39,7 @@ rule raw_fastqc_pe:
     benchmark:
         "benchmark/samples/{sample}/raw_fastqc_pe.tsv"
     shell:
-        "fastqc {input} -o {params.dir} {params.fastqc} && python3 {scripts_directory}move_fastqc_output.py {wildcards.sample}"
+        "fastqc {input} -o {output.dir} {params} && python3 {scripts_directory}move_fastqc_output.py {wildcards.sample}"
 
 
 rule trimmed_fastqc_pe:
@@ -49,11 +49,11 @@ rule trimmed_fastqc_pe:
     output:
         html_1="samples/{sample}/trimmed_fastqc/{sample}_1.trimmed_fastqc.html",
         html_2="samples/{sample}/trimmed_fastqc/{sample}_2.trimmed_fastqc.html",
+        dir=directory("samples/{sample}/trimmed_fastqc"),
     conda:
         "../envs/fastqc.yaml"
     params:
-        fastqc = "--nogroup",
-        dir = "samples/{sample}/trimmed_fastqc"
+        "--nogroup",
     resources:
         mem_mb=memory["trimmed_fastqc_pe"],
     log:
@@ -62,7 +62,7 @@ rule trimmed_fastqc_pe:
         "benchmark/samples/{sample}/trimmed_fastqc_pe.tsv"
     threads: 2
     shell:
-        "fastqc {input.read_1} {input.read_2} -o {params.dir} {params.fastqc} -t {threads}"
+        "fastqc {input.read_1} {input.read_2} -o {output.dir} {params} -t {threads}"
 
 
 rule trimmed_fastqc_se:
@@ -70,11 +70,11 @@ rule trimmed_fastqc_se:
         read="samples/{sample}/trimmed_reads/{sample}.trimmed.fastq.gz",
     output:
         html="samples/{sample}/trimmed_fastqc/{sample}.trimmed_fastqc.html",
+        dir=directory("samples/{sample}/trimmed_fastqc/"),
     conda:
         "../envs/fastqc.yaml"
     params:
-        fastqc = "--nogroup",
-        dir = "samples/{sample}/trimmed_fastqc"
+        "--nogroup",
     threads: 2
     resources:
         mem_mb=memory["trimmed_fastqc_se"],
@@ -83,4 +83,4 @@ rule trimmed_fastqc_se:
     benchmark:
         "benchmark/samples/{sample}/trimmed_fastqc_se.tsv"
     shell:
-        "fastqc {input.read} -o {params.dir} {params.fastqc} -t {threads}"
+        "fastqc {input.read} -o {output.dir} {params} -t {threads}"
