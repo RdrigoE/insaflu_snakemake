@@ -1,5 +1,7 @@
 import csv
 import re
+
+# from typing_extensions import TypedDict
 import sys
 
 DESCRIPTORS = [
@@ -36,8 +38,6 @@ DESCRIPTORS = [
 #     ann: dict[str, str]
 #     names: list[str]
 #     values: list[str]
-#
-#
 
 
 def remove_smallcase(string):
@@ -64,8 +64,8 @@ def convert_list_to_dict(data: list[str]) -> tuple[dict[str, str], dict[str, str
             if k.upper() == "ANN":
                 ann_dict = {}
                 new_v = v.split("|")
-                for idx, v in enumerate(new_v):
-                    ann_dict[snp_annotation[idx]] = v
+                for idx in range(16):
+                    ann_dict[snp_annotation[idx]] = new_v[idx]
             else:
                 new_dict[k] = v
     return new_dict, ann_dict
@@ -93,7 +93,14 @@ def convert_list_to_dict(data: list[str]) -> tuple[dict[str, str], dict[str, str
 #     "PRODUCT"
 #     "VARIANTS IN INCOMPLETE LOCUS"
 #
-#
+def get_multiple_freq(AO, DP):
+    freqs = []
+    dp_value = float(DP)
+    for v in AO.split(','):
+        freqs.append(float(v)/dp_value)
+    return round(min(freqs), 2)
+
+
 def analyse_file(input_file):
     with open(input_file) as handler:
         lines = [line for line in handler.readlines() if not line[0] == '#']
@@ -101,21 +108,25 @@ def analyse_file(input_file):
     for line in lines:
         l = line.split()
         info, ann = convert_list_to_dict(l[7].split(";"))
-        entry = dict(
-            chrom=l[0],
-            pos=int(l[1]),
-            ref=l[3],
-            alt=l[4],
-            qual=float(l[5]),
-            info=info,
-            ann=ann,
-            names=l[8].split(":"),
-            values=l[9].split(":")
-        )
-        print(entry["info"], input_file, entry["pos"])
+        entry = {
+            "chrom": l[0],
+            "pos": int(l[1]),
+            "ref": l[3],
+            "alt": l[4],
+            "qual": float(l[5]),
+            "info": info,
+            "ann": ann,
+            "names": l[8].split(":"),
+            "values": l[9].split(":")
+        }
 
-        get_freq = round(float(entry["info"]["AO"].replace(
-            ",", "."))/float(entry["info"]["DP"].replace(",", ".")) * 100, 1)
+        get_freq = entry["info"].get("FREQ", False)
+        if not get_freq:
+            get_freq = get_multiple_freq(
+                entry["info"]["AO"], entry["info"]["DP"]
+            )
+        else:
+            get_freq = round(float(get_freq)/100, 2)
         default = [entry["chrom"],
                    entry["pos"],
                    entry["info"]["TYPE"],
@@ -165,7 +176,7 @@ def comparison(value1, value2, signal):
 def filter_variants(data: list[list[str]], signal: str, list_of_types: list[str], identifier: str) -> list[list[str]]:
     filtered_data = []
     for entry in data:
-        entry_d = dict() # DataEntry()
+        entry_d = {}
         for idx, value in enumerate(entry):
             entry_d[DESCRIPTORS[idx]] = value
         if not comparison(entry_d["FREQ"], 0.51, signal):
@@ -225,7 +236,6 @@ def validated_variants(
             clean_file, signal, list_of_types, identifier
         )
         vcf_final.extend(filtered_file)
-    print(vcf_final)
     with open(output_file, mode="w") as f:
         f_writer = csv.writer(f, delimiter=",")
         f_writer.writerows(vcf_final)
