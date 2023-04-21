@@ -36,6 +36,7 @@ def read_text_file(file_name):
     """
     read text file and put the result in an vector
     """
+    
     vect_out = []
     with open(file_name, "r", encoding="utf-8") as handle:
         for line in handle:
@@ -60,7 +61,7 @@ def get_coverage_by_pos(
         temp_file,
     )
     os.system(cmd)
-    ### get number
+    # get number
     vect_lines = read_text_file(temp_file)
     if (
         len(vect_lines) == 1
@@ -93,7 +94,7 @@ def add_freq_ao_ad_and_type_to_vcf(
     RO = "RO"
     AF = "AF"
     TYPE = "TYPE"
-    DP_COMPOSED = "DP_COMPOSED"  ### this is used to get
+    DP_COMPOSED = "DP_COMPOSED"  # this is used to get
 
     # read the input file
     vcf_hanlder = pysam.VariantFile(vcf_file, "r")
@@ -150,7 +151,7 @@ def add_freq_ao_ad_and_type_to_vcf(
             description="Coverage at position (DPSP-AR)/(samtools -aa). First is collected by Medaka, Second is collected by samtools.",
         )
 
-    ## write the header
+    # write the header
     for variant_header_records in vcf_hanlder.header.records:
         vcf_hanlder_write.header.add_record(variant_header_records)
         if not vcf_file_out_removed_by_filter is None:
@@ -166,9 +167,9 @@ def add_freq_ao_ad_and_type_to_vcf(
             )
 
     for variant in vcf_hanlder:
-        ### DP must be replaced by DPSP. DPSP is the sum of all reads Span and Ambiguous
-        if variant_has_SR_DPSP_AR(variant.info):  ## SR=0,0,15,6
-            ### don't process this VCF because has a low coverage
+        # DP must be replaced by DPSP. DPSP is the sum of all reads Span and Ambiguous
+        if variant_has_SR_DPSP_AR(variant.info):  # SR=0,0,15,6
+            # don't process this VCF because has a low coverage
             total_deep = int(variant.info["DPSP"]) - sum(
                 [int(x) for x in variant.info["AR"]]
             )
@@ -183,15 +184,15 @@ def add_freq_ao_ad_and_type_to_vcf(
                 continue
             if ((len(variant.info["SR"]) // 2) - 1) != len(variant.alts):
                 # vcf_hanlder_write.write(variant)
-                continue  ### different numbers of Alleles and References
+                continue  # different numbers of Alleles and References
 
-            #### extra info
-            vect_out_ao = []  ### AO
-            out_ro = -1  ### RO
-            vect_out_af = []  ### AF
-            vect_out_freq = []  ### FREQ
-            vect_out_freq_filtered = []  ### FREQ
-            vect_out_type = []  ### TYPE
+            # extra info
+            vect_out_ao = []  # AO
+            out_ro = -1  # RO
+            vect_out_af = []  # AF
+            vect_out_freq = []  # FREQ
+            vect_out_freq_filtered = []  # FREQ
+            vect_out_type = []  # TYPE
 
             for value_ in range(0, len(variant.info["SR"]), 2):
                 if value_ > 0:
@@ -201,7 +202,7 @@ def add_freq_ao_ad_and_type_to_vcf(
 
                     if total_deep > 0:
                         ### incongruences in Medaka,
-                        ### these values are collected in different stages of the Medaka workflow, (email from support@nanoporetech.com at 23 Dec 2020)
+                        # these values are collected in different stages of the Medaka workflow, (email from support@nanoporetech.com at 23 Dec 2020)
                         if total_deep <= allele_count:
                             vect_out_freq.append(100)
                         else:
@@ -232,7 +233,7 @@ def add_freq_ao_ad_and_type_to_vcf(
                         variant.info["SR"][value_ + 1]
                     )
 
-            ### has some variant to save
+            # has some variant to save
             if len(vect_out_freq) > 0:
                 if out_ro > -1:
                     variant.info[RO] = tuple([out_ro])
@@ -244,10 +245,10 @@ def add_freq_ao_ad_and_type_to_vcf(
                 )
                 variant.info[FREQ] = tuple(vect_out_freq)
 
-                ### Only save the ones with FREQ
+                # Only save the ones with FREQ
                 vcf_hanlder_write.write(variant)
 
-            ### save the filtered
+            # save the filtered
             if len(vect_out_freq_filtered) > 0:
                 if out_ro > -1:
                     variant.info[RO] = tuple([out_ro])
@@ -259,7 +260,7 @@ def add_freq_ao_ad_and_type_to_vcf(
                 )
                 variant.info[FREQ] = tuple(vect_out_freq_filtered)
 
-                ### Only save the ones with FREQ
+                # Only save the ones with FREQ
                 vcf_hanlder_write_removed_by_filter.write(variant)
 
     vcf_hanlder_write.close()
@@ -332,7 +333,7 @@ def main():
     for variant in vcf_hanlder:
         if element_name_old != variant.chrom:
             element_name_old = variant.chrom
-        ### MEDAKA output must have "TYPE" in info
+        # MEDAKA output must have "TYPE" in info
         if variant.info["TYPE"][0] == "snp":
             vect_sites.append(str(variant.pos))
         elif variant.info["TYPE"][0] == "ins":
@@ -384,7 +385,7 @@ def main():
         )
         masking_sites = sorted(masking_sites)
         # print(masking_sites)
-        ### Taken from insaflu
+        # Taken from insaflu
         ref_pos = 0
         ref_insertions = 0
         gap = 0
@@ -405,7 +406,7 @@ def main():
             ref_pos += 1
             if (ref_pos + ref_insertions) >= len(record.seq):
                 break
-        ### End of insaflu code
+        # End of insaflu code
         record.seq = sequence
         final_mask_consensus.append(record)
 

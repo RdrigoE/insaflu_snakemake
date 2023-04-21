@@ -11,7 +11,7 @@ rule iVar_align_pe:
     log:
         "logs/align_samples/{sample}/iVar/mapping.log",
     benchmark:
-        "benchmark/align_samples/{sample}/iVar/mapping.tsv"
+        "benchmark/align_samples/{sample}/iVar/mapping_pe.tsv"
     params:
         minqual=software_parameters["mapqual"],
     shell:
@@ -35,7 +35,7 @@ rule iVar_align_se:
     log:
         "logs/align_samples/{sample}/iVar/mapping.log",
     benchmark:
-        "benchmark/align_samples/{sample}/iVar/mapping.tsv"
+        "benchmark/align_samples/{sample}/iVar/mapping_se.tsv"
     params:
         minqual=software_parameters["mapqual"],
     shell:
