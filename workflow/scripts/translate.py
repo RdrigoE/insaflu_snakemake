@@ -1,23 +1,12 @@
 import sys
 import csv
-from typing import Counter
 from Bio import SeqIO
 import extract_gb_info as ggb
 from yaml_io import read_yaml
+import textwrap
 
 
-def write_fasta(dictionary, filename):
-    """
-    The write_fasta function takes a dictionary and a filename as input.
-    It then writes the sequences in the dictionary to that file in FASTA format.
-
-    :param dictionary: Store the key value pairs of the sequence names and sequences
-    :param filename: Specify the name of the file that will be created
-    :return: The name of the file created
-    :doc-author: Trelent
-    """
-    import textwrap
-
+def write_fasta(dictionary: dict[str, str], filename: str):
     with open(filename, "w") as fasta:
         for key, value in dictionary.items():
             fasta.write(f">{key}\n")
@@ -25,169 +14,116 @@ def write_fasta(dictionary, filename):
             fasta.write("\n")
 
 
-def get_ref_adjusted_positions(alignment, positions, locus, gene):
-    """
-    The get_ref_adjusted_positions function takes a fasta file of aligned sequences and the positions
-    of interest for each gene, and returns the adjusted positions in reference to the first sequence.
+def get_reference(file_name: str) -> SeqIO.SeqRecord:
+    with open(file_name, "r") as handle:
+        record = next(SeqIO.parse(handle, "fasta"))
+        return record
 
 
-    :param alignment: Get the reference sequence
-    :param positions: Get the positions of each gene group in the alignment
-    :param locus: Identify the gene that is being used to get the positions
-    :param gene: Determine which gene is being analyzed
-    :return: The positions of the genes in the reference sequence
-    :doc-author: Trelent
-    """
-    references = []
+def get_ref_adjusted_positions(alignment: str,
+                               positions: list[tuple[str, list[list[int]]]],
+                               gene) -> list[tuple[str, list[list[int]]]]:
     new_positions = []
-    ref = list(SeqIO.parse(alignment, "fasta"))[0]
+    ref = get_reference(alignment)
 
     index_list = []
-    for idx in range(len(ref)):
-        if ref[idx] != "-":
+    for idx, nucleotide in enumerate(ref):
+        if nucleotide != "-":
             index_list.append(idx)
+
     for gene_group in positions:
         if gene_group[0] == gene:
             for group in gene_group[1]:
                 group[0] = index_list[group[0]]
-                if group[1] >= len(
-                    index_list
-                ):  # if this is == it will throw an error cuz index list é mais pequena que o numero no group[1 ]
+                if group[1] >= len(index_list):
                     group[1] = index_list[-1]
                 else:
-                    # print(len(index_list),group[1])
                     group[1] = index_list[group[1]]
             new_positions.append(gene_group)
     return new_positions
 
 
-def get_coverage_to_translate_matrix(filename):
-    """
-    The get_coverage_to_translate_matrix function takes a csv file as an argument and returns a dictionary.
-    The csv file is expected to have two columns, the first being the name of the gene and each subsequent column
-    being one sample's coverage for that gene. The function then creates a dictionary where each key is one of
-    the samples' names and its value is another dictionary with keys being genes (from the first column) and values
-    being that sample's coverage for that gene.
-
-    :param filename: Specify the name of the file to be read
-    :return: A dictionary with the coverage as keys and a list of the number of times each amino acid was translated for that coverage
-    :doc-author: Trelent
-    """
-    with open(filename, newline="") as csvfile:
-        csv_reader = csv.reader(csvfile, delimiter=",")
-        coverage_dic = {}
+def get_coverage_to_translate_matrix(filename: str) -> dict[str, list[str]]:
+    with open(filename) as csvfile:
+        csv_reader = csv.reader(csvfile)
+        coverage_dic: dict[str, list[str]] = {}
         for row in csv_reader:
             coverage_dic[row[0]] = row[1:]
     return coverage_dic
 
 
-def get_position_in_list(reference, locus):
-    list_of_locus = ggb.get_locus(reference)
+def get_position_in_list(reference: str, locus: str) -> int:
+    list_of_locus: list[str] = ggb.get_locus(reference)
     return list_of_locus.index(locus)
 
 
-def write_fast_aa(reference, alignment, output, locus, gene, coverage):
-    """
-    The write_fast_aa function takes a reference sequence, an alignment file, and an output file as arguments.
-    It then parses the alignment to find all of the positions that are not gaps in the reference sequence.
-    For each position it finds that is not a gap it translates those bases into amino acids and writes them to
-    the output fasta file.
+def write_fast_aa(reference: str, alignment: str, output: str,
+                  reference_id: str, gene: str, coverage: str):
+    position = get_position_in_list(reference, reference_id)
 
-    :param reference: Get the reference sequence
-    :param alignment: Specify the alignment file
-    :param output: Specify the output file name
-    :param locus: Specify the reference sequence number
-    :param gene: Specify which gene to write the consensus sequence for
-    :param coverage: Filter out sequences that have a coverage below 90% for the locus of interest
-    :return: A dictionary with the amino acid sequences of each gene in a reference genome
-    :doc-author: Trelent
-    """
-    position = get_position_in_list(reference, locus)
     coverage_dic = get_coverage_to_translate_matrix(coverage)
-    reference_id = str(locus)
 
-    dic_directory = read_yaml("../config/constants.yaml")
+    constants: dict[str, str] = read_yaml("../config/constants.yaml")
 
-    software_parameters = read_yaml(dic_directory["software_parameters"])
+    coverage_value: int = read_yaml(
+        constants["software_parameters"])["min_coverage_consensus"]
 
-    coverage_value = software_parameters["min_coverage_consensus"]
-    positions = ggb.get_positions_gb(reference)
-    positions = get_ref_adjusted_positions(alignment, positions, locus, gene)
-    new_consensus = {}
-    for gene in positions:
-        new_consensus[gene[0]] = {}
-        for pos in gene[1]:
-            # print(f"This is {gene[0]} with the pos {pos[0], pos[1]}") #This is orf1ab with the pos (265, 13468)
+    positions: list[tuple[str, list[list[int]]]
+                    ] = ggb.get_positions_gb(reference)
+
+    positions = get_ref_adjusted_positions(alignment, positions, gene)
+
+    new_consensus: dict[str, dict[str, str]] = {}
+
+    for gene_structure in positions:
+        gene_name = gene_structure[0]
+        gene_positions = gene_structure[1]
+        new_consensus[gene_name] = {}
+        for pos in gene_positions:
             for record in SeqIO.parse(alignment, "fasta"):
+                if record.id == reference_id:
+                    if new_consensus[gene_name].get(record.id, False):
+                        new_consensus[gene_name][record.id] += (
+                            record.seq[pos[0]: pos[1]]
+                            .replace("-", "")
+                            .translate(table=11, to_stop=False)
+                        )
+                    else:
+                        new_consensus[gene_name][record.id] = (
+                            record.seq[pos[0]: pos[1]]
+                            .replace("-", "")
+                            .translate(table=11, to_stop=False)
+                        )
+                    continue
                 identifier = record.id
-                if (
-                    identifier != reference_id
-                    and float(
-                        coverage_dic[
-                            identifier[: identifier.index(f"__{reference_id}")]
-                        ][position]
-                    )
-                    >= coverage_value
-                ):
-                    try:
-                        new_consensus[gene[0]][record.id] += (
-                            record.seq[pos[0] : pos[1]]
+                record_coverage = float(
+                    coverage_dic[
+                        identifier[: identifier.index(f"__{reference_id}")]
+                    ][position])
+                if record_coverage >= coverage_value:
+                    if new_consensus[gene_name].get(identifier, False):
+                        new_consensus[gene_name][record.id] += (
+                            record.seq[pos[0]: pos[1]]
                             .replace("-", "")
                             .translate(table=11, to_stop=False)
                         )
-                    except:
-                        new_consensus[gene[0]][record.id] = (
-                            record.seq[pos[0] : pos[1]]
+                    else:
+                        new_consensus[gene_name][identifier] = (
+                            record.seq[pos[0]: pos[1]]
                             .replace("-", "")
                             .translate(table=11, to_stop=False)
                         )
-                elif record.id == reference_id:
-                    # can be refactored with dict.get() method
-                    try:
-                        new_consensus[gene[0]][record.id] += (
-                            record.seq[pos[0] : pos[1]]
-                            .replace("-", "")
-                            .translate(table=11, to_stop=False)
-                        )
-                    except:
-                        new_consensus[gene[0]][record.id] = (
-                            record.seq[pos[0] : pos[1]]
-                            .replace("-", "")
-                            .translate(table=11, to_stop=False)
-                        )
+
     for gene in new_consensus:
         write_fasta(new_consensus[gene], output)
-
-
-def check_for_undefined(filename):
-    checked_sequences = []
-
-    with open(filename, "r", encoding="utf-8") as handler:
-        fasta_files = SeqIO.parse(handler, "fasta")
-        for fasta in fasta_files:
-            counter_dic = Counter(fasta.seq)
-            total_undefined = (
-                counter_dic.get("*", 0)
-                + counter_dic.get("X", 0)
-                + counter_dic.get("-", 0)
-            )
-            total_char = len(fasta.seq)
-            if (total_char - total_undefined) / total_char * 100 >= 90:
-                checked_sequences.append(fasta)
-    with open(filename, "w", encoding="utf-8") as handler:
-        SeqIO.write(checked_sequences, handler, "fasta")
-    if len(checked_sequences) < 2:
-        with open(filename[:-11] + "mafft.fasta", "w", encoding="utf-8") as handler_2:
-            SeqIO.write(checked_sequences, handler_2, "fasta")
 
 
 if __name__ == "__main__":
     reference = sys.argv[1]
     alignment = sys.argv[2]
     output = sys.argv[3]
-    locus = sys.argv[4]
+    reference_id = sys.argv[4]
     gene = sys.argv[5]
     coverage = sys.argv[6]
 
-    write_fast_aa(reference, alignment, output, locus, gene, coverage)
-    # check_for_undefined(output)
+    write_fast_aa(reference, alignment, output, reference_id, gene, coverage)
