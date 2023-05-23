@@ -7,11 +7,11 @@ mergeCoverage: 500
 makeproject: 500
 assemble_consensus: 500
 create_segments: 500
-trimme_reads_PE: 1136
-trimme_reads_SE: 1136
-fasttree: 1924
+trimme_reads_PE: 1500
+trimme_reads_SE: 1500
+fasttree: 4000
 fasttree_proteins: 500
-fasttree_nt: 3676
+fasttree_nt: 4000
 cp_Alignment_nt_tree: 500
 translate: 500
 medaka_consensus: 4620
@@ -29,7 +29,7 @@ raw_nanostat: 500
 trimmed_nanostat: 500
 point abricate_pangolin: 500
 not_pangolin: 500
-pangolin: 834
+pangolin: 1000
 seqret_all_nt: 200
 seqret_all_nt_only_90: 200
 seqret_all_consensus: 200
