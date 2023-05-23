@@ -74,7 +74,6 @@ def get_locus_and_genes(genbank_file):
                         locus_gene[record.name].append(
                             feat.qualifiers["product"][0].replace(" ", "_")
                         )
-
     return locus_gene
 
 
@@ -163,10 +162,12 @@ def get_positions_gb(genbank_file):
 
 def get_genes(genbank_file):
     """
-    The get_genes function takes a genbank file as input and returns a list of all the genes in that file.
+    The get_genes function takes a genbank file as input and returns a list of
+    all the genes in that file.
     The function is used to create a list of all the genes in each genome.
 
-    :param genbank_file: Specify the name of the file that contains all of the genes in a genome
+    :param genbank_file: Specify the name of the file that contains all of 
+    the genes in a genome
     :return: A list of all the genes in the genbank file
     :doc-author: Trelent
     """
@@ -199,12 +200,14 @@ def get_genes(genbank_file):
 
 def get_identification_version(segments, reference_gb):
     """
-    The get_identification_version function takes a list of SeqRecord objects and the path to a reference GenBank file.
+    The get_identification_version function takes a list of SeqRecord objects 
+    and the path to a reference GenBank file.
     It returns the identification and version numbers for that GenBank file.
 
     :param segments:list: Determine if the reference is a single segment or not
     :param reference_gb:str: Specify the reference genome in genbank format
-    :return: A tuple with the identification and version of the reference genome
+    :return: A tuple with the identification and version of the reference 
+    genome
     :doc-author: Trelent
     """
     if len(segments) == 1:
@@ -222,12 +225,14 @@ def get_identification_version(segments, reference_gb):
 
 def get_identification_version_string(segments, reference_gb):
     """
-    The get_identification_version function takes a list of SeqRecord objects and the path to a reference GenBank file.
+    The get_identification_version function takes a list of SeqRecord objects
+    and the path to a reference GenBank file.
     It returns the identification and version numbers for that GenBank file.
 
     :param segments:list: Determine if the reference is a single segment or not
     :param reference_gb:str: Specify the reference genome in genbank format
-    :return: A tuple with the identification and version of the reference genome
+    :return: A tuple with the identification and version of the reference
+    genome
     :doc-author: Trelent
     """
     if len(segments) == 1:

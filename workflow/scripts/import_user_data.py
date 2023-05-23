@@ -15,7 +15,8 @@ class Data:
 
     def get_sample_names(self) -> list[str]:
         """
-        The get_sample_names function returns a list of sample names from the user_df dataframe.
+        The get_sample_names function returns a list of sample names from the
+        user_df dataframe.
 
 
         :param self: Access the attributes and methods of the class in python
@@ -101,12 +102,13 @@ class Data:
 
     def get_options(self) -> list[Optional[dict[str, dict[str, Optional[str]]]]]:
         """
-        The get_options function returns a list of dictionaries. The first dictionary is the
-        paired illumina samples, the second is the single illumina samples, and the
-        third is ont_samples. The fourth dictionary contains all of the information for each
-        sample in a project and will be used to create yaml files for Snakemake. Lastly, it
-
-        :param self: Access the attributes and methods of the class in python
+        The get_options function returns a list of dictionaries.
+        The first dictionary is the paired illumina samples, the second is th
+        single illumina samples, and the third is ont_samples. The fourth
+        dictionary contains all of the information for each sample in a
+        project and will be used to create yaml files for Snakemake.
+        Lastly, it :param self: Access the attributes and methods of
+        the class in python
         :return: A list of dictionaries
         :doc-author: Trelent
         """
@@ -162,11 +164,12 @@ def get_data_in_align_form(
     paired_illumina: dict[str, Optional[str]],
 ) -> list[dict[str, Optional[str]]]:
     """
-    The get_data_in_align_form function takes in the assembler, single_illumina and paired_illumina
-    dictionaries. It then checks to see if the assembler is snippy or iVar. If it is snippy,
-    it returns the paired illumina dictionary as well as both single illumina dictionaries.
-    If it is iVar, then it returns both paired illumina dictionaries and both single illumina
-    dictionaries.
+    The get_data_in_align_form function takes in the assembler, single_illumina
+    and paired_illumina dictionaries. It then checks to see if the assembler is
+    snippy or iVar. If it is snippy, it returns the paired illumina dictionary 
+    as well as both single illumina dictionaries.
+    If it is iVar, then it returns both paired illumina dictionaries and both 
+    single illumina dictionaries.
 
     :param assembler:str: Determine which assembler to use
     :param single_illumina:dict[str: Store the name of the file that contains the single-end

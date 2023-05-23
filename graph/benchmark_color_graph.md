@@ -1,4 +1,5 @@
 # How to do dag by color?
+python ./graph/get_rule_info.py graph/ workflow/rules rules.csv results/benchmark/ time.csv rule_graph rule_graph.png
 
 # Getting the information from benchmarks
 

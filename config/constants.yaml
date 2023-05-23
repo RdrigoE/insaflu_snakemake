@@ -1,7 +1,7 @@
 working: ../results/
 user_metadata: ../user_metadata/
-sample_yaml: ../user/sars_cov_2.yaml #sample
-sample_csv: ../user/sars_cov_2.csv #csv
+sample_yaml: ../user/influenza.yaml #sample
+sample_csv: ../user/influenza.csv #csv
 config_file: ../config/config.yaml
 software_parameters: ../user/parameters.yaml
 get_coverage: ../workflow/software/getCoverage/getCoverage.py

@@ -36,7 +36,7 @@ def read_text_file(file_name):
     """
     read text file and put the result in an vector
     """
-    
+
     vect_out = []
     with open(file_name, "r", encoding="utf-8") as handle:
         for line in handle:
@@ -107,43 +107,43 @@ def add_freq_ao_ad_and_type_to_vcf(
         return
 
     vcf_hanlder_write = pysam.VariantFile(vcf_file_out, "w")
-    if not vcf_file_out_removed_by_filter is None:
+    if vcf_file_out_removed_by_filter is not None:
         vcf_hanlder_write_removed_by_filter = pysam.VariantFile(
             vcf_file_out_removed_by_filter, "w"
         )
-    if not FREQ in vcf_hanlder.header.info:
+    if FREQ not in vcf_hanlder.header.info:
         vcf_hanlder.header.info.add(
             FREQ, number="A", type="Float", description="Ratio of AO/(DPSP-AR)"
         )
-    if not AO in vcf_hanlder.header.info:
+    if AO not in vcf_hanlder.header.info:
         vcf_hanlder.header.info.add(
             AO,
             number="A",
             type="Integer",
             description="Alternate allele observation count, SR (alt1 fwd + alt1 rev, etc.)",
         )
-    if not RO in vcf_hanlder.header.info:
+    if RO not in vcf_hanlder.header.info:
         vcf_hanlder.header.info.add(
             RO,
             number="1",
             type="Integer",
             description="Reference allele observation count, SR (ref fwd + ref rev)",
         )
-    if not AF in vcf_hanlder.header.info:
+    if AF not in vcf_hanlder.header.info:
         vcf_hanlder.header.info.add(
             AF,
             number="R",
             type="Integer",
             description="Number of observation for each allele, SR (ref fwd + ref rev, alt1 fwd + alt1 rev, etc.)",
         )
-    if not TYPE in vcf_hanlder.header.info:
+    if TYPE not in vcf_hanlder.header.info:
         vcf_hanlder.header.info.add(
             TYPE,
             number="A",
             type="String",
             description="The type of allele, either snp, mnp, ins, del, or complex",
         )
-    if not DP_COMPOSED in vcf_hanlder.header.info:
+    if DP_COMPOSED not in vcf_hanlder.header.info:
         vcf_hanlder.header.info.add(
             DP_COMPOSED,
             number="1",
@@ -154,20 +154,21 @@ def add_freq_ao_ad_and_type_to_vcf(
     # write the header
     for variant_header_records in vcf_hanlder.header.records:
         vcf_hanlder_write.header.add_record(variant_header_records)
-        if not vcf_file_out_removed_by_filter is None:
+        if vcf_file_out_removed_by_filter is not None:
             vcf_hanlder_write_removed_by_filter.header.add_record(
                 variant_header_records
             )
 
     for variant_sample in vcf_hanlder.header.samples:
         vcf_hanlder_write.header.add_sample(variant_sample)
-        if not vcf_file_out_removed_by_filter is None:
+        if vcf_file_out_removed_by_filter is not None:
             vcf_hanlder_write_removed_by_filter.header.add_sample(
                 variant_sample
             )
 
     for variant in vcf_hanlder:
-        # DP must be replaced by DPSP. DPSP is the sum of all reads Span and Ambiguous
+        # DP must be replaced by DPSP. DPSP is the
+        # sum of all reads Span and Ambiguous
         if variant_has_SR_DPSP_AR(variant.info):  # SR=0,0,15,6
             # don't process this VCF because has a low coverage
             total_deep = int(variant.info["DPSP"]) - sum(
@@ -201,7 +202,7 @@ def add_freq_ao_ad_and_type_to_vcf(
                     )
 
                     if total_deep > 0:
-                        ### incongruences in Medaka,
+                        # incongruences in Medaka,
                         # these values are collected in different stages of the Medaka workflow, (email from support@nanoporetech.com at 23 Dec 2020)
                         if total_deep <= allele_count:
                             vect_out_freq.append(100)
@@ -211,7 +212,7 @@ def add_freq_ao_ad_and_type_to_vcf(
                                 vect_out_freq.append(
                                     float("{:.1f}".format(freq_value * 100))
                                 )
-                            elif not vcf_file_out_removed_by_filter is None:
+                            elif vcf_file_out_removed_by_filter is not None:
                                 vect_out_freq_filtered.append(
                                     float("{:.1f}".format(freq_value * 100))
                                 )
@@ -265,7 +266,7 @@ def add_freq_ao_ad_and_type_to_vcf(
 
     vcf_hanlder_write.close()
     vcf_hanlder.close()
-    if not vcf_file_out_removed_by_filter is None:
+    if vcf_file_out_removed_by_filter is not None:
         vcf_hanlder_write_removed_by_filter.close()
     return vcf_file_out
 

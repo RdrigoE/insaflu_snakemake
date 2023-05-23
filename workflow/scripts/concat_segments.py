@@ -24,7 +24,8 @@ def get_fasta_reference_concat(fasta_ref):
             concat_reference.append(record)
             start = fasta_ref.index("reference")
             end = fasta_ref.index(".fasta")
-            concat_reference[0].id = fasta_ref[start + 11 : end]
+            # why + 11 => 16/05
+            concat_reference[0].id = fasta_ref[start + 11: end]
         else:
             concat_reference[0].seq += record.seq
         count += 1
@@ -160,6 +161,7 @@ def create_consensus_file_for_alignment(
                 new_concat_file_strict.append(new_sequence)
         SeqIO.write(new_concat_file_strict, output_only_90_plus, "fasta")
         SeqIO.write(new_concat_file_strict, output, "fasta")
+
 
 if __name__ == "__main__":
     CONSENSUS_LIST = sys.argv[1].split(" ")
