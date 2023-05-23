@@ -1,7 +1,0 @@
-only_samples: False
-project_name: insaflu_sars
-fasta_reference: SARS_CoV_2_COVID_19_Wuhan_Hu_1_MN908947.fasta
-gb_reference: SARS_CoV_2_COVID_19_Wuhan_Hu_1_MN908947.gbk
-abricate: False
-illumina_consensus: snippy
-primers: sars_cov_2_primers.bed
