@@ -41,11 +41,7 @@ DESCRIPTORS = [
 
 
 def remove_smallcase(string):
-    word = ""
-    for letter in string:
-        if not letter.islower():
-            word += letter
-    return word
+    return "".join(letter for letter in string if not letter.islower())
 
 
 def smaller(string: str) -> str:
@@ -62,10 +58,8 @@ def convert_list_to_dict(data: list[str]) -> tuple[dict[str, str], dict[str, str
         if item:
             k, v = item.split("=")
             if k.upper() == "ANN":
-                ann_dict = {}
                 new_v = v.split("|")
-                for idx in range(16):
-                    ann_dict[snp_annotation[idx]] = new_v[idx]
+                ann_dict = {snp_annotation[idx]: new_v[idx] for idx in range(16)}
             else:
                 new_dict[k] = v
     return new_dict, ann_dict
@@ -94,16 +88,29 @@ def convert_list_to_dict(data: list[str]) -> tuple[dict[str, str], dict[str, str
 #     "VARIANTS IN INCOMPLETE LOCUS"
 #
 def get_multiple_freq(AO, DP):
-    freqs = []
     dp_value = float(DP)
-    for v in AO.split(','):
-        freqs.append(float(v)/dp_value)
+    freqs = [float(v)/dp_value for v in AO.split(',')]
     return round(min(freqs), 2)
+
+
+def get_type(a, b):
+    if a == b:
+        return "snp"
+    elif a > b:
+        return "del"
+    elif a < b:
+        return "ins"
+    else:
+        return "complex"
+
+
+def get_info_on(dictionary, key, before=""):
+    return before+dictionary.get(key) if dictionary.get(key, False) else ""
 
 
 def analyse_file(input_file):
     with open(input_file) as handler:
-        lines = [line for line in handler.readlines() if not line[0] == '#']
+        lines = [line for line in handler.readlines() if line[0] != '#']
     vcf_data = []
     for line in lines:
         l = line.split()
@@ -122,20 +129,26 @@ def analyse_file(input_file):
 
         get_freq = entry["info"].get("FREQ", False)
         if not get_freq:
-            get_freq = get_multiple_freq(
-                entry["info"]["AO"], entry["info"]["DP"]
-            )
+            try:
+                get_freq = get_multiple_freq(
+                    entry["info"]["AO"], entry["info"]["DP"]
+                )
+            except KeyError:
+                get_freq = round(float(entry["values"][-1]), 2)
         else:
             get_freq = round(float(get_freq)/100, 2)
         default = [entry["chrom"],
                    entry["pos"],
-                   entry["info"]["TYPE"],
+                   entry["info"].get("TYPE",
+                                     get_type(
+                                         len(entry["ref"]),
+                                         len(entry["alt"]))),
                    entry["ref"],
                    entry["alt"],
                    get_freq,
-                   entry["info"]["DP"],
-                   entry["alt"] + ":" + entry["info"]["AO"],
-                   entry["ref"] + ":" + entry["info"]["RO"],
+                   get_info_on(entry["info"], "DP"),
+                   get_info_on(entry["info"], "AO", f"{entry['alt']}:"),
+                   get_info_on(entry["info"], "RO", f"{entry['ref']}:"),
                    ]
 
         if entry.get("ann"):
@@ -156,14 +169,12 @@ def analyse_file(input_file):
         else:
             default.extend(['', '', '', '', '', '', '', '', '', '', ''])
         vcf_data.append(default)
+    print(vcf_data)
     return vcf_data
 
 
 def word_in_list(word, check_list):
-    for item in check_list:
-        if item in word:
-            return True
-    return False
+    return any(item in word for item in check_list)
 
 
 def comparison(value1, value2, signal):
@@ -176,9 +187,7 @@ def comparison(value1, value2, signal):
 def filter_variants(data: list[list[str]], signal: str, list_of_types: list[str], identifier: str) -> list[list[str]]:
     filtered_data = []
     for entry in data:
-        entry_d = {}
-        for idx, value in enumerate(entry):
-            entry_d[DESCRIPTORS[idx]] = value
+        entry_d = {DESCRIPTORS[idx]: value for idx, value in enumerate(entry)}
         if not comparison(entry_d["FREQ"], 0.51, signal):
             continue
         if not word_in_list(entry_d["TYPE"], list_of_types):
@@ -259,7 +268,7 @@ if __name__ == "__main__":
         re_expression = "(?<=/freebayes/)(.*?)(?=_snpeff.vcf)"
         list_of_words = ["snp"]
     else:
-        raise TypeError  # to change
+        raise RuntimeError("That was a bad call")  # to change
     validated_variants(
         files_path,
         output_file,
