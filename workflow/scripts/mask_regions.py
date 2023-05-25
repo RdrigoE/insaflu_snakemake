@@ -58,24 +58,22 @@ if __name__ == "__main__":
     ranges = None
     consensus = args.consensus or None
     output = args.output or None
+    # Need to Error if output is missing
     single_positions = args.single.split(",") if args.single else None
     if args.regions:
         ranges = [x.split("-") for x in args.regions.split(",")]
     from_beggining = args.beggining or None
     from_end = args.end or None
     final_mask_consensus = []
-    print(from_beggining, from_end)
 
     for record in SeqIO.parse(consensus, "fasta"):
         sequence = MutableSeq(record.seq)
         masking_sites = compute_masking_sites(
             sequence, ranges, single_positions, from_beggining, from_end
         )
-        print(masking_sites, len(masking_sites))
         # Taken from insaflu
         ref_pos = 0
         ref_insertions = 0
-        print(len(sequence))
         # for _ in range(len(sequence)):
         #     if sequence[_] == "-":
         #         ref_insertions += 1
