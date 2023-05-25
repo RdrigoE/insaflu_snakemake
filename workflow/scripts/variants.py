@@ -45,12 +45,28 @@ def remove_smallcase(string):
 
 
 def smaller(string: str) -> str:
-    return string[: 2] + remove_smallcase(string[2:])
+    return string[:2] + remove_smallcase(string[2:])
 
 
 def convert_list_to_dict(data: list[str]) -> tuple[dict[str, str], dict[str, str]]:
-    snp_annotation = ["Allele", "Annotation", "Annotation_Impact", "Gene_Name", "Gene_ID", "Feature_Type", "Feature_ID",
-                      "Transcript_BioType", "Rank", "HGVS.c", "HGVS.p", "cDNA.pos/cDNA.length", "CDS_CDSLength", "AA.pos/AA.length", "Distance", "ERRORS/WARNINGS/INFO"]
+    snp_annotation = [
+        "Allele",
+        "Annotation",
+        "Annotation_Impact",
+        "Gene_Name",
+        "Gene_ID",
+        "Feature_Type",
+        "Feature_ID",
+        "Transcript_BioType",
+        "Rank",
+        "HGVS.c",
+        "HGVS.p",
+        "cDNA.pos/cDNA.length",
+        "CDS_CDSLength",
+        "AA.pos/AA.length",
+        "Distance",
+        "ERRORS/WARNINGS/INFO",
+    ]
     new_dict = {}
 
     ann_dict = {}
@@ -59,7 +75,8 @@ def convert_list_to_dict(data: list[str]) -> tuple[dict[str, str], dict[str, str
             k, v = item.split("=")
             if k.upper() == "ANN":
                 new_v = v.split("|")
-                ann_dict = {snp_annotation[idx]: new_v[idx] for idx in range(16)}
+                ann_dict = {snp_annotation[idx]: new_v[idx]
+                            for idx in range(16)}
             else:
                 new_dict[k] = v
     return new_dict, ann_dict
@@ -89,7 +106,7 @@ def convert_list_to_dict(data: list[str]) -> tuple[dict[str, str], dict[str, str
 #
 def get_multiple_freq(AO, DP):
     dp_value = float(DP)
-    freqs = [float(v)/dp_value for v in AO.split(',')]
+    freqs = [float(v) / dp_value for v in AO.split(",")]
     return round(min(freqs), 2)
 
 
@@ -105,69 +122,70 @@ def get_type(a, b):
 
 
 def get_info_on(dictionary, key, before=""):
-    return before+dictionary.get(key) if dictionary.get(key, False) else ""
+    return before + dictionary.get(key) if dictionary.get(key, False) else ""
 
 
 def analyse_file(input_file):
     with open(input_file) as handler:
-        lines = [line for line in handler.readlines() if line[0] != '#']
+        lines = [line for line in handler.readlines() if line[0] != "#"]
     vcf_data = []
     for line in lines:
-        l = line.split()
-        info, ann = convert_list_to_dict(l[7].split(";"))
+        line = line.split()
+        info, ann = convert_list_to_dict(line[7].split(";"))
         entry = {
-            "chrom": l[0],
-            "pos": int(l[1]),
-            "ref": l[3],
-            "alt": l[4],
-            "qual": float(l[5]),
+            "chrom": line[0],
+            "pos": int(line[1]),
+            "ref": line[3],
+            "alt": line[4],
+            "qual": float(line[5]),
             "info": info,
             "ann": ann,
-            "names": l[8].split(":"),
-            "values": l[9].split(":")
+            "names": line[8].split(":"),
+            "values": line[9].split(":"),
         }
 
         get_freq = entry["info"].get("FREQ", False)
         if not get_freq:
             try:
                 get_freq = get_multiple_freq(
-                    entry["info"]["AO"], entry["info"]["DP"]
-                )
+                    entry["info"]["AO"], entry["info"]["DP"])
             except KeyError:
                 get_freq = round(float(entry["values"][-1]), 2)
         else:
-            get_freq = round(float(get_freq)/100, 2)
-        default = [entry["chrom"],
-                   entry["pos"],
-                   entry["info"].get("TYPE",
-                                     get_type(
-                                         len(entry["ref"]),
-                                         len(entry["alt"]))),
-                   entry["ref"],
-                   entry["alt"],
-                   get_freq,
-                   get_info_on(entry["info"], "DP"),
-                   get_info_on(entry["info"], "AO", f"{entry['alt']}:"),
-                   get_info_on(entry["info"], "RO", f"{entry['ref']}:"),
-                   ]
+            get_freq = round(float(get_freq) / 100, 2)
+        default = [
+            entry["chrom"],
+            entry["pos"],
+            entry["info"].get("TYPE", get_type(
+                len(entry["ref"]), len(entry["alt"]))),
+            entry["ref"],
+            entry["alt"],
+            get_freq,
+            get_info_on(entry["info"], "DP"),
+            get_info_on(entry["info"], "AO", f"{entry['alt']}:"),
+            get_info_on(entry["info"], "RO", f"{entry['ref']}:"),
+        ]
 
         if entry.get("ann"):
             ann = entry["ann"]
 
-            default.extend(["CDS",
-                            "+",
-                            ann["CDS_CDSLength"],
-                            ann["AA.pos/AA.length"],
-                            ann["Annotation"],
-                            ann["HGVS.c"],
-                            ann["HGVS.p"],
-                            smaller(ann["HGVS.p"]),
-                            ann["Gene_Name"],
-                            ann["Gene_Name"],
-                            "yes"
-                            ])
+            default.extend(
+                [
+                    "CDS",
+                    "+",
+                    ann["CDS_CDSLength"],
+                    ann["AA.pos/AA.length"],
+                    ann["Annotation"],
+                    ann["HGVS.c"],
+                    ann["HGVS.p"],
+                    smaller(ann["HGVS.p"]),
+                    ann["Gene_Name"],
+                    ann["Gene_Name"],
+                    "yes",
+                ]
+            )
         else:
-            default.extend(['', '', '', '', '', '', '', '', '', '', ''])
+            default.extend(["", "", "", "", "", "", "", "", "", "", ""])
         vcf_data.append(default)
     print(vcf_data)
     return vcf_data
@@ -184,7 +202,9 @@ def comparison(value1, value2, signal):
         return value1 < value2
 
 
-def filter_variants(data: list[list[str]], signal: str, list_of_types: list[str], identifier: str) -> list[list[str]]:
+def filter_variants(
+    data: list[list[str]], signal: str, list_of_types: list[str], identifier: str
+) -> list[list[str]]:
     filtered_data = []
     for entry in data:
         entry_d = {DESCRIPTORS[idx]: value for idx, value in enumerate(entry)}
@@ -198,9 +218,7 @@ def filter_variants(data: list[list[str]], signal: str, list_of_types: list[str]
     return filtered_data
 
 
-def validated_variants(
-    files_path, output_file, signal, re_expression, list_of_types
-):
+def validated_variants(files_path, output_file, signal, re_expression, list_of_types):
     """
     The validated_variants function takes a list of vcf files and outputs a csv file with the following columns:
         ID, CHROM, POS, TYPE, REF, ALT, FREQ (allele frequency), COVERAGE (total depth at that position), EVIDENCE (number of reads supporting variant)
@@ -242,8 +260,7 @@ def validated_variants(
         identifier = re.findall(re_expression, file)[0]
         clean_file = analyse_file(file)
         filtered_file = filter_variants(
-            clean_file, signal, list_of_types, identifier
-        )
+            clean_file, signal, list_of_types, identifier)
         vcf_final.extend(filtered_file)
     with open(output_file, mode="w") as f:
         f_writer = csv.writer(f, delimiter=",")

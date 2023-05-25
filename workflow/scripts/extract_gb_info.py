@@ -120,33 +120,28 @@ def get_positions_gb(genbank_file):
                     if feat.qualifiers.get("locus_tag", False):
                         positions.append(
                             [
-                                feat.qualifiers.get("locus_tag")[0].replace(
-                                    " ", "_"
-                                ),
+                                feat.qualifiers.get("locus_tag")[0].replace(" ", "_"),
                                 feat.location,
                             ]
                         )
                     elif feat.qualifiers.get("gene", False):
                         positions.append(
                             [
-                                feat.qualifiers["gene"][0].replace(
-                                    " ", "_"),
+                                feat.qualifiers["gene"][0].replace(" ", "_"),
                                 feat.location,
                             ]
                         )
                     elif feat.qualifiers.get("note", False):
                         positions.append(
                             [
-                                feat.qualifiers["note"][0].replace(
-                                    " ", "_"),
+                                feat.qualifiers["note"][0].replace(" ", "_"),
                                 feat.location,
                             ]
                         )
                     elif feat.qualifiers.get("product", False):
                         positions.append(
                             [
-                                feat.qualifiers["product"][0].replace(
-                                    " ", "_"),
+                                feat.qualifiers["product"][0].replace(" ", "_"),
                                 feat.location,
                             ]
                         )
@@ -166,7 +161,7 @@ def get_genes(genbank_file):
     all the genes in that file.
     The function is used to create a list of all the genes in each genome.
 
-    :param genbank_file: Specify the name of the file that contains all of 
+    :param genbank_file: Specify the name of the file that contains all of
     the genes in a genome
     :return: A list of all the genes in the genbank file
     :doc-author: Trelent
@@ -177,19 +172,13 @@ def get_genes(genbank_file):
             for features in record.features:
                 if features.type == "CDS":
                     if features.qualifiers.get("gene"):
-                        genes.append(
-                            features.qualifiers["gene"][0].replace(" ", "_")
-                        )
+                        genes.append(features.qualifiers["gene"][0].replace(" ", "_"))
                     elif features.qualifiers.get("locus_tag"):
                         genes.append(
-                            features.qualifiers["locus_tag"][0].replace(
-                                " ", "_"
-                            )
+                            features.qualifiers["locus_tag"][0].replace(" ", "_")
                         )
                     elif features.qualifiers.get("note"):
-                        genes.append(
-                            features.qualifiers["note"][0].replace(" ", "_")
-                        )
+                        genes.append(features.qualifiers["note"][0].replace(" ", "_"))
                     elif features.qualifiers.get("product"):
                         genes.append(
                             features.qualifiers["product"][0].replace(" ", "_")
@@ -200,13 +189,13 @@ def get_genes(genbank_file):
 
 def get_identification_version(segments, reference_gb):
     """
-    The get_identification_version function takes a list of SeqRecord objects 
+    The get_identification_version function takes a list of SeqRecord objects
     and the path to a reference GenBank file.
     It returns the identification and version numbers for that GenBank file.
 
     :param segments:list: Determine if the reference is a single segment or not
     :param reference_gb:str: Specify the reference genome in genbank format
-    :return: A tuple with the identification and version of the reference 
+    :return: A tuple with the identification and version of the reference
     genome
     :doc-author: Trelent
     """

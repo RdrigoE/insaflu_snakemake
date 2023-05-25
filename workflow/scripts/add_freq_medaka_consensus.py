@@ -162,9 +162,7 @@ def add_freq_ao_ad_and_type_to_vcf(
     for variant_sample in vcf_hanlder.header.samples:
         vcf_hanlder_write.header.add_sample(variant_sample)
         if vcf_file_out_removed_by_filter is not None:
-            vcf_hanlder_write_removed_by_filter.header.add_sample(
-                variant_sample
-            )
+            vcf_hanlder_write_removed_by_filter.header.add_sample(variant_sample)
 
     for variant in vcf_hanlder:
         # DP must be replaced by DPSP. DPSP is the

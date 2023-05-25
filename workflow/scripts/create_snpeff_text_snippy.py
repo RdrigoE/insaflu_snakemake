@@ -48,8 +48,7 @@ def prepare_snpeff_run(snpeff_path, ref_path_gb, locus, ref_path_fa, reference_n
         find = joined.find("".join(text))
 
     if find == -1:
-        os.system(
-            f"mkdir  {snpeff_path}/share/snpeff-4.3.1t-5/data/{reference_name} ")
+        os.system(f"mkdir  {snpeff_path}/share/snpeff-4.3.1t-5/data/{reference_name} ")
         os.system(
             f"cat {ref_path_gb} > {snpeff_path}/share/snpeff-4.3.1t-5/{reference_name}/genes.gbk"
         )

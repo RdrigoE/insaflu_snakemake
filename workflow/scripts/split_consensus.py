@@ -63,6 +63,4 @@ if __name__ == "__main__":
     DEPTH = sys.argv[2]
     LOCUS = sys.argv[3]
     OUTPUT = sys.argv[4]
-    split_consensus(
-        consensus=CONSENSUS, depth=DEPTH, locus=LOCUS, output=OUTPUT
-    )
+    split_consensus(consensus=CONSENSUS, depth=DEPTH, locus=LOCUS, output=OUTPUT)

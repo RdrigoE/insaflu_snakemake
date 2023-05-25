@@ -20,9 +20,9 @@ def get_reference(file_name: str) -> SeqIO.SeqRecord:
         return record
 
 
-def get_ref_adjusted_positions(alignment: str,
-                               positions: list[tuple[str, list[list[int]]]],
-                               gene) -> list[tuple[str, list[list[int]]]]:
+def get_ref_adjusted_positions(
+    alignment: str, positions: list[tuple[str, list[list[int]]]], gene
+) -> list[tuple[str, list[list[int]]]]:
     new_positions = []
     ref = get_reference(alignment)
 
@@ -57,19 +57,25 @@ def get_position_in_list(reference: str, locus: str) -> int:
     return list_of_locus.index(locus)
 
 
-def write_fast_aa(reference: str, alignment: str, output: str,
-                  reference_id: str, gene: str, coverage: str):
+def write_fast_aa(
+    reference: str,
+    alignment: str,
+    output: str,
+    reference_id: str,
+    gene: str,
+    coverage: str,
+):
     position = get_position_in_list(reference, reference_id)
 
     coverage_dic = get_coverage_to_translate_matrix(coverage)
 
     constants: dict[str, str] = read_yaml("../config/constants.yaml")
 
-    coverage_value: int = read_yaml(
-        constants["software_parameters"])["min_coverage_consensus"]
+    coverage_value: int = read_yaml(constants["software_parameters"])[
+        "min_coverage_consensus"
+    ]
 
-    positions: list[tuple[str, list[list[int]]]
-                    ] = ggb.get_positions_gb(reference)
+    positions: list[tuple[str, list[list[int]]]] = ggb.get_positions_gb(reference)
 
     positions = get_ref_adjusted_positions(alignment, positions, gene)
 
@@ -84,32 +90,33 @@ def write_fast_aa(reference: str, alignment: str, output: str,
                 if record.id == reference_id:
                     if new_consensus[gene_name].get(record.id, False):
                         new_consensus[gene_name][record.id] += (
-                            record.seq[pos[0]: pos[1]]
+                            record.seq[pos[0] : pos[1]]
                             .replace("-", "")
                             .translate(table=11, to_stop=False)
                         )
                     else:
                         new_consensus[gene_name][record.id] = (
-                            record.seq[pos[0]: pos[1]]
+                            record.seq[pos[0] : pos[1]]
                             .replace("-", "")
                             .translate(table=11, to_stop=False)
                         )
                     continue
                 identifier = record.id
                 record_coverage = float(
-                    coverage_dic[
-                        identifier[: identifier.index(f"__{reference_id}")]
-                    ][position])
+                    coverage_dic[identifier[: identifier.index(f"__{reference_id}")]][
+                        position
+                    ]
+                )
                 if record_coverage >= coverage_value:
                     if new_consensus[gene_name].get(identifier, False):
                         new_consensus[gene_name][record.id] += (
-                            record.seq[pos[0]: pos[1]]
+                            record.seq[pos[0] : pos[1]]
                             .replace("-", "")
                             .translate(table=11, to_stop=False)
                         )
                     else:
                         new_consensus[gene_name][identifier] = (
-                            record.seq[pos[0]: pos[1]]
+                            record.seq[pos[0] : pos[1]]
                             .replace("-", "")
                             .translate(table=11, to_stop=False)
                         )

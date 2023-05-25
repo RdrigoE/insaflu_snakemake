@@ -25,7 +25,7 @@ def get_fasta_reference_concat(fasta_ref):
             start = fasta_ref.index("reference")
             end = fasta_ref.index(".fasta")
             # why + 11 => 16/05
-            concat_reference[0].id = fasta_ref[start + 11: end]
+            concat_reference[0].id = fasta_ref[start + 11 : end]
         else:
             concat_reference[0].seq += record.seq
         count += 1

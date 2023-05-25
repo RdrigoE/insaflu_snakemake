@@ -11,8 +11,8 @@ if __name__ == "__main__":
     with open(reference_fasta, "r", encoding="utf-8") as handle_fasta:
         dt_consensus = SeqIO.to_dict(SeqIO.parse(consensus_file, "fasta"))
         for record in SeqIO.parse(handle_fasta, "fasta"):
-            if record.id == segment_name:  ### make mask
-                ### get sequences
+            if record.id == segment_name:  # make mask
+                # get sequences
                 vect_out_fasta_to_align = []
                 record_id = record.id
                 record.id = ""

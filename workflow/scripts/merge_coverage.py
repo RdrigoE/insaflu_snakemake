@@ -88,9 +88,9 @@ def merge_coverage(file_list, output_file):
 
     for file in file_list:
         with open(file, "r", encoding="utf8") as f:
-            sample_name = re.findall("(?<=/)(.*?)(?=_coverage.csv)", file)[
-                0
-            ].split("/")[0]
+            sample_name = re.findall("(?<=/)(.*?)(?=_coverage.csv)", file)[0].split(
+                "/"
+            )[0]
             info = f.readlines()[6].split()
             sample_t = sample_type[sample_name]
             if sample_t in ("snippy", "iVar"):
@@ -128,9 +128,9 @@ def get_coverage(filename: str, n_locus: int):
     with open(filename, newline="", encoding="UTF8") as csvfile:
         csv_reader = csv.reader(csvfile, delimiter="\t")
         coverage_list = []
-        sample_name = re.findall("(?<=/)(.*?)(?=_coverage.csv)", filename)[
-            0
-        ].split("/")[0]
+        sample_name = re.findall("(?<=/)(.*?)(?=_coverage.csv)", filename)[0].split(
+            "/"
+        )[0]
         for i in csv_reader:
             coverage_list.append(i)
         coverage_list = coverage_list[-1][-n_locus:]
@@ -175,6 +175,4 @@ if __name__ == "__main__":
 
     NUMBER_OF_LOCUS = len(get_locus(REFERENCE_GB))
     merge_coverage(COVERAGE_FILES, OUTPUT_FILE_1)
-    create_script_readable_coverage_file(
-        COVERAGE_FILES, OUTPUT_FILE_2, NUMBER_OF_LOCUS
-    )
+    create_script_readable_coverage_file(COVERAGE_FILES, OUTPUT_FILE_2, NUMBER_OF_LOCUS)

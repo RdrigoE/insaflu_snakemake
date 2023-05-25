@@ -8,9 +8,7 @@ import argparse
 
 def parse_args(args=None):
     Description = "Convert iVar variants tsv file to vcf format."
-    Epilog = (
-        """Example usage: python ivar_variants_to_vcf.py <FILE_IN> <FILE_OUT>"""
-    )
+    Epilog = """Example usage: python ivar_variants_to_vcf.py <FILE_IN> <FILE_OUT>"""
 
     parser = argparse.ArgumentParser(description=Description, epilog=Epilog)
     parser.add_argument("FILE_IN", help="Input tsv file.")
@@ -61,9 +59,7 @@ def ivar_variants_to_vcf(FileIn, FileOut, passOnly=False, minAF=0):
         '##FORMAT=<ID=ALT_FREQ,Number=1,Type=String,Description="Frequency of alternate base">\n'
     )
     header += (
-        "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\t"
-        + filename
-        + "\n"
+        "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\t" + filename + "\n"
     )
 
     varList = []
@@ -96,9 +92,7 @@ def ivar_variants_to_vcf(FileIn, FileOut, passOnly=False, minAF=0):
                 else:
                     FILTER = "FAIL"
                 INFO = "DP=" + line[11]
-                FORMAT = (
-                    "GT:REF_DP:REF_RV:REF_QUAL:ALT_DP:ALT_RV:ALT_QUAL:ALT_FREQ"
-                )
+                FORMAT = "GT:REF_DP:REF_RV:REF_QUAL:ALT_DP:ALT_RV:ALT_QUAL:ALT_FREQ"
                 SAMPLE = (
                     "1:"
                     + line[4]

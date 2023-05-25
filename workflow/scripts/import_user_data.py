@@ -85,7 +85,6 @@ class Data:
             dic[name] = {}
 
         for idx, sample_name_1 in enumerate(self.get_sample_1()):
-
             dic[names[idx]]["fastq1"] = (
                 sample_name_1 if isinstance(sample_name_1, str) else None
             )
@@ -166,9 +165,9 @@ def get_data_in_align_form(
     """
     The get_data_in_align_form function takes in the assembler, single_illumina
     and paired_illumina dictionaries. It then checks to see if the assembler is
-    snippy or iVar. If it is snippy, it returns the paired illumina dictionary 
+    snippy or iVar. If it is snippy, it returns the paired illumina dictionary
     as well as both single illumina dictionaries.
-    If it is iVar, then it returns both paired illumina dictionaries and both 
+    If it is iVar, then it returns both paired illumina dictionaries and both
     single illumina dictionaries.
 
     :param assembler:str: Determine which assembler to use
