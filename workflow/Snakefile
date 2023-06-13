@@ -1,7 +1,6 @@
 from scripts.check_file_validity import is_fasta, is_genbank, same_identifiers
 from scripts.import_user_data import Data, get_data_in_align_form
 from scripts.yaml_io import read_yaml, write_yaml
-from scripts.random_string import random_string
 from scripts.extract_gb_info import (
     get_locus,
     get_id_version,
@@ -33,7 +32,6 @@ class Abricate_Pangolin:
 
     def __call__(self, w):
         global checkpoints
-
         checkpoints.abricate_pangolin.get(**w)
         pattern = self.get_output()
         return pattern
@@ -57,66 +55,10 @@ class Abricate_Pangolin:
         )
         return pattern
 
-
-class Checkpoint_Alignment_aa:
-    def __init__(self, prefix, sufix, genbank_file, coverage_file, coverage_limit):
-        self.prefix = prefix
-        self.sufix = sufix
-        self.genbank_file = genbank_file
-        self.coverage_file = coverage_file
-        self.coverage_limit = coverage_limit
-
-    def __call__(self, w):
-        global checkpoints
-
-        # wait for the results of 'check_csv'; this will trigger an
-        # exception until that rule has been run.
-        checkpoints.mergeCoverage.get(**w)
-
-        # the magic, such as it is, happens here: we create the
-        # information used to expand the pattern, using arbitrary
-        # Python code.
-
-        pattern = self.get_output(
-            self.genbank_file, self.coverage_file, self.coverage_limit
-        )
-        return pattern
-
-    def get_locus_w_coverage(self, coverage_file, genbank_file, coverage_limit):
-        with open(coverage_file, newline="") as csvfile:
-            csv_reader = csv.reader(csvfile, delimiter=",")
-            coverage_list = list(csv_reader)
-            chrom = get_locus(genbank_file)
-            coverage_list = list(map(lambda x: x[1:], coverage_list))
-            for idx, li in enumerate(coverage_list):
-                coverage_list[idx] = list(map(lambda x: float(x), li))
-
-            final_output = []
-            for sample in coverage_list:
-                if min(sample) >= coverage_limit:
-                    final_output.append(True)
-                else:
-                    final_output.append(False)
-
-        return final_output
-
-    def get_output(self, genbank_file, coverage_file, coverage_limit):
-        locus_protein = []
-        valide_locus = self.get_locus_w_coverage(
-            coverage_file, genbank_file, coverage_limit
-        )
-        segments = get_locus_and_genes(genbank_file)
-        if True in valide_locus:
-            for idx, seg in enumerate(segments, start=0):
-                for gene in segments[seg]:
-                    locus_protein.append(
-                        f"{self.prefix}{seg}/Alignment_aa_{seg}_{gene}{self.sufix}"
-                    )
-        return locus_protein
-
-
+   
 class Checkpoint_Main:
-    def __init__(self, genbank_file, coverage_file, coverage_limit, project):
+    def __init__(self, output_tuple, genbank_file, coverage_file, coverage_limit, project):
+        self.output_tuple = output_tuple
         self.genbank_file = genbank_file
         self.coverage_file = coverage_file
         self.coverage_limit = coverage_limit
@@ -133,38 +75,66 @@ class Checkpoint_Main:
         # information used to expand the pattern, using arbitrary
         # Python code.
 
-        pattern = self.get_output(
-            self.genbank_file, self.coverage_file, self.coverage_limit
-        )
+        pattern = self.get_output()
+        pattern.extend(self.get_output_prefix_sufix())
+        
 
         if pattern == []:
             return "template_empty.txt"
         return pattern
-
-    def get_locus_w_coverage(self, coverage_file, genbank_file, coverage_limit):
-        with open(coverage_file, newline="") as csvfile:
+    def get_locus_w_coverage_prefix_sufix(self):
+        with open(self.coverage_file, newline="") as csvfile:
             csv_reader = csv.reader(csvfile, delimiter=",")
             coverage_list = list(csv_reader)
-            chrom = get_locus(genbank_file)
+            chrom = get_locus(self.genbank_file)
             coverage_list = list(map(lambda x: x[1:], coverage_list))
             for idx, li in enumerate(coverage_list):
                 coverage_list[idx] = list(map(lambda x: float(x), li))
 
             final_output = []
             for sample in coverage_list:
-                if min(sample) >= coverage_limit:
+                if min(sample) >= self.coverage_limit:
                     final_output.append(True)
                 else:
                     final_output.append(False)
 
         return final_output
 
-    def get_output(self, genbank_file, coverage_file, coverage_limit):
+    def get_output_prefix_sufix(self):
+        locus_protein = []
+        valide_locus = self.get_locus_w_coverage_prefix_sufix()
+        segments = get_locus_and_genes(self.genbank_file)
+        if True in valide_locus:
+          for prefix,sufix in self.output_tuple:
+            for idx, seg in enumerate(segments, start=0):
+                for gene in segments[seg]:
+                    locus_protein.append(
+                        f"{prefix}{seg}/Alignment_aa_{seg}_{gene}{sufix}"
+                    )
+        return locus_protein
+
+
+    def get_locus_w_coverage(self):
+        with open(self.coverage_file, newline="") as csvfile:
+            csv_reader = csv.reader(csvfile, delimiter=",")
+            coverage_list = list(csv_reader)
+            chrom = get_locus(self.genbank_file)
+            coverage_list = list(map(lambda x: x[1:], coverage_list))
+            for idx, li in enumerate(coverage_list):
+                coverage_list[idx] = list(map(lambda x: float(x), li))
+
+            final_output = []
+            for sample in coverage_list:
+                if min(sample) >= self.coverage_limit:
+                    final_output.append(True)
+                else:
+                    final_output.append(False)
+
+        return final_output
+
+    def get_output(self):
         return_list = []
-        valide_locus = self.get_locus_w_coverage(
-            coverage_file, genbank_file, coverage_limit
-        )
-        segments = get_locus_and_genes(genbank_file)
+        valide_locus = self.get_locus_w_coverage()
         leave = False
 
         if True in valide_locus:
@@ -261,6 +231,15 @@ class Checkpoint_Main:
             return return_list
         else:
             return expand("projects/{p}/main_result/warning.txt", p=self.project)
+
+            final_output = []
+            for sample in coverage_list:
+                if min(sample) >= self.coverage_limit:
+                    final_output.append(True)
+                else:
+                    final_output.append(False)
+
+        return final_output
 
 
 dic_directory = read_yaml("../config/constants.yaml")
@@ -478,38 +457,15 @@ def get_output_project():
             sample=ont_samples.keys(),
         ),
         Checkpoint_Main(
+            [(f'projects/{config_user["project"]}/main_result/',
+            "_trans.fasta"), (f'projects/{config_user["project"]}/main_result/',
+            "_mafft.fasta"), (f'projects/{config_user["project"]}/main_result/',
+            "_mafft.nex"), (f'projects/{config_user["project"]}/main_result/',
+            "_tree.tree")],
             REFERENCE_GB,
             f"projects/{config_user['project']}/main_result/coverage_translate.csv",
             software_parameters["min_coverage_consensus"],
             PROJECT_NAME,
-        ),
-        Checkpoint_Alignment_aa(
-            f'projects/{config_user["project"]}/main_result/',
-            "_trans.fasta",
-            REFERENCE_GB,
-            f"projects/{config_user['project']}/main_result/coverage_translate.csv",
-            software_parameters["min_coverage_consensus"],
-        ),
-        Checkpoint_Alignment_aa(
-            f'projects/{config_user["project"]}/main_result/',
-            "_mafft.fasta",
-            REFERENCE_GB,
-            f"projects/{config_user['project']}/main_result/coverage_translate.csv",
-            software_parameters["min_coverage_consensus"],
-        ),
-        Checkpoint_Alignment_aa(
-            f'projects/{config_user["project"]}/main_result/',
-            "_mafft.nex",
-            REFERENCE_GB,
-            f"projects/{config_user['project']}/main_result/coverage_translate.csv",
-            software_parameters["min_coverage_consensus"],
-        ),
-        Checkpoint_Alignment_aa(
-            f'projects/{config_user["project"]}/main_result/',
-            "_tree.tree",
-            REFERENCE_GB,
-            f"projects/{config_user['project']}/main_result/coverage_translate.csv",
-            software_parameters["min_coverage_consensus"],
         ),
         Abricate_Pangolin(
             f"projects/{config_user['project']}/ref.yaml",

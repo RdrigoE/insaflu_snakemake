@@ -134,7 +134,7 @@ rule bcf_consensus:
         vcf_ziped="align_samples/{sample}/medaka/snps.vcf.gz",
         ref="align_samples/{sample}/medaka/ref_masked.fasta",
     output:
-        temp("align_samples/{sample}/medaka/first_consensus.fasta"),
+        "align_samples/{sample}/medaka/first_consensus.fasta",
     conda:
         "../envs/bcftools.yaml"
     resources:
@@ -151,7 +151,7 @@ rule create_align_file:
     input:
         first_consensus="align_samples/{sample}/medaka/first_consensus.fasta",
     output:
-        align_file=temp("align_samples/{sample}/medaka/medaka_align_{seg}.fasta"),
+        align_file="align_samples/{sample}/medaka/medaka_align_{seg}.fasta",
     conda:
         "../envs/base.yaml"
     resources:

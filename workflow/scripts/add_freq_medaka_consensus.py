@@ -162,7 +162,8 @@ def add_freq_ao_ad_and_type_to_vcf(
     for variant_sample in vcf_hanlder.header.samples:
         vcf_hanlder_write.header.add_sample(variant_sample)
         if vcf_file_out_removed_by_filter is not None:
-            vcf_hanlder_write_removed_by_filter.header.add_sample(variant_sample)
+            vcf_hanlder_write_removed_by_filter.header.add_sample(
+                variant_sample)
 
     for variant in vcf_hanlder:
         # DP must be replaced by DPSP. DPSP is the
@@ -348,69 +349,5 @@ def main():
             vect_ranges.append(
                 "{}-{}".format(variant.pos, variant.pos + len(variant.ref) - 1)
             )
-
-    sites = ""
-    for idx, i in enumerate(vect_sites):
-        if idx == len(vect_sites) - 1:
-            sites += i
-        else:
-            sites += i + ","
-
-    regions = ""
-    for idx, i in enumerate(vect_ranges):
-        if idx == len(vect_ranges) - 1:
-            regions += i
-        else:
-            regions += i + ","
-
-    # print(sites)
-    # print(regions)
-
-    consensus = sys.argv[1]
-    output = sys.argv[7]
-    final_mask_consensus = []
-
-    ranges, single_positions, from_beggining, from_end = (
-        [x.split("-") for x in regions.split(",")] if regions != "" else None,
-        sites.split(",") if sites != "" else None,
-        None,
-        None,
-    )
-
-    for record in SeqIO.parse(consensus, "fasta"):
-        sequence = MutableSeq(record.seq)
-        masking_sites = compute_masking_sites(
-            sequence, ranges, single_positions, from_beggining, from_end
-        )
-        masking_sites = sorted(masking_sites)
-        # print(masking_sites)
-        # Taken from insaflu
-        ref_pos = 0
-        ref_insertions = 0
-        gap = 0
-        for idx in range(len(sequence)):
-            if sequence[idx] == "-":
-                # print("Hello")
-                gap += 1
-                # print(gap)
-
-            # ref_insertions += 1
-            # continue
-            # print(_, ref_pos)
-            if ref_pos in masking_sites:
-                # print(
-                #     f"placing N in position {ref_pos + ref_insertions}, it was a {sequence[ref_pos + ref_insertions]}"
-                # )
-                sequence[ref_pos + ref_insertions] = "N"
-            ref_pos += 1
-            if (ref_pos + ref_insertions) >= len(record.seq):
-                break
-        # End of insaflu code
-        record.seq = sequence
-        final_mask_consensus.append(record)
-
-    SeqIO.write(final_mask_consensus, output, "fasta")
-
-
 if __name__ == "__main__":
     main()

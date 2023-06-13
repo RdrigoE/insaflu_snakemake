@@ -1,9 +1,9 @@
-min_coverage_consensus: 89
+min_coverage_consensus: 70
 
 ##ILLUMINA / Ion Torrent data##
 # Trimmomatic
 trimmo-ILLUMINACLIP: null #(default: Not apply)
-trimmo-HEADCROP: 30 #(default = 0)
+trimmo-HEADCROP: null #(default = 0)
 trimmo-CROP: null #(default = 0)
 trimmo-SLIDINGWINDOW1: 5 #(default = 5)
 trimmo-SLIDINGWINDOW2: 20 #(default = 20)
@@ -17,7 +17,7 @@ QUALITY: 10 #(default: 10)
 LENGTH: 50 #(default: 50)
 HEADCROP: 70 #(default: 70)
 TAILCROP: 70 #(default: 70)
-MAXLENGTH: null #(default: 0)
+MAXLENGTH: 50000 #(default: 0)
 
 #Mapping, Variant Calling
 ##ILLUMINA / Ion Torrent data##
@@ -26,7 +26,7 @@ MAXLENGTH: null #(default: 0)
 
 mapqual: 20 #(default = 20)
 
-mincov: 30 #default = 10)
+mincov: 10 #default = 10)
 
 minfrac: 0.51 #(default = 0.51)
 
@@ -37,10 +37,10 @@ Medaka_model: r941_min_high_g360 #(default: r941_min_high_g360) (see: https://na
 
 mincov_medaka: 29 #(default: 29) #msa_masker medaka
 
-min_prop_for_variant_evidence: 0.8 #(default: 0.8).
+min_prop_for_variant_evidence: 0.81 #(default: 0.8).
 
 # MASK ALL CONSENSUS IN PROJECT
 MASK_SITES: null #1,2,3,4
 MASK_REGIONS: null #200-250
-MASK_F_BEGINNING: 50 #40
-MASK_F_END: 80 #100
+MASK_F_BEGINNING: null #40
+MASK_F_END: null #100
