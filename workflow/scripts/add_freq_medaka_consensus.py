@@ -34,7 +34,7 @@ def variant_has_SR_DPSP_AR(variant):
 
 def read_text_file(file_name):
     """
-    read text file and put the result in an vector
+    read text file and put the result in an list
     """
 
     vect_out = []
@@ -162,7 +162,8 @@ def add_freq_ao_ad_and_type_to_vcf(
     for variant_sample in vcf_hanlder.header.samples:
         vcf_hanlder_write.header.add_sample(variant_sample)
         if vcf_file_out_removed_by_filter is not None:
-            vcf_hanlder_write_removed_by_filter.header.add_sample(variant_sample)
+            vcf_hanlder_write_removed_by_filter.header.add_sample(
+                variant_sample)
 
     for variant in vcf_hanlder:
         # DP must be replaced by DPSP. DPSP is the
@@ -180,6 +181,7 @@ def add_freq_ao_ad_and_type_to_vcf(
                 temp_file,
             )
             if coverage_limit > 0 and total_deep_samtools < coverage_limit:
+                # print(f"positions with N: {variant.pos}")
                 continue
             if ((len(variant.info["SR"]) // 2) - 1) != len(variant.alts):
                 # vcf_hanlder_write.write(variant)

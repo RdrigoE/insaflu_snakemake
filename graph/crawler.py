@@ -5,6 +5,19 @@ import sys
 from typing import NamedTuple
 
 
+class benchmark(NamedTuple):
+    seconds: float
+    hours: str
+    max_rss: float
+    max_vms: float
+    max_uss: float
+    max_pss: float
+    io_in: float
+    io_out: float
+    mean_load: float
+    cpu_time: float
+
+
 class rule(NamedTuple):
     file_name: str
     rule: str
@@ -46,19 +59,6 @@ def crawl_folder(folder_name):
             crawl_folder(item.absolute())
 
 
-class benchmark(NamedTuple):
-    seconds: float
-    hours: str
-    max_rss: float
-    max_vms: float
-    max_uss: float
-    max_pss: float
-    io_in: float
-    io_out: float
-    mean_load: float
-    cpu_time: float
-
-
 def get_time(path) -> benchmark:
     with open(path) as handler:
         line = list(csv.reader(handler, delimiter="\t"))[1]
@@ -84,9 +84,9 @@ rule_seconds = {}
 for k, v in rule_dict.items():
     max_value = 0
     for path in v:
-        time = get_time(path).max_rss
-        if time > max_value:
-            max_value = time
+        value = getattr(get_time(path), sys.argv[4])
+        if value > max_value:
+            max_value = value
     rule_seconds[k] = max_value
 # :%s/[{[a-zA-z]*}]*/*/g
 

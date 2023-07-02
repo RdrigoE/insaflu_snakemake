@@ -33,6 +33,7 @@ def get_rules(filename: str) -> list[Rule]:
                     new_object.append(line.strip())
                     b = False
                     a = False
+                    print(new_object)
                     rule_list.append(
                         Rule(new_object[0], new_object[1], new_object[2])
                     )
@@ -44,7 +45,7 @@ def get_quotes(string: str) -> str:
     cut_start = string.index("benchmark")
     first_sliced = string[cut_start:]
     cut_end = first_sliced[::-1].index("vst.")
-    return string[cut_start : len(string) - cut_end]
+    return string[cut_start: len(string) - cut_end]
 
 
 if __name__ == "__main__":

@@ -11,6 +11,7 @@ crawl_folder = sys.argv[4]
 time_path = sys.argv[5]
 rulegraph = sys.argv[6]
 rulegraph_output = sys.argv[7]
+attribute = sys.argv[8]
 # get rules with get_rules_benchmark.py
 os.system(
     f"python {script_dir}get_rules_benchmark.py {rules_path} {rules_file_path}"
@@ -19,7 +20,7 @@ os.system(
 os.system(f"sed -i '{r's/{[a-zA-Z_]*}/*/g'}' {rules_file_path}")
 os.system(f"sed -i 's/benchmark/./g' {rules_file_path}")
 os.system(
-    f"python {script_dir}crawler.py {crawl_folder} {rules_file_path} {time_path}"
+    f"python {script_dir}crawler.py {crawl_folder} {rules_file_path} {time_path} {attribute}"
 )
 # generate rulegraph
 # with open(rulegraph, "w") as f:
