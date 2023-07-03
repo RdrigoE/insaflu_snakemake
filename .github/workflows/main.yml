@@ -27,6 +27,7 @@ jobs:
       run: |
         conda env create --name insaflu --file config/insaflu.yaml
         conda activate insaflu
+        conda install -n base -c conda-forge mamba
         conda install -n insaflu -c bioconda snakefmt
     
     - name: Lint with snakefmt
