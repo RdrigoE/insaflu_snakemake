@@ -21,25 +21,30 @@ jobs:
         auto-update-conda: true
         python-version: 3.8
     
-    - name: Install Snakemake
+    - name: Install Snakemake and snakefmt
       shell: bash -l {0}
-      run: mamba env create --name insaflu --file config/insaflu.yaml
+      run: |
+        mamba env create --name insaflu --file config/insaflu.yaml
+        conda activate insaflu
+        mamba install -n insaflu -c conda-forge snakefmt
     
-    - name: Install Linter
-      run: conda activate insaflu
-
     - name: Lint with snakefmt
-      run: snakefmt workflow/Snakefile workflow/rules
+      shell: bash -l {0}
+      run: |
+        conda activate insaflu
+        snakefmt workflow/Snakefile workflow/rules
 
     - name: Execute Snakemake
       shell: bash -l {0}
-      run: snakemake --cores 1 --use-conda
+      run: |
+        conda activate insaflu
+        snakemake --cores 1 --use-conda
 
     # New step to compare the generated files to expected outputs
     - name: Validate output files
       run: |
         # Compute checksums for the generated files
         sha256sum results/samples/demo_illumina_1/trimmed_reads/demo_illumina_1_1.trimmed.fastq.gz > generated_checksums.txt
-        sha256sum results/samples/demo_illumina_1/trimmed_reads/demo_illumina_1_2.trimmed.fastq.gz > generated_checksums.txt
-        sha256sum results/samples/demo_ont_1/trimmed_reads/nano_demo_ont_1.trimmed.fastq.gz > generated_checksums.txt
+        sha256sum results/samples/demo_illumina_1/trimmed_reads/demo_illumina_1_2.trimmed.fastq.gz >> generated_checksums.txt
+        sha256sum results/samples/demo_ont_1/trimmed_reads/nano_demo_ont_1.trimmed.fastq.gz >> generated_checksums.txt
         diff generated_checksums.txt .test_expected/expected_checksums.txt
