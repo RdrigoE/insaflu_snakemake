@@ -55,9 +55,11 @@ class Abricate_Pangolin:
         )
         return pattern
 
-   
+
 class Checkpoint_Main:
-    def __init__(self, output_tuple, genbank_file, coverage_file, coverage_limit, project):
+    def __init__(
+        self, output_tuple, genbank_file, coverage_file, coverage_limit, project
+    ):
         self.output_tuple = output_tuple
         self.genbank_file = genbank_file
         self.coverage_file = coverage_file
@@ -77,11 +79,11 @@ class Checkpoint_Main:
 
         pattern = self.get_output()
         pattern.extend(self.get_output_prefix_sufix())
-        
 
         if pattern == []:
             return "template_empty.txt"
         return pattern
+
     def get_locus_w_coverage_prefix_sufix(self):
         with open(self.coverage_file, newline="") as csvfile:
             csv_reader = csv.reader(csvfile, delimiter=",")
@@ -105,14 +107,13 @@ class Checkpoint_Main:
         valide_locus = self.get_locus_w_coverage_prefix_sufix()
         segments = get_locus_and_genes(self.genbank_file)
         if True in valide_locus:
-          for prefix,sufix in self.output_tuple:
-            for idx, seg in enumerate(segments, start=0):
-                for gene in segments[seg]:
-                    locus_protein.append(
-                        f"{prefix}{seg}/Alignment_aa_{seg}_{gene}{sufix}"
-                    )
+            for prefix, sufix in self.output_tuple:
+                for idx, seg in enumerate(segments, start=0):
+                    for gene in segments[seg]:
+                        locus_protein.append(
+                            f"{prefix}{seg}/Alignment_aa_{seg}_{gene}{sufix}"
+                        )
         return locus_protein
-
 
     def get_locus_w_coverage(self):
         with open(self.coverage_file, newline="") as csvfile:
@@ -457,11 +458,12 @@ def get_output_project():
             sample=ont_samples.keys(),
         ),
         Checkpoint_Main(
-            [(f'projects/{config_user["project"]}/main_result/',
-            "_trans.fasta"), (f'projects/{config_user["project"]}/main_result/',
-            "_mafft.fasta"), (f'projects/{config_user["project"]}/main_result/',
-            "_mafft.nex"), (f'projects/{config_user["project"]}/main_result/',
-            "_tree.tree")],
+            [
+                (f'projects/{config_user["project"]}/main_result/', "_trans.fasta"),
+                (f'projects/{config_user["project"]}/main_result/', "_mafft.fasta"),
+                (f'projects/{config_user["project"]}/main_result/', "_mafft.nex"),
+                (f'projects/{config_user["project"]}/main_result/', "_tree.tree"),
+            ],
             REFERENCE_GB,
             f"projects/{config_user['project']}/main_result/coverage_translate.csv",
             software_parameters["min_coverage_consensus"],

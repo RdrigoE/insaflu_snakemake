@@ -6,8 +6,7 @@ rule freebayes:
         "projects/{project}/sample_{sample}/freebayes/{sample}_var.vcf",
     # conda:
     #     "../envs/freebayes.yaml"
-    threads:
-        8
+    threads: 8
     params:
         "--min-mapping-quality 20 --min-base-quality 20 --min-coverage 100 --min-alternate-count 10  --min-alternate-fraction 0.01 --ploidy 2 -V ",
     # resources:
@@ -18,4 +17,3 @@ rule freebayes:
         "benchmark/projects/{project}/{sample}/freebayes_{sample}_var.tsv"
     wrapper:
         "v1.14.0/bio/freebayes"
-
