@@ -3,6 +3,7 @@ user_metadata: ../user_metadata/
 sample_yaml: ../user/project.yaml #sample
 sample_csv: ../user/samples.csv #csv
 config_file: ../config/config.yaml
+memory: ../config/max_memory.yaml
 software_parameters: ../user/parameters.yaml
 get_coverage: ../workflow/software/getCoverage/getCoverage.py
 references: ../user/references/
