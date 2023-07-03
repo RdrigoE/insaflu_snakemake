@@ -6,6 +6,7 @@
 - [Activate Environment](#activate-environment)
 - [Explore Folder Structure](#explore-folder-structure)
 - [Execution](#execution)
+- [SLURM Execution](#execution-in-slurm-cluster)
 - [Exploring the Results](#exploring-the-results)
 
 ## Installation Process
@@ -47,10 +48,21 @@ Check constants.yaml. This file ties everything together by routing all the file
 
 ## Execution
 
-To execute the workflow, run the following command:
+To execute the workflow locally, run the following command:
 
 ```shell
 snakemake -c 8 --use-conda
+```
+
+## Execution in SLURM cluster
+
+Change the execution to the SLURM execution by using two files:
+
+- Edit the settings for SLURM execution in slurm/config.yaml.
+- Edit your paths in slurm/run_slurm.sh and run with:
+
+```shell
+sbatch slurm/run_slurm.sh
 ```
 
 ## Exploring the Results
@@ -68,6 +80,5 @@ results/samples contains directories for each sample with FastQC results and tri
 results/align_samples contains the results of SNP variant calling and consensus assembly.
 
 results/projects contains project-related files and align_sample files. The main files are in the main_result folder, which includes alignments, variants, and coverage files.
-
 
 
