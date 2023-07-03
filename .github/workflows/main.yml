@@ -46,7 +46,7 @@ jobs:
     - name: Validate output files
       run: |
         # Compute checksums for the generated files
-        sha256sum results/samples/demo_illumina_1/trimmed_reads/demo_illumina_1_1.trimmed.fastq.gz > generated_checksums.txt
+        sha256sum results/samples/demo_ont_1/trimmed_reads/nano_demo_ont_1.trimmed.fastq.gz > generated_checksums.txt
+        sha256sum results/samples/demo_illumina_1/trimmed_reads/demo_illumina_1_1.trimmed.fastq.gz >> generated_checksums.txt
         sha256sum results/samples/demo_illumina_1/trimmed_reads/demo_illumina_1_2.trimmed.fastq.gz >> generated_checksums.txt
-        sha256sum results/samples/demo_ont_1/trimmed_reads/nano_demo_ont_1.trimmed.fastq.gz >> generated_checksums.txt
         diff generated_checksums.txt .test_expected/expected_checksums.txt
