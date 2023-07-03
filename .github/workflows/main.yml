@@ -25,9 +25,9 @@ jobs:
     - name: Install Snakemake and snakefmt
       shell: bash -l {0}
       run: |
-        mamba env create --name insaflu --file config/insaflu.yaml
+        conda env create --name insaflu --file config/insaflu.yaml
         conda activate insaflu
-        mamba install -n insaflu -c bioconda snakefmt
+        conda install -n insaflu -c bioconda snakefmt
     
     - name: Lint with snakefmt
       shell: bash -l {0}
