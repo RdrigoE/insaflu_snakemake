@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Setup Conda
+      uses: conda-incubator/setup-miniconda@v2
+      with:
+        auto-update-conda: true
+        python-version: 3.8
+    
+    - name: Install Snakemake
+      shell: bash -l {0}
+      run: mamba env create --name insaflu --file config/insaflu.yaml
+    
+    - name: Install Linter
+      run: conda activate insaflu
+
+    - name: Lint with snakefmt
+      run: snakefmt workflow/Snakefile workflow/rules
+
+    - name: Execute Snakemake
+      shell: bash -l {0}
+      run: snakemake --cores 1 --use-conda
+
+    # New step to compare the generated files to expected outputs
+    - name: Validate output files
+      run: |
+        # Compute checksums for the generated files
+        sha256sum results/samples/sample_01/trimmed_reads/sample_01.trimmed.fastq.gz > generated_checksums.txt
+        sha256sum test_files/sample_01.trimmed.fastq.gz >> generated_checksums.txt
+        
+        # Compare to expected checksums
+        diff generated_checksums.txt expected_checksums.txt
