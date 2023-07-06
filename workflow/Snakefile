@@ -299,6 +299,14 @@ PRIMERS = (
     user_metadata.get("primers") if user_metadata.get("primers") is not None else False
 )
 PRIMERS = f"../user/primers/{user_metadata['primers']}" if PRIMERS else False
+PRIMER_FASTA = (
+    user_metadata.get("primers_fasta")
+    if user_metadata.get("primers_fasta") is not None
+    else False
+)
+PRIMER_FASTA = f"../user/primers/{user_metadata['primers_fasta']}" if PRIMERS else False
+
+
 
 CONSENSUS_TOOL = user_metadata["illumina_consensus"]
 

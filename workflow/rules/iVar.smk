@@ -18,8 +18,11 @@ rule iVar_align_pe:
         "mkdir align_samples/{wildcards.sample}/reference -p && "
         "cp {REFERENCE_FASTA} align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta && "
         "bwa index align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta && "
+
         "bwa mem align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta {input.reads_1} {input.reads_2} | "
+
         "samtools view -u -T align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta -q {params.minqual} | "
+
         "samtools sort --reference align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta > {output}"
 
 
@@ -54,7 +57,7 @@ rule primers_bam:
     input:
         pre_snps="align_samples/{sample}/iVar/pre_snps.bam",
     output:
-        snps="align_samples/{sample}/iVar/snps.bam",
+        snps="align_samples/{sample}/iVar/second_snps.bam",
     conda:
         "../envs/ivar.yaml"
     params:
@@ -67,8 +70,42 @@ rule primers_bam:
         "benchmark/align_samples/{sample}/iVar/primers.tsv"
     shell:
         "samtools sort -o {input.pre_snps}.sorted {input.pre_snps} "
-        "&& ivar trim -b {PRIMERS} -i {input.pre_snps}.sorted -m 35 -s 5  -p {output} -e "
+        "&& ivar trim -b {PRIMERS} -i {input.pre_snps}.sorted -m 0 -q 0 -p {output} -e "
         "&& samtools sort -o {output} {output}"
+
+
+rule injection:
+    input:
+        bam="align_samples/{sample}/iVar/second_snps.bam",
+    output:
+        snps="align_samples/{sample}/iVar/snps.bam",
+    conda:
+        "../envs/ivar.yaml"
+    params:
+        prefix="align_samples/{sample}/iVar/temp_snps",
+    resources:
+        mem_mb=memory["primers_bam"],
+    log:
+        "logs/align_samples/{sample}/iVar/primers.log",
+    benchmark:
+        "benchmark/align_samples/{sample}/iVar/primers.tsv"
+    shell:
+        "bwa mem -k 5 -T 16 align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta {PRIMER_FASTA} | samtools view -b -F 4 > primers.bam"
+        " && bedtools bamtobed -i primers.bam > primers.bed"
+        " && ivar trim -m 0 -q 0 -e -b primers.bed -p {params.prefix}.trimmed -i {input.bam}"
+        " && samtools sort -o {params.prefix}.trimmed.sorted.bam {params.prefix}.trimmed.bam"
+        " && samtools index {params.prefix}.trimmed.sorted.bam"
+        " && samtools mpileup -A -d 0 -Q 0 {input.bam} | ivar consensus -m 0 -n N -p {params.prefix}.ivar_consensus"
+        " && ./../workflow/scripts/run_check_consensus {params.prefix}.ivar_consensus.fa align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta"
+        " && bwa index -p {params.prefix}.ivar_consensus {params.prefix}.ivar_consensus.fa"
+        " && bwa mem -k 5 -T 16 {params.prefix}.ivar_consensus {PRIMER_FASTA} | samtools view -bS -F 4 | samtools sort -o primers_consensus.bam"
+        " && samtools mpileup -A -d 0 --reference {params.prefix}.ivar_consensus.fa -Q 0 primers_consensus.bam | ivar variants -p primers_consensus -t 0.03"
+        " && bedtools bamtobed -i primers_consensus.bam > primers_consensus.bed"
+        " && ivar getmasked -i primers_consensus.tsv -b primers_consensus.bed -f {PRIMER_FASTA}.pair_information.tsv -p primer_mismatchers_indices"
+        " && ivar removereads -i {params.prefix}.trimmed.sorted.bam -p {params.prefix}.masked.bam -t primer_mismatchers_indices.txt -b primers.bed"
+        " && samtools sort -o {params.prefix}.masked.sorted.bam {params.prefix}.masked.bam"
+        " && cp {params.prefix}.masked.sorted.bam {output}"
+        " && samtools index {output}"
 
 
 rule call_variant:
@@ -112,7 +149,8 @@ rule generate_consensus:
     benchmark:
         "benchmark/align_samples/{sample}/iVar/generate_consensus.tsv"
     shell:
-        "samtools mpileup -d 1000 -A -Q {params.mapqual} {input.bam} --reference align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta | ivar consensus -p align_samples/{wildcards.sample}/iVar/{params.consensus} -q {params.mapqual} -t {params.minfrac} -n N -m {params.mincov} "
+        "samtools mpileup -d 0 -A -Q {params.mapqual} {input.bam} --reference align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta | "
+        "ivar consensus -p align_samples/{wildcards.sample}/iVar/{params.consensus} -q {params.mapqual} -t {params.minfrac} -n N -m {params.mincov} "
 
 
 rule get_depth:
