@@ -83,6 +83,7 @@ rule injection:
         "../envs/ivar.yaml"
     params:
         prefix="align_samples/{sample}/iVar/temp_snps",
+        folder="align_samples/{sample}/iVar/",
     resources:
         mem_mb=memory["primers_bam"],
     log:
@@ -90,19 +91,19 @@ rule injection:
     benchmark:
         "benchmark/align_samples/{sample}/iVar/primers.tsv"
     shell:
-        "bwa mem -k 5 -T 16 align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta {PRIMER_FASTA} | samtools view -b -F 4 > primers.bam"
-        " && bedtools bamtobed -i primers.bam > primers.bed"
-        " && ivar trim -m 0 -q 0 -e -b primers.bed -p {params.prefix}.trimmed -i {input.bam}"
+        "bwa mem -k 5 -T 16 align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta {PRIMER_FASTA} | samtools view -b -F 4 > {params.folder}primers.bam"
+        " && bedtools bamtobed -i {params.folder}primers.bam > {params.folder}primers.bed"
+        " && ivar trim -m 0 -q 0 -e -b {params.folder}primers.bed -p {params.prefix}.trimmed -i {input.bam}"
         " && samtools sort -o {params.prefix}.trimmed.sorted.bam {params.prefix}.trimmed.bam"
         " && samtools index {params.prefix}.trimmed.sorted.bam"
         " && samtools mpileup -A -d 0 -Q 0 {input.bam} | ivar consensus -m 0 -n N -p {params.prefix}.ivar_consensus"
         " && ./../workflow/scripts/run_check_consensus {params.prefix}.ivar_consensus.fa align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta"
         " && bwa index -p {params.prefix}.ivar_consensus {params.prefix}.ivar_consensus.fa"
-        " && bwa mem -k 5 -T 16 {params.prefix}.ivar_consensus {PRIMER_FASTA} | samtools view -bS -F 4 | samtools sort -o primers_consensus.bam"
-        " && samtools mpileup -A -d 0 --reference {params.prefix}.ivar_consensus.fa -Q 0 primers_consensus.bam | ivar variants -p primers_consensus -t 0.03"
-        " && bedtools bamtobed -i primers_consensus.bam > primers_consensus.bed"
-        " && ivar getmasked -i primers_consensus.tsv -b primers_consensus.bed -f {PRIMER_FASTA}.pair_information.tsv -p primer_mismatchers_indices"
-        " && ivar removereads -i {params.prefix}.trimmed.sorted.bam -p {params.prefix}.masked.bam -t primer_mismatchers_indices.txt -b primers.bed"
+        " && bwa mem -k 5 -T 16 {params.prefix}.ivar_consensus {PRIMER_FASTA} | samtools view -bS -F 4 | samtools sort -o {params.folder}primers_consensus.bam"
+        " && samtools mpileup -A -d 0 --reference {params.prefix}.ivar_consensus.fa -Q 0 {params.folder}primers_consensus.bam | ivar variants -p {params.folder}primers_consensus -t 0.03"
+        " && bedtools bamtobed -i {params.folder}primers_consensus.bam > {params.folder}primers_consensus.bed"
+        " && ivar getmasked -i {params.folder}primers_consensus.tsv -b {params.folder}primers_consensus.bed -f {PRIMER_FASTA}.pair_information.tsv -p {params.folder}primer_mismatchers_indices"
+        " && ivar removereads -i {params.prefix}.trimmed.sorted.bam -p {params.prefix}.masked.bam -t {params.folder}primer_mismatchers_indices.txt -b {params.folder}primers.bed"
         " && samtools sort -o {params.prefix}.masked.sorted.bam {params.prefix}.masked.bam"
         " && cp {params.prefix}.masked.sorted.bam {output}"
         " && samtools index {output}"
