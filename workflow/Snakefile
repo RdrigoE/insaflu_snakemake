@@ -295,16 +295,12 @@ assert (
 ), "Project name is not set in the config file. Please set a project name"
 ABRICATE = user_metadata["abricate"]
 
-PRIMERS = (
-    user_metadata.get("primers") if user_metadata.get("primers") is not None else False
-)
-PRIMERS = f"../user/primers/{user_metadata['primers']}" if PRIMERS else False
 PRIMER_FASTA = (
     user_metadata.get("primers_fasta")
     if user_metadata.get("primers_fasta") is not None
     else False
 )
-PRIMER_FASTA = f"../user/primers/{user_metadata['primers_fasta']}" if PRIMERS else False
+PRIMER_FASTA = f"../user/primers/{user_metadata['primers_fasta']}" if PRIMER_FASTA else False
 
 
 
@@ -312,7 +308,7 @@ CONSENSUS_TOOL = user_metadata["illumina_consensus"]
 
 assert CONSENSUS_TOOL in "iVar snippy", "Consensus tool not set correctly"
 
-primers_setup = PRIMERS is False or CONSENSUS_TOOL == "iVar" and os.path.isfile(PRIMERS)
+primers_setup = PRIMER_FASTA is False or CONSENSUS_TOOL == "iVar" and os.path.isfile(PRIMER_FASTA)
 if CONSENSUS_TOOL == "iVar":
     assert (
         primers_setup
@@ -552,7 +548,7 @@ include: "rules/mafft.smk"
 include: "rules/warnings.smk"
 
 
-if PRIMERS and CONSENSUS_TOOL == "iVar":
+if PRIMER_FASTA and CONSENSUS_TOOL == "iVar":
 
     include: "rules/iVar.smk"
 

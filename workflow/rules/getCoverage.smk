@@ -1,18 +1,29 @@
+def get_threshold(wildcards):
+    sample_type = config_user["sample_type"][wildcards.sample]
+    if sample_type in ["snippy", "iVar"]:
+      return software_parameters["mincov"]
+    else:
+      return software_parameters["mincov_medaka"]
+
 rule getCoverage:
     input:
         depth=get_depth,
     output:
         coverage="align_samples/{sample}/{sample}_coverage.csv",
     conda:
-        "../envs/coverage.yaml"
+        "../envs/base.yaml"
     resources:
         mem_mb=memory["getCoverage"],
     log:
         "logs/samples/{sample}/get_coverage.log",
     benchmark:
         "benchmark/samples/{sample}/get_coverage.tsv"
+    params:
+      threshold=get_threshold 
+
     shell:
-        "python {coverage_script} -i {input.depth} -r {REFERENCE_FASTA} -o {output.coverage}"
+      "python {coverage_script} -i {input.depth} -r {REFERENCE_FASTA}"
+       " -o {output.coverage} -t {params.threshold} -g {REFERENCE_GB}"
 
 
 checkpoint mergeCoverage:

@@ -18,11 +18,8 @@ rule iVar_align_pe:
         "mkdir align_samples/{wildcards.sample}/reference -p && "
         "cp {REFERENCE_FASTA} align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta && "
         "bwa index align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta && "
-
         "bwa mem align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta {input.reads_1} {input.reads_2} | "
-
         "samtools view -u -T align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta -q {params.minqual} | "
-
         "samtools sort --reference align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta > {output}"
 
 
@@ -60,17 +57,19 @@ rule primers_bam:
         snps="align_samples/{sample}/iVar/second_snps.bam",
     conda:
         "../envs/ivar.yaml"
-    params:
-        "align_samples/{wildcards.sample}/iVar/snps",
     resources:
         mem_mb=memory["primers_bam"],
     log:
         "logs/align_samples/{sample}/iVar/primers.log",
     benchmark:
         "benchmark/align_samples/{sample}/iVar/primers.tsv"
+    params:
+        folder="align_samples/{sample}/iVar/",
     shell:
+        "bwa mem -k 5 -T 16 align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta {PRIMER_FASTA} | samtools view -b -F 4 > {params.folder}primers.bam"
+        " && bedtools bamtobed -i {params.folder}primers.bam > {params.folder}primers.bed &&"
         "samtools sort -o {input.pre_snps}.sorted {input.pre_snps} "
-        "&& ivar trim -b {PRIMERS} -i {input.pre_snps}.sorted -m 0 -q 0 -p {output} -e "
+        "&& ivar trim -b {params.folder}primers.bed -i {input.pre_snps}.sorted -m 0 -q 0 -p {output} -e "
         "&& samtools sort -o {output} {output}"
 
 
@@ -91,9 +90,7 @@ rule injection:
     benchmark:
         "benchmark/align_samples/{sample}/iVar/primers.tsv"
     shell:
-        "bwa mem -k 5 -T 16 align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta {PRIMER_FASTA} | samtools view -b -F 4 > {params.folder}primers.bam"
-        " && bedtools bamtobed -i {params.folder}primers.bam > {params.folder}primers.bed"
-        " && ivar trim -m 0 -q 0 -e -b {params.folder}primers.bed -p {params.prefix}.trimmed -i {input.bam}"
+        " ivar trim -m 0 -q 0 -e -b {params.folder}primers.bed -p {params.prefix}.trimmed -i {input.bam}"
         " && samtools sort -o {params.prefix}.trimmed.sorted.bam {params.prefix}.trimmed.bam"
         " && samtools index {params.prefix}.trimmed.sorted.bam"
         " && samtools mpileup -A -d 0 -Q 0 {input.bam} | ivar consensus -m 0 -n N -p {params.prefix}.ivar_consensus"

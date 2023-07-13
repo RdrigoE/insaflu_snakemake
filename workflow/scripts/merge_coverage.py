@@ -1,5 +1,4 @@
 """Create coverage report"""
-from ast import Raise
 import re
 import sys
 import csv
@@ -126,13 +125,12 @@ def get_coverage(filename: str, n_locus: int):
     :doc-author: Trelent
     """
     with open(filename, newline="", encoding="UTF8") as csvfile:
-        csv_reader = csv.reader(csvfile, delimiter="\t")
-        coverage_list = []
+        coverage_list = list(csv.reader(csvfile, delimiter="\t"))
         sample_name = re.findall("(?<=/)(.*?)(?=_coverage.csv)", filename)[0].split(
             "/"
         )[0]
-        for i in csv_reader:
-            coverage_list.append(i)
+        for i in coverage_list:
+            print(i)
         coverage_list = coverage_list[-1][-n_locus:]
         coverage_list.insert(0, sample_name)
         csvfile.close()
@@ -175,4 +173,5 @@ if __name__ == "__main__":
 
     NUMBER_OF_LOCUS = len(get_locus(REFERENCE_GB))
     merge_coverage(COVERAGE_FILES, OUTPUT_FILE_1)
-    create_script_readable_coverage_file(COVERAGE_FILES, OUTPUT_FILE_2, NUMBER_OF_LOCUS)
+    create_script_readable_coverage_file(
+        COVERAGE_FILES, OUTPUT_FILE_2, NUMBER_OF_LOCUS)
