@@ -17,3 +17,4 @@ output.txt
 *.pdf
 workflow/db/snpeff.config
 reads
+workflow/db/snpeff.config
