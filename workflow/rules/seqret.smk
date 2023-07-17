@@ -13,6 +13,7 @@ rule seqret_all_nt:
         "logs/projects/{project}/nex/main_result/All_nt_to_nex.log",
     benchmark:
         "benchmark/projects/{project}/nex/main_result/All_nt_to_nex.tsv"
+    localrule: True
     shell:
         "seqret {params} -sequence {input} -outseq {output}"
 
@@ -32,6 +33,7 @@ rule seqret_all_nt_only_90:
         "logs/projects/{project}/nex/main_result/All_nt_only_90plus_to_nex.log",
     benchmark:
         "benchmark/projects/{project}/nex/main_result/All_nt_only_90plus_to_nex.tsv"
+    localrule: True
     shell:
         "seqret {params} -sequence {input} -outseq {output}"
 
@@ -51,6 +53,7 @@ rule seqret_all_consensus:
         "logs/projects/{project}/nex/main_result/AllConsensus_to_nex.log",
     benchmark:
         "benchmark/projects/{project}/nex/main_result/AllConsensus_to_nex.tsv"
+    localrule: True
     shell:
         "seqret {params} -sequence {input} -outseq {output}"
 
@@ -70,6 +73,7 @@ rule seqret_alignment_aa_gene:
         "logs/projects/{project}/nex/main_result/{locus}/Alignment_aa_{locus}_{gene}_mafft_to_nex.log",
     benchmark:
         "benchmark/projects/{project}/nex/main_result/{locus}/Alignment_aa_{locus}_{gene}_mafft_to_nex.tsv"
+    localrule: True
     shell:
         "seqret {params} -sequence {input} -outseq {output}"
 
@@ -89,6 +93,7 @@ rule alignment_nt_seg_mafft_seqret:
         "logs/projects/{project}/nex/main_result/{seg}/Alignment_nt_{seg}_mafft_to_nex.log",
     benchmark:
         "benchmark/projects/{project}/nex/main_result/{seg}/Alignment_nt_{seg}_mafft_to_nex.tsv"
+    localrule: True
     shell:
         "seqret {params} -sequence {input} -outseq {output}"
 
@@ -108,6 +113,7 @@ rule alignment_nt_seg_seqret:
         "logs/projects/{project}/nex/main_result/{seg}/Alignment_nt_{seg}_to_nex.log",
     benchmark:
         "benchmark/projects/{project}/nex/main_result/{seg}/Alignment_nt_{seg}_to_nex.tsv"
+    localrule: True
     shell:
         "seqret {params} -sequence {input} -outseq {output}"
 
@@ -127,6 +133,7 @@ rule alignment_nt_All_seqret:
         "logs/projects/{project}/nex/main_result/Alignment_nt_All_to_nex.log",
     benchmark:
         "benchmark/projects/{project}/nex/main_result/Alignment_nt_All_to_nex.tsv"
+    localrule: True
     shell:
         "seqret {params} -sequence {input} -outseq {output}"
 
@@ -146,5 +153,6 @@ rule alignment_nt_specific_seqret:
         "logs/projects/{project}/nex/main_result/Alignment_nt_{seg}_mafft_to_nex.log",
     benchmark:
         "benchmark/projects/{project}/nex/main_result/Alignment_nt_{seg}_mafft_to_nex.tsv"
+    localrule: True
     shell:
         "seqret {params} -sequence {input} -outseq {output}"

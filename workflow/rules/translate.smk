@@ -12,5 +12,6 @@ rule translate:
         "logs/projects/{project}/main_result/{locus}/translate_{locus}_{gene}.log",
     benchmark:
         "benchmark/projects/{project}/main_result/{locus}/translate_{locus}_{gene}.tsv"
+    localrule: True
     shell:
         "python {scripts_directory}translate.py {REFERENCE_GB} {input.Alignment_nt} {output} '{wildcards.locus}' '{wildcards.gene}' {input.coverage}"

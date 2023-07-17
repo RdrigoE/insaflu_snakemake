@@ -169,6 +169,9 @@ rule get_depth:
         "logs/align_samples/{sample}/iVar/get_depth.log",
     benchmark:
         "benchmark/align_samples/{sample}/iVar/get_depth.tsv"
+
+    localrule: True
+
     shell:
         "samtools depth {params} {input.i} | bgzip -c > {output.only_depth} "
         "&& tabix -p vcf {output.only_depth} && gunzip -c {output.only_depth}  > {output.depth} "
@@ -188,6 +191,7 @@ rule iVar_depth_1_2:
         "logs/align_samples/{sample}/iVar/depth_1_2.log",
     benchmark:
         "benchmark/align_samples/{sample}/iVar/depth_1_2.tsv"
+    localrule: True
     shell:
         "python ../workflow/scripts/split_consensus.py {input.consensus} {input.depth} {REFERENCE_GB} {output.consensus}"
 
@@ -205,6 +209,7 @@ rule iVar_depth_step_2:
         "logs/align_samples/{sample}/iVar/depth_step_2/{seg}.log",
     benchmark:
         "benchmark/align_samples/{sample}/iVar/depth_step_2/{seg}.tsv"
+    localrule: True
     shell:
         "python ../workflow/scripts/split_depth_file.py {input.zipped} {REFERENCE_GB}"
 
@@ -222,6 +227,7 @@ rule create_align_file_iVar:
         "logs/align_samples/{sample}/iVar/create_align_file/{seg}.log",
     benchmark:
         "benchmark/align_samples/{sample}/iVar/create_align_file/{seg}.tsv"
+    localrule: True
     shell:
         "python ../workflow/scripts/mask_consensus_by_deep.py align_samples/{wildcards.sample}/reference/{REFERENCE_NAME}.fasta {input.first_consensus} {output.align_file} {wildcards.seg}"
 
@@ -242,6 +248,7 @@ rule align_mafft_iVar:
         "logs/align_samples/{sample}/iVar/align_mafft/{seg}.log",
     benchmark:
         "benchmark/align_samples/{sample}/iVar/align_mafft/{seg}.tsv"
+    localrule: True
     shell:
         "mafft --thread {threads} {params} {input.align_file} > {output.aligned_file}"
 
@@ -262,6 +269,7 @@ rule msa_masker_iVar:
         "logs/align_samples/{sample}/iVar/msa_masker/{seg}.log",
     benchmark:
         "benchmark/align_samples/{sample}/iVar/msa_masker/{seg}.tsv"
+    localrule: True
     shell:
         "python ../workflow/scripts/msa_masker.py -i {input.align_file} -df {input.depth} -o {output} {params}"
 
@@ -283,6 +291,7 @@ rule get_masked_consensus_iVar:
         "logs/align_samples/{sample}/iVar/get_masked_consensus.log",
     benchmark:
         "benchmark/align_samples/{sample}/iVar/get_masked_consensus.tsv"
+    localrule: True
     shell:
         "python ../workflow/scripts/get_consensus_medaka.py '{input}' {output}"
 
@@ -304,6 +313,7 @@ rule mask_regions_consensus_iVar:
         "logs/align_samples/{sample}/iVar/mask_regions_consensus.log",
     benchmark:
         "benchmark/align_samples/{sample}/iVar/mask_regions_consensus.tsv"
+    localrule: True
     shell:
         "python {scripts_directory}mask_regions.py {input.consensus} {output.final_consensus} {params} "
 
@@ -317,5 +327,6 @@ rule get_vcf:
         mem_mb=memory["get_vcf"],
     conda:
         "../envs/base.yaml"
+    localrule: True
     shell:
         "python {scripts_directory}convert_vcf.py {input.tsv_file} {output.vcf_file} "

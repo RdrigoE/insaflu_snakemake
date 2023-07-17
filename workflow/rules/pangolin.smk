@@ -31,6 +31,7 @@ rule not_pangolin:
         "logs/projects/{project}/main_result/not_pangolin.log",
     benchmark:
         "benchmark/projects/{project}/main_result/not_pangolin.tsv"
+    localrule: True
     shell:
         "echo 'This is not SARS-CoV-2' > {output}"
 

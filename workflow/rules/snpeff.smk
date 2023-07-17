@@ -22,6 +22,7 @@ rule prepare_snpeff:
         "logs/projects/{project}/main_result/snpeff_prepare.log",
     benchmark:
         "benchmark/projects/{project}/main_result/snpeff_prepare.tsv"
+    localrule: True
     shell:
         "python {scripts_directory}create_snpeff_text.py $CONDA_PREFIX {input.ref_gb} {input.ref_fa} {REFERENCE_NAME} {output} "
 

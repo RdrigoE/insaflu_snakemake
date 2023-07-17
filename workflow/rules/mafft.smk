@@ -134,5 +134,6 @@ rule cp_Alignment_nt:
         "logs/projects/{project}/main_results/copy_Alignment_nt_{seg}.log",
     benchmark:
         "benchmark/projects/{project}/main_results/copy_Alignment_nt_{seg}.tsv"
+    localrule: True
     shell:
         "cp {input} {output}"

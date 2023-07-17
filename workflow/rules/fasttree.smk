@@ -72,6 +72,7 @@ rule cp_Alignment_nt_tree:
         "logs/projects/{project}/main_result/copy_Tree_ML_All/{seg}.log",
     benchmark:
         "benchmark/projects/{project}/main_result/copy_Tree_ML_All/{seg}.tsv"
+    localrule: True
     shell:
         "cp {input.tree} {output.tree} &&"
         "cp {input.tree} {output.nwk}"

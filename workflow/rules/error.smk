@@ -12,5 +12,6 @@ rule warning_no_coverage:
         "logs/projects/{project}/main_result/warning.log",
     benchmark:
         "benchmark/projects/{project}/main_result/warning.tsv"
+    localrule: True
     shell:
         "echo 'Not enough coverage in any sample to continue the analysis' > {output}"

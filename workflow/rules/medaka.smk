@@ -57,6 +57,7 @@ rule medaka_split_depth:
         "logs/align_samples/{sample}/medaka/medaka_split_depth/{seg}.log",
     benchmark:
         "benchmark/align_samples/{sample}/medaka/medaka_split_depth/{seg}.tsv"
+    localrule: True
     shell:
         "python3 {scripts_directory}split_depth_file.py {input} {REFERENCE_GB}"
 
@@ -122,6 +123,7 @@ rule mask_between_top_and_50:
         "logs/align_samples/{sample}/medaka/filter_medaka.log",
     benchmark:
         "benchmark/align_samples/{sample}/medaka/filter_medaka.tsv"
+    localrule: True
     shell:
         "touch {output.temp_file} && "
         "python {scripts_directory}add_freq_medaka_consensus.py {input.normal_reference_fasta} {input.vcf_file} {input.file_coverage} "
@@ -160,6 +162,7 @@ rule create_align_file:
         "logs/align_samples/{sample}/medaka/create_align_file_{seg}.log",
     benchmark:
         "benchmark/align_samples/{sample}/medaka/create_align_file_{seg}.tsv"
+    localrule: True
     shell:
         "python {scripts_directory}mask_consensus_by_deep.py {REFERENCE_FASTA} {input.first_consensus} {output.align_file} {wildcards.seg}"
 
@@ -180,6 +183,7 @@ rule msa_masker_medaka:
         "logs/align_samples/{sample}/medaka/msa_masker_medaka_{seg}.log",
     benchmark:
         "benchmark/align_samples/{sample}/medaka/msa_masker_medaka_{seg}.tsv"
+    localrule: True
     shell:
         "python {scripts_directory}msa_masker.py -i {input.align_file} -df {input.depth} -o {output} {params}"
 
@@ -201,6 +205,7 @@ rule get_masked_consensus_medaka:
         "logs/align_samples/{sample}/medaka/get_masked_consensus_medaka.log",
     benchmark:
         "benchmark/align_samples/{sample}/medaka/get_masked_consensus_medaka.tsv"
+    localrule: True
     shell:
         "python {scripts_directory}get_consensus_medaka.py '{input}' {output}"
 
@@ -220,5 +225,6 @@ rule mask_regions_consensus_medaka:
         "logs/align_samples/{sample}/medaka/mask_regions_consensus_medaka.log",
     benchmark:
         "benchmark/align_samples/{sample}/medaka/mask_regions_consensus_medaka.tsv"
+    localrule: True
     shell:
         "python {scripts_directory}mask_regions.py {input} {output} {params}"
