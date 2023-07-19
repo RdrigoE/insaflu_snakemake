@@ -1,6 +1,7 @@
 configfile: "../config/threads.yaml"
 
 
+
 rule spades_se:
     input:
         "samples/{sample}/trimmed_reads/{sample}.trimmed.fastq.gz",

@@ -1,3 +1,4 @@
+localrules:initiate_folder,makeproject,assemble_consensus,create_segments,
 rule initiate_folder:
     conda:
         "../envs/base.yaml"
@@ -9,7 +10,6 @@ rule initiate_folder:
         expand("logs/{project}/main_result/initiate_folder.log", project=PROJECT_NAME),
     benchmark:
         f"benchmark/{PROJECT_NAME}/main_result/initiate_folder.tsv"
-    localrule: True
     shell:
         "mkdir {output} && cp {user_metadata_directort}parameters.yaml projects/{wildcards.project}/"
 
@@ -31,7 +31,6 @@ rule makeproject:
         "logs/projects/{project}/makeproject/{sample}.log",
     benchmark:
         "benchmark/projects/{project}/makeproject/{sample}.tsv"
-    localrule: True
     shell:
         "mkdir projects/{wildcards.project}/sample_{wildcards.sample}/ -p && "
         " cp -r {params} projects/{wildcards.project}/sample_{wildcards.sample}/ "
@@ -58,7 +57,6 @@ rule assemble_consensus:
         "logs/projects/{project}/main_result/assemble_consensus.log",
     benchmark:
         "benchmark/projects/{project}/main_result/assemble_consensus.tsv"
-    localrule: True
     shell:
         "python {scripts_directory}generate_AllConsensus.py {input.coverage} {REFERENCE_GB} '{input.every_consensus}' {REFERENCE_FASTA} {output.AllConsensus} {output.all_consensus_no_ref} "
         "&& python {scripts_directory}concat_segments.py '{input.every_consensus}' {REFERENCE_GB} {output.All_nt} {input.coverage} {REFERENCE_FASTA} {output.All_nt_only_90plus}"
@@ -88,6 +86,5 @@ rule create_segments:
         f"benchmark/projects/{PROJECT_NAME}/main_result/create_segments/{SEGMENTS}.tsv"
     conda:
         "../envs/base.yaml"
-    localrule: True
     shell:
         "python {scripts_directory}split_files_by_locus.py {input} projects/{PROJECT_NAME}/main_result {REFERENCE_GB}"

@@ -1,4 +1,5 @@
 configfile: f"../config/threads.yaml"
+localrules:snippy_unzip_depth,snippy_split_depth,create_align_file_snippy,msa_masker_snippy,get_masked_consensus_snippy,mask_regions_consensus_snippy,
 
 
 rule snippy_pe:
@@ -67,7 +68,6 @@ rule snippy_unzip_depth:
         "logs/align_samples/{sample}/snippy/unzip_depth.log",
     benchmark:
         "benchmark/align_samples/{sample}/snippy/unzip_depth.tsv"
-    localrule: True
     shell:
         "gunzip -c {input.zipped} > {output.unzipped}"
 
@@ -85,7 +85,6 @@ rule snippy_split_depth:
         "logs/align_samples/{sample}/snippy/split_depth_{seg}.log",
     benchmark:
         "benchmark/align_samples/{sample}/snippy/split_depth_{seg}.tsv"
-    localrule: True
     shell:
         "python3 {scripts_directory}split_depth_file.py align_samples/{wildcards.sample}/snippy/depth/snps.depth {REFERENCE_GB} "
         "&& touch {output.unzipped}"
@@ -104,7 +103,6 @@ rule create_align_file_snippy:
         "logs/align_samples/{sample}/snippy/create_align_file_{seg}.log",
     benchmark:
         "benchmark/align_samples/{sample}/snippy/create_align_file_{seg}.tsv"
-    localrule: True
     shell:
         "python {scripts_directory}mask_consensus_by_deep.py {REFERENCE_FASTA} {input.first_consensus} {output.align_file} {wildcards.seg}"
 
@@ -125,7 +123,6 @@ rule msa_masker_snippy:
         "logs/align_samples/{sample}/snippy/msa_masker_{seg}.log",
     benchmark:
         "benchmark/align_samples/{sample}/snippy/msa_masker_{seg}.tsv"
-    localrule: True
     shell:
         "python {scripts_directory}msa_masker.py -i {input.align_file} -df {input.depth} -o {output} {params}"
 
@@ -147,7 +144,6 @@ rule get_masked_consensus_snippy:
         "logs/align_samples/{sample}/snippy/get_masked_consensus.log",
     benchmark:
         "benchmark/align_samples/{sample}/snippy/get_masked_consensus.tsv"
-    localrule: True
     shell:
         "python {scripts_directory}get_consensus_medaka.py '{input}' {output}"
 
@@ -167,6 +163,5 @@ rule mask_regions_consensus_snippy:
         "logs/align_samples/{sample}/snippy/mask_regions_consensus.log",
     benchmark:
         "benchmark/align_samples/{sample}/snippy/mask_regions_consensus.tsv"
-    localrule: True
     shell:
         "python {scripts_directory}mask_regions.py {input} {output} {params}"

@@ -1,3 +1,4 @@
+localrules: not_pangolin,
 checkpoint abricate_pangolin:
     output:
         csv=temp(expand("projects/{project}/ref.csv", project=config_user["project"])),
@@ -31,7 +32,6 @@ rule not_pangolin:
         "logs/projects/{project}/main_result/not_pangolin.log",
     benchmark:
         "benchmark/projects/{project}/main_result/not_pangolin.tsv"
-    localrule: True
     shell:
         "echo 'This is not SARS-CoV-2' > {output}"
 

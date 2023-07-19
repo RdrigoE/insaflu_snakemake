@@ -1,4 +1,5 @@
 configfile: "../config/threads.yaml"
+localrules: cp_Alignment_nt,
 
 
 rule align_w_mafft_medaka:
@@ -134,6 +135,5 @@ rule cp_Alignment_nt:
         "logs/projects/{project}/main_results/copy_Alignment_nt_{seg}.log",
     benchmark:
         "benchmark/projects/{project}/main_results/copy_Alignment_nt_{seg}.tsv"
-    localrule: True
     shell:
         "cp {input} {output}"
