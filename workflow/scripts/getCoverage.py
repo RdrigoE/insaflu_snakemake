@@ -125,6 +125,7 @@ class Coverage(object):
             sz_return += "{}\t".format(
                 self.get_coverage(
                     key, Coverage.COVERAGE_ALL))
+            print(sz_return)
 
         for key in self.dt_data:
             sz_return += "{}\t".format(

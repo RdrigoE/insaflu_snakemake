@@ -145,7 +145,7 @@ rule bcf_consensus:
     benchmark:
         "benchmark/align_samples/{sample}/medaka/bcf_consensus.tsv"
     shell:
-        "bcftools consensus -s SAMPLE -f {REFERENCE_FASTA} {input.vcf_ziped} -o {output}"
+        "bcftools consensus -s SAMPLE -f {input.ref} {input.vcf_ziped} -o {output}"
 
 
 rule create_align_file:
@@ -174,7 +174,7 @@ rule msa_masker_medaka:
     conda:
         "../envs/msa_masker.yaml"
     params:
-        "--c " + str(software_parameters["mincov_medaka"]),
+        "--c " + str(software_parameters["mincov_medaka"] - 1),
     resources:
         mem_mb=memory["msa_masker_medaka"],
     log:

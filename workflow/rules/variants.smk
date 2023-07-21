@@ -24,7 +24,7 @@ rule snpeff_concat:
     input:
         expand(
             "projects/{project}/sample_{sample}/freebayes/{sample}_snpeff.vcf",
-            sample=config_user["samples"],
+            sample=illumina_samples,
             project=config_user["project"],
         ),
     conda:
@@ -45,7 +45,7 @@ rule snpeff_concat_indels:
     input:
         expand(
             "projects/{project}/sample_{sample}/freebayes/{sample}_snpeff.vcf",
-            sample=config_user["samples"],
+            sample=illumina_samples,
             project=config_user["project"],
         ),
     conda:

@@ -39,7 +39,7 @@ def get_raw_input_ont(wildcards):
 
 # MEDAKA
 def get_add_freq_medaka(software_parameters):
-    params = f'{int(software_parameters["mincov_medaka"]) + 2}  {software_parameters["min_prop_for_variant_evidence"]}'
+    params = f'{int(software_parameters["mincov_medaka"])}  {software_parameters["min_prop_for_variant_evidence"]}'
     return params
 
 

@@ -187,7 +187,7 @@ def analyse_file(input_file):
         else:
             default.extend(["", "", "", "", "", "", "", "", "", "", ""])
         vcf_data.append(default)
-    print(vcf_data)
+    # print(vcf_data)
     return vcf_data
 
 
@@ -283,7 +283,7 @@ if __name__ == "__main__":
     elif type_of_file == "minor_iSNVs":
         signal = "smaller"
         re_expression = "(?<=/freebayes/)(.*?)(?=_snpeff.vcf)"
-        list_of_words = ["snp"]
+        list_of_words = ["snp", "complex"]
     else:
         raise RuntimeError("That was a bad call")  # to change
     validated_variants(

@@ -16,8 +16,7 @@ def write_fasta(dictionary: dict[str, str], filename: str):
 
 def get_reference(file_name: str) -> SeqIO.SeqRecord:
     with open(file_name, "r") as handle:
-        record = next(SeqIO.parse(handle, "fasta"))
-        return record
+        return next(SeqIO.parse(handle, "fasta"))
 
 
 def get_ref_adjusted_positions(
@@ -26,11 +25,8 @@ def get_ref_adjusted_positions(
     new_positions = []
     ref = get_reference(alignment)
 
-    index_list = []
-    for idx, nucleotide in enumerate(ref):
-        if nucleotide != "-":
-            index_list.append(idx)
-
+    index_list = [idx for idx, nucleotide in enumerate(
+        ref) if nucleotide != "-"]
     for gene_group in positions:
         if gene_group[0] == gene:
             for group in gene_group[1]:
@@ -46,15 +42,35 @@ def get_ref_adjusted_positions(
 def get_coverage_to_translate_matrix(filename: str) -> dict[str, list[str]]:
     with open(filename) as csvfile:
         csv_reader = csv.reader(csvfile)
-        coverage_dic: dict[str, list[str]] = {}
-        for row in csv_reader:
-            coverage_dic[row[0]] = row[1:]
+        coverage_dic: dict[str, list[str]] = {
+            row[0]: row[1:] for row in csv_reader}
     return coverage_dic
 
 
 def get_position_in_list(reference: str, locus: str) -> int:
     list_of_locus: list[str] = ggb.get_locus(reference)
     return list_of_locus.index(locus)
+
+
+def get_best_translation(record, pos: list[int]) -> str:
+    options = ["", "", ""]
+    options[0] = record.seq[pos[0]: pos[1]].ungap(
+    ).translate(table=11, to_stop=False)
+    options[1] = record.seq[pos[0] + 1: pos[1]].ungap(
+    ).translate(table=11, to_stop=False)
+    options[2] = record.seq[pos[0] + 2: pos[1]].ungap(
+    ).translate(table=11, to_stop=False)
+
+    idx = 0
+    min_idx = 0
+    min_value = options[0][:-1].count("*")
+    for entry in options[1:]:
+        idx += 1
+        new_value = entry[:-1].count("*")
+        if new_value < min_value:
+            min_value = new_value
+            min_idx = idx
+    return options[min_idx]
 
 
 def write_fast_aa(
@@ -75,10 +91,9 @@ def write_fast_aa(
         "min_coverage_consensus"
     ]
 
-    positions: list[tuple[str, list[list[int]]]] = ggb.get_positions_gb(reference)
-
+    positions: list[tuple[str, list[list[int]]]
+                    ] = ggb.get_positions_gb(reference)
     positions = get_ref_adjusted_positions(alignment, positions, gene)
-
     new_consensus: dict[str, dict[str, str]] = {}
 
     for gene_structure in positions:
@@ -89,40 +104,33 @@ def write_fast_aa(
             for record in SeqIO.parse(alignment, "fasta"):
                 if record.id == reference_id:
                     if new_consensus[gene_name].get(record.id, False):
-                        new_consensus[gene_name][record.id] += (
-                            record.seq[pos[0] : pos[1]]
-                            .replace("-", "")
-                            .translate(table=11, to_stop=False)
-                        )
+                        new_consensus[gene_name][record.id] += get_best_translation(
+                            record, pos)
                     else:
-                        new_consensus[gene_name][record.id] = (
-                            record.seq[pos[0] : pos[1]]
-                            .replace("-", "")
-                            .translate(table=11, to_stop=False)
-                        )
+                        new_consensus[gene_name][record.id] = get_best_translation(
+                            record, pos)
+                    continue
+
+                seq = "".join([str(record.seq)[pos[0]: pos[1]].replace("-", "")
+                              for pos in gene_positions])
+                gene_length = sum([pos[1] - pos[0] for pos in gene_positions])
+                if seq.count("N") / gene_length > 0.1:
                     continue
                 identifier = record.id
                 record_coverage = float(
-                    coverage_dic[identifier[: identifier.index(f"__{reference_id}")]][
-                        position
-                    ]
+                    coverage_dic[identifier[: identifier.index(
+                        f"__{reference_id}")]][position]
                 )
                 if record_coverage >= coverage_value:
                     if new_consensus[gene_name].get(identifier, False):
-                        new_consensus[gene_name][record.id] += (
-                            record.seq[pos[0] : pos[1]]
-                            .replace("-", "")
-                            .translate(table=11, to_stop=False)
-                        )
+                        new_consensus[gene_name][record.id] += get_best_translation(
+                            record, pos)
                     else:
-                        new_consensus[gene_name][identifier] = (
-                            record.seq[pos[0] : pos[1]]
-                            .replace("-", "")
-                            .translate(table=11, to_stop=False)
-                        )
+                        new_consensus[gene_name][identifier] = get_best_translation(
+                            record, pos)
 
-    for gene in new_consensus:
-        write_fasta(new_consensus[gene], output)
+    for value in new_consensus.values():
+        write_fasta(value, output)
 
 
 if __name__ == "__main__":

@@ -258,12 +258,15 @@ sample_data: Data = Data(
     dic_directory["sample_csv"], user_metadata["illumina_consensus"]
 )
 
+
 (
     paired_illumina,
     single_illumina,
     ont_samples,
     sample_info_dic,
 ) = sample_data.get_options()
+
+illumina_samples = [*paired_illumina.keys(), *single_illumina.keys()]
 
 illumina_assembler = sample_data.get_assembler()
 (
@@ -272,7 +275,6 @@ illumina_assembler = sample_data.get_assembler()
     paired_illumina_ivar,
     single_illumina_ivar,
 ) = get_data_in_align_form(illumina_assembler, single_illumina, paired_illumina)
-
 # Load in run config
 
 REFERENCE_GB = f"../user/references/{user_metadata['gb_reference']}"

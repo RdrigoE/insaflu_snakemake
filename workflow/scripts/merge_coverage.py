@@ -95,7 +95,7 @@ def merge_coverage(file_list, output_file):
             if sample_t in ("snippy", "iVar"):
                 sample_cov = software_parameters["mincov"]
             elif sample_t == "medaka":
-                sample_cov = software_parameters["mincov_medaka"] + 1
+                sample_cov = software_parameters["mincov_medaka"]
             else:
                 raise Exception(
                     "There is no implementation for other tools than snippy, iVar and medaka."

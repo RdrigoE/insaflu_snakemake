@@ -1,7 +1,7 @@
 working: ../results/
 user_metadata: ../user_metadata/
 sample_yaml: ../user/project.yaml
-sample_csv: ../user/samples.csv
+sample_csv:  ../user/samples.csv
 config_file: ../config/config.yaml
 memory: ../config/max_memory.yaml
 software_parameters: ../user/parameters.yaml

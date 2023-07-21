@@ -15,26 +15,22 @@ def get_type_variation(ref, alt):
                     del	Deletion	ACGG => ACG
                     complex	Combination of snp/mnp
     """
-    if ref == alt and alt == 1:
+    if ref == alt == 1:
         return "snp"
     if ref > alt:
         return "del"
     if ref < alt:
         return "ins"
-    if ref == alt and alt > 1:
-        return "mnp"
-    return "complex"
+    return "mnp" if ref == alt and alt > 1 else "complex"
 
 
 def variant_has_SR_DPSP_AR(variant):
-    if "SR" in variant and "DPSP" in variant and "AR" in variant:
-        return True
-    return False
+    return "SR" in variant and "DPSP" in variant and "AR" in variant
 
 
 def read_text_file(file_name):
     """
-    read text file and put the result in an list
+    read text file and put the result in an vector
     """
 
     vect_out = []
@@ -52,14 +48,7 @@ def get_coverage_by_pos(
 ):
     if not os.path.exists(file_coverage):
         return -1
-    cmd = "{} {} {}:{}-{} > {}".format(
-        "tabix",
-        file_coverage,
-        chr_name,
-        position_start,
-        position_end,
-        temp_file,
-    )
+    cmd = f"tabix {file_coverage} {chr_name}:{position_start}-{position_end} > {temp_file}"
     os.system(cmd)
     # get number
     vect_lines = read_text_file(temp_file)
@@ -162,8 +151,7 @@ def add_freq_ao_ad_and_type_to_vcf(
     for variant_sample in vcf_hanlder.header.samples:
         vcf_hanlder_write.header.add_sample(variant_sample)
         if vcf_file_out_removed_by_filter is not None:
-            vcf_hanlder_write_removed_by_filter.header.add_sample(
-                variant_sample)
+            vcf_hanlder_write_removed_by_filter.header.add_sample(variant_sample)
 
     for variant in vcf_hanlder:
         # DP must be replaced by DPSP. DPSP is the
@@ -171,7 +159,7 @@ def add_freq_ao_ad_and_type_to_vcf(
         if variant_has_SR_DPSP_AR(variant.info):  # SR=0,0,15,6
             # don't process this VCF because has a low coverage
             total_deep = int(variant.info["DPSP"]) - sum(
-                [int(x) for x in variant.info["AR"]]
+                int(x) for x in variant.info["AR"]
             )
             total_deep_samtools = get_coverage_by_pos(
                 file_coverage,
@@ -181,7 +169,6 @@ def add_freq_ao_ad_and_type_to_vcf(
                 temp_file,
             )
             if coverage_limit > 0 and total_deep_samtools < coverage_limit:
-                # print(f"positions with N: {variant.pos}")
                 continue
             if ((len(variant.info["SR"]) // 2) - 1) != len(variant.alts):
                 # vcf_hanlder_write.write(variant)
@@ -235,30 +222,26 @@ def add_freq_ao_ad_and_type_to_vcf(
                     )
 
             # has some variant to save
-            if len(vect_out_freq) > 0:
+            if vect_out_freq:
                 if out_ro > -1:
-                    variant.info[RO] = tuple([out_ro])
+                    variant.info[RO] = (out_ro, )
                 variant.info[AO] = tuple(vect_out_ao)
                 variant.info[AF] = tuple(vect_out_af)
                 variant.info[TYPE] = tuple(vect_out_type)
-                variant.info[DP_COMPOSED] = tuple(
-                    ["{}/{}".format(total_deep, total_deep_samtools)]
-                )
+                variant.info[DP_COMPOSED] = (f"{total_deep}/{total_deep_samtools}", )
                 variant.info[FREQ] = tuple(vect_out_freq)
 
                 # Only save the ones with FREQ
                 vcf_hanlder_write.write(variant)
 
             # save the filtered
-            if len(vect_out_freq_filtered) > 0:
+            if vect_out_freq_filtered:
                 if out_ro > -1:
-                    variant.info[RO] = tuple([out_ro])
+                    variant.info[RO] = (out_ro, )
                 variant.info[AO] = tuple(vect_out_ao)
                 variant.info[AF] = tuple(vect_out_af)
                 variant.info[TYPE] = tuple(vect_out_type)
-                variant.info[DP_COMPOSED] = tuple(
-                    ["{}/{}".format(total_deep, total_deep_samtools)]
-                )
+                variant.info[DP_COMPOSED] = (f"{total_deep}/{total_deep_samtools}", )
                 variant.info[FREQ] = tuple(vect_out_freq_filtered)
 
                 # Only save the ones with FREQ
@@ -286,19 +269,16 @@ def compute_masking_sites(
             pos[0] = int(pos[0])
             pos[1] = int(pos[1])
             if pos[1] < length and pos[1] > pos[0]:
-                for position in range(pos[0] - 1, pos[1] - 1):
-                    masking_sites.append(position)
+                masking_sites.extend(iter(range(pos[0] - 1, pos[1] - 1)))
     if single_positions is not None:
         for pos in single_positions:
             pos = int(pos)
             if pos < length:
                 masking_sites.append(pos - 1)
     if from_beggining is not None:
-        for pos in range(int(from_beggining)):
-            masking_sites.append(pos)
+        masking_sites.extend(iter(range(int(from_beggining))))
     if from_end is not None:
-        for pos in range(length - int(from_end), length):
-            masking_sites.append(pos)
+        masking_sites.extend(iter(range(length - int(from_end), length)))
     return masking_sites
 
 
@@ -341,30 +321,19 @@ def main():
             vect_sites.append(str(variant.pos))
         elif variant.info["TYPE"][0] == "del":
             vect_ranges.append(
-                "{}-{}".format(
-                    variant.pos + len(variant.alts[0]),
-                    variant.pos - len(variant.alts[0]) + len(variant.ref),
-                )
+                f"{variant.pos + len(variant.alts[0])}-{variant.pos - len(variant.alts[0]) + len(variant.ref)}"
             )
         else:
-            vect_ranges.append(
-                "{}-{}".format(variant.pos, variant.pos + len(variant.ref) - 1)
-            )
+            vect_ranges.append(f"{variant.pos}-{variant.pos + len(variant.ref) - 1}")
 
-    sites = ""
-    for idx, i in enumerate(vect_sites):
-        if idx == len(vect_sites) - 1:
-            sites += i
-        else:
-            sites += i + ","
-
-    regions = ""
-    for idx, i in enumerate(vect_ranges):
-        if idx == len(vect_ranges) - 1:
-            regions += i
-        else:
-            regions += i + ","
-
+    sites = "".join(
+        i if idx == len(vect_sites) - 1 else f"{i},"
+        for idx, i in enumerate(vect_sites)
+    )
+    regions = "".join(
+        i if idx == len(vect_ranges) - 1 else f"{i},"
+        for idx, i in enumerate(vect_ranges)
+    )
     # print(sites)
     # print(regions)
 
@@ -379,16 +348,16 @@ def main():
         None,
     )
 
+    ref_insertions = 0
     for record in SeqIO.parse(consensus, "fasta"):
         sequence = MutableSeq(record.seq)
         masking_sites = compute_masking_sites(
             sequence, ranges, single_positions, from_beggining, from_end
         )
         masking_sites = sorted(masking_sites)
-        # print(masking_sites)
+        print(masking_sites)
         # Taken from insaflu
         ref_pos = 0
-        ref_insertions = 0
         gap = 0
         for idx in range(len(sequence)):
             if sequence[idx] == "-":
@@ -398,11 +367,11 @@ def main():
 
             # ref_insertions += 1
             # continue
-            # print(_, ref_pos)
+                print(idx)
             if ref_pos in masking_sites:
-                # print(
-                #     f"placing N in position {ref_pos + ref_insertions}, it was a {sequence[ref_pos + ref_insertions]}"
-                # )
+                print(
+                    f"placing N in position {ref_pos + ref_insertions}, it was a {sequence[ref_pos + ref_insertions]}"
+                )
                 sequence[ref_pos + ref_insertions] = "N"
             ref_pos += 1
             if (ref_pos + ref_insertions) >= len(record.seq):
@@ -410,6 +379,7 @@ def main():
         # End of insaflu code
         record.seq = sequence
         final_mask_consensus.append(record)
+        print(final_mask_consensus[0].seq[8650])
 
     SeqIO.write(final_mask_consensus, output, "fasta")
 
