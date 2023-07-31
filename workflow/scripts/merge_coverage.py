@@ -101,8 +101,11 @@ def merge_coverage(file_list, output_file):
                     "There is no implementation for other tools than snippy, iVar and medaka."
                 )
             info[0] = sample_name
+            print("This is info prev", info)
             info.insert(1 + len(species), "")
+            print("This is info prev", info)
             info.insert(2 + len(species) * 2, sample_cov)
+            print("This is info last", info)
             final_output.append(info)
 
     with open(output_file, mode="w", encoding="utf8") as f:
@@ -110,7 +113,6 @@ def merge_coverage(file_list, output_file):
             f, delimiter=",", quotechar='"', quoting=csv.QUOTE_MINIMAL
         )
         f_writer.writerows(final_output)
-        f.close()
 
 
 def get_coverage(filename: str, n_locus: int):
@@ -129,8 +131,8 @@ def get_coverage(filename: str, n_locus: int):
         sample_name = re.findall("(?<=/)(.*?)(?=_coverage.csv)", filename)[0].split(
             "/"
         )[0]
-        for i in coverage_list:
-            print(i)
+        # for i in coverage_list:
+        #     print(i)
         coverage_list = coverage_list[-1][-n_locus:]
         coverage_list.insert(0, sample_name)
         csvfile.close()

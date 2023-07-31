@@ -3,4 +3,4 @@ channels:
   - bioconda
   - nodefaults
 dependencies:
-  - freebayes =1.1.0
+  - freebayes =1.1.0.46

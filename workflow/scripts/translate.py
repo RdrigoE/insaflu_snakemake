@@ -117,6 +117,13 @@ def write_fast_aa(
                 if seq.count("N") / gene_length > 0.1:
                     continue
                 identifier = record.id
+                print(coverage_dic)
+                print(identifier)
+                print(reference_id)
+                print(identifier[: identifier.index(
+                        f"__{reference_id}")])
+                print(coverage_dic[identifier[: identifier.index(
+                        f"__{reference_id}")]][position])
                 record_coverage = float(
                     coverage_dic[identifier[: identifier.index(
                         f"__{reference_id}")]][position]

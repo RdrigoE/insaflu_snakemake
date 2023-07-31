@@ -3,6 +3,12 @@ from Bio import SeqIO
 from extract_gb_info import get_locus
 
 
+def get_locus_out_id(string_id: str):
+    if string_id.find("__") == -1:
+        return False
+    return string_id[len(string_id) - string_id[::-1].index("__"):]
+
+
 def prepare_msa_masker(alignment, outdir, reference_gb):
     """
     The prepare_msa_masker function takes a multiple sequence alignment and a reference genbank file as input.
@@ -15,19 +21,18 @@ def prepare_msa_masker(alignment, outdir, reference_gb):
     :return: A list of lists
     :doc-author: Trelent
     """
-    counter = 0
-    seg_names = get_locus(reference_gb)
-    n_locus = len(seg_names)
-    list_of_segments = [[] for x in range(n_locus)]
-    for record in SeqIO.parse(alignment, "fasta"):
-        if counter == len(list_of_segments):
-            counter = 0
-        list_of_segments[counter].append(record)
-        counter += 1
-    for index, seg in enumerate(list_of_segments):
+    locus_names = get_locus(reference_gb)
+
+    locus_records = {x: [] for x in locus_names}
+
+    for locus in locus_records:
+        for record in SeqIO.parse(alignment, "fasta"):
+            if locus == record.id or locus == get_locus_out_id(record.id):
+                locus_records[locus].append(record)
+    for locus, list_of_records in locus_records.items():
         SeqIO.write(
-            seg,
-            f"{outdir}/{seg_names[index]}/Alignment_nt_{seg_names[index]}.fasta",
+            list_of_records,
+            f"{outdir}/{locus}/Alignment_nt_{locus}.fasta",
             "fasta",
         )
 

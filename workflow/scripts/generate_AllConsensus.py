@@ -6,6 +6,19 @@ from Bio import SeqIO
 from extract_gb_info import get_locus
 
 
+def get_locus_out_id(string_id: str):
+    return string_id[len(string_id) - string_id[::-1].index("__"):]
+
+
+def convert_index_to_locus(coverage: dict[str, list[int]], genbank: str) -> dict[str, list[str]]:
+    locus_names: list[str] = get_locus(genbank)
+
+    for sample in coverage:
+        for idx, value in enumerate(coverage[sample]):
+            coverage[sample][idx] = locus_names[value-1]
+    return coverage
+
+
 def generate_AllConsensus(
     coverage_file,
     reference_gb,
@@ -51,17 +64,18 @@ def generate_AllConsensus(
     for i in coverage_list:
         coverage_dic[i[0]] = i[1:]
 
-    n_locus = len(get_locus(reference_gb))
+    coverage_dic = convert_index_to_locus(coverage_dic, reference_gb)
 
     final_consensus_w_ref = []
     final_consensus_no_ref = []
     for record in SeqIO.parse(reference_fasta, "fasta"):
         final_consensus_w_ref.append(record)
     for sample in coverage_dic:
-        if len(coverage_dic[sample]) == n_locus:
-            for file in input_files:
-                if sample in file:
-                    for record in SeqIO.parse(file, "fasta"):
+        for file in input_files:
+            if sample in file:
+                record: SeqIO.SeqRecord
+                for record in SeqIO.parse(file, "fasta"):
+                    if get_locus_out_id(record.id) in coverage_dic[sample]:
                         final_consensus_w_ref.append(record)
                         final_consensus_no_ref.append(record)
 

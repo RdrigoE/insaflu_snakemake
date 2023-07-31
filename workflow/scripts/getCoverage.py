@@ -100,10 +100,11 @@ class Coverage(object):
     COVERAGE_ALL = "CoverageAll"
     COVERAGE_MORE_DEFINED_BY_USER = "CoverageMoreDefinedByUser"
 
-    def __init__(self, limit_defined_by_user=10):
+    def __init__(self, genbank, limit_defined_by_user=10):
         self.limit_defined_by_user = limit_defined_by_user
         self.dt_data = {}
         self.ratio_value_defined_by_user = 0
+        self.genbank = genbank
 
     def get_dict_data(self): return self.dt_data
 
@@ -120,7 +121,13 @@ class Coverage(object):
         raise Exception("Error: there's no key like this: " + element)
 
     def __str__(self):
-        sz_return = "snps\tLOCUS\t"
+        sz_return = "snps"
+        names, _ = get_locus_name_len(self.genbank)
+        for name in names:
+            sz_return += f"\t{name}"
+
+        sz_return += "\t"
+
         for key in self.dt_data:
             sz_return += "{}\t".format(
                 self.get_coverage(
@@ -330,7 +337,7 @@ class GetCoverage(object):
         data_file = parse_file.parse_file(deep_file)
         self.read_reference_fasta(reference)
 
-        coverage = Coverage()
+        coverage = Coverage(genbank=options.genbank)
         for chromosome in self.vect_reference:
             if (chromosome not in self.reference_dict):
                 raise Exception("Can't locate the chromosome '" +
