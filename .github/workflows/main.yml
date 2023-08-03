@@ -2,11 +2,11 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, master]
 
   pull_request:
     branches:
-      - main
+      - master
   workflow_dispatch:
   
 
@@ -35,45 +35,84 @@ jobs:
       shell: bash -l {0}
       run: |
         conda activate insaflu
-        snakefmt workflow/Snakefile workflow/rules
+        snakefmt --in-place workflow/Snakefile workflow/rules
+        snakefmt --check workflow/Snakefile workflow/rules
 
-    - name: Execute Snakemake Snippy
+    - name: Execute Snakemake Snippy SARS-CoV-2
       shell: bash -l {0}
       run: |
         conda activate insaflu
         snakemake --cores 1 --use-conda
 
         # New step to compare the generated files to expected outputs
-    - name: Validate output files snippy
+    - name: Validate output files snippy SARS-CoV-2
       run: |
         # Compute checksums for the generated files
-        sha256sum results/samples/demo_ont_1/trimmed_reads/nano_demo_ont_1.trimmed.fastq.gz >> output_snippy.txt
-        sha256sum results/samples/demo_illumina_1/trimmed_reads/demo_illumina_1_1.trimmed.fastq.gz >> output_snippy.txt
-        sha256sum results/samples/demo_illumina_1/trimmed_reads/demo_illumina_1_2.trimmed.fastq.gz >> output_snippy.txt
-        sha256sum results/align_samples/demo_illumina_1/snippy/demo_illumina_1_consensus.fasta >> output_snippy.txt
-        sha256sum results/align_samples/demo_ont_1/medaka/demo_ont_1_consensus.fasta >> output_snippy.txt
-        sha256sum results/projects/snippy_project/main_result/Alignment_nt_All.fasta >> output_snippy.txt
-        sha256sum results/projects/snippy_project/main_result/coverage_translate.csv >> output_snippy.txt
-        diff output_snippy.txt .test_expected/expected_snippy.txt
+        sha256sum results/samples/demo_ont_1/trimmed_reads/nano_demo_ont_1.trimmed.fastq.gz >> output_snippy_sars.txt
+        sha256sum results/samples/demo_illumina_1/trimmed_reads/demo_illumina_1_1.trimmed.fastq.gz >> output_snippy_sars.txt
+        sha256sum results/samples/demo_illumina_1/trimmed_reads/demo_illumina_1_2.trimmed.fastq.gz >> output_snippy_sars.txt
+        sha256sum results/align_samples/demo_illumina_1/snippy/demo_illumina_1_consensus.fasta >> output_snippy_sars.txt
+        sha256sum results/align_samples/demo_ont_1/medaka/demo_ont_1_consensus.fasta >> output_snippy_sars.txt
+        sha256sum results/projects/snippy_project/main_result/Alignment_nt_All.fasta >> output_snippy_sars.txt
+        sha256sum results/projects/snippy_project/main_result/coverage_translate.csv >> output_snippy_sars.txt
+        diff output_snippy_sars.txt .test_expected/expected_snippy_sars.txt
 
-    - name: Execute Snakemake
+    - name: Execute Snakemake iVar SARS-CoV-2
       shell: bash -l {0}
       run: |
         sed s/snippy/iVar/g user/project.yaml > user/project.yaml
         conda activate insaflu
         snakemake --cores 1 --use-conda
 
-    - name: Validate output files iVar
+    - name: Validate output files iVar SARS-CoV-2
       run: |
         # Compute checksums for the generated files
-        sha256sum results/samples/demo_ont_1/trimmed_reads/nano_demo_ont_1.trimmed.fastq.gz >> output_ivar.txt
-        sha256sum results/samples/demo_illumina_1/trimmed_reads/demo_illumina_1_1.trimmed.fastq.gz >> output_ivar.txt
-        sha256sum results/samples/demo_illumina_1/trimmed_reads/demo_illumina_1_2.trimmed.fastq.gz >> output_ivar.txt
-        sha256sum results/align_samples/demo_illumina_1/iVar/demo_illumina_1_consensus.fasta >> output_ivar.txt
-        sha256sum results/projects/iVar_project/main_result/coverage_translate.csv >> output_ivar.txt
-        sha256sum results/projects/iVar_project/main_result/Alignment_nt_All.fasta >> output_ivar.txt
+        sha256sum results/samples/demo_ont_1/trimmed_reads/nano_demo_ont_1.trimmed.fastq.gz >> output_ivar_sars.txt
+        sha256sum results/samples/demo_illumina_1/trimmed_reads/demo_illumina_1_1.trimmed.fastq.gz >> output_ivar_sars.txt
+        sha256sum results/samples/demo_illumina_1/trimmed_reads/demo_illumina_1_2.trimmed.fastq.gz >> output_ivar_sars.txt
+        sha256sum results/align_samples/demo_illumina_1/iVar/demo_illumina_1_consensus.fasta >> output_ivar_sars.txt
+        sha256sum results/projects/iVar_project/main_result/coverage_translate.csv >> output_ivar_sars.txt
+        sha256sum results/projects/iVar_project/main_result/Alignment_nt_All.fasta >> output_ivar_sars.txt
 
-        diff output_ivar.txt .test_expected/expected_ivar.txt
+        diff output_ivar_sars.txt .test_expected/expected_ivar_sars.txt
+
+    - name: Execute Snakemake iVar Influenza
+      shell: bash -l {0}
+      run: |
+        sed s/project.yaml/influenza.yaml/g user/constants.yaml > user/constants.yaml
+        sed s/samples.csv/influenza.csv/g user/constants.yaml > user/constants.yaml
+        conda activate insaflu
+        snakemake --cores 1 --use-conda
+
+    - name: Validate output files snippy influenza
+      run: |
+        # Compute checksums for the generated files
+        sha256sum results/samples/influenza_01/trimmed_reads/influenza_01_1.trimmed.fastq.gz >> output_snippy_influenza.txt
+        sha256sum results/samples/influenza_01/trimmed_reads/influenza_01_2.trimmed.fastq.gz >> output_snippy_influenza.txt
+        sha256sum results/align_samples/influenza_01/snippy/influenza_01_consensus.fasta >> output_snippy_influenza.txt
+        sha256sum results/projects/influenza_snippy/main_result/Alignment_nt_All.fasta >> output_snippy_influenza.txt
+        sha256sum results/projects/influenza_snippy/main_result/coverage_translate.csv >> output_snippy_influenza.txt
+        diff output_snippy_influenza.txt .test_expected/expected_snippy_influenza.txt
+
+    # Need the primers
+    # - name: Execute Snakemake iVar Influenza
+    #   shell: bash -l {0}
+    #   run: |
+    #     sed s/snippy/iVar/g user/influenza.yaml > user/influenza.yaml
+    #     conda activate insaflu
+    #     snakemake --cores 1 --use-conda
+    #
+    # - name: Validate output files iVar influenza
+    #   run: |
+    #     # Compute checksums for the generated files
+    #     sha256sum results/samples/influenza_01/trimmed_reads/influenza_01_1.trimmed.fastq.gz >> output_ivar_influenza.txt
+    #     sha256sum results/samples/influenza_01/trimmed_reads/influenza_01_2.trimmed.fastq.gz >> output_ivar_influenza.txt
+    #     sha256sum results/align_samples/influenza_01/iVar/influenza_01_consensus.fasta >> output_ivar_influenza.txt
+    #     sha256sum results/projects/iVar_project/main_result/coverage_translate.csv >> output_ivar_influenza.txt
+    #     sha256sum results/projects/iVar_project/main_result/Alignment_nt_All.fasta >> output_ivar_influenza.txt
+    #
+    #     diff output_ivar_influenza.txt .test_expected/expected_ivar_influenza.txt
+    #
 
 
 
