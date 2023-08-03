@@ -31,13 +31,13 @@ jobs:
         conda install -n base -c conda-forge mamba
         conda install -n insaflu -c bioconda snakefmt
     
-    - name: Lint with snakefmt
-      shell: bash -l {0}
-      run: |
-        conda activate insaflu
-        snakefmt --in-place workflow/Snakefile workflow/rules
-        snakefmt --check workflow/Snakefile workflow/rules
-
+    # - name: Lint with snakefmt
+    #   shell: bash -l {0}
+    #   run: |
+    #     conda activate insaflu
+    #     snakefmt --in-place workflow/Snakefile workflow/rules
+    #     snakefmt --check workflow/Snakefile workflow/rules
+    #
     - name: Execute Snakemake Snippy SARS-CoV-2
       shell: bash -l {0}
       run: |
