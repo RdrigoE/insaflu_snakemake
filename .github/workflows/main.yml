@@ -60,7 +60,7 @@ jobs:
     - name: Execute Snakemake iVar SARS-CoV-2
       shell: bash -l {0}
       run: |
-        sed s/project/project_i/g config/constants.yaml > config/constants.yaml
+        sed -i 's/project/project_i/' config/constants.yaml 
         conda activate insaflu
         snakemake --cores 1 --use-conda
 
@@ -79,8 +79,8 @@ jobs:
     - name: Execute Snakemake iVar Influenza
       shell: bash -l {0}
       run: |
-        sed s/project_i.yaml/influenza.yaml/g config/constants.yaml > config/constants.yaml
-        sed s/samples.csv/influenza.csv/g config/constants.yaml > config/constants.yaml
+        sed -i 's/project_i.yaml/influenza.yaml/' config/constants.yaml 
+        sed -i 's/samples.csv/influenza.csv/' config/constants.yaml 
         conda activate insaflu
         snakemake --cores 1 --use-conda
 
