@@ -31,7 +31,7 @@ rule medaka_get_depth:
         depth="align_samples/{sample}/medaka/snps.depth",
         ind="align_samples/{sample}/medaka/snps.depth.gz.tbi",
     conda:
-        "../envs/medaka_1_2_1.yaml"
+        "../envs/medaka_1_4_4.yaml"
     params:
         "-aa ",
     resources:
