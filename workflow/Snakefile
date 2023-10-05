@@ -211,7 +211,7 @@ class Checkpoint_Main:
                 # ),
             ]
             if user_metadata['get_minor_variants']:
-                files.append(
+                files.extend([
 
                 expand(
                     "projects/{project}/main_result/validated_minor_iSNVs.csv",
@@ -224,8 +224,8 @@ class Checkpoint_Main:
                 expand(
                     "projects/{project}/main_result/proportions_iSNVs_graph.csv",
                     project=config_user["project"],
-                ),
-                        )
+                )
+                ])
             return_list = []
             for new in files:
                 if isinstance(new, list):
@@ -307,7 +307,6 @@ PRIMER_FASTA = (
     else False
 )
 PRIMER_FASTA = f"../user/primers/{user_metadata['primers_fasta']}" if PRIMER_FASTA else False
-print(PRIMER_FASTA)
 
 
 
