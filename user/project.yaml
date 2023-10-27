@@ -1,8 +1,8 @@
 only_samples: False
-project_name: monkeypox500
-fasta_reference: monkeypox_MT903344_MPXV_UK_P2_wo_NNcut_191315.fasta
-gb_reference: monkeypox_MT903344_MPXV_UK_P2_wo_NNcut_191315.gbk
-abricate: False
+project_name: snippy_project
+fasta_reference: SARS_CoV_2_Wuhan_Hu_1_MN908947.fasta
+gb_reference: SARS_CoV_2_Wuhan_Hu_1_MN908947.gbk
+abricate: True
 illumina_consensus: snippy
 primers_fasta: null
 get_minor_variants: True
