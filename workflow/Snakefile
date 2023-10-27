@@ -374,7 +374,7 @@ def get_output_sample():
             sample=ont_samples.keys(),
         ),
         expand(
-            "samples/{sample}/processed_rabbit_qc/{sample}_stats.txt",
+            "samples/{sample}/processed_rabbit_qc/{sample}_stats.html",
             sample=ont_samples.keys(),
         ),
     ]
@@ -413,8 +413,14 @@ def get_output_sample():
                     "samples/{sample}/abricate_ont/abricate_{sample}.yaml",
                     sample=ont_samples.keys(),
                 ),
-                # expand("samples/{sample}/rabbitqc/rabbit.html", sample=ont_samples.keys()),
-            ]
+        expand(
+            "samples/{sample}/raw_rabbit_qc/{sample}_stats.html",
+            sample=ont_samples.keys(),
+        ),
+        expand(
+            "samples/{sample}/processed_rabbit_qc/{sample}_stats.txt",
+            sample=ont_samples.keys(),
+        ),  ]
         )
     return files
 
@@ -536,8 +542,15 @@ def get_output_project():
                     "samples/{sample}/abricate_ont/abricate_{sample}.yaml",
                     sample=ont_samples.keys(),
                 ),
-                expand("samples/{sample}/rabbitqc/rabbit.html", sample =  ont_samples.keys()),
-            ]
+                expand(
+                "samples/{sample}/raw_rabbit_qc/{sample}_stats.html",
+                sample=ont_samples.keys(),
+                ),
+                expand(
+                    "samples/{sample}/processed_rabbit_qc/{sample}_stats.html",
+                    sample=ont_samples.keys(),
+                ),
+        ]
         )
     return files
 
@@ -574,12 +587,8 @@ if PRIMER_FASTA and CONSENSUS_TOOL == "iVar":
 
     include: "rules/iVar.smk"
 
-elif CONSENSUS_TOOL == "iVar":
-
-    include: "rules/iVar_noPrimer.smk"
 
 
-# include: "../workflow/rules/nextalign.smk"
 rule all:
     input:
         get_output(),
