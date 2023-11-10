@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+source activate
+conda activate ~/mambaforge/envs/ivar8745920361
+ivar $@
+conda deactivate

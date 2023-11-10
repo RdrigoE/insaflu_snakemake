@@ -26,6 +26,7 @@ jobs:
     - name: Install Snakemake and snakefmt
       shell: bash -l {0}
       run: |
+        sudo apt install git build-essential zlib1g-dev
         conda env create --name insaflu --file config/insaflu.yaml
         conda activate insaflu
         conda install -n base -c conda-forge mamba
