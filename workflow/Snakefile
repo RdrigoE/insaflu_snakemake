@@ -210,22 +210,23 @@ class Checkpoint_Main:
                 #     seg=SEGMENTS,
                 # ),
             ]
-            if user_metadata['get_minor_variants']:
-                files.extend([
-
-                expand(
-                    "projects/{project}/main_result/validated_minor_iSNVs.csv",
-                    project=config_user["project"],
-                    ),
-                expand(
-                    "projects/{project}/main_result/validated_minor_iSNVs_inc_indels.csv",
-                    project=config_user["project"],
-                ),
-                expand(
-                    "projects/{project}/main_result/proportions_iSNVs_graph.csv",
-                    project=config_user["project"],
+            if user_metadata["get_minor_variants"]:
+                files.extend(
+                    [
+                        expand(
+                            "projects/{project}/main_result/validated_minor_iSNVs.csv",
+                            project=config_user["project"],
+                        ),
+                        expand(
+                            "projects/{project}/main_result/validated_minor_iSNVs_inc_indels.csv",
+                            project=config_user["project"],
+                        ),
+                        expand(
+                            "projects/{project}/main_result/proportions_iSNVs_graph.csv",
+                            project=config_user["project"],
+                        ),
+                    ]
                 )
-                ])
             return_list = []
             for new in files:
                 if isinstance(new, list):
@@ -246,6 +247,7 @@ class Checkpoint_Main:
 
         return final_output
 
+include: "outputs.smk"
 
 dic_directory = read_yaml("../config/constants.yaml")
 scripts_directory = dic_directory["scripts"]
@@ -306,15 +308,18 @@ PRIMER_FASTA = (
     if user_metadata.get("primers_fasta") is not None
     else False
 )
-PRIMER_FASTA = f"../user/primers/{user_metadata['primers_fasta']}" if PRIMER_FASTA else False
-
+PRIMER_FASTA = (
+    f"../user/primers/{user_metadata['primers_fasta']}" if PRIMER_FASTA else False
+)
 
 
 CONSENSUS_TOOL = user_metadata["illumina_consensus"]
 
 assert CONSENSUS_TOOL in "iVar snippy", "Consensus tool not set correctly"
 
-primers_setup = PRIMER_FASTA is False or CONSENSUS_TOOL == "iVar" and os.path.isfile(PRIMER_FASTA)
+primers_setup = (
+    PRIMER_FASTA is False or CONSENSUS_TOOL == "iVar" and os.path.isfile(PRIMER_FASTA)
+)
 if CONSENSUS_TOOL == "iVar":
     assert (
         primers_setup
@@ -335,224 +340,6 @@ config_user = {
 
 write_yaml(dic_directory["config_file"], config_user)
 software_parameters = read_yaml(dic_directory["software_parameters"])
-
-
-def get_output_sample():
-    files = [
-        expand(
-            "samples/{sample}/raw_fastqc/{sample}_{direction}_fastqc.html",
-            sample=paired_illumina.keys(),
-            direction=["1", "2"],
-        ),
-        expand(
-            "samples/{sample}/trimmed_fastqc/{sample}_{direction}.trimmed_fastqc.html",
-            sample=paired_illumina.keys(),
-            direction=["1", "2"],
-        ),
-        expand(
-            "samples/{sample}/raw_fastqc/{sample}_fastqc.html",
-            sample=single_illumina.keys(),
-        ),
-        expand(
-            "samples/{sample}/trimmed_fastqc/{sample}.trimmed_fastqc.html",
-            sample=single_illumina.keys(),
-        ),
-        expand(
-            "samples/{sample}/raw_nanostat/{sample}_stats.txt",
-            sample=ont_samples.keys(),
-        ),
-        expand(
-            "samples/{sample}/trimmed_reads/nano_{sample}.trimmed.fastq.gz",
-            sample=ont_samples.keys(),
-        ),
-        expand(
-            "samples/{sample}/nano_trimmed_fastqc/{sample}_stats.txt",
-            sample=ont_samples.keys(),
-        ),
-        expand(
-            "samples/{sample}/raw_rabbit_qc/{sample}_stats.html",
-            sample=ont_samples.keys(),
-        ),
-        expand(
-            "samples/{sample}/processed_rabbit_qc/{sample}_stats.html",
-            sample=ont_samples.keys(),
-        ),
-    ]
-    if ABRICATE is True:
-        files.extend(
-            [
-                expand(
-                    "samples/{sample}/spades_se/contigs.fasta",
-                    sample=single_illumina.keys(),
-                ),
-                expand(
-                    "samples/{sample}/abricate_se/abricate_{sample}.csv",
-                    sample=single_illumina.keys(),
-                ),
-                expand(
-                    "samples/{sample}/abricate_se/abricate_{sample}.yaml",
-                    sample=single_illumina.keys(),
-                ),
-                expand(
-                    "samples/{sample}/spades_pe/contigs.fasta",
-                    sample=paired_illumina.keys(),
-                ),
-                expand(
-                    "samples/{sample}/abricate_pe/abricate_{sample}.csv",
-                    sample=paired_illumina.keys(),
-                ),
-                expand(
-                    "samples/{sample}/abricate_pe/abricate_{sample}.yaml",
-                    sample=paired_illumina.keys(),
-                ),
-                expand(
-                    "samples/{sample}/abricate_ont/abricate_{sample}.csv",
-                    sample=ont_samples.keys(),
-                ),
-                expand(
-                    "samples/{sample}/abricate_ont/abricate_{sample}.yaml",
-                    sample=ont_samples.keys(),
-                ),
-        expand(
-            "samples/{sample}/raw_rabbit_qc/{sample}_stats.html",
-            sample=ont_samples.keys(),
-        ),
-        expand(
-            "samples/{sample}/processed_rabbit_qc/{sample}_stats.txt",
-            sample=ont_samples.keys(),
-        ),  ]
-        )
-    return files
-
-
-def get_output_project():
-    files = [
-        expand(
-            "samples/{sample}/raw_fastqc/{sample}_{direction}_fastqc.html",
-            sample=paired_illumina.keys(),
-            direction=["1", "2"],
-        ),  # generalizar
-        expand(
-            "samples/{sample}/trimmed_fastqc/{sample}_{direction}.trimmed_fastqc.html",
-            sample=paired_illumina.keys(),
-            direction=["1", "2"],
-        ),
-        expand(
-            "samples/{sample}/raw_fastqc/{sample}_fastqc.html",
-            sample=single_illumina.keys(),
-        ),
-        expand(
-            "samples/{sample}/trimmed_fastqc/{sample}.trimmed_fastqc.html",
-            sample=single_illumina.keys(),
-        ),
-        expand(
-            "align_samples/{sample}/{illumina_genome_assembly_software}/{sample}_consensus.fasta",
-            illumina_genome_assembly_software=illumina_assembler,
-            sample=single_illumina.keys(),
-        ),
-        expand(
-            "align_samples/{sample}/{illumina_genome_assembly_software}/{sample}_consensus.fasta",
-            illumina_genome_assembly_software=illumina_assembler,
-            sample=paired_illumina.keys(),
-        ),
-        expand(
-            "align_samples/{sample}/{sample}_coverage.csv",
-            sample=single_illumina.keys(),
-        ),
-        expand(
-            "align_samples/{sample}/{sample}_coverage.csv",
-            sample=paired_illumina.keys(),
-        ),
-        expand(
-            expand(
-                "projects/{project}/main_result/coverage_translate.csv",
-                project=config_user["project"],
-            )
-        ),
-        expand(
-            "samples/{sample}/raw_nanostat/{sample}_stats.txt",
-            sample=ont_samples.keys(),
-        ),
-        expand(
-            "samples/{sample}/trimmed_reads/nano_{sample}.trimmed.fastq.gz",
-            sample=ont_samples.keys(),
-        ),
-        expand(
-            "samples/{sample}/nano_trimmed_fastqc/{sample}_stats.txt",
-            sample=ont_samples.keys(),
-        ),
-        expand(
-            "samples/{sample}/raw_rabbit_qc/{sample}_stats.html",
-            sample=ont_samples.keys(),
-        ),
-        expand(
-            "samples/{sample}/processed_rabbit_qc/{sample}_stats.html",
-            sample=ont_samples.keys(),
-        ),
-        Checkpoint_Main(
-            [
-                (f'projects/{config_user["project"]}/main_result/', "_trans.fasta"),
-                (f'projects/{config_user["project"]}/main_result/', "_mafft.fasta"),
-                (f'projects/{config_user["project"]}/main_result/', "_mafft.nex"),
-                (f'projects/{config_user["project"]}/main_result/', "_tree.tree"),
-            ],
-            REFERENCE_GB,
-            f"projects/{config_user['project']}/main_result/coverage_translate.csv",
-            software_parameters["min_coverage_consensus"],
-            PROJECT_NAME,
-        ),
-        Abricate_Pangolin(
-            f"projects/{config_user['project']}/ref.yaml",
-            f"projects/{config_user['project']}/main_result/lineage_report.csv",
-            config_user["project"],
-        ),
-    ]
-    if ABRICATE is True:
-        files.extend(
-            [
-                expand(
-                    "samples/{sample}/spades_se/contigs.fasta",
-                    sample=single_illumina.keys(),
-                ),
-                expand(
-                    "samples/{sample}/abricate_se/abricate_{sample}.csv",
-                    sample=single_illumina.keys(),
-                ),
-                expand(
-                    "samples/{sample}/abricate_se/abricate_{sample}.yaml",
-                    sample=single_illumina.keys(),
-                ),
-                expand(
-                    "samples/{sample}/spades_pe/contigs.fasta",
-                    sample=paired_illumina.keys(),
-                ),
-                expand(
-                    "samples/{sample}/abricate_pe/abricate_{sample}.csv",
-                    sample=paired_illumina.keys(),
-                ),
-                expand(
-                    "samples/{sample}/abricate_pe/abricate_{sample}.yaml",
-                    sample=paired_illumina.keys(),
-                ),
-                expand(
-                    "samples/{sample}/abricate_ont/abricate_{sample}.csv",
-                    sample=ont_samples.keys(),
-                ),
-                expand(
-                    "samples/{sample}/abricate_ont/abricate_{sample}.yaml",
-                    sample=ont_samples.keys(),
-                ),
-                expand(
-                "samples/{sample}/raw_rabbit_qc/{sample}_stats.html",
-                sample=ont_samples.keys(),
-                ),
-                expand(
-                    "samples/{sample}/processed_rabbit_qc/{sample}_stats.html",
-                    sample=ont_samples.keys(),
-                ),
-        ]
-        )
-    return files
 
 
 get_output = (
@@ -584,11 +371,16 @@ include: "rules/warnings.smk"
 
 
 if PRIMER_FASTA and CONSENSUS_TOOL == "iVar":
-
     include: "rules/iVar.smk"
-
 
 
 rule all:
     input:
-        get_output(),
+        get_output(paired_illumina= paired_illumina.keys(), 
+                           single_illumina= single_illumina.keys(),
+                           ont_samples= ont_samples.keys(),
+                           classification= ABRICATE,
+                           illumina_vc_software= illumina_assembler,
+                           project_name= PROJECT_NAME,
+                           min_coverage= software_parameters["min_coverage_consensus"],
+                           reference_gb= REFERENCE_GB),
