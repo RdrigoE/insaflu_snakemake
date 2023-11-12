@@ -1,11 +1,14 @@
-localrules:getCoverage,
+localrules:
+    getCoverage,
+
 
 def get_threshold(wildcards):
     sample_type = config_user["sample_type"][wildcards.sample]
     if sample_type in ["snippy", "iVar"]:
-      return software_parameters["mincov"]
+        return software_parameters["mincov"]
     else:
-      return software_parameters["mincov_medaka"]
+        return software_parameters["mincov_medaka"]
+
 
 rule getCoverage:
     input:
@@ -21,10 +24,10 @@ rule getCoverage:
     benchmark:
         "benchmark/samples/{sample}/get_coverage.tsv"
     params:
-      threshold=get_threshold 
+        threshold=get_threshold,
     shell:
-      "python {coverage_script} -i {input.depth} -r {REFERENCE_FASTA}"
-       " -o {output.coverage} -t {params.threshold} -g {REFERENCE_GB}"
+        "python {coverage_script} -i {input.depth} -r {REFERENCE_FASTA}"
+        " -o {output.coverage} -t {params.threshold} -g {REFERENCE_GB}"
 
 
 checkpoint mergeCoverage:

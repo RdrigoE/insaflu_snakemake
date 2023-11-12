@@ -5,4 +5,3 @@ channels:
 dependencies:
   - gcc =12.1
   - make =4.3
-  - zlib

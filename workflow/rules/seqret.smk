@@ -1,4 +1,14 @@
-localrules: seqret_all_nt,seqret_all_nt_only_90,seqret_all_consensus,seqret_alignment_aa_gene,alignment_nt_seg_mafft_seqret,alignment_nt_seg_seqret,alignment_nt_All_seqret,alignment_nt_specific_seqret,
+localrules:
+    seqret_all_nt,
+    seqret_all_nt_only_90,
+    seqret_all_consensus,
+    seqret_alignment_aa_gene,
+    alignment_nt_seg_mafft_seqret,
+    alignment_nt_seg_seqret,
+    alignment_nt_All_seqret,
+    alignment_nt_specific_seqret,
+
+
 rule seqret_all_nt:
     input:
         "projects/{project}/main_result/All_nt.fasta",

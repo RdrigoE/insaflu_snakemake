@@ -1,5 +1,8 @@
 configfile: "../config/threads.yaml"
-localrules: prepare_snpeff,
+
+
+localrules:
+    prepare_snpeff,
 
 
 replace = (

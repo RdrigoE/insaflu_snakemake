@@ -52,9 +52,9 @@ rule raw_rabbit_qc:
     benchmark:
         "benchmark/samples/{sample}/raw_rabbit_qc/{sample}.tsv"
     params:
-        "-w 3 -D"
+        "-w 3 -D",
     shell:
-       "../workflow/software/RabbitQC/rabbit_qc {params} -i {input} -h {output.stats}"
+        "../workflow/software/RabbitQC/rabbit_qc {params} -i {input} -h {output.stats}"
 
 
 rule processed_rabbit_qc:
@@ -72,6 +72,6 @@ rule processed_rabbit_qc:
     benchmark:
         "benchmark/samples/{sample}/nano_trimmed_fastqc/{sample}.tsv"
     params:
-        "-w 3 -D"
+        "-w 3 -D",
     shell:
-       "../workflow/software/RabbitQC/rabbit_qc {params} -i {input} -h {output.stats}"
+        "../workflow/software/RabbitQC/rabbit_qc {params} -i {input} -h {output.stats}"

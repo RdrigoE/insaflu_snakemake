@@ -1,8 +1,17 @@
-localrules:medaka_split_depth,mask_between_top_and_50,create_align_file,msa_masker_medaka,get_masked_consensus_medaka,mask_regions_consensus_medaka,
+localrules:
+    medaka_split_depth,
+    mask_between_top_and_50,
+    create_align_file,
+    msa_masker_medaka,
+    get_masked_consensus_medaka,
+    mask_regions_consensus_medaka,
+
+
 def get_model():
-    params =  f"-m {software_parameters['Medaka_model']}"
-    params +=  f" -p ../../../{PRIMER_FASTA}" if PRIMER_FASTA else ""
+    params = f"-m {software_parameters['Medaka_model']}"
+    params += f" -p ../../../{PRIMER_FASTA}" if PRIMER_FASTA else ""
     return params
+
 
 rule medaka_consensus:
     input:
@@ -24,7 +33,7 @@ rule medaka_consensus:
     benchmark:
         "benchmark/align_samples/{sample}/medaka/medaka_consensus.tsv"
     params:
-        get_model()
+        get_model(),
     shell:
         "rm -r align_samples/{wildcards.sample}/medaka/ && "
         "mkdir align_samples/{wildcards.sample}/medaka/ && "

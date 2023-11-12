@@ -1,4 +1,7 @@
-localrules: warning,
+localrules:
+    warning,
+
+
 rule warning:
     output:
         "projects/{project}/main_result/warning.txt",

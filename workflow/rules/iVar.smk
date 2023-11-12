@@ -1,4 +1,15 @@
-localrules: get_depth,iVar_depth_1_2,iVar_depth_step_2,create_align_file_iVar,align_mafft_iVar,msa_masker_iVar,get_masked_consensus_iVar,mask_regions_consensus_iVar,get_vcf,
+localrules:
+    get_depth,
+    iVar_depth_1_2,
+    iVar_depth_step_2,
+    create_align_file_iVar,
+    align_mafft_iVar,
+    msa_masker_iVar,
+    get_masked_consensus_iVar,
+    mask_regions_consensus_iVar,
+    get_vcf,
+
+
 rule iVar_align_pe:
     input:
         reads_1="samples/{sample}/trimmed_reads/{sample}_1.trimmed.fastq.gz",
@@ -170,8 +181,6 @@ rule get_depth:
         "logs/align_samples/{sample}/iVar/get_depth.log",
     benchmark:
         "benchmark/align_samples/{sample}/iVar/get_depth.tsv"
-
-
     shell:
         "samtools depth {params} {input.i} | bgzip -c > {output.only_depth} "
         "&& tabix -p vcf {output.only_depth} && gunzip -c {output.only_depth}  > {output.depth} "

@@ -1,5 +1,13 @@
 configfile: f"../config/threads.yaml"
-localrules:snippy_unzip_depth,snippy_split_depth,create_align_file_snippy,msa_masker_snippy,get_masked_consensus_snippy,mask_regions_consensus_snippy,
+
+
+localrules:
+    snippy_unzip_depth,
+    snippy_split_depth,
+    create_align_file_snippy,
+    msa_masker_snippy,
+    get_masked_consensus_snippy,
+    mask_regions_consensus_snippy,
 
 
 rule snippy_pe:

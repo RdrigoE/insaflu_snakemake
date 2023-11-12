@@ -1,4 +1,10 @@
-localrules: variant_validated,snpeff_concat,snpeff_concat_indels,proportions_iSNVs_graph,
+localrules:
+    variant_validated,
+    snpeff_concat,
+    snpeff_concat_indels,
+    proportions_iSNVs_graph,
+
+
 rule variant_validated:
     input:
         expand(

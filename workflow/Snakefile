@@ -1,253 +1,32 @@
+import sys
 from scripts.check_file_validity import is_fasta, is_genbank, same_identifiers
 from scripts.import_user_data import Data, get_data_in_align_form
 from scripts.yaml_io import read_yaml, write_yaml
 from scripts.extract_gb_info import (
-    get_locus,
-    get_id_version,
-    get_locus_and_genes,
-    get_genes,
-    get_identification_version,
-    get_identification_version_string,
-)
+        get_locus,
+        get_id_version,
+        get_locus_and_genes,
+        get_genes,
+        get_identification_version,
+        get_identification_version_string,
+        )
 from scripts.get_software_parameters import (
-    get_nanofilt_parameters,
-    mask_regions_parameters,
-    get_trimmomatic_parameters,
-    get_snippy_parameters,
-)
+        get_nanofilt_parameters,
+        mask_regions_parameters,
+        get_trimmomatic_parameters,
+        get_snippy_parameters,
+        )
 import yaml
 import re
 import csv
 import os
-
+from validation.project import validate_project_settings
 
 workdir: "./results/"
 
+include: "../workflow/checkpoints/pangolin.smk"
+include: "../workflow/checkpoints/main.smk"
 
-class Abricate_Pangolin:
-    def __init__(self, abricate_output, output, project):
-        self.abricate_output = abricate_output
-        self.output = output
-        self.project = project
-
-    def __call__(self, w):
-        global checkpoints
-        checkpoints.abricate_pangolin.get(**w)
-        pattern = self.get_output()
-        return pattern
-
-    def get_output(self):
-        abricate_dic = read_yaml(self.abricate_output)
-        if abricate_dic["Species"] is None:
-            abricate_dic["Species"] = []
-        if abricate_dic["Genus"] is None:
-            abricate_dic["Genus"] = []
-        go_pangolin = bool(
-            "coronavirus" in abricate_dic.get("Species")
-            or "coronavirus" in abricate_dic.get("Genus")
-        )
-        pattern = (
-            self.output
-            if go_pangolin
-            else expand(
-                "projects/{project}/main_result/not_pangolin.csv", project=self.project
-            )
-        )
-        return pattern
-
-
-class Checkpoint_Main:
-    def __init__(
-        self, output_tuple, genbank_file, coverage_file, coverage_limit, project
-    ):
-        self.output_tuple = output_tuple
-        self.genbank_file = genbank_file
-        self.coverage_file = coverage_file
-        self.coverage_limit = coverage_limit
-        self.project = project
-
-    def __call__(self, w):
-        global checkpoints
-
-        # wait for the results of 'check_csv'; this will trigger an
-        # exception until that rule has been run.
-        checkpoints.mergeCoverage.get(**w)
-
-        # the magic, such as it is, happens here: we create the
-        # information used to expand the pattern, using arbitrary
-        # Python code.
-
-        pattern = self.get_output()
-        pattern.extend(self.get_output_prefix_sufix())
-
-        if pattern == []:
-            return "template_empty.txt"
-        return pattern
-
-    def get_locus_w_coverage_prefix_sufix(self):
-        with open(self.coverage_file, newline="") as csvfile:
-            csv_reader = csv.reader(csvfile, delimiter=",")
-            coverage_list = list(csv_reader)
-            chrom = get_locus(self.genbank_file)
-            coverage_list = list(map(lambda x: x[1:], coverage_list))
-            for idx, li in enumerate(coverage_list):
-                coverage_list[idx] = list(map(lambda x: float(x), li))
-
-            final_output = []
-            for sample in coverage_list:
-                if min(sample) >= self.coverage_limit:
-                    final_output.append(True)
-                else:
-                    final_output.append(False)
-
-        return final_output
-
-    def get_output_prefix_sufix(self):
-        locus_protein = []
-        valide_locus = self.get_locus_w_coverage_prefix_sufix()
-        segments = get_locus_and_genes(self.genbank_file)
-        if True in valide_locus:
-            for prefix, sufix in self.output_tuple:
-                for idx, seg in enumerate(segments, start=0):
-                    for gene in segments[seg]:
-                        locus_protein.append(
-                            f"{prefix}{seg}/Alignment_aa_{seg}_{gene}{sufix}"
-                        )
-        return locus_protein
-
-    def get_locus_w_coverage(self):
-        with open(self.coverage_file, newline="") as csvfile:
-            csv_reader = csv.reader(csvfile, delimiter=",")
-            coverage_list = list(csv_reader)
-            chrom = get_locus(self.genbank_file)
-            coverage_list = list(map(lambda x: x[1:], coverage_list))
-            for idx, li in enumerate(coverage_list):
-                coverage_list[idx] = list(map(lambda x: float(x), li))
-
-            final_output = []
-            for sample in coverage_list:
-                if min(sample) >= self.coverage_limit:
-                    final_output.append(True)
-                else:
-                    final_output.append(False)
-
-        return final_output
-
-    def get_output(self):
-        return_list = []
-        valide_locus = self.get_locus_w_coverage()
-        leave = False
-
-        if True in valide_locus:
-            files = [
-                expand(
-                    "projects/{project}/main_result/validated_variants.csv",
-                    project=config_user["project"],
-                ),
-                expand(
-                    "projects/{project}/main_result/Alignment_nt_All.fasta",
-                    sample=config_user["samples"],
-                    project=config_user["project"],
-                ),
-                expand(
-                    "projects/{project}/main_result/All_nt_only_90plus.fasta",
-                    sample=config_user["samples"],
-                    project=config_user["project"],
-                ),
-                expand(
-                    "projects/{project}/main_result/AllConsensus.fasta",
-                    sample=config_user["samples"],
-                    project=config_user["project"],
-                ),
-                expand(
-                    "projects/{project}/main_result/All_nt.fasta",
-                    sample=config_user["samples"],
-                    project=config_user["project"],
-                ),
-                expand(
-                    "projects/{project}/main_result/All_nt.nex",
-                    sample=config_user["samples"],
-                    project=config_user["project"],
-                ),
-                expand(
-                    "projects/{project}/main_result/AllConsensus.nex",
-                    sample=config_user["samples"],
-                    project=config_user["project"],
-                ),
-                expand(
-                    "projects/{project}/main_result/Alignment_nt_All.nex",
-                    sample=config_user["samples"],
-                    project=config_user["project"],
-                ),
-                expand(
-                    "projects/{project}/main_result/All_nt_only_90plus.nex",
-                    sample=config_user["samples"],
-                    project=config_user["project"],
-                ),
-                expand(
-                    "projects/{project}/main_result/snp_ready.txt",
-                    project=config_user["project"],
-                ),
-                expand(
-                    "projects/{project}/main_result/Tree_ML_All.tree",
-                    sample=config_user["samples"],
-                    project=config_user["project"],
-                ),
-                expand(
-                    "projects/{project}/main_result/Tree_ML_{seg}.tree",
-                    sample=config_user["samples"],
-                    project=config_user["project"],
-                    seg=SEGMENTS,
-                ),
-                expand(
-                    "projects/{project}/main_result/{seg}/Alignment_nt_{seg}.fasta",
-                    project=config_user["project"],
-                    seg=SEGMENTS,
-                ),
-                # expand(
-                #     "projects/{project}/main_result/{seg}/Alignment_nt_{seg}.nex",
-                #     project=config_user["project"],
-                #     seg=SEGMENTS,
-                # ),
-            ]
-            if user_metadata["get_minor_variants"]:
-                files.extend(
-                    [
-                        expand(
-                            "projects/{project}/main_result/validated_minor_iSNVs.csv",
-                            project=config_user["project"],
-                        ),
-                        expand(
-                            "projects/{project}/main_result/validated_minor_iSNVs_inc_indels.csv",
-                            project=config_user["project"],
-                        ),
-                        expand(
-                            "projects/{project}/main_result/proportions_iSNVs_graph.csv",
-                            project=config_user["project"],
-                        ),
-                    ]
-                )
-            return_list = []
-            for new in files:
-                if isinstance(new, list):
-                    for new_2 in new:
-                        return_list.append(new_2)
-                else:
-                    return_list.append(new)
-            return return_list
-        else:
-            return expand("projects/{p}/main_result/warning.txt", p=self.project)
-
-            final_output = []
-            for sample in coverage_list:
-                if min(sample) >= self.coverage_limit:
-                    final_output.append(True)
-                else:
-                    final_output.append(False)
-
-        return final_output
-
-include: "outputs.smk"
 
 dic_directory = read_yaml("../config/constants.yaml")
 scripts_directory = dic_directory["scripts"]
@@ -260,76 +39,66 @@ config = read_yaml(dic_directory["threads"])
 
 # Load in sample data
 user_metadata = read_yaml(dic_directory["sample_yaml"])
-sample_data: Data = Data(
-    dic_directory["sample_csv"], user_metadata["illumina_consensus"]
-)
+
+
+paths_dir = {"project_dir": "./projects/",
+             "reference_dir": dic_directory["references"],
+             "primer_dir": dic_directory["primers"]}
+
+errors = validate_project_settings(user_metadata,paths_dir)
+if len(errors) != 0:
+    print(f"The file '{dic_directory['sample_yaml']}' as the following errors:")
+    for error, text in errors.items():
+        print(f"\t{error}")
+        print(f"\t\t{text}")
+    sys.exit()
+
+
+
+sample_data= Data(
+        dic_directory["sample_csv"], user_metadata["illumina_consensus"]
+        )
 
 
 (
-    paired_illumina,
-    single_illumina,
-    ont_samples,
-    sample_info_dic,
-) = sample_data.get_options()
+        paired_illumina,
+        single_illumina,
+        ont_samples,
+        samples,
+        ) = sample_data.get_options()
 
 illumina_samples = [*paired_illumina.keys(), *single_illumina.keys()]
 
 illumina_assembler = sample_data.get_assembler()
 (
-    paired_illumina_snippy,
-    single_illumina_snippy,
-    paired_illumina_ivar,
-    single_illumina_ivar,
-) = get_data_in_align_form(illumina_assembler, single_illumina, paired_illumina)
-# Load in run config
+        paired_illumina_snippy,
+        single_illumina_snippy,
+        paired_illumina_ivar,
+        single_illumina_ivar,
+        ) = get_data_in_align_form(illumina_assembler, single_illumina, paired_illumina)
 
-REFERENCE_GB = f"../user/references/{user_metadata['gb_reference']}"
-assert is_genbank(REFERENCE_GB), "Reference genbank file is not in genbank format"
-REFERENCE_FASTA = f"../user/references/{user_metadata['fasta_reference']}"
-assert is_fasta(REFERENCE_FASTA), "Reference fasta file is not in fasta format"
-assert same_identifiers(
-    REFERENCE_FASTA, REFERENCE_GB
-), "Reference fasta and genbank files do not have the same identifiers"
-REFERENCE_NAME = re.findall("(?<=references/)(.*?)(?=.fasta)", REFERENCE_FASTA)[0]
+
 
 memory = read_yaml(dic_directory["memory"])
 
-
-SEGMENTS = get_locus(REFERENCE_GB)
-
-PROJECT_NAME = user_metadata["project_name"]
-assert (
-    PROJECT_NAME != ""
-), "Project name is not set in the config file. Please set a project name"
+# Runtime Variables
 ABRICATE = user_metadata["abricate"]
-
+REFERENCE_GB = paths_dir["reference_dir"] + user_metadata['gb_reference']
+REFERENCE_FASTA = paths_dir["reference_dir"] + user_metadata['fasta_reference']
+SEGMENTS = get_locus(REFERENCE_GB)
+REFERENCE_NAME = re.findall("(?<=references/)(.*?)(?=.fasta)", REFERENCE_FASTA)[0]
+PROJECT_NAME = user_metadata["project_name"]
 PRIMER_FASTA = (
-    user_metadata.get("primers_fasta")
-    if user_metadata.get("primers_fasta") is not None
-    else False
-)
-PRIMER_FASTA = (
-    f"../user/primers/{user_metadata['primers_fasta']}" if PRIMER_FASTA else False
-)
-
-
+        paths_dir["primer_dir"] + user_metadata.get("primers_fasta")
+        if user_metadata.get("primers_fasta") is not None
+        else False
+        )
 CONSENSUS_TOOL = user_metadata["illumina_consensus"]
-
-assert CONSENSUS_TOOL in "iVar snippy", "Consensus tool not set correctly"
-
-primers_setup = (
-    PRIMER_FASTA is False or CONSENSUS_TOOL == "iVar" and os.path.isfile(PRIMER_FASTA)
-)
-if CONSENSUS_TOOL == "iVar":
-    assert (
-        primers_setup
-    ), "Primers file not found. Please check the name and path to the primers file"
-
 
 identification, version = get_identification_version(SEGMENTS, REFERENCE_GB)
 
 config_user = {
-    "samples": sample_info_dic,
+    "samples": samples,
     "project": user_metadata["project_name"],
     "locus": get_locus(REFERENCE_GB),
     "proteins": get_genes(REFERENCE_GB),
@@ -339,12 +108,10 @@ config_user = {
 }
 
 write_yaml(dic_directory["config_file"], config_user)
+
 software_parameters = read_yaml(dic_directory["software_parameters"])
 
 
-get_output = (
-    get_output_sample if user_metadata["only_samples"] is True else get_output_project
-)
 
 
 # CLOSE
@@ -373,6 +140,12 @@ include: "rules/warnings.smk"
 if PRIMER_FASTA and CONSENSUS_TOOL == "iVar":
     include: "rules/iVar.smk"
 
+
+include: "outputs.smk"
+
+get_output = (
+    get_output_sample if user_metadata["only_samples"] is True else get_output_project
+)
 
 rule all:
     input:

@@ -1,4 +1,10 @@
-localrules:initiate_folder,makeproject,assemble_consensus,create_segments,
+localrules:
+    initiate_folder,
+    makeproject,
+    assemble_consensus,
+    create_segments,
+
+
 rule initiate_folder:
     conda:
         "../envs/base.yaml"

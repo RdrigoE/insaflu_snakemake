@@ -1,4 +1,7 @@
-localrules: cp_Alignment_nt_tree,
+localrules:
+    cp_Alignment_nt_tree,
+
+
 rule fasttree:
     input:
         "projects/{project}/main_result/Alignment_nt_All.fasta",

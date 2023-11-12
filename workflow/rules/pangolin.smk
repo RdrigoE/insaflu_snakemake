@@ -1,4 +1,7 @@
-localrules: not_pangolin,
+localrules:
+    not_pangolin,
+
+
 checkpoint abricate_pangolin:
     output:
         csv=temp(expand("projects/{project}/ref.csv", project=config_user["project"])),

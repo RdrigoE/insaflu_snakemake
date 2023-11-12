@@ -160,6 +160,8 @@ def get_output_project(
             f"projects/{config_user['project']}/main_result/coverage_translate.csv",
             min_coverage,
             project_name,
+            samples,
+            SEGMENTS
         ),
         Abricate_Pangolin(
             f"projects/{config_user['project']}/ref.yaml",

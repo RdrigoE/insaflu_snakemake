@@ -1,5 +1,8 @@
 configfile: "../config/threads.yaml"
-localrules: cp_Alignment_nt,
+
+
+localrules:
+    cp_Alignment_nt,
 
 
 rule align_w_mafft_medaka:
