@@ -3,8 +3,8 @@ localrules:
 
 
 def get_threshold(wildcards):
-    sample_type = config_user["sample_type"][wildcards.sample]
-    if sample_type in ["snippy", "iVar"]:
+    sample_type = config_user["samples"][wildcards.sample]["tech"]
+    if sample_type == "illumina":
         return software_parameters["mincov"]
     else:
         return software_parameters["mincov_medaka"]

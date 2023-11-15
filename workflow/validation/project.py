@@ -61,7 +61,7 @@ def validate_project_settings(project_settings: ProjectSettings, paths: ProjectP
     ):
         errors[
             "illumina_consensus"
-        ] = f"You provided the tool '{project_settings['illumina_consensus']}' but currently the pipeline only supports 'snippy' and 'iVar'.\nChange the illumina_consensus field."
+        ] = f"You provided the tool '{project_settings['illumina_consensus']}' but currently the pipeline only supports 'snippy' and 'iVar'.\n\t\tChange the illumina_consensus field."
 
     if project_settings["primers_fasta"] is not None and not Validator.is_fasta(
         paths["primer_dir"] + project_settings["primers_fasta"]

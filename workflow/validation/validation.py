@@ -1,11 +1,4 @@
-# only_samples: bool
-# project_name: str (no_spaces)
-# fasta_reference: valid_fasta
-# gb_reference: valid_genbank
-# abricate: bool
-# illumina_consensus: snippy | iVar
-# primers_fasta: valid fasta and check if there is the other file
-# get_minor_variants: bool
+import os
 
 from pathlib import Path
 from Bio import SeqIO
@@ -18,6 +11,8 @@ class Validator:
         Validates a string checking if it has not empty characters
         and checks if there are spaces
         """
+        if not isinstance(value, str):
+            return False
         value = value.strip()
         if len(value) == 0 or value.find(" ") != -1:
             return False
@@ -34,14 +29,19 @@ class Validator:
         return False
 
     @staticmethod
+    def is_file(path: str) -> bool:
+        return os.path.exists(path)
+
+    @staticmethod
     def is_fasta(path: str) -> bool:
         """
         The is_fasta function checks if a file is in FASTA format.
 
         :param filename: str: Specify the file to be checked
         :return: True if the file is a fasta file, and false otherwise
-        :doc-author: Trelent
         """
+        if not Validator.is_file(path):
+            return False
         with open(path, "r", encoding="utf-8") as handle:
             fasta = SeqIO.parse(handle, "fasta")
             return any(fasta)
@@ -53,8 +53,9 @@ class Validator:
 
         :param filename: str: Specify the file to be checked
         :return: True if the file is a genbank file, and false otherwise
-        :doc-author: Trelent
         """
+        if not Validator.is_file(path):
+            return False
         with open(path, "r", encoding="utf-8") as handle:
             gbk = SeqIO.parse(handle, "genbank")
             return any(gbk)
@@ -71,6 +72,9 @@ class Validator:
         :param gbk_file: str: Specify the path to the genbank file
         :return: True if the order of the ids in both files are equal
         """
+
+        if not Validator.is_file(fasta_path) and not Validator.is_file(gbk_path):
+            return False
         with open(fasta_path, "r", encoding="utf-8") as handle:
             fasta = SeqIO.parse(handle, "fasta")  # type: ignore
             fasta_ids: list[str] = [record.id for record in fasta]
@@ -83,5 +87,9 @@ class Validator:
 
     @staticmethod
     def check_file_in_the_directory(directory: str, file_name: str) -> bool:
+        if not Validator.is_file(directory + file_name):
+            return False
+
         path = Path(directory)
+
         return not path.is_relative_to(Path(directory + file_name))
