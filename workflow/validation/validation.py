@@ -34,12 +34,6 @@ class Validator:
 
     @staticmethod
     def is_fasta(path: str) -> bool:
-        """
-        The is_fasta function checks if a file is in FASTA format.
-
-        :param filename: str: Specify the file to be checked
-        :return: True if the file is a fasta file, and false otherwise
-        """
         if not Validator.is_file(path):
             return False
         with open(path, "r", encoding="utf-8") as handle:
@@ -48,12 +42,6 @@ class Validator:
 
     @staticmethod
     def is_genbank(path: str) -> bool:
-        """
-        The is_gbk function checks if a file is in GenBank format.
-
-        :param filename: str: Specify the file to be checked
-        :return: True if the file is a genbank file, and false otherwise
-        """
         if not Validator.is_file(path):
             return False
         with open(path, "r", encoding="utf-8") as handle:
@@ -62,17 +50,6 @@ class Validator:
 
     @staticmethod
     def same_identifiers(fasta_path: str, gbk_path: str) -> bool:
-        """
-        The same_identifiers function checks whether the IDs in a FASTA file match those
-        in a GenBank file. It does this by opening both files and parsing them with
-        the SeqIO module from Biopython. The function returns True if the lists of IDs
-        are identical, and False otherwise.
-
-        :param fasta_file: str: Specify the path to the fasta file
-        :param gbk_file: str: Specify the path to the genbank file
-        :return: True if the order of the ids in both files are equal
-        """
-
         if not Validator.is_file(fasta_path) and not Validator.is_file(gbk_path):
             return False
         with open(fasta_path, "r", encoding="utf-8") as handle:

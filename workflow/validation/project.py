@@ -71,8 +71,7 @@ def validate_project_settings(project_settings: ProjectSettings, paths: ProjectP
     if project_settings[
         "primers_fasta"
     ] is not None and not Validator.check_file_in_the_directory(
-        paths["primer_dir"], project_settings["primers_fasta"] +
-            ".pair_information.tsv"
+        paths["primer_dir"], project_settings["primers_fasta"] + ".pair_information.tsv"
     ):
         errors[
             "primers_files"
